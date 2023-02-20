@@ -2,76 +2,175 @@
 
 local Package = { }
 
-local InternalPackages = script.Packages
+local CanaryEngineServer = { }
+local CanaryEngineClient = { }
+
+-- // Types
+
+--[[
+
+	The ScriptConnection type is very similar to the
+	RBXScriptConnection.
+	
+	@private
+	@typedef [{
+		Disconnect: (self: ScriptConnection) -> ();
+		Connected: boolean;
+	}] ScriptConnection
+	
+--]]
+
+type ScriptConnection = {
+	Disconnect: (self: ScriptConnection) -> ();
+	Connected: boolean;
+}
+
+--[[
+
+	The ScriptSignal type is very similar to the
+	RBXScriptSignal.
+	
+	@private
+	@typedef [{
+		Connect: (self: ScriptSignal<T...>?, func: (T...) -> ()) -> (ScriptConnection);
+		Wait: (self: ScriptSignal<T...>?) -> (T...);
+		Once: (self: ScriptSignal<T...>?, func: (T...) -> ()) -> (ScriptConnection);
+		ConnectParallel: (self: ScriptSignal<T...>?, func: (T...) -> ()) -> (ScriptConnection);
+	}] ScriptSignal
+	
+--]]
+
+type ScriptSignal<T...> = {
+	Connect: (self: ScriptSignal<T...>?, func: (T...) -> ()) -> (ScriptConnection);
+	Wait: (self: ScriptSignal<T...>?) -> (T...);
+	Once: (self: ScriptSignal<T...>?, func: (T...) -> ()) -> (ScriptConnection);
+}
+
+--[[
+
+	The CustomScriptSignal type is very similar to the
+	ScriptSignal type, but it lets you fire info as well.
+	
+	@public
+	@typedef [{
+		Connect: (self: CustomScriptSignal, func: (...any) -> ()) -> (ScriptConnection);
+		Wait: (self: CustomScriptSignal) -> (...any);
+		Once: (self: CustomScriptSignal, func: (...any) -> ()) -> (ScriptConnection);
+		Fire: (self: CustomScriptSignal, ...any) -> ();
+		ConnectParallel: (self: CustomScriptSignal, func: (...any) -> ()) -> (ScriptConnection);
+		DisconnectAll: (self: CustomScriptSignal) -> ()
+	}] CustomScriptSignal
+	
+--]]
+
+export type CustomScriptSignal = {
+	Connect: (self: CustomScriptSignal, func: (...any) -> ()) -> (ScriptConnection);
+	Wait: (self: CustomScriptSignal) -> (...any);
+	Once: (self: CustomScriptSignal, func: (...any) -> ()) -> (ScriptConnection);
+	Fire: (self: CustomScriptSignal, ...any) -> ();
+	DisconnectAll: (self: CustomScriptSignal) -> ()
+}
+
+--[[
+
+	A NetworkSignal is similar to a remote event.
+	
+	@public
+	@typedef [{
+	Connect: (self: NetworkSignal, func: (...any) -> ()) -> (ScriptConnection);
+	Once: (self: NetworkSignal, func: (...any) -> ()) -> (ScriptConnection);
+	FireServer: (self: NetworkSignal, ...any) -> ();
+	}] NetworkSignal
+	
+--]]
+
+type NetworkSignal = { -- sadly bridgenet2 is very limited right now, but it should be find for the time being.
+	Connect: (self: NetworkSignal, func: (...any) -> ()) -> ();
+	FireServer: (self: NetworkSignal, ...any) -> ();
+}
+
+--[[
+
+	A sNetworkSignal is similar to NetworkSignal, but is server-sided.
+	
+	@public
+	@typedef [{
+	Connect: (self: sNetworkSignal, func: (player: Player, ...any) -> ()) -> (ScriptConnection);
+	Once: (self: sNetworkSignal, func: (player: Player, ...any) -> ()) -> (ScriptConnection);
+	FireClient: (self: sNetworkSignal, player: Player, ...any) -> ();
+	FireAllClients: (self: sNetworkSignal, ...any) -> ();
+	FireMultipleClients: (self: sNetworkSignal, players: {Player}, ...any) -> ();
+	FireAllClientsExcept: (self: sNetworkSignal, blacklisted: {Player} | Player, ...any) -> ();
+	}] sNetworkSignal
+	
+--]]
+
+
+type sNetworkSignal = {
+	Connect: (self: sNetworkSignal, func: (player: Player, ...any) -> ()) -> ();
+	FireClient: (self: sNetworkSignal, player: Player, ...any) -> ();
+	FireAllClients: (self: sNetworkSignal, ...any) -> ();
+	FireMultipleClients: (self: sNetworkSignal, players: {Player}, ...any) -> ();
+	FireAllClientsExcept: (self: sNetworkSignal, blacklisted: {Player} | Player, ...any) -> ();
+}
 
 -- // Variables
 
 local MarketplaceService = game:GetService("MarketplaceService")
 local ServerStorage = game:GetService("ServerStorage")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local RunService = game:GetService("RunService")
 local PlayerService = game:GetService("Players")
 
-local StartupData = {StartTime = 0; IsStarted = false;}
-local LocalStartupData = {StartTime = 0; IsStarted = false;}
+local CanaryEngine = ReplicatedStorage:WaitForChild("CanaryEngineFramework")
+local PreinstalledPackages = CanaryEngine.CanaryEngine.Packages
 
-local CanaryEngineServer = { }
-local CanaryEngineClient = { }
+local Startup = require(script.Startup)
+local Debugger = require(script.Debugger)
+local Runtime = require(script.Runtime) -- Get the RuntimeSettings, which are settings that are set during runtime
 
-local CanaryEngine = ReplicatedStorage.CanaryEngine
+local RuntimeContext = Runtime.Context
+local RuntimeSettings = Runtime.Settings
 
-local EngineSignal = require(InternalPackages.EngineSignal)
-local EngineConsole, console = require(script.Console), require(script.Console)
-local EngineTypes = require(InternalPackages.EngineTypes)
-local EngineUtility = require(InternalPackages.EngineUtility)
-local EngineNetworkSignal = require(InternalPackages.BridgeNet)
-local EngineStartup = require(script.Startup)
+--
 
-local IsStudio = RunService:IsStudio()
-
-Package.Console = EngineConsole
+local Signal = require(PreinstalledPackages.Signal)
+local BridgeNet2 = require(PreinstalledPackages.BridgeNet2)
 
 -- // Functions
 
-local SetupServer = function()
-	local StartTime = os.clock()
-
-	EngineStartup.SetupFolders("Server")
-	EngineStartup.SetupFolders("Client")
-	EngineStartup.SetupFolders("Global")
-
-	EngineStartup.FinalizeSetup()
-
-	console.warn("CanaryEngine is not ready for stable use; bugs will be present. Contact Canary if you find any bugs.")
-
-	local EndTime = (os.clock() - StartTime) * 1000
-
-	StartupData.IsStarted = true
-	StartupData.StartTime = EndTime
-
-	Package.GetLatestPackageVersion(script.Parent, true)
-	CanaryEngine:SetAttribute("EngineStarted", true)
+local function nilparam<a>(arg: a?, def: a): a
+	if arg == nil then
+		return def
+	else
+		return arg
+	end
 end
 
 --[[
 
-	Starts the server and then will automatically replicate
-	all client folders. Allows you to use the server-sided
-	version of cEngine.
+	Allows you to use the server sided version of cEngine.
 	
+	@public
 	@returns [dictionary] EngineServer
 	
 --]]
 
 function Package.GetEngineServer()
-	if RunService:IsServer() then
-		
-		CanaryEngineServer.Packages = ServerStorage:WaitForChild("EngineServer").Packages :: Folder
-		CanaryEngineServer.Media = ServerStorage:WaitForChild("EngineServer").Media :: Folder
-		
+	if RuntimeContext.Server then
+		CanaryEngineServer.Packages = {
+			Server = ServerStorage:WaitForChild("EngineServer").Packages :: typeof(CanaryEngine.Packages.Server);
+			Global = ReplicatedStorage:WaitForChild("EngineGlobal").Packages :: typeof(CanaryEngine.Packages.Global);
+		}
+
+		CanaryEngineServer.Media = ServerStorage:WaitForChild("EngineServer").Media :: typeof(CanaryEngine.Media.Server)
+		CanaryEngineServer.PreinstalledPackages = {
+			DataService = require(PreinstalledPackages.DataService);
+			RandomGenerator = require(PreinstalledPackages.RandomGenerator);
+		}
+
 		return CanaryEngineServer
 	else
-		console.silentError("Could not fetch table 'EngineServer'.")
+		error("[CanaryEngine]: Could not fetch table 'EngineServer'.")
 	end
 end
 
@@ -79,91 +178,67 @@ end
 
 	Allows you to use the client sided version of cEngine.
 	
+	@public
 	@returns [dictionary] EngineClient
 	
 --]]
 
 function Package.GetEngineClient()
-	if RunService:IsClient() then
-		
-		CanaryEngineClient.Packages = ReplicatedStorage:WaitForChild("EngineClient").Packages :: Folder
-		CanaryEngineClient.Media = ReplicatedStorage:WaitForChild("EngineClient").Media :: Folder
-		
+	if RuntimeContext.Client then
+		CanaryEngineClient.Packages = {
+			Client = ReplicatedStorage:WaitForChild("EngineClient").Packages :: typeof(CanaryEngine.Packages.Client);
+			Global = ReplicatedStorage:WaitForChild("EngineGlobal").Packages :: typeof(CanaryEngine.Packages.Global);
+		}
+
+		CanaryEngineClient.Media = ReplicatedStorage:WaitForChild("EngineClient").Media :: typeof(CanaryEngine.Media.Client)
 		CanaryEngineClient.Player = PlayerService.LocalPlayer :: Player
-		
+		CanaryEngineClient.PreinstalledPackages = {
+			RandomGenerator = require(PreinstalledPackages.RandomGenerator);
+		}
+
 		return CanaryEngineClient
 	else
-		console.silentError("Could not fetch table 'EngineClient'.")
+		error("[CanaryEngine]: Could not fetch table 'EngineClient'.")
 	end
 end
 
 --[[
 
-	Creates a client-sided `NetworkSignal`.
+	Creates a `NetworkSignal`, can be used in the other types of RunContexts.
 	
-	@returns [NetworkSignalClient] A client-sided NetworkSignal object.
+	@public
+	@returns [NetworkSignal] Similar to a remote event, but client-sided.
 	
 --]]
 
-function CanaryEngineClient.CreateNetworkSignal(id: string | number): EngineTypes.NetworkSignalClient
-	return EngineNetworkSignal.CreateBridge(tostring(id))
+function CanaryEngineClient.CreateNetworkSignal(name: string): NetworkSignal
+	return BridgeNet2.ReferenceBridge(name)
+end
+
+--[[
+
+	Creates a `NetworkSignal`, can be used in the other types of RunContexts.
+	
+	@public
+	@returns [sNetworkSignal] Similar to a remote event, but server-sided.
+	
+--]]
+
+function CanaryEngineServer.CreateNetworkSignal(name: string): sNetworkSignal
+	return BridgeNet2.ReferenceBridge(name)
 end
 
 --[[
 
 	Creates a `ScriptSignal`, can be used in the same RunContext.
 	
-	@param [(string|number)] id - The name/id of the signal.
-	
+	@public
 	@returns [CustomScriptSignal] A user-created `ScriptSignal` object.
 	
 --]]
 
-function Package.CreateSignal(): EngineTypes.CustomScriptSignal
-	return EngineSignal.new()
-end
-
---[[
-
-	Creates a server-sided `NetworkSignal`.
-	
-	@param [(string|number)] id - The name/id of the signal.
-	
-	@returns [NetworkSignalServer] A server-sided `NetworkSignal` object.
-	
---]]
-
-function CanaryEngineServer.CreateNetworkSignal(id: string | number): EngineTypes.NetworkSignalServer
-	return EngineNetworkSignal.CreateBridge(tostring(id))
-end
-
---[[
-
-	Gets `DataService` from the services folder. This is the default data package.
-	
-	@returns [DataService] The data storing method used by cEngine.
-	
---]]
-
-function CanaryEngineServer.GetDataService()
-	return require(InternalPackages.DataService)
-end
-
---[[
-
-	Gets the start time of EngineServer.
-	
-	@returns [?number] The amount of time (in ms) cEngine took to start.
-	
---]]
-
-function Package.GetStartupTime(): number?
-	if StartupData.IsStarted then
-		return StartupData.StartTime
-	else
-		console.warn("Engine not started.")
-		return nil
-	end
+function Package.CreateSignal(): CustomScriptSignal
+	return Signal.new()
 end
 
 --[[
@@ -178,54 +253,54 @@ end
 	@param [?boolean] warnIfNotLatestVersion - An option to log a warning
 	if the package version isn't the latest.
 	
+	@public
+	
 	@returns [?number] The fetched version, may be nil if there was an
 	error fetching the version
 	
 --]]
 
-function Package.GetLatestPackageVersion(package: Instance, warnIfNotLatestVersion: boolean?): number?
-	console.assert(package:GetAttribute("PackageId") ~= nil, "Package must have a valid 'PackageId'")
-	console.assert(package:GetAttribute("VersionNumber") ~= nil, "Package must have a valid 'VersionNumber'")
+function Package.GetLatestPackageVersionAsync(package: Instance, warnIfNotLatestVersion: boolean?): number?
+	Debugger.assertmulti(
+		{package:GetAttribute("PackageId") ~= nil, "Package must have a valid 'PackageId'"},
+		{package:GetAttribute("VersionNumber") ~= nil, "Package must have a valid 'VersionNumber'"},
+		{package:GetAttribute("PackageId") ~= 0, "Cannot have a PackageId of zero."}
+	)
 	
-	console.assert(package:GetAttribute("PackageId") ~= 0, "Cannot have a PackageId of zero.")
-	
-	warnIfNotLatestVersion = EngineUtility.optionalParam(warnIfNotLatestVersion, true)
+	warnIfNotLatestVersion = nilparam(warnIfNotLatestVersion, true)
 	
 	local MarketplaceInfo
-	local success, err = pcall(function()
+	local Success, Error = pcall(function()
 		MarketplaceInfo = MarketplaceService:GetProductInfo(package:GetAttribute("PackageId"))
 	end)
 	
-	if success then
-		local FetchedVersion = string.match(MarketplaceInfo.Description, "Version: %d+")
-		
-		if not FetchedVersion then
-			console.error("Asset description must have 'Version: (number)")
-		end
-		
-		local SplitFetchedVersion = tonumber(string.split(FetchedVersion, " ")[2])
-		
-		if SplitFetchedVersion ~= package:GetAttribute("VersionNumber") then
-			if warnIfNotLatestVersion then
-				console.warn(`Package '{MarketplaceInfo.Name}' is not up-to-date. Available version: {SplitFetchedVersion}`)
-			end
-			return SplitFetchedVersion
-		else
-			if IsStudio then
-				console.log(`Package '{MarketplaceInfo.Name}' is up-to-date.`)
-			else
-				console.silentLog("Package is up-to-date.")
-			end
-			return SplitFetchedVersion
-		end
-	else
-		console.silentError(`There was an error fetching package info, retry. '{err}'`)
+	if not Success and Error then
+		warn(`Could not fetch version: {Error}`)
 		return nil
 	end
+	
+	local FetchedVersion = string.match(MarketplaceInfo.Description, "Version: %d+")
+		
+	if not FetchedVersion then
+		error("Asset description must have 'Version: (number)")
+	end
+	
+	local SplitFetchedVersion = tonumber(string.split(FetchedVersion, " ")[2])
+	
+	if SplitFetchedVersion ~= package:GetAttribute("VersionNumber") then
+		if warnIfNotLatestVersion then
+			warn(`Package '{MarketplaceInfo.Name}' is not up-to-date. Available version: {SplitFetchedVersion}`)
+		end
+		return SplitFetchedVersion
+	end
+		
+	Debugger.print(`Package '{MarketplaceInfo.Name}' is up-to-date.`)
+			
+	return SplitFetchedVersion
 end
 
 -- // Actions
 
-if RunService:IsServer() and not StartupData.IsStarted then SetupServer() end
+Startup.StartEngine()
 
 return Package
