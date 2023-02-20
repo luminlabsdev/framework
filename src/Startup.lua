@@ -7,13 +7,11 @@ local Package = { }
 local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
+local RunService = game:GetService("RunService")
 
-local EngineMain = ReplicatedStorage.CanaryEngine
-
-local IsStudio = RunService:IsStudio()
-local console = require(script.Parent.Console)
-
-local StudioDebuggerEnabled = EngineMain.EngineManager:GetAttribute("StudioDebuggerEnabled")
+local CanaryEngineFolder = ReplicatedStorage.CanaryEngineFramework
+local CanaryEngineModule = script.Parent
+local CanaryEngineDebugger = require(script.Parent.Debugger)
 
 local ParentTypes = {
 	Client = ReplicatedStorage;
@@ -23,44 +21,54 @@ local ParentTypes = {
  
 -- // Functions
 
-function Package.SetupFolders(setupType: "Server" | "Global" | "Client")
-	local EngineFolder = Instance.new("Folder")
-	
-	EngineFolder.Name = "Engine" .. setupType
-	
-	local UserPackages = EngineMain.Packages
-	local UserAssets = EngineMain.Media
-	
-	local NewPackages: Folder = UserPackages[setupType]
-	
-	if setupType ~= "Global" then
-		local NewAssets: Folder = UserAssets[setupType]
-		
-		NewAssets.Name = "Assets"
-		NewAssets.Parent = EngineFolder
+function Package.StartEngine()
+	-- Check if it's already running
+	if CanaryEngineFolder:GetAttribute("EngineStarted") then
+		return
+	end
+
+	if not RunService:IsServer() then
+		return
 	end
 	
-	NewPackages.Name = "Packages"
-	NewPackages.Parent = EngineFolder
+	local UserPackages = CanaryEngineFolder.Packages
+	local UserAssets = CanaryEngineFolder.Media
+	local UserScripts = CanaryEngineFolder.Scripts
 	
-	EngineFolder.Parent = ParentTypes[setupType]
-end
+	-- Loop through available setup types
+	for setupType, parentType in pairs(ParentTypes) do
+		local EngineFolder = Instance.new("Folder")
 
-function Package.FinalizeSetup()
-	local Scripts = EngineMain.Scripts
+		EngineFolder.Name = `Engine{setupType}`
 
-	Scripts.Name = "EngineScripts"
-	Scripts.Parent = ReplicatedStorage
+		local NewPackages: Folder = UserPackages[setupType]
+
+		if setupType ~= "Global" then
+			local NewMedia: Folder = UserAssets[setupType]
+
+			NewMedia.Name = "Media"
+			NewMedia.Parent = EngineFolder
+		end
+
+		NewPackages.Name = "Packages"
+		NewPackages.Parent = EngineFolder
+
+		EngineFolder.Parent = parentType
+	end
+	-- Finalize setup
 	
-	for index, value in ipairs(EngineMain:GetChildren()) do
-		if value.Name ~= "EngineManager" then
+	UserScripts.Name = "EngineScripts"
+	UserScripts.Parent = ReplicatedStorage
+
+	for index, value in ipairs(CanaryEngineFolder:GetChildren()) do
+		if value.Name ~= "CanaryEngine" then
 			value:Destroy()
 		end
 	end
-	
-	if IsStudio and StudioDebuggerEnabled then
-		console.log("Startup finalized.")
-	end
+
+	CanaryEngineDebugger.print("Framework loaded successfully!")
+
+	CanaryEngineModule:SetAttribute("EngineStarted", true)
 end
 
 -- // Actions
