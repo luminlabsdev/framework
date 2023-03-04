@@ -12,6 +12,10 @@ local RunService = game:GetService("RunService")
 local CanaryEngineFolder = ReplicatedStorage.CanaryEngineFramework
 local CanaryEngineModule = script.Parent
 local CanaryEngineDebugger = require(script.Parent.Debugger)
+local CanaryEngineRuntime = require(script.Parent.Runtime)
+
+local RuntimeContext = CanaryEngineRuntime.Context
+local RuntimeSettings = CanaryEngineRuntime.Settings
 
 local ParentTypes = {
 	Client = ReplicatedStorage;
@@ -23,11 +27,11 @@ local ParentTypes = {
 
 function Package.StartEngine()
 	-- Check if it's already running
-	if CanaryEngineFolder:GetAttribute("EngineStarted") then
+	if CanaryEngineRuntime.IsStarted() then
 		return
 	end
 
-	if not RunService:IsServer() then
+	if not RuntimeContext.Server then
 		return
 	end
 	
