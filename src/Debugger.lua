@@ -20,32 +20,22 @@ local ValidDebugFunctionList = {
 
 local function IsStudioAndDebugEnabled(debugType: "print" | "warn", ...: any)
 	if RuntimeContext.Studio and RuntimeSettings.StudioDebugEnabled then
-		ValidDebugFunctionList[debugType](...)
+		ValidDebugFunctionList[debugType](Prefix, ...)
 	end
 end
 
-function Package.print<T...>(...: T...)
+function Package.print(...: any)
 	IsStudioAndDebugEnabled("print", ...)
 end
 
-function Package.warn<T...>(...: T...)
+function Package.warn(...: any)
 	IsStudioAndDebugEnabled("warn", ...)
 end
 
-function Package.assert<a, b>(assertion: a, msg: b): a?
-	if not (assertion) then
-		error(msg)
-		return nil
-	end
-	return assertion
-end
-
-function Package.assertmulti<a, b>(...: {a | b})
-	for index, value in ipairs({...}) do
-		if not (value[1]) then
-			error(value[2])
-		end
-	end
+function Package.silenterror<T>(msg: T)
+	local thread = task.spawn(error, msg, 0)
+	task.cancel(thread)
+	thread = nil
 end
 
 -- // Actions
