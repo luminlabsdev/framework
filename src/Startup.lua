@@ -19,7 +19,7 @@ local RuntimeSettings = CanaryEngineRuntime.Settings
 
 local ParentTypes = {
 	Client = ReplicatedStorage;
-	Global = ReplicatedStorage;
+	Replicated = ReplicatedStorage;
 	Server = ServerStorage;
 }
  
@@ -36,26 +36,26 @@ function Package.StartEngine()
 	end
 	
 	local UserPackages = CanaryEngineFolder.Packages
-	local UserAssets = CanaryEngineFolder.Media
+	local UserMedia = CanaryEngineFolder.Media
 	local UserScripts = CanaryEngineFolder.Scripts
 	
 	-- Loop through available setup types
-	for setupType, parentType in pairs(ParentTypes) do
+	for setupType, parentType in ParentTypes do
 		local EngineFolder = Instance.new("Folder")
 
 		EngineFolder.Name = `Engine{setupType}`
-
+		
 		local NewPackages: Folder = UserPackages[setupType]
-
-		if setupType ~= "Global" then
-			local NewMedia: Folder = UserAssets[setupType]
-
-			NewMedia.Name = "Media"
-			NewMedia.Parent = EngineFolder
-		end
 
 		NewPackages.Name = "Packages"
 		NewPackages.Parent = EngineFolder
+
+		if setupType ~= "Replicated" then
+			local NewMedia: Folder = UserMedia[setupType]
+			
+			NewMedia.Name = "Media"
+			NewMedia.Parent = EngineFolder
+		end
 
 		EngineFolder.Parent = parentType
 	end
@@ -64,7 +64,7 @@ function Package.StartEngine()
 	UserScripts.Name = "EngineScripts"
 	UserScripts.Parent = ReplicatedStorage
 
-	for index, value in ipairs(CanaryEngineFolder:GetChildren()) do
+	for index, value in CanaryEngineFolder:GetChildren() do
 		if value.Name ~= "CanaryEngine" then
 			value:Destroy()
 		end
