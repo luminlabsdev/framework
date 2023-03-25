@@ -12,6 +12,11 @@ return {
 	};
 	
 	Settings = {
-		StudioDebugEnabled = CanaryEngineFramework:GetAttribute("StudioDebugger")
-	}
+		StudioDebugEnabled = CanaryEngineFramework:GetAttribute("StudioDebugger");
+		CheckLatestVersion = CanaryEngineFramework:GetAttribute("CheckLatestVersion");
+	};
+	
+	IsStarted = function(): boolean
+		return CanaryEngineFramework.CanaryEngine:GetAttribute("Started")
+	end;
 }
