@@ -4,7 +4,6 @@ local Package = {
 	Utility = { };
 	Benchmark = { };
 	Serialize = require(script.Packages.ThirdParty.BlueSerializer)
-
 }
 
 local CanaryEngineServer = { }
@@ -79,24 +78,43 @@ export type CustomScriptSignal = {
 
 --[[
 
-	A NetworkSignal is similar to a remote event.
+	A NetworkSignal is similar to a remote event, client-sided.
 	
 	@public
 	@typedef [{
-	Connect: (self: NetworkSignal, func: (...any) -> ()) -> (ScriptConnection);
-	Once: (self: NetworkSignal, func: (...any) -> ()) -> (ScriptConnection);
-	FireServer: (self: NetworkSignal, ...any) -> ();
+	Connect: (self: ClientNetworkSignal, func: (data: {any}) -> ()) -> (ScriptConnection);
+	Once: (self: ClientNetworkSignal, func: (data: {any}) -> ()) -> (ScriptConnection);
+	Wait: (self: ClientNetworkSignal) -> ({any});
+	Fire: (self: ClientNetworkSignal, data: {any}?) -> ();
 	}] NetworkSignal
 	
 --]]
 
-type ClientNetworkSignal = {
-	Connect: (self: ClientNetworkSignal, func: (...any) -> ()) -> ();
+export type ClientNetworkSignal = {
+	Connect: (self: ClientNetworkSignal, func: (data: {any}) -> ()) -> (ScriptConnection);
+	Once: (self: ClientNetworkSignal, func: (data: {any}) -> ()) -> (ScriptConnection);
+	Wait: (self: ClientNetworkSignal) -> ({any});
 	Fire: (self: ClientNetworkSignal, data: {any}?) -> ();
 }
 
-type ServerNetworkSignal = {
-	Connect: (self: ServerNetworkSignal, func: (recipient: Player, ...any) -> ()) -> ();
+--[[
+
+	A NetworkSignal is similar to a remote event, server-sided.
+	
+	@public
+	@typedef [{
+	Connect: (self: ServerNetworkSignal, func: (sender: Player, data: {any}) -> ()) -> (ScriptConnection);
+	Once: (self: ServerNetworkSignal, func: (sender: Player, data: {any}) -> ()) -> (ScriptConnection);
+	Wait: (self: ServerNetworkSignal) -> (Player, {any});
+	Fire: (self: ServerNetworkSignal, recipient: Player | {Player}, data: {any}?) -> ();
+	}] NetworkSignal
+	
+--]]
+
+export type ServerNetworkSignal = {
+	Connect: (self: ServerNetworkSignal, func: (sender: Player, data: {any}) -> ()) -> (ScriptConnection);
+	Once: (self: ServerNetworkSignal, func: (sender: Player, data: {any}) -> ()) -> (ScriptConnection);
+	Wait: (self: ServerNetworkSignal) -> (Player, {any});
 	Fire: (self: ServerNetworkSignal, recipient: Player | {Player}, data: {any}?) -> ();
 }
 
@@ -123,6 +141,11 @@ local RuntimeSettings = Runtime.Settings
 
 local Signal = require(PreinstalledPackages.ThirdParty.Signal)
 local BridgeNet2 = require(PreinstalledPackages.ThirdParty.BridgeNet2)
+
+Package.Runtime = {
+	RuntimeSettings = RuntimeSettings;
+	RuntimeContext = RuntimeContext;
+}
 
 -- // Functions
 
@@ -168,7 +191,7 @@ function Package.Utility.assert<a, b>(assertion: a, msg: b): a?
 		error(msg, 0)
 		return nil
 	end
-	
+
 	return assertion
 end
 
@@ -242,18 +265,18 @@ end
 
 function Package.Utility.DeepCopy(t: {[number]: any}): {[number]: any}
 	local copied = { }
-	
+
 	if type(t) ~= "table" then
 		Debugger.silenterror(`Field 't' expected array, got {typeof(t)}.`)
 	end
-	
+
 	for index, value in t do
 		if type(value) == "table" then
 			value = Package.Utility.DeepCopy(value)
 		end
 		copied[index] = value
 	end
-	
+
 	return copied
 end
 
@@ -269,10 +292,10 @@ end
 	
 --]]
 
-function Package.Utility.IsDictionary(t: table): boolean?
+function Package.Utility.IsDictionary(t: table): boolean
 	if type(t) ~= "table" then
 		Debugger.silenterror(`Field 't' expected table, got {typeof(t)}.`)
-		return
+		return false
 	end
 	if not t[1] then
 		return true
@@ -297,13 +320,13 @@ function Package.Utility.DictionaryToArray<a, b>(d: {[a]: b}): {[number]: {a | b
 		Debugger.silenterror(`Field 'd' expected dictionary, got {typeof(d)}.`)
 		return
 	end
-	
+
 	local newArray = { }
-	
+
 	for key, value in d do
 		table.insert(newArray, {key, value})
 	end
-	
+
 	return newArray
 end
 
@@ -329,8 +352,31 @@ function Package.Utility.ArrayToDictionary<a, b>(t: {[number]: {a | b}}): {[a]: 
 	for index, value in t do
 		newDictionary[value[1]] = value[2]
 	end
-	
+
 	return newDictionary
+end
+
+--[[
+
+	Returns the number of keys inside of the provided
+	dictionary.
+	
+	@param [dictionary] d - The dictionary to get the
+	count of.
+	
+	@public
+	@returns [number] 
+	
+--]]
+
+function Package.Utility.DictionaryGetn(d: {[any]: any}): number
+	local count = 0
+
+	for key, value in pairs(d) do
+		count += 1
+	end
+
+	return count
 end
 
 --[[
@@ -352,30 +398,58 @@ end
 	
 --]]
 
-function Package.Utility.ArrayToString(t: {[number]: any}, sep: string?, i: number?, j: number?): string?
+function Package.Utility.TableToString(t: {[any]: any}, sep: string?, i: number?, j: number?): string?
+	if Package.Utility.DictionaryGetn(t) == 0 then
+		return "{}"
+	end
+
 	local stringToConvert = "{"
-	
+
 	sep = Package.Utility.nilparam(sep, ", ")
 	i = Package.Utility.nilparam(i, 1)
 	j = Package.Utility.nilparam(j, #t)
-	
-	if i <= 0 or i > #t then
-		Debugger.silenterror(`Field 'i' must be greater than 0 and less than or equal to {#t}.`)
-		return
+
+	if not Package.Utility.IsDictionary(t) then
+		if i <= 0 or i > #t then
+			Debugger.silenterror(`Field 'i' must be greater than 0 and less than or equal to {#t}.`)
+			return
+		end
+
+		if j <= 0 or j > #t then
+			Debugger.silenterror(`Field 'j' must be greater than 0 and less than or equal to {#t}.`)
+			return
+		end
 	end
-	
-	if j <= 0 or j > #t then
-		Debugger.silenterror(`Field 'j' must be greater than 0 and less than or equal to {#t}.`)
-		return
+
+	if Package.Utility.IsDictionary(t) then
+		local total = Package.Utility.DictionaryGetn(t)
+		local current = 0
+
+		for key, value in t do
+			current += 1
+			if type(value) == "string" then
+				value = `"{value}"`
+			end
+			if type(value) == "table" then
+				value = Package.Utility.TableToString(value, sep)
+			end
+			if current == total then
+				stringToConvert = `{stringToConvert}["{key}"] = {value}}`
+			else
+				stringToConvert = `{stringToConvert}["{key}"] = {value}{sep}`
+			end
+		end
+
+		return stringToConvert
 	end
-	
+
 	for index = i :: number, j :: number do
 		local value = t[index]
 		if type(value) == "string" then
 			value = `"{value}"`
 		end
-		if type(value) == "table" and not Package.Utility.IsDictionary(value) then
-			value = Package.Utility.ArrayToString(value, sep)
+		if type(value) == "table" then
+			value = Package.Utility.TableToString(value, sep)
 		end
 		if index == j then
 			stringToConvert = `{stringToConvert}[{index}] = {value}}`
@@ -383,31 +457,8 @@ function Package.Utility.ArrayToString(t: {[number]: any}, sep: string?, i: numb
 			stringToConvert = `{stringToConvert}[{index}] = {value}{sep}`
 		end
 	end
-	
+
 	return stringToConvert
-end
-
---[[
-
-	Returns the number of keys inside of the provided
-	dictionary.
-	
-	@param [dictionary] d - The dictionary to get the
-	count of.
-	
-	@public
-	@returns [number] 
-	
---]]
-
-function Package.Utility.DictionaryGetn(d: {[any]: any}): number
-	local count = 0
-	
-	for key, value in pairs(d) do
-		count += 1
-	end
-	
-	return count
 end
 
 --[[
@@ -422,12 +473,12 @@ end
 
 function Package.Benchmark.CreateBenchmark()
 	local self = setmetatable({ }, {__index = BenchmarkMethods})
-	
+
 	self.IsCompleted = false
 	self.Destroying = Signal.new() :: ScriptSignal<>
 	self.StartTime = 0
 	self.EndTime = 0
-	
+
 	return self
 end
 
@@ -447,19 +498,19 @@ function BenchmarkMethods:SetFunction(timesToRun: number, func: (timesRan: numbe
 		Debugger.silenterror("Field 'timesToRun' must be greater than 0.")
 		return
 	end
-	
+
 	local result
-	
+
 	task.spawn(function()
 		self.StartTime = os.clock()
 
 		for index = 1, timesToRun do
 			func(index)
 		end
-		
+
 		result = self:Stop()
 	end)
-	
+
 	return result
 end
 
@@ -491,11 +542,11 @@ end
 function BenchmarkMethods:Stop(): number
 	self.IsCompleted = true
 	self.EndTime = os.clock()
-	
+
 	local StoppedTime = self.EndTime - self.StartTime
-	
+
 	self:Destroy()
-	
+
 	return StoppedTime
 end
 
@@ -514,7 +565,7 @@ function BenchmarkMethods:GetCurrentTime(): number?
 		Debugger.silenterror("Timer cannot be stopped to view current time.")
 		return
 	end
-	
+
 	return os.clock() - self.StartTime
 end
 
@@ -547,10 +598,9 @@ end
 function Package.GetEngineServer()
 	if RuntimeContext.Server then
 		CanaryEngineServer.Packages = {
-			Server = ServerStorage:WaitForChild("EngineServer").Packages :: typeof(CanaryEngine.Packages.Server);
-			Global = ReplicatedStorage:WaitForChild("EngineGlobal").Packages :: typeof(CanaryEngine.Packages.Global);
+			Server = ServerStorage:WaitForChild("EngineServer").Packages :: typeof(script.Parent.Packages.Server);
+			Replicated = ReplicatedStorage:WaitForChild("EngineReplicated").Packages :: typeof(script.Parent.Packages.Replicated);
 		}
-
 		CanaryEngineServer.Media = ServerStorage:WaitForChild("EngineServer").Media :: typeof(CanaryEngine.Media.Server)
 		CanaryEngineServer.PreinstalledPackages = {
 			DataService = require(PreinstalledPackages.DataService);
@@ -574,13 +624,18 @@ end
 
 function Package.GetEngineClient()
 	if RuntimeContext.Client then
-		CanaryEngineClient.Packages = {
-			Client = ReplicatedStorage:WaitForChild("EngineClient").Packages :: typeof(CanaryEngine.Packages.Client);
-			Global = ReplicatedStorage:WaitForChild("EngineGlobal").Packages :: typeof(CanaryEngine.Packages.Global);
-		}
+		local Player = PlayerService.LocalPlayer
 
-		CanaryEngineClient.Media = ReplicatedStorage:WaitForChild("EngineClient").Media :: typeof(CanaryEngine.Media.Client)
-		CanaryEngineClient.Player = PlayerService.LocalPlayer :: Player
+		CanaryEngineClient.Packages = {
+			Client = ReplicatedStorage:WaitForChild("EngineClient").Packages :: typeof(script.Parent.Packages.Client);
+			Replicated = ReplicatedStorage:WaitForChild("EngineReplicated").Packages :: typeof(script.Parent.Packages.Replicated);
+		}
+		CanaryEngineClient.Media = ReplicatedStorage:WaitForChild("EngineClient").Media :: typeof(CanaryEngine.Media.Client);
+		CanaryEngineClient.Player = Player :: Player
+		CanaryEngineClient.LocalObjects = {
+			PlayerGui = Player:WaitForChild("PlayerGui") :: typeof(game:GetService("StarterGui"));
+			PlayerBackpack = Player:WaitForChild("Backpack") :: typeof(game:GetService("StarterPack"));
+		}
 		CanaryEngineClient.PreinstalledPackages = {
 			RandomGenerator = require(PreinstalledPackages.RandomGenerator);
 		}
@@ -655,40 +710,40 @@ function Package.GetLatestPackageVersionAsync(package: Instance, warnIfNotLatest
 		{package:GetAttribute("VersionNumber") ~= nil, "Package must have a valid 'VersionNumber'"},
 		{package:GetAttribute("PackageId") ~= 0, "Cannot have a PackageId of zero."}
 	)
-	
+
 	warnIfNotLatestVersion = Package.Utility.nilparam(warnIfNotLatestVersion, true)
-	
+
 	if not RuntimeContext.Server then
 		return
 	end
-	
+
 	local MarketplaceInfo
 	local Success, Error = pcall(function()
 		MarketplaceInfo = MarketplaceService:GetProductInfo(package:GetAttribute("PackageId"))
 	end)
-	
+
 	if not Success and Error then
 		warn(`Could not fetch version: {Error}`)
 		return nil
 	end
-	
+
 	local FetchedVersion = string.match(MarketplaceInfo.Description, "Version: %d+")
-		
+
 	if not FetchedVersion then
 		error("Asset description must have 'Version: (number)")
 	end
-	
+
 	local SplitFetchedVersion = tonumber(string.split(FetchedVersion, " ")[2])
-	
+
 	if SplitFetchedVersion ~= package:GetAttribute("VersionNumber") then
 		if warnIfNotLatestVersion then
 			warn(`Package '{MarketplaceInfo.Name}' is not up-to-date. Available version: {SplitFetchedVersion}`)
 		end
 		return SplitFetchedVersion
 	end
-		
+
 	Debugger.print(`Package '{MarketplaceInfo.Name}' is up-to-date.`)
-			
+
 	return SplitFetchedVersion
 end
 
@@ -696,7 +751,7 @@ end
 
 Startup.StartEngine()
 
-if script.Parent:GetAttribute("CheckLatestVersion") then
+if RuntimeSettings.CheckLatestVersion then
 	Package.GetLatestPackageVersionAsync(script.Parent, true)
 end
 
