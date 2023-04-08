@@ -14,12 +14,13 @@ local Prefix = "[Debugger]:"
 local ValidDebugFunctionList = {
 	["warn"] = warn;
 	["print"] = print;
+	["error"] = error;
 }
 
 -- // Functions
 
-local function IsStudioAndDebugEnabled(debugType: "print" | "warn", ...: any)
-	if RuntimeContext.Studio and RuntimeSettings.StudioDebugEnabled then
+local function IsStudioAndDebugEnabled(debugType: "print" | "warn" | "error", ...: any)
+	if (RuntimeContext.Studio and RuntimeSettings.StudioDebugEnabled) or (RuntimeSettings.LiveGameDebugger) then
 		ValidDebugFunctionList[debugType](Prefix, ...)
 	end
 end
@@ -36,6 +37,10 @@ function Package.silenterror<T>(msg: T)
 	local thread = task.spawn(error, msg, 0)
 	task.cancel(thread)
 	thread = nil
+end
+
+function Package.error<T>(msg: T)
+	IsStudioAndDebugEnabled("error", msg)
 end
 
 -- // Actions
