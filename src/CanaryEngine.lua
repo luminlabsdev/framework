@@ -3,7 +3,7 @@
 local Package = {
 	Utility = { };
 	Benchmark = { };
-	Serialize = require(script.Packages.ThirdParty.BlueSerializer)
+	Serialize = require(script.Vendor.BlueSerializer)
 }
 
 local CanaryEngineServer = { }
@@ -92,8 +92,8 @@ export type CustomScriptSignal = {
 
 export type ClientNetworkSignal = {
 	Connect: (self: ClientNetworkSignal, func: (data: {any}) -> ()) -> (ScriptConnection);
-	Once: (self: ClientNetworkSignal, func: (data: {any}) -> ()) -> (ScriptConnection);
-	Wait: (self: ClientNetworkSignal) -> ({any});
+	Once_DISABLED: (self: ClientNetworkSignal, func: (data: {any}) -> ()) -> (ScriptConnection);
+	Wait_DISABLED: (self: ClientNetworkSignal) -> ({any});
 	Fire: (self: ClientNetworkSignal, data: {any}?) -> ();
 }
 
@@ -113,8 +113,8 @@ export type ClientNetworkSignal = {
 
 export type ServerNetworkSignal = {
 	Connect: (self: ServerNetworkSignal, func: (sender: Player, data: {any}) -> ()) -> (ScriptConnection);
-	Once: (self: ServerNetworkSignal, func: (sender: Player, data: {any}) -> ()) -> (ScriptConnection);
-	Wait: (self: ServerNetworkSignal) -> (Player, {any});
+	Once_DISABLED: (self: ServerNetworkSignal, func: (sender: Player, data: {any}) -> ()) -> (ScriptConnection);
+	Wait_DISABLED: (self: ServerNetworkSignal) -> (Player, {any});
 	Fire: (self: ServerNetworkSignal, recipient: Player | {Player}, data: {any}?) -> ();
 }
 
@@ -127,8 +127,12 @@ local ServerStorage = game:GetService("ServerStorage")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local PlayerService = game:GetService("Players")
 
+if not ReplicatedStorage:FindFirstChild("CanaryEngineFramework") then
+	error("CanaryEngine must be parented to DataModel.ReplicatedStorage")
+end
+
 local CanaryEngine = ReplicatedStorage:WaitForChild("CanaryEngineFramework")
-local PreinstalledPackages = CanaryEngine.CanaryEngine.Packages
+local Vendor = CanaryEngine.CanaryEngine.Vendor
 
 local Startup = require(script.Startup)
 local Debugger = require(script.Debugger)
@@ -139,8 +143,8 @@ local RuntimeSettings = Runtime.Settings
 
 --
 
-local Signal = require(PreinstalledPackages.ThirdParty.Signal)
-local BridgeNet2 = require(PreinstalledPackages.ThirdParty.BridgeNet2)
+local Signal = require(Vendor.Signal)
+local BridgeNet2 = require(Vendor.BridgeNet2)
 
 Package.Runtime = {
 	RuntimeSettings = RuntimeSettings;
@@ -186,9 +190,9 @@ end
 	
 --]]
 
-function Package.Utility.assert<a, b>(assertion: a, msg: b): a?
+function Package.Utility.assert<a>(assertion: a, msg: string, ...: any): a?
 	if not (assertion) then
-		error(msg, 0)
+		error(string.format(msg, ...), 0)
 		return nil
 	end
 
@@ -242,10 +246,10 @@ end
 	
 --]]
 
-function Package.Utility.assertmulti<a, b>(...: {a | b})
+function Package.Utility.assertmulti<a, b>(...: {a | b | {any}?})
 	for index, value in {...} do
 		if not value[1] then
-			error(value[2], 0)
+			error(string.format(value[2], table.unpack(value[3])), 0)
 		end
 	end
 end
@@ -263,7 +267,7 @@ end
 	
 --]]
 
-function Package.Utility.DeepCopy(t: {[number]: any}): {[number]: any}
+function Package.Utility.DeepCopy<a>(t: {[number]: a}): {[number]: a}
 	local copied = { }
 
 	if type(t) ~= "table" then
@@ -297,11 +301,7 @@ function Package.Utility.IsDictionary(t: table): boolean
 		Debugger.silenterror(`Field 't' expected table, got {typeof(t)}.`)
 		return false
 	end
-	if not t[1] then
-		return true
-	else
-		return false
-	end
+	return not t[1]
 end
 
 --[[
@@ -358,40 +358,186 @@ end
 
 --[[
 
-	Returns the number of keys inside of the provided
-	dictionary.
+	Running this function on a dictionary will allow
+	you to use the length operator (#dict) on it.
 	
-	@param [dictionary] d - The dictionary to get the
-	count of.
+	@param [dictionary] d - The dictionary to set
+	the metatable to.
 	
 	@public
-	@returns [number] 
+	@returns [void]
 	
 --]]
 
-function Package.Utility.DictionaryGetn(d: {[any]: any}): number
-	local count = 0
-
-	for key, value in pairs(d) do
-		count += 1
-	end
-
-	return count
+function Package.Utility.dictionaryLen(d: {[any]: any})
+	setmetatable(d, {
+		__len = function(t)
+			local count = 0
+			for key, value in pairs(d) do
+				count += 1
+			end
+			return count
+		end,
+	})
 end
 
 --[[
 
-	Converts a array -> string. Example:
+	Gets all of the ancestors of the provided
+	instance.
+	
+	@param [Instance] instance - The instance
+	to get all of the ancestors of.
+	
+	@public
+	@returns [Instance]
+	
+--]]
+
+function Package.Utility.GetAncestors(instance: Instance): {Instance}
+	local ancestors = { }
+	
+	repeat
+		instance = instance.Parent :: Instance
+		table.insert(ancestors, instance)
+	until instance == game
+	
+	table.remove(ancestors, table.find(ancestors, game))
+	
+	return ancestors
+end
+
+--[[
+
+	Finds and waits for a child for whom
+	Instance:IsA() will return true for.
+	
+	@param [Instance] instance - The pa-
+	rent instance of the child to be fo-
+	und.
+	
+	@param [string] className - The cla-
+	ssName of the child to be found.
+	
+	@param [?number] timeOut - The amou-
+	nt of time the instance should be
+	waited for, nil if forever.
+	
+	@public
+	@returns [Instance]
+	
+--]]
+
+function Package.Utility.WaitForChildWhichIsA(instance: Instance, className: string, timeOut: number?)
+	for index, value in instance:GetChildren() do
+		if value:IsA(className) then
+			return instance:WaitForChild(value, timeOut)
+		end
+	end
+end
+
+--[[
+
+	Finds and waits for child that `clas-
+	sName` is equal to the child's class-
+	Name.
+	
+	@param [Instance] instance - The pa-
+	rent instance of the child to be fo-
+	und.
+	
+	@param [string] className - The cla-
+	ssName of the child to be found.
+	
+	@param [?number] timeOut - The amou-
+	nt of time the instance should be
+	waited for, nil if forever.
+	
+	@public
+	@returns [Instance]
+	
+--]]
+
+function Package.Utility.WaitForChildOfClass(instance: Instance, className: string, timeOut: number?)
+	for index, value in instance:GetChildren() do
+		if value.ClassName == className then
+			return instance:WaitForChild(value, timeOut)
+		end
+	end
+end
+
+--[[
+
+	Iterates through a list of values and
+	returns a boolean and a string. If t-
+	he value is true, then a string will
+	be returned with a list of values a-
+	nd their order in the original list.
+	The function is useful for times wh-
+	en you only want 1 value to be used
+	at a time. Example:
+	
+	```
+	local MyValues = {true, true, false}
+	
+	print(Utility.ConflictingValues(MyValues))
+	
+	-- Output: true Conflicting Values: 1; 2
+	```
+	
+	@param [array] values - A list of
+	values to be checked.
+	
+	@param [?string] sep - The separ-
+	ator between each conflicting va-
+	lue index.
+	
+	@public
+	@returns [(boolean, ?string)] 
+	
+--]]
+
+function Package.Utility.ConflictingValues(values: {any}, sep: string?): (boolean, string?)
+	local trueValues = { }
+	
+	sep = Package.Utility.nilparam(sep, "; ")
+	
+	for index, value in values do
+		if value then
+			table.insert(trueValues, index)
+		end
+	end
+	
+	if #trueValues ~= 1 then
+		return true, `Conflicting Values: {table.concat(trueValues, sep)}`
+	end
+	
+	return false, nil
+end
+
+--[[
+
+	Converts a array/dictionary -> string. An empty table
+	will result in the function returning: "{}". Example
+	of function in use:
 	
 	```
 	local myArray = {"This", "Is", "An", "Array!", 1, 2, 3, true, false}
 	
-	print(Utility.arrayToString(myArray))
+	print(Utility.TableToString(myArray))
 	
 	-- Output: {[1] = "This", [2] = "Is", [3] = "An", [4] = "Array!", [5] = 1, [6] = 2, [7] = 3, [8] = true, [9] = false}
 	```
 	
-	@param [array] t - The array to convert.
+	@param [table] t - The table to convert
+	@param [?string] sep - The separator
+	between each element.
+	
+	@param [?number] i - The index to start
+	at. (only for arrays)
+	
+	@param [?number] j - The index to end
+	at. (only for arrays)
 	
 	@public
 	@returns [dictionary] 
@@ -399,7 +545,11 @@ end
 --]]
 
 function Package.Utility.TableToString(t: {[any]: any}, sep: string?, i: number?, j: number?): string?
-	if Package.Utility.DictionaryGetn(t) == 0 then
+	if Package.Utility.IsDictionary(t) then
+		Package.Utility.dictionaryLen(t)
+	end
+	
+	if #t == 0 then
 		return "{}"
 	end
 
@@ -411,18 +561,17 @@ function Package.Utility.TableToString(t: {[any]: any}, sep: string?, i: number?
 
 	if not Package.Utility.IsDictionary(t) then
 		if i <= 0 or i > #t then
-			Debugger.silenterror(`Field 'i' must be greater than 0 and less than or equal to {#t}.`)
+			Debugger.error(`Field 'i' must be greater than 0 and less than or equal to {#t}.`)
 			return
 		end
 
 		if j <= 0 or j > #t then
-			Debugger.silenterror(`Field 'j' must be greater than 0 and less than or equal to {#t}.`)
+			Debugger.error(`Field 'j' must be greater than 0 and less than or equal to {#t}.`)
 			return
 		end
 	end
 
 	if Package.Utility.IsDictionary(t) then
-		local total = Package.Utility.DictionaryGetn(t)
 		local current = 0
 
 		for key, value in t do
@@ -433,7 +582,7 @@ function Package.Utility.TableToString(t: {[any]: any}, sep: string?, i: number?
 			if type(value) == "table" then
 				value = Package.Utility.TableToString(value, sep)
 			end
-			if current == total then
+			if current == #t then
 				stringToConvert = `{stringToConvert}["{key}"] = {value}}`
 			else
 				stringToConvert = `{stringToConvert}["{key}"] = {value}{sep}`
@@ -495,7 +644,7 @@ end
 
 function BenchmarkMethods:SetFunction(timesToRun: number, func: (timesRan: number) -> ()): number?
 	if timesToRun <= 0 then
-		Debugger.silenterror("Field 'timesToRun' must be greater than 0.")
+		Debugger.error("Field 'timesToRun' must be greater than 0.")
 		return
 	end
 
@@ -562,7 +711,7 @@ end
 
 function BenchmarkMethods:GetCurrentTime(): number?
 	if self.IsCompleted then
-		Debugger.silenterror("Timer cannot be stopped to view current time.")
+		Debugger.warn("Benchmark timer must still be running to view the current time.")
 		return
 	end
 
@@ -602,14 +751,10 @@ function Package.GetEngineServer()
 			Replicated = ReplicatedStorage:WaitForChild("EngineReplicated").Packages :: typeof(script.Parent.Packages.Replicated);
 		}
 		CanaryEngineServer.Media = ServerStorage:WaitForChild("EngineServer").Media :: typeof(CanaryEngine.Media.Server)
-		CanaryEngineServer.PreinstalledPackages = {
-			DataService = require(PreinstalledPackages.DataService);
-			RandomGenerator = require(PreinstalledPackages.RandomGenerator);
-		}
 
 		return CanaryEngineServer
 	else
-		error("[CanaryEngine]: Could not fetch table 'EngineServer'.")
+		Debugger.error("Failed to fetch 'EngineServer'; Context must be server.")
 	end
 end
 
@@ -624,25 +769,16 @@ end
 
 function Package.GetEngineClient()
 	if RuntimeContext.Client then
-		local Player = PlayerService.LocalPlayer
-
 		CanaryEngineClient.Packages = {
 			Client = ReplicatedStorage:WaitForChild("EngineClient").Packages :: typeof(script.Parent.Packages.Client);
 			Replicated = ReplicatedStorage:WaitForChild("EngineReplicated").Packages :: typeof(script.Parent.Packages.Replicated);
 		}
 		CanaryEngineClient.Media = ReplicatedStorage:WaitForChild("EngineClient").Media :: typeof(CanaryEngine.Media.Client);
-		CanaryEngineClient.Player = Player :: Player
-		CanaryEngineClient.LocalObjects = {
-			PlayerGui = Player:WaitForChild("PlayerGui") :: typeof(game:GetService("StarterGui"));
-			PlayerBackpack = Player:WaitForChild("Backpack") :: typeof(game:GetService("StarterPack"));
-		}
-		CanaryEngineClient.PreinstalledPackages = {
-			RandomGenerator = require(PreinstalledPackages.RandomGenerator);
-		}
+		CanaryEngineClient.Player = PlayerService.LocalPlayer :: Player
 
 		return CanaryEngineClient
 	else
-		error("[CanaryEngine]: Could not fetch table 'EngineClient'.")
+		Debugger.error("Failed to fetch 'EngineClient'; Context must be client.")
 	end
 end
 
@@ -651,7 +787,7 @@ end
 	Creates a `NetworkSignal`, can be used in the other types of RunContexts.
 	
 	@public
-	@returns [NetworkSignal] Similar to a remote event, but client-sided.
+	@returns [ClientNetworkSignal] Similar to a remote event, but client-sided.
 	
 --]]
 
@@ -664,12 +800,25 @@ end
 	Creates a `NetworkSignal`, can be used in the other types of RunContexts.
 	
 	@public
-	@returns [sNetworkSignal] Similar to a remote event, but server-sided.
+	@returns [ServerNetworkSignal] Similar to a remote event, but server-sided.
 	
 --]]
 
 function CanaryEngineServer.CreateNetworkSignal(name: string): ServerNetworkSignal
 	return BridgeNet2.ReferenceBridge(name)
+end
+
+--[[
+
+	Retrieves the main data service.
+	
+	@public
+	@returns [dictionary] DataService
+	
+--]]
+
+function CanaryEngineServer.GetDataService()
+	return require(Vendor.DataService)
 end
 
 --[[
