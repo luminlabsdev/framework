@@ -45,10 +45,10 @@ type ScriptConnection = {
 	
 --]]
 
-type ScriptSignal<T...> = {
-	Connect: (self: ScriptSignal<T...>?, func: (T...) -> ()) -> (ScriptConnection);
-	Wait: (self: ScriptSignal<T...>?) -> (T...);
-	Once: (self: ScriptSignal<T...>?, func: (T...) -> ()) -> (ScriptConnection);
+type ScriptSignal<T> = {
+	Connect: (self: ScriptSignal<T>?, func: (data: {T}) -> ()) -> (ScriptConnection);
+	Wait: (self: ScriptSignal<T>?) -> ({T});
+	Once: (self: ScriptSignal<T>?, func: (data: {T}) -> ()) -> (ScriptConnection);
 }
 
 --[[
@@ -69,9 +69,9 @@ type ScriptSignal<T...> = {
 --]]
 
 export type CustomScriptSignal = {
-	Connect: (self: CustomScriptSignal, func: (...any) -> ()) -> (ScriptConnection);
-	Wait: (self: CustomScriptSignal) -> (...any);
-	Once: (self: CustomScriptSignal, func: (...any) -> ()) -> (ScriptConnection);
+	Connect: (self: CustomScriptSignal, func: (data: {any}) -> ()) -> (ScriptConnection);
+	Wait: (self: CustomScriptSignal) -> ({any});
+	Once: (self: CustomScriptSignal, func: (data: {any}) -> ()) -> (ScriptConnection);
 	Fire: (self: CustomScriptSignal, data: {any}?) -> ();
 	DisconnectAll: (self: CustomScriptSignal) -> ()
 }
@@ -93,7 +93,7 @@ export type CustomScriptSignal = {
 export type ClientNetworkSignal = {
 	Connect: (self: ClientNetworkSignal, func: (data: {any}) -> ()) -> (ScriptConnection);
 	Once_DISABLED: (self: ClientNetworkSignal, func: (data: {any}) -> ()) -> (ScriptConnection);
-	Wait_DISABLED: (self: ClientNetworkSignal) -> ({any});
+	Wait: (self: ClientNetworkSignal) -> ({any});
 	Fire: (self: ClientNetworkSignal, data: {any}?) -> ();
 }
 
@@ -114,7 +114,7 @@ export type ClientNetworkSignal = {
 export type ServerNetworkSignal = {
 	Connect: (self: ServerNetworkSignal, func: (sender: Player, data: {any}) -> ()) -> (ScriptConnection);
 	Once_DISABLED: (self: ServerNetworkSignal, func: (sender: Player, data: {any}) -> ()) -> (ScriptConnection);
-	Wait_DISABLED: (self: ServerNetworkSignal) -> (Player, {any});
+	Wait: (self: ServerNetworkSignal) -> (Player, {any});
 	Fire: (self: ServerNetworkSignal, recipient: Player | {Player}, data: {any}?) -> ();
 }
 
@@ -144,7 +144,7 @@ local RuntimeSettings = Runtime.Settings
 --
 
 local Signal = require(Vendor.Signal)
-local BridgeNet2 = require(Vendor.BridgeNet2)
+local BridgeNetWrapper = require(Vendor.BridgeNetWrapper)
 
 Package.Runtime = {
 	RuntimeSettings = RuntimeSettings;
@@ -396,14 +396,14 @@ end
 
 function Package.Utility.GetAncestors(instance: Instance): {Instance}
 	local ancestors = { }
-	
+
 	repeat
 		instance = instance.Parent :: Instance
 		table.insert(ancestors, instance)
 	until instance == game
-	
+
 	table.remove(ancestors, table.find(ancestors, game))
-	
+
 	return ancestors
 end
 
@@ -499,19 +499,19 @@ end
 
 function Package.Utility.ConflictingValues(values: {any}, sep: string?): (boolean, string?)
 	local trueValues = { }
-	
+
 	sep = Package.Utility.nilparam(sep, "; ")
-	
+
 	for index, value in values do
 		if value then
 			table.insert(trueValues, index)
 		end
 	end
-	
+
 	if #trueValues ~= 1 then
 		return true, `Conflicting Values: {table.concat(trueValues, sep)}`
 	end
-	
+
 	return false, nil
 end
 
@@ -548,7 +548,7 @@ function Package.Utility.TableToString(t: {[any]: any}, sep: string?, i: number?
 	if Package.Utility.IsDictionary(t) then
 		Package.Utility.dictionaryLen(t)
 	end
-	
+
 	if #t == 0 then
 		return "{}"
 	end
@@ -624,7 +624,7 @@ function Package.Benchmark.CreateBenchmark()
 	local self = setmetatable({ }, {__index = BenchmarkMethods})
 
 	self.IsCompleted = false
-	self.Destroying = Signal.new() :: ScriptSignal<>
+	self.Destroying = Signal.new() :: ScriptSignal<any>
 	self.StartTime = 0
 	self.EndTime = 0
 
@@ -791,8 +791,8 @@ end
 	
 --]]
 
-function CanaryEngineClient.CreateNetworkSignal(name: string): ClientNetworkSignal
-	return BridgeNet2.ReferenceBridge(name)
+function CanaryEngineClient.CreateNetworkSignal<a>(name: a): ClientNetworkSignal
+	return BridgeNetWrapper.newClient(name)
 end
 
 --[[
@@ -804,8 +804,8 @@ end
 	
 --]]
 
-function CanaryEngineServer.CreateNetworkSignal(name: string): ServerNetworkSignal
-	return BridgeNet2.ReferenceBridge(name)
+function CanaryEngineServer.CreateNetworkSignal<a>(name: a): ServerNetworkSignal
+	return BridgeNetWrapper.newServer(name)
 end
 
 --[[
