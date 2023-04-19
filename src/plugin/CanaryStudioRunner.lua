@@ -33,6 +33,7 @@ CreateScriptsMenu:AddNewAction("CreateServerScript", "Server Script", "rbxasseti
 CreateInstancesMenu:AddMenu(CreatePackagesMenu)
 CreateInstancesMenu:AddMenu(CreateScriptsMenu)
 
+InstallDefaultPackages.ClickableWhenViewportHidden = true
 CreateInstances.ClickableWhenViewportHidden = true
 MigrateVersion.ClickableWhenViewportHidden = true
 InstallFramework.ClickableWhenViewportHidden = true
@@ -57,6 +58,8 @@ local EngineServer = CanaryEngine.GetEngineServer()
 local Packages = EngineServer.Packages
 local Media = EngineServer.Media
 
+-- // Constants
+
 -- // Variables
 
 -- // Functions
@@ -64,6 +67,8 @@ local Media = EngineServer.Media
 local function myFunction()
 	print("Hello, function!")
 end
+
+-- // Connections
 
 -- // Actions
 
@@ -79,6 +84,8 @@ local EngineClient = CanaryEngine.GetEngineClient()
 local Packages = EngineClient.Packages
 local Media = EngineClient.Media
 
+-- // Constants
+
 -- // Variables
 
 -- // Functions
@@ -86,6 +93,8 @@ local Media = EngineClient.Media
 local function myFunction()
 	print("Hello, function!")
 end
+
+-- // Connections
 
 -- // Actions
 
@@ -123,11 +132,14 @@ local function CreatePackage(packageType: "Server" | "Client" | "Replicated")
 		warn("CanaryEngine must be installed correctly before creating new objects.")
 		return
 	end
-
+	
+	local PackageVendor = Instance.new("Folder")
 	local ClonedPackage = script.Assets[`{packageType}Package`]:Clone()
-
+	
+	PackageVendor.Name = "Vendor"
 	ClonedPackage.Name = `{packageType}Package`
 	ClonedPackage.Parent = ParentedFramework.Packages[packageType]
+	PackageVendor.Parent = ClonedPackage
 	
 	ScriptEditorService:OpenScriptDocumentAsync(ClonedPackage)
 	Selection:Set({ClonedPackage})
