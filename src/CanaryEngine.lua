@@ -1,8 +1,10 @@
+
 -- // Package
 
 local Package = {
 	Utility = { };
 	Benchmark = { };
+	Statistics = { },
 	Serialize = require(script.Vendor.BlueSerializer)
 }
 
@@ -90,11 +92,11 @@ export type CustomScriptSignal = {
 	
 --]]
 
-export type ClientNetworkSignal = {
-	Connect: (self: ClientNetworkSignal, func: (data: {any}) -> ()) -> (ScriptConnection);
-	Once_DISABLED: (self: ClientNetworkSignal, func: (data: {any}) -> ()) -> (ScriptConnection);
-	Wait: (self: ClientNetworkSignal) -> ({any});
-	Fire: (self: ClientNetworkSignal, data: {any}?) -> ();
+export type ClientNetworkController = {
+	Connect: (self: ClientNetworkController, func: (data: {any}) -> ()) -> (ScriptConnection);
+	Once_DISABLED: (self: ClientNetworkController, func: (data: {any}) -> ()) -> (ScriptConnection);
+	Wait: (self: ClientNetworkController) -> ({any});
+	Fire: (self: ClientNetworkController, data: {any}?) -> ();
 }
 
 --[[
@@ -111,11 +113,11 @@ export type ClientNetworkSignal = {
 	
 --]]
 
-export type ServerNetworkSignal = {
-	Connect: (self: ServerNetworkSignal, func: (sender: Player, data: {any}) -> ()) -> (ScriptConnection);
-	Once_DISABLED: (self: ServerNetworkSignal, func: (sender: Player, data: {any}) -> ()) -> (ScriptConnection);
-	Wait: (self: ServerNetworkSignal) -> (Player, {any});
-	Fire: (self: ServerNetworkSignal, recipient: Player | {Player}, data: {any}?) -> ();
+export type ServerNetworkController = {
+	Connect: (self: ServerNetworkController, func: (sender: Player, data: {any}) -> ()) -> (ScriptConnection);
+	Once_DISABLED: (self: ServerNetworkController, func: (sender: Player, data: {any}) -> ()) -> (ScriptConnection);
+	Wait: (self: ServerNetworkController) -> (Player, {any});
+	Fire: (self: ServerNetworkController, recipient: Player | {Player}, data: {any}?) -> ();
 }
 
 type table = {}
@@ -224,8 +226,9 @@ end
 	Does the same thing as assert, but takes multiple tables
 	of assertions and errors for optimization and simplicity.
 	
-	@param [{assertion | msg}] - Same as assert, but takes
-	multiple values to cut down on function calls.
+	@param [{assertion | msg | formatString}] - Same as assert, but takes
+	multiple values to cut down on function calls. Used in
+	that order.
 	
 	Example:
 	
@@ -242,7 +245,7 @@ end
 	```
 	
 	@public
-	@returns [?any] 
+	@returns [void] 
 	
 --]]
 
@@ -263,15 +266,16 @@ end
 	@param [array] t - The array that should be deep copied.
 	
 	@public
-	@returns [array] 
+	@returns [array?] 
 	
 --]]
 
-function Package.Utility.DeepCopy<a>(t: {[number]: a}): {[number]: a}
+function Package.Utility.DeepCopy<a>(t: {[number]: a}): {[number]: a}?
 	local copied = { }
 
 	if type(t) ~= "table" then
-		Debugger.silenterror(`Field 't' expected array, got {typeof(t)}.`)
+		Debugger.error(`Field 't' expected array, got {typeof(t)}.`)
+		return nil
 	end
 
 	for index, value in t do
@@ -298,7 +302,7 @@ end
 
 function Package.Utility.IsDictionary(t: table): boolean
 	if type(t) ~= "table" then
-		Debugger.silenterror(`Field 't' expected table, got {typeof(t)}.`)
+		Debugger.error(`Field 't' expected table, got {typeof(t)}.`)
 		return false
 	end
 	return not t[1]
@@ -316,11 +320,6 @@ end
 --]]
 
 function Package.Utility.DictionaryToArray<a, b>(d: {[a]: b}): {[number]: {a | b}}?
-	if not Package.Utility.IsDictionary(d) then
-		Debugger.silenterror(`Field 'd' expected dictionary, got {typeof(d)}.`)
-		return
-	end
-
 	local newArray = { }
 
 	for key, value in d do
@@ -343,7 +342,7 @@ end
 
 function Package.Utility.ArrayToDictionary<a, b>(t: {[number]: {a | b}}): {[a]: b}?
 	if Package.Utility.IsDictionary(t) then
-		Debugger.silenterror(`Field 't' expected array, got {typeof(t)}.`)
+		Debugger.error(`Field 't' expected array, got {typeof(t)}.`)
 		return
 	end
 
@@ -624,7 +623,7 @@ function Package.Benchmark.CreateBenchmark()
 	local self = setmetatable({ }, {__index = BenchmarkMethods})
 
 	self.IsCompleted = false
-	self.Destroying = Signal.new() :: ScriptSignal<any>
+	self.Destroying = Signal.new() :: ScriptSignal<nil>
 	self.StartTime = 0
 	self.EndTime = 0
 
@@ -636,6 +635,12 @@ end
 	Sets a function that can be ran `timesToRun` times,
 	and will return the amount of time it took to run
 	the functions.
+	
+	@param [number] timesToRun - The amount of times to
+	run the following function.
+	
+	@param [function] func - The function to run for e-
+	ach `timesToRun` index.
 	
 	@public
 	@returns [?number] 
@@ -737,6 +742,102 @@ end
 
 --[[
 
+	Gets the number in the middle of a dataset. For ex-
+	ample, the median in the following dataset is 7:
+	
+	{2, 5, 6, 8, 3, 8}
+	
+	@param [array] numberList - The dataset of numbers
+	to perform the function on.
+	
+	@public
+	@returns [?number] 
+	
+--]]
+
+function Package.Statistics.GetMedian(numberList: {number}): number
+	local TotalNumbers = #numberList
+	local IsTotalEven = TotalNumbers % 2 == 0
+	
+	if not IsTotalEven then
+		return numberList[(TotalNumbers / 2) + 0.5]
+	end
+	
+	local FirstMedian = numberList[TotalNumbers / 2]
+	local SecondMedian = numberList[(TotalNumbers / 2) + 1]
+	
+	return (FirstMedian + SecondMedian) / 2
+end
+
+--[[
+
+	Gets the average/mean of all of the numbers.
+	
+	@param [array] numberList - The dataset of numbers
+	to perform the function on.
+	
+	@public
+	@returns [?number] 
+	
+--]]
+
+function Package.Statistics.GetMean(numberList: {number}): number
+	local Total = 0
+	
+	for index, number in numberList do
+		Total += number
+	end
+	
+	return Total / #numberList
+end
+
+--[[
+
+	Gets the mode of a list, nil if none. A mode
+	in a dataset is a number that occurs the most.
+	If all numbers occur the same amount of times,
+	then the mode is null/nil. For example, the
+	mode of this dataset is 5:
+	
+	{5, 5, 5, 7, 7, 3, 1}
+	
+	@param [array] numberList - The dataset of numbers
+	to perform the function on.
+	
+	@public
+	@returns [?number] 
+	
+--]]
+
+function Package.Statistics.GetMode(numberList: {number}): number?
+	local CalculatedList = { }
+	
+	table.sort(numberList)
+	
+	for index, number in numberList do
+		if not CalculatedList[number] then
+			CalculatedList[number] = 1
+			continue
+		end
+		
+		CalculatedList[number] += 1
+	end
+	
+	local SortedList = Package.Utility.DictionaryToArray(CalculatedList)
+	
+	table.sort(SortedList, function(a, b)
+		return a[2] > b[2]
+	end)
+	
+	if SortedList[1][1] == 1 and CalculatedList[SortedList[1][1]] == 1 then
+		return nil
+	end
+	
+	return SortedList[1][1]
+end
+
+--[[
+
 	Allows you to use the server sided version of cEngine.
 	
 	@public
@@ -775,6 +876,7 @@ function Package.GetEngineClient()
 		}
 		CanaryEngineClient.Media = ReplicatedStorage:WaitForChild("EngineClient").Media :: typeof(CanaryEngine.Media.Client);
 		CanaryEngineClient.Player = PlayerService.LocalPlayer :: Player
+		CanaryEngineClient.PlayerGui = PlayerService.LocalPlayer:WaitForChild("PlayerGui") :: typeof(game:GetService("StarterGui"))
 
 		return CanaryEngineClient
 	else
@@ -791,7 +893,7 @@ end
 	
 --]]
 
-function CanaryEngineClient.CreateNetworkSignal<a>(name: a): ClientNetworkSignal
+function CanaryEngineClient.CreateNetworkSignal<a>(name: a): ClientNetworkController
 	return BridgeNetWrapper.newClient(name)
 end
 
@@ -804,7 +906,7 @@ end
 	
 --]]
 
-function CanaryEngineServer.CreateNetworkSignal<a>(name: a): ServerNetworkSignal
+function CanaryEngineServer.CreateNetworkSignal<a>(name: a): ServerNetworkController
 	return BridgeNetWrapper.newServer(name)
 end
 
@@ -839,7 +941,7 @@ end
 	Returns the latest version of a package. You can also log a warning
 	in the console if you wish
 	
-	@param [ModuleScript] package - The package to check the version of,
+	@param [Instance] package - The package to check the version of,
 	must have a `VersionNumber` and `PackageId` attribute, and the asset
 	must have a 'Version: (number)' in its description.
 	
@@ -853,14 +955,20 @@ end
 	
 --]]
 
-function Package.GetLatestPackageVersionAsync(package: Instance, warnIfNotLatestVersion: boolean?): number?
+function Package.GetLatestPackageVersionAsync(package: Instance, warnIfNotLatestVersion: boolean?, respectDebugger: boolean?): number?
 	Package.Utility.assertmulti(
 		{package:GetAttribute("PackageId") ~= nil, "Package must have a valid 'PackageId'"},
 		{package:GetAttribute("VersionNumber") ~= nil, "Package must have a valid 'VersionNumber'"},
-		{package:GetAttribute("PackageId") ~= 0, "Cannot have a PackageId of zero."}
+		{package:GetAttribute("PackageId") ~= 0, "Cannot have a PackageId of zero."},
+		{package:GetAttribute("CheckLatestVersion") ~= nil, "Package must include 'CheckLatestVersion' setting."}
 	)
+	
+	if not package:GetAttribute("CheckLatestVersion") then
+		return nil
+	end
 
 	warnIfNotLatestVersion = Package.Utility.nilparam(warnIfNotLatestVersion, true)
+	respectDebugger = Package.Utility.nilparam(respectDebugger, true)
 
 	if not RuntimeContext.Server then
 		return
@@ -876,16 +984,20 @@ function Package.GetLatestPackageVersionAsync(package: Instance, warnIfNotLatest
 		return nil
 	end
 
-	local FetchedVersion = string.match(MarketplaceInfo.Description, "Version: %d+")
+	local FetchedVersion = string.match(MarketplaceInfo.Description, "Version: %d+") or string.match(MarketplaceInfo.Description, "v%d+")
 
 	if not FetchedVersion then
-		error("Asset description must have 'Version: (number)")
+		error("Asset description must have 'Version: (number) or 'v(number)'")
 	end
 
 	local SplitFetchedVersion = tonumber(string.split(FetchedVersion, " ")[2])
 
 	if SplitFetchedVersion ~= package:GetAttribute("VersionNumber") then
 		if warnIfNotLatestVersion then
+			if respectDebugger then
+				Debugger.warn(`Package '{MarketplaceInfo.Name}' is not up-to-date. Available version: {SplitFetchedVersion}`)
+				return SplitFetchedVersion
+			end
 			warn(`Package '{MarketplaceInfo.Name}' is not up-to-date. Available version: {SplitFetchedVersion}`)
 		end
 		return SplitFetchedVersion
@@ -899,9 +1011,6 @@ end
 -- // Actions
 
 Startup.StartEngine()
-
-if RuntimeSettings.CheckLatestVersion then
-	Package.GetLatestPackageVersionAsync(script.Parent, true)
-end
+Package.GetLatestPackageVersionAsync(script.Parent)
 
 return Package
