@@ -8,6 +8,7 @@ local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
 local RunService = game:GetService("RunService")
+local PlayerService = game:GetService("Players")
 
 local CanaryEngineFolder = ReplicatedStorage.CanaryEngineFramework
 local CanaryEngineModule = script.Parent
@@ -25,14 +26,15 @@ local ParentTypes = {
  
 -- // Functions
 
-function Package.StartEngine()
+function Package.StartEngine(): number?
+	local currentTime = os.clock()
 	-- Check if it's already running
 	if CanaryEngineRuntime.IsStarted() then
-		return
+		return nil
 	end
 
 	if not RuntimeContext.Server then
-		return
+		return nil
 	end
 	
 	local UserPackages = CanaryEngineFolder.Packages
@@ -69,10 +71,17 @@ function Package.StartEngine()
 			value:Destroy()
 		end
 	end
+	
+	if not UserScripts.Server:FindFirstChildWhichIsA("Script") then
+		CanaryEngineDebugger.print("At least one server script inside of the scripts folder is required.")
+	end
+	
+	local TimeTaken = os.clock() - currentTime
 
-	CanaryEngineDebugger.print("Framework loaded successfully!")
-
+	CanaryEngineDebugger.print(`CanaryEngine loaded successfully! ({TimeTaken * 1000}ms)`)
 	CanaryEngineModule:SetAttribute("EngineStarted", true)
+	
+	return TimeTaken
 end
 
 -- // Actions
