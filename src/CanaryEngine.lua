@@ -74,7 +74,7 @@ export type CustomScriptSignal = {
 	Connect: (self: CustomScriptSignal, func: (data: {any}) -> ()) -> (ScriptConnection);
 	Wait: (self: CustomScriptSignal) -> ({any});
 	Once: (self: CustomScriptSignal, func: (data: {any}) -> ()) -> (ScriptConnection);
-	Fire: (self: CustomScriptSignal, data: {any}?) -> ();
+	Fire: (self: CustomScriptSignal, data: {any}? | any?) -> ();
 	DisconnectAll: (self: CustomScriptSignal) -> ()
 }
 
@@ -94,9 +94,9 @@ export type CustomScriptSignal = {
 
 export type ClientNetworkController = {
 	Connect: (self: ClientNetworkController, func: (data: {any}) -> ()) -> (ScriptConnection);
-	Once_DISABLED: (self: ClientNetworkController, func: (data: {any}) -> ()) -> (ScriptConnection);
+	Once: (self: ClientNetworkController, func: (data: {any}) -> ()) -> (ScriptConnection);
 	Wait: (self: ClientNetworkController) -> ({any});
-	Fire: (self: ClientNetworkController, data: {any}?) -> ();
+	Fire: (self: ClientNetworkController, data: {any}? | any?) -> ();
 }
 
 --[[
@@ -115,9 +115,9 @@ export type ClientNetworkController = {
 
 export type ServerNetworkController = {
 	Connect: (self: ServerNetworkController, func: (sender: Player, data: {any}) -> ()) -> (ScriptConnection);
-	Once_DISABLED: (self: ServerNetworkController, func: (sender: Player, data: {any}) -> ()) -> (ScriptConnection);
+	Once: (self: ServerNetworkController, func: (sender: Player, data: {any}) -> ()) -> (ScriptConnection);
 	Wait: (self: ServerNetworkController) -> (Player, {any});
-	Fire: (self: ServerNetworkController, recipient: Player | {Player}, data: {any}?) -> ();
+	Fire: (self: ServerNetworkController, recipient: Player | {Player}, data: {any}? | any?) -> ();
 }
 
 type table = {}
@@ -137,6 +137,7 @@ local CanaryEngine = ReplicatedStorage:WaitForChild("CanaryEngineFramework")
 local Vendor = CanaryEngine.CanaryEngine.Vendor
 
 local Startup = require(script.Startup)
+local StartupTime = Startup.StartEngine()
 local Debugger = require(script.Debugger)
 local Runtime = require(script.Runtime) -- Get the RuntimeSettings, which are settings that are set during runtime
 
@@ -991,6 +992,10 @@ function Package.GetLatestPackageVersionAsync(package: Instance, warnIfNotLatest
 	end
 
 	local SplitFetchedVersion = tonumber(string.split(FetchedVersion, " ")[2])
+	
+	if SplitFetchedVersion < package:GetAttribute("VersionNumber") then
+		error("Package version cannot be greater than live package version.")
+	end
 
 	if SplitFetchedVersion ~= package:GetAttribute("VersionNumber") then
 		if warnIfNotLatestVersion then
@@ -1010,7 +1015,6 @@ end
 
 -- // Actions
 
-Startup.StartEngine()
 Package.GetLatestPackageVersionAsync(script.Parent)
 
 return Package
