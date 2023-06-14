@@ -4,6 +4,21 @@ gitSourceBranch = "main"
 
 changelog = true
 
+[[navbar.items]]
+href = "https://discord.gg/ZAMgyTYcXy"
+label = "Discord"
+position = "right"
+
+[[classOrder]]
+section = "CanaryEngine"
+collapsed = false
+classes = ["CanaryEngine", "CanaryEngineServer", "CanaryEngineClient"]
+
+[[classOrder]]
+section = "Benchmark"
+collapsed = true
+classes = ["Benchmark", "BenchmarkObject"]
+
 [docusaurus]
 projectName = "CanaryEngine"
 tagline = "The lightweight and optimized framework"
@@ -18,3 +33,15 @@ copyright = "Copyright © 2023 lolmansReturn. Built with Moonwave and Docusaurus
 [home]
 enabled = true
 includeReadme = false
+
+[[home.features]]
+title = "Type Safe"
+description = "Fully compatible with Roblox’s intellisense and Roblox LSP. Support for roblox-ts is coming soon."
+
+[[home.features]]
+title = "Secure"
+description = "The framework is amazingly secure, 0 client code required. The built-in networking library is partially immune to popular networking exploits such as RemoteSpy."
+
+[[home.features]]
+title = "Lightweight"
+description = "Lightweight framework that does not need any external dependencies. Only 3 internal modules that are also super lightweight and performant."
