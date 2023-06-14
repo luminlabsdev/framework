@@ -1,5 +1,6 @@
 title = "CanaryEngine"
 gitRepoUrl = "https://github.com/canary-development/CanaryEngine"
+gitSourceBranch = "main"
 
 changelog = true
 
