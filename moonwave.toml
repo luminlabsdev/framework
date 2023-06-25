@@ -30,6 +30,10 @@ favicon = "favicon.png"
 style = "dark"
 copyright = "Copyright © 2023 lolmansReturn. Built with Moonwave and Docusaurus"
 
+[navbar.logo]
+alt = "Canary"
+src = "favicon.png"
+
 [home]
 enabled = true
 includeReadme = false
