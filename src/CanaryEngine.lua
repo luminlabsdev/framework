@@ -186,6 +186,14 @@ export type CustomScriptSignal<T> = {
 }
 
 --[=[
+	The type of the data being sent through a network controller, though it is generally known as a rule that sent data will be converted into a table.
+
+	@type NetworkControllerData
+	@within CanaryEngine
+]=]
+export type NetworkControllerData<T> = ({T} | T)
+
+--[=[
 	A ClientNetworkController is basically a mixed version of a [RemoteEvent] and [RemoteFunction]. It has better features and is more performant.
 
 	@field Connect (self: ClientNetworkController<T>?, func: (data: {T}) -> ()) -> (ScriptConnection)
@@ -203,10 +211,9 @@ export type ClientNetworkController<T> = {
 	Connect: (self: ClientNetworkController<T>?, func: (data: {T}) -> ()) -> (ScriptConnection),
 	Once: (self: ClientNetworkController<T>?, func: (data: {T}) -> ()) -> (ScriptConnection),
 	Wait: (self: ClientNetworkController<T>?) -> ({T}),
-	Fire: (self: ClientNetworkController<T>?, data: ({T} | T)?) -> (),
-	
-	Invoke: (self: ClientNetworkController<T>?, data: ({T} | T)?) -> ({T}),
-	OnInvoke_DISABLED: (self: ClientNetworkController<T>?, callback: (data: {T}) -> ()) -> (),
+	Fire: (self: ClientNetworkController<T>?, data: NetworkControllerData<T>?) -> (),
+
+	InvokeAsync: (self: ClientNetworkController<T>?, data: NetworkControllerData<T>?) -> ({T}),
 }
 
 --[=[
@@ -227,10 +234,9 @@ export type ServerNetworkController<T> = {
 	Connect: (self: ServerNetworkController<T>?, func: (sender: Player, data: {T}) -> ()) -> (ScriptConnection),
 	Once: (self: ServerNetworkController<T>?, func: (sender: Player, data: {T}) -> ()) -> (ScriptConnection),
 	Wait: (self: ServerNetworkController<T>?) -> (Player, {T}),
-	Fire: (self: ServerNetworkController<T>?, recipient: Player | {Player}, data: ({T} | T)?) -> (),
-	
-	Invoke_DISABLED: (self: ServerNetworkController<T>?, recipient: Player, data: ({T} | T)?) -> ({T}),
-	OnInvoke: (self: ServerNetworkController<T>?, callback: (sender: Player, data: {T}) -> ()) -> ()
+	Fire: (self: ServerNetworkController<T>?, recipient: Player | {Player}, data: NetworkControllerData<T>?) -> (),
+
+	OnInvoke: (self: ServerNetworkController<T>?, callback: (sender: Player, data: {T}) -> ({T})) -> ()
 }
 
 --[=[
@@ -304,7 +310,7 @@ type EngineClient = {
 
 	PlayerGui: typeof(game:GetService("StarterGui")),
 	PlayerBackpack: typeof(game:GetService("StarterPack")),
-	
+
 	CreateNetworkController: (controllerName: string) -> (ClientNetworkController<any>)
 }
 
@@ -320,10 +326,14 @@ if not ReplicatedStorage:FindFirstChild("CanaryEngineFramework") then
 end
 
 local CanaryEngineFramework = ReplicatedStorage:WaitForChild("CanaryEngineFramework")
+
 local Vendor = CanaryEngineFramework.CanaryEngine.Vendor
+local Data = Vendor.Data
+local Libraries = Vendor.Libraries
+local Network = Vendor.Network
 
 local Startup = require(script.Startup)
-local _ = Startup.StartEngine()
+local StartupResult = Startup.StartEngine()
 local Debugger = require(script.Debugger)
 local Runtime = require(script.Runtime) -- Get the RuntimeSettings, which are settings that are set during runtime
 
@@ -332,12 +342,12 @@ local RuntimeSettings = Runtime.Settings
 
 --
 
-local Signal = require(Vendor.Libraries.Signal)
-local Utility = require(Vendor.Libraries.Utility)
-local Benchmark = require(Vendor.Libraries.Benchmark)
-local Statistics = require(Vendor.Libraries.Statistics)
-local Serialize = require(Vendor.Data.BlueSerializer)
-local NetworkController = require(Vendor.NetworkController)
+local Signal = require(Libraries.Signal)
+local Utility = require(Libraries.Utility)
+local Benchmark = require(Libraries.Benchmark)
+local Statistics = require(Libraries.Statistics)
+local Serialize = require(Data.BlueSerializer)
+local NetworkController = require(Network.NetworkController)
 
 CanaryEngine.Runtime = table.freeze({
 	RuntimeSettings = RuntimeSettings,
@@ -382,6 +392,8 @@ CanaryEngine.DeveloperMode = true
 		Statistics: typeof(Statistics),
 		Serialize: typeof(Serialize),
 	}
+	
+	@field DeveloperMode boolean
 
 	@interface CanaryEngine
 	@within CanaryEngine
@@ -392,14 +404,14 @@ type CanaryEngine = {
 	GetEngineClient: () -> (EngineClient),
 	CreateSignal: () -> (CustomScriptSignal<any>),
 	GetLatestPackageVersionAsync: (CanaryEngine: Instance, warnIfNotLatestVersion: boolean?, respectDebugger: boolean?) -> (number?),
-	
+
 	Runtime: {
 		RuntimeSettings: {
 			StudioDebugEnabled: boolean,
 			CheckLatestVersion: boolean,
 			LiveGameDebugger: boolean,
 		},
-		
+
 		RuntimeContext: {
 			Studio: boolean,
 			Server: boolean,
@@ -407,13 +419,15 @@ type CanaryEngine = {
 			StudioPlay: boolean,
 		}
 	},
-	
+
 	Libraries: {
 		Utility: typeof(Utility),
 		Benchmark: typeof(Benchmark),
 		Statistics: typeof(Statistics),
 		Serialize: typeof(Serialize),
-	}
+	},
+	
+	DeveloperMode: boolean,
 }
 
 -- // Functions
@@ -429,11 +443,11 @@ function CanaryEngine.GetEngineServer(): EngineServer?
 		Debugger.error("Failed to fetch 'EngineServer', context must be server")
 		return nil
 	end
-	
+
 	if Runtime.IsStarted() then
 		Debugger.warn("Importing a Package while the game is running may cause internal issues")
 	end
-	
+
 	local EngineServer = ServerStorage:WaitForChild("EngineServer")
 	local EngineReplicated = ReplicatedStorage:WaitForChild("EngineReplicated")
 
@@ -441,10 +455,10 @@ function CanaryEngine.GetEngineServer(): EngineServer?
 		Server = EngineServer.Packages,
 		Replicated = EngineReplicated.Packages,
 	}
-		
+
 	CanaryEngineServer.Media = {
 		Server = EngineServer.Media,
-		Replicated = EngineServer.Media,
+		Replicated = EngineReplicated.Media,
 	}
 
 	return CanaryEngineServer
@@ -462,35 +476,31 @@ function CanaryEngine.GetEngineClient(): EngineClient?
 		Debugger.error("Failed to fetch 'EngineClient', Context must be client.")
 		return nil
 	end
-	
+
 	if Runtime.IsStarted() then
 		Debugger.warn("Importing a Package while the game is running may cause internal issues")
 	end
-		
+
 	local EngineClient = ReplicatedStorage:WaitForChild("EngineClient")
 	local EngineReplicated = ReplicatedStorage:WaitForChild("EngineReplicated")
-	
+
 	local Player = PlayerService.LocalPlayer
-		
+
 	CanaryEngineClient.Packages = {
 		Client = EngineClient.Packages,
 		Replicated = EngineReplicated.Packages,
 	}
-		
+
 	CanaryEngineClient.Media = {
 		Client = EngineClient.Media,
 		Replicated = EngineReplicated.Media,
 	}
 
 	CanaryEngineClient.Player = Player
+	
 	CanaryEngineClient.PlayerGui = Player:WaitForChild("PlayerGui")
 	CanaryEngineClient.PlayerBackpack = Player:WaitForChild("Backpack")
-
-	CanaryEngineClient.LocalObjects = {
-		PlayerGui = Player:WaitForChild("PlayerGui"),
-		Backpack = Player:WaitForChild("Backpack")
-	}
-
+	
 	return CanaryEngineClient
 end
 
@@ -510,7 +520,7 @@ end
 	@return ClientNetworkController<any>
 ]=]
 function CanaryEngineClient.CreateNetworkController(controllerName: string): ClientNetworkController<any>
-	return NetworkController.NewServerController(controllerName)
+	return NetworkController.NewClientController(controllerName)
 end
 
 --[=[
@@ -531,16 +541,6 @@ end
 ]=]
 function CanaryEngineServer.CreateNetworkController(controllerName: string): ServerNetworkController<any>
 	return NetworkController.NewServerController(controllerName)
-end
-
---[=[
-	Used to return the primary data storing package.
-	
-	@deprecated v3 -- Use GetEngineServer instead.
-	@return dictionary
-]=]
-function CanaryEngineServer.GetDataService()
-	return require(Vendor.Data.DataService)	
 end
 
 --[=[
@@ -603,21 +603,21 @@ function CanaryEngine.GetLatestPackageVersionAsync(package: Instance, warnIfNotL
 	local SplitFetchedVersion = tonumber(string.split(FetchedVersion, " ")[2])
 
 	if SplitFetchedVersion < package:GetAttribute("VersionNumber") then
-		error("CanaryEngine version cannot be greater than live CanaryEngine version.")
+		error("Package version cannot be greater than live package version.")
 	end
 
 	if SplitFetchedVersion ~= package:GetAttribute("VersionNumber") then
 		if warnIfNotLatestVersion then
 			if respectDebugger then
-				Debugger.warn(`CanaryEngine '{MarketplaceInfo.Name}' is not up-to-date. Available version: {SplitFetchedVersion}`)
+				Debugger.warn(`Package '{MarketplaceInfo.Name}' is not up-to-date. Available version: {SplitFetchedVersion}`)
 				return SplitFetchedVersion
 			end
-			warn(`CanaryEngine '{MarketplaceInfo.Name}' is not up-to-date. Available version: {SplitFetchedVersion}`)
+			warn(`Package '{MarketplaceInfo.Name}' is not up-to-date. Available version: {SplitFetchedVersion}`)
 		end
 		return SplitFetchedVersion
 	end
 
-	Debugger.print(`CanaryEngine '{MarketplaceInfo.Name}' is up-to-date.`)
+	Debugger.print(`Package '{MarketplaceInfo.Name}' is up-to-date.`)
 
 	return SplitFetchedVersion
 end
