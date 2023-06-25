@@ -188,7 +188,7 @@ export type CustomScriptSignal<T> = {
 --[=[
 	The type of the data being sent through a network controller, though it is generally known as a rule that sent data will be converted into a table.
 
-	@type NetworkControllerData
+	@type NetworkControllerData: ({T} | T)
 	@within CanaryEngine
 ]=]
 export type NetworkControllerData<T> = ({T} | T)
