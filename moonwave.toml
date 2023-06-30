@@ -5,7 +5,7 @@ gitSourceBranch = "main"
 changelog = true
 
 [[navbar.items]]
-href = "https://discord.gg/ZAMgyTYcXy"
+href = "https://discord.gg/cwwcZtqJAt"
 label = "Discord"
 position = "right"
 

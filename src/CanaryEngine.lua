@@ -178,12 +178,9 @@ type ScriptSignal<T> = {
 	@within CanaryEngine
 ]=]
 export type CustomScriptSignal<T> = {
-	Connect: (self: CustomScriptSignal<T>?, func: (data: {T}) -> ()) -> (ScriptConnection),
-	Wait: (self: CustomScriptSignal<T>?) -> ({T}),
-	Once: (self: CustomScriptSignal<T>?, func: (data: {T}) -> ()) -> (ScriptConnection),
 	Fire: (self: CustomScriptSignal<T>?, data: ({T} | T)?) -> (),
 	DisconnectAll: (self: CustomScriptSignal<T>?) -> (),
-}
+} & ScriptSignal<T>
 
 --[=[
 	The type of the data being sent through a network controller, though it is generally known as a rule that sent data will be converted into a table.
@@ -208,13 +205,9 @@ export type NetworkControllerData<T> = ({T} | T)
 	@within CanaryEngine
 ]=]
 export type ClientNetworkController<T> = {
-	Connect: (self: ClientNetworkController<T>?, func: (data: {T}) -> ()) -> (ScriptConnection),
-	Once: (self: ClientNetworkController<T>?, func: (data: {T}) -> ()) -> (ScriptConnection),
-	Wait: (self: ClientNetworkController<T>?) -> ({T}),
 	Fire: (self: ClientNetworkController<T>?, data: NetworkControllerData<T>?) -> (),
-
 	InvokeAsync: (self: ClientNetworkController<T>?, data: NetworkControllerData<T>?) -> ({T}),
-}
+} & ScriptSignal<T>
 
 --[=[
 	A ServerNetworkController is basically a mixed version of a [RemoteEvent] and [RemoteFunction]. It has better features and is more performant, though this is the server-sided API.
@@ -231,13 +224,9 @@ export type ClientNetworkController<T> = {
 	@within CanaryEngine
 ]=]
 export type ServerNetworkController<T> = {
-	Connect: (self: ServerNetworkController<T>?, func: (sender: Player, data: {T}) -> ()) -> (ScriptConnection),
-	Once: (self: ServerNetworkController<T>?, func: (sender: Player, data: {T}) -> ()) -> (ScriptConnection),
-	Wait: (self: ServerNetworkController<T>?) -> (Player, {T}),
 	Fire: (self: ServerNetworkController<T>?, recipient: Player | {Player}, data: NetworkControllerData<T>?) -> (),
-
 	OnInvoke: (self: ServerNetworkController<T>?, callback: (sender: Player, data: {T}) -> ({T})) -> ()
-}
+} & ScriptSignal<T>
 
 --[=[
 	This is the server sided API for CanaryEngine.
@@ -322,7 +311,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local PlayerService = game:GetService("Players")
 
 if not ReplicatedStorage:FindFirstChild("CanaryEngineFramework") then
-	error("CanaryEngine must be parented to DataModel.ReplicatedStorage")
+	error("CanaryEngine must be parented to ReplicatedStorage")
 end
 
 local CanaryEngineFramework = ReplicatedStorage:WaitForChild("CanaryEngineFramework")
