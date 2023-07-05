@@ -4,11 +4,36 @@
 
 **Added**
 
+* Add `CanaryEngine.RuntimeCreatedSignals`
+* Add `CanaryEngine.RuntimeCreatedNetworkControllers`
+* Support for invoking server
+* Reworked data saving
+* Add `CanaryEngineClient.PlayerBackpack`
+* Add `Replicated` folder to `CanaryEngine/Media`
+* Proper documentation to almost all methods, expect finished docs to come along when **v3.1.0** releases with a few hotfixes and general improvements
+* Add `CanaryEngineServer.Media.Server`
+* Add `CanaryEngineClient.Media.Client`
+* Add `Spring` to default packages
+* Add `Promise` to default packages
+* Add `MatchmakingService`
+
 **Improvements**
 
 * Turn `NetworkSignal` into `NetworkController`
+* Add `signalName` parameter to `CanaryEngine.CreateSignal` for easier signal access across scripts (breaking change)
+* Add error when trying to import packages during runtime
+* Fix `Runtime.IsStarted` not working
+* Move `Utility`, `Benchmark`, and `Statistics` to their own each modules for better loading times
+* Improve engine context fetch code
+* CustomScriptSignal is now ScriptSignal, old ScriptSignal is now BasicScriptSignal
+* Improve BridgeNet wrapper to be more clean + efficient
+* Internal tooling is extremely easier to access
 
 **Removed**
+
+* Remove `CanaryEngineServer.GetDataService`
+* Remove `CanaryEngineServer.Media`
+* Remove `CanaryEngineClient.Media`
 
 ## v2.2.1
 
@@ -100,3 +125,7 @@
 **Removed**
 
 * Removed intellisense from plugin, it's sadly impossible
+
+## v1.1.0
+
+* Public release!

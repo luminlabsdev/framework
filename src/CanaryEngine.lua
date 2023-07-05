@@ -149,43 +149,40 @@ type ScriptConnection = {
 
 
 --[=[
-	A script signal, similar to an [RBXScriptSignal]
+	A basic script signal, similar to an [RBXScriptSignal]
 
-	@field Connect (self: ScriptSignal<T>?, func: (data: {T}) -> ()) -> (ScriptConnection)
-	@field Wait (self: ScriptSignal<T>?) -> ({T})
-	@field Once (self: ScriptSignal<T>?, func: (data: {T}) -> ()) -> (ScriptConnection)
+	@field Connect (self: ScriptSignalBasic<T>?, func: (data: {T}) -> ()) -> (ScriptConnection)
+	@field Wait (self: ScriptSignalBasic<T>?) -> ({T})
+	@field Once (self: ScriptSignalBasic<T>?, func: (data: {T}) -> ()) -> (ScriptConnection)
 
-	@interface ScriptSignal
+	@interface ScriptSignalBasic
 	@within CanaryEngine
 	@private
 ]=]
-type ScriptSignal<T> = {
-	Connect: (self: ScriptSignal<T>?, func: (data: {T}) -> ()) -> (ScriptConnection),
-	Wait: (self: ScriptSignal<T>?) -> ({T}),
-	Once: (self: ScriptSignal<T>?, func: (data: {T}) -> ()) -> (ScriptConnection),
+type ScriptSignalBasic<T> = {
+	Connect: (self: ScriptSignalBasic<T>?, func: (data: {T}) -> ()) -> (ScriptConnection),
+	Wait: (self: ScriptSignalBasic<T>?) -> ({T}),
+	Once: (self: ScriptSignalBasic<T>?, func: (data: {T}) -> ()) -> (ScriptConnection),
 }
 
 --[=[
-	A custom script signal, similar to a [ScriptSignal]
+	A script signal, similar to a [ScriptSignal]. Please note that this extends to [ScriptSignalBasic]
 
-	@field Connect (self: CustomScriptSignal<T>?, func: (data: {T}) -> ()) -> (ScriptConnection)
-	@field Wait (self: CustomScriptSignal<T>?) -> ({T})
-	@field Once (self: CustomScriptSignal<T>?, func: (data: {T}) -> ()) -> (ScriptConnection)
-	@field Fire (self: CustomScriptSignal<T>?, data: ({T} | T)?) -> ()
-	@field DisconnectAll (self: CustomScriptSignal<T>?) -> ()
+	@field Fire (self: ScriptSignal<T>?, data: ({T} | T)?) -> ()
+	@field DisconnectAll (self: ScriptSignal<T>?) -> ()
 
-	@interface CustomScriptSignal
+	@interface ScriptSignal
 	@within CanaryEngine
 ]=]
-export type CustomScriptSignal<T> = {
-	Fire: (self: CustomScriptSignal<T>?, data: ({T} | T)?) -> (),
-	DisconnectAll: (self: CustomScriptSignal<T>?) -> (),
-} & ScriptSignal<T>
+export type ScriptSignal<T> = {
+	Fire: (self: ScriptSignal<T>?, data: ({T} | T)?) -> (),
+	DisconnectAll: (self: ScriptSignal<T>?) -> (),
+} & ScriptSignalBasic<T>
 
 --[=[
 	The type of the data being sent through a network controller, though it is generally known as a rule that sent data will be converted into a table.
 
-	@type NetworkControllerData: ({T} | T)
+	@type NetworkControllerData ({T} | T)
 	@within CanaryEngine
 ]=]
 export type NetworkControllerData<T> = ({T} | T)
@@ -198,16 +195,19 @@ export type NetworkControllerData<T> = ({T} | T)
 	@field Wait (self: ClientNetworkController<T>?) -> ({T})
 	@field Fire (self: ClientNetworkController<T>?, data: ({T} | T)?) -> ()
 	
-	@field Invoke (self: ClientNetworkController<T>?, data: ({T} | T)?) -> ({T})
-	@field OnInvoke_DISABLED (self: ClientNetworkController<T>?, callback: (data: {T}) -> ()) -> ()
+	@field InvokeAsync (self: ClientNetworkController<T>?, data: ({T} | T)?) -> ({T})
 
 	@interface ClientNetworkController
 	@within CanaryEngine
 ]=]
 export type ClientNetworkController<T> = {
+	Connect: (self: ClientNetworkController<T>?, func: (data: {T}) -> ()) -> (ScriptConnection),
+	Wait: (self: ClientNetworkController<T>?) -> ({T}),
+	Once: (self: ClientNetworkController<T>?, func: (data: {T}) -> ()) -> (ScriptConnection),
+	
 	Fire: (self: ClientNetworkController<T>?, data: NetworkControllerData<T>?) -> (),
 	InvokeAsync: (self: ClientNetworkController<T>?, data: NetworkControllerData<T>?) -> ({T}),
-} & ScriptSignal<T>
+}
 
 --[=[
 	A ServerNetworkController is basically a mixed version of a [RemoteEvent] and [RemoteFunction]. It has better features and is more performant, though this is the server-sided API.
@@ -217,16 +217,19 @@ export type ClientNetworkController<T> = {
 	@field Wait (self: ServerNetworkController<T>?) -> (Player, {T})
 	@field Fire (self: ServerNetworkController<T>?, recipient: Player | {Player}, data: ({T} | T)?) -> ()
 	
-	@field Invoke_DISABLED (self: ServerNetworkController<T>?, recipient: Player, data: ({T} | T)?) -> ({T})
 	@field OnInvoke (self: ServerNetworkController<T>?, callback: (sender: Player, data: {T}) -> ()) -> ()
 
 	@interface ServerNetworkController
 	@within CanaryEngine
 ]=]
 export type ServerNetworkController<T> = {
+	Connect: (self: ClientNetworkController<T>?, func: (sender: Player, data: {T}) -> ()) -> (ScriptConnection),
+	Wait: (self: ClientNetworkController<T>?) -> (Player, {T}),
+	Once: (self: ClientNetworkController<T>?, func: (sender: Player, data: {T}) -> ()) -> (ScriptConnection),
+	
 	Fire: (self: ServerNetworkController<T>?, recipient: Player | {Player}, data: NetworkControllerData<T>?) -> (),
 	OnInvoke: (self: ServerNetworkController<T>?, callback: (sender: Player, data: {T}) -> ({T})) -> ()
-} & ScriptSignal<T>
+}
 
 --[=[
 	This is the server sided API for CanaryEngine.
@@ -257,6 +260,10 @@ type EngineServer = {
 		Server: typeof(script.Parent.Media.Server),
 		Replicated: typeof(script.Parent.Media.Replicated)
 	},
+	
+	Matchmaking: typeof(require(script.Vendor.Network.MatchmakingService)),
+	Moderation: nil,
+	Data: typeof(require(script.Vendor.Data.DataService)),
 
 	CreateNetworkController: (controllerName: string) -> (ServerNetworkController<any>)
 }
@@ -311,7 +318,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local PlayerService = game:GetService("Players")
 
 if not ReplicatedStorage:FindFirstChild("CanaryEngineFramework") then
-	error("CanaryEngine must be parented to ReplicatedStorage")
+	error("CanaryEngine must be parented to DataModel.ReplicatedStorage")
 end
 
 local CanaryEngineFramework = ReplicatedStorage:WaitForChild("CanaryEngineFramework")
@@ -320,9 +327,10 @@ local Vendor = CanaryEngineFramework.CanaryEngine.Vendor
 local Data = Vendor.Data
 local Libraries = Vendor.Libraries
 local Network = Vendor.Network
+local IsDeveloperMode = CanaryEngineFramework:GetAttribute("DeveloperMode")
 
 local Startup = require(script.Startup)
-local StartupResult = Startup.StartEngine()
+local StartupResult = Startup.StartEngine(IsDeveloperMode)
 local Debugger = require(script.Debugger)
 local Runtime = require(script.Runtime) -- Get the RuntimeSettings, which are settings that are set during runtime
 
@@ -338,6 +346,9 @@ local Statistics = require(Libraries.Statistics)
 local Serialize = require(Data.BlueSerializer)
 local NetworkController = require(Network.NetworkController)
 
+CanaryEngine.RuntimeCreatedSignals = { }
+CanaryEngine.RuntimeCreatedNetworkControllers = { }
+
 CanaryEngine.Runtime = table.freeze({
 	RuntimeSettings = RuntimeSettings,
 	RuntimeContext = RuntimeContext,
@@ -350,14 +361,14 @@ CanaryEngine.Libraries = table.freeze({
 	Serialize = Serialize,
 })
 
-CanaryEngine.DeveloperMode = true
+CanaryEngine.DeveloperMode = IsDeveloperMode
 
 --[=[
 	This is the main API for CanaryEngine
 
 	@field GetEngineServer () -> (EngineServer),
 	@field GetEngineClient () -> (EngineClient),
-	@field CreateSignal () -> (CustomScriptSignal<any>),
+	@field CreateSignal () -> (ScriptSignal<any>),
 	@field GetLatestPackageVersionAsync (CanaryEngine: Instance, warnIfNotLatestVersion: boolean?, respectDebugger: boolean?) -> (number?),
 	
 	@field Runtime {
@@ -391,7 +402,7 @@ CanaryEngine.DeveloperMode = true
 type CanaryEngine = {
 	GetEngineServer: () -> (EngineServer),
 	GetEngineClient: () -> (EngineClient),
-	CreateSignal: () -> (CustomScriptSignal<any>),
+	CreateSignal: (signalName: string) -> (ScriptSignal<any>),
 	GetLatestPackageVersionAsync: (CanaryEngine: Instance, warnIfNotLatestVersion: boolean?, respectDebugger: boolean?) -> (number?),
 
 	Runtime: {
@@ -415,7 +426,7 @@ type CanaryEngine = {
 		Statistics: typeof(Statistics),
 		Serialize: typeof(Serialize),
 	},
-	
+
 	DeveloperMode: boolean,
 }
 
@@ -434,7 +445,7 @@ function CanaryEngine.GetEngineServer(): EngineServer?
 	end
 
 	if Runtime.IsStarted() then
-		Debugger.warn("Importing a Package while the game is running may cause internal issues")
+		Debugger.warn("Importing a Package while the game is running may cause internal issues, expect errors to occur")
 	end
 
 	local EngineServer = ServerStorage:WaitForChild("EngineServer")
@@ -444,6 +455,10 @@ function CanaryEngine.GetEngineServer(): EngineServer?
 		Server = EngineServer.Packages,
 		Replicated = EngineReplicated.Packages,
 	}
+	
+	CanaryEngineServer.Matchmaking = require(Network.MatchmakingService)
+	CanaryEngineServer.Moderation = nil
+	CanaryEngineServer.Data = require(Data.DataService)
 
 	CanaryEngineServer.Media = {
 		Server = EngineServer.Media,
@@ -467,7 +482,7 @@ function CanaryEngine.GetEngineClient(): EngineClient?
 	end
 
 	if Runtime.IsStarted() then
-		Debugger.warn("Importing a Package while the game is running may cause internal issues")
+		Debugger.warn("Importing a Package while the game is running may cause internal issues, expect errors to occur")
 	end
 
 	local EngineClient = ReplicatedStorage:WaitForChild("EngineClient")
@@ -486,10 +501,10 @@ function CanaryEngine.GetEngineClient(): EngineClient?
 	}
 
 	CanaryEngineClient.Player = Player
-	
+
 	CanaryEngineClient.PlayerGui = Player:WaitForChild("PlayerGui")
 	CanaryEngineClient.PlayerBackpack = Player:WaitForChild("Backpack")
-	
+
 	return CanaryEngineClient
 end
 
@@ -509,7 +524,14 @@ end
 	@return ClientNetworkController<any>
 ]=]
 function CanaryEngineClient.CreateNetworkController(controllerName: string): ClientNetworkController<any>
-	return NetworkController.NewClientController(controllerName)
+	if not CanaryEngine.RuntimeCreatedNetworkControllers[controllerName] then
+		local NewNetworkController = NetworkController.NewClientController(controllerName)
+
+		CanaryEngine.RuntimeCreatedNetworkControllers[controllerName] = NewNetworkController
+		return NewNetworkController
+	end
+
+	return CanaryEngine.RuntimeCreatedNetworkControllers[controllerName]
 end
 
 --[=[
@@ -529,16 +551,31 @@ end
 	@return ServerNetworkController<any>
 ]=]
 function CanaryEngineServer.CreateNetworkController(controllerName: string): ServerNetworkController<any>
-	return NetworkController.NewServerController(controllerName)
+	if not CanaryEngine.RuntimeCreatedNetworkControllers[controllerName] then
+		local NewNetworkController = NetworkController.NewServerController(controllerName)
+		
+		CanaryEngine.RuntimeCreatedNetworkControllers[controllerName] = NewNetworkController
+		return NewNetworkController
+	end
+	
+	return CanaryEngine.RuntimeCreatedNetworkControllers[controllerName]
 end
 
 --[=[
 	Creates a new signal that is then given a reference in the signals table.
 	
-	@return CustomScriptSignal<any>
+	@param signalName string -- The name of the signal
+	@return ScriptSignal<any>
 ]=]
-function CanaryEngine.CreateSignal(): CustomScriptSignal<any>
-	return Signal.new()
+function CanaryEngine.CreateSignal(signalName: string): ScriptSignal<any>
+	if not CanaryEngine.RuntimeCreatedSignals[signalName] then
+		local NewSignal = Signal.new()
+		
+		CanaryEngine.RuntimeCreatedSignals[signalName] = NewSignal
+		return NewSignal
+	end
+	
+	return CanaryEngine.RuntimeCreatedSignals[signalName]
 end
 
 --[=[
@@ -615,4 +652,4 @@ end
 
 CanaryEngine.GetLatestPackageVersionAsync(script.Parent :: Instance)
 
-return CanaryEngine :: CanaryEngine
+return table.freeze(CanaryEngine :: CanaryEngine)

@@ -9,6 +9,11 @@ href = "https://discord.gg/cwwcZtqJAt"
 label = "Discord"
 position = "right"
 
+[[navbar.items]]
+href = "https://trello.com/b/fTJOmMua/canaryengine"
+label = "Trello"
+position = "right"
+
 [[classOrder]]
 section = "CanaryEngine"
 collapsed = false
@@ -28,7 +33,7 @@ favicon = "favicon.png"
 
 [footer]
 style = "dark"
-copyright = "Copyright © 2023 lolmansReturn. Built with Moonwave and Docusaurus"
+copyright = "Copyright © 2023 Canary. Built with Moonwave and Docusaurus"
 
 [navbar.logo]
 alt = "Canary"
