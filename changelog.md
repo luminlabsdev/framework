@@ -1,5 +1,20 @@
 # Changelog
 
+## v3.1.0
+
+**Added**
+
+* Nothing!
+
+**Improvements**
+
+* Typings have been improved to contain an additional argument for network controllers
+* Signals now use a wrapper
+
+**Removed**
+
+* Nothing!
+
 ## v3.0.0
 
 **Added**
