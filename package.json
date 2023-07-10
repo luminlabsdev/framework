@@ -1,6 +1,9 @@
 {
     "dependencies": {
-      "@docusaurus/core": "2.4.0",
-      "@docusaurus/preset-classic": "2.4.0"
+        "@docusaurus/core": "2.4.0",
+        "@docusaurus/preset-classic": "2.4.0"
+    },
+    "devDependencies": {
+        "@rbxts/types": "^1.0.704"
     }
 }
