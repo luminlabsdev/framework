@@ -1,0 +1,5 @@
+{
+    "Spring": "https://raw.githubusercontent.com/Fraktality/spr/master/spr.lua",
+    "Promise": "https://raw.githubusercontent.com/evaera/roblox-lua-promise/master/lib/init.lua",
+    "Base64": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/plugin/internal/libraries/base64.lua",
+}
