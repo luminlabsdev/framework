@@ -11,7 +11,7 @@ CanaryEngine's signal system is essentially the successor of the well-known [Bin
 Firing and connecting to signals should be as simple as possible. If you are familiar with the [RBXScriptSignal](https://create.roblox.com/docs/reference/engine/datatypes/RBXScriptSignal), then it should be easy enough to learn `ScriptSignal`'s. As common knowledge, firing + connecting is identical across both the `NetworkController` and `ScriptSignal`. Here's an example of an event being fired and connected to:
 
 ```lua
-local TestSignal = CanaryEngine.CreateSignal()
+local TestSignal = CanaryEngine.CreateSignal("NewSignal")
 
 TestSignal:Connect(function(data)
     print(data) -- Output: {"Hello,", "player"}

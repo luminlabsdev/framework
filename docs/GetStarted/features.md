@@ -1,23 +1,22 @@
 ---
-sidebar-position: 1
+sidebar-position: 2
 ---
 
 # Features
 
-CanaryEngine is a really lightweight framework, but is also very feature-packed! Here are a few notable features that make CanaryEngine standout:
+* **Type Safe** 🦺
+Strictly typed, along with native support for `roblox-ts`.
 
-* **Type Safe** - Fully compatible with Roblox’s intellisense and [Roblox LSP](https://marketplace.visualstudio.com/items?itemName=Nightrains.robloxlsp).
+* **Context-specific API** 🖥️
+The API is aimed to be completely separate the server and the client, which allows for a better type checking experience.
 
-* **Simple API** - There is very little API to interact with, therefore it shouldn’t take long to get used it!
+* **Fully Documented** 📚
+The entire framework is documented, along with tutorials on each subject.
 
-* **Fully Documented** - All functions in the main module are fully documented, along with the types
+* **Optimized** 🏃‍♀️
+Extremely optimized, and in some circumstances starting up in as little as 0.5 milliseconds!
 
-* **Easy Setup** - Simply require the module on the server, and your game will be set up automatically.
+* **Secure** 🔐
+The networking system that CanaryEngine uses can actually partially prevent exploits like RemoteSpy from being easily useable.
 
-* **Nicely Organized** - There are folders such as Scripts, Packages, and Media each with their own client, server, and shared (later referred to as replicated) folders.
-
-* **Lightweight** - The framework is really lightweight, with only about 4 modules needed to startup and function, totaling to ~400 lines of code (including function documentation).
-
-* **Secure** - The framework is super secure, minimizing as much client code as possible and when not needed. The current networking library that is being used is also super secure and partially immune to exploits such as **RemoteSpy**
-
-* **Easy Modding** - Not completely satisfied with the framework I have provided you with? Since all of the internal API is split into separate modules, it should be easy to create your own init file.
+... and much more!

@@ -1,6 +1,22 @@
 # Changelog
 
-## v3.1.0
+## v3.1.1
+
+**Added**
+
+* Support for `roblox-ts` natively
+* New plugin that works much smoother
+
+**Improvements**
+
+* Packages now can be autocompleted
+* More documentation
+
+**Removed**
+
+* Ability to require modules with `require`
+
+## v3.0.1
 
 **Added**
 
