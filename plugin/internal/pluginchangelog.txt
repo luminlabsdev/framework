@@ -1,0 +1,13 @@
+<b>Added<b>\n\n
+
+\nSupport for `roblox-ts` natively
+\nNew plugin that works much smoother
+
+<b>Improvements<b>\n\n
+
+\nPackages now can be autocompleted
+\nMore documentation
+
+<b>Removed<b>\n\n
+
+\nAbility to require modules with require
