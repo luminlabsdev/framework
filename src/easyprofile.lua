@@ -12,7 +12,7 @@ type array = {[number]: any}
 	}
 
 	@interface ProfileMetaData
-	@within CanaryEngine
+	@within EasyProfile
 ]=]
 type ProfileMetaData = {ProfileCreated: number; ProfileLoadCount: number; ProfileActiveSession: {placeId: number; jobId: string;}}
 
@@ -20,7 +20,7 @@ type ProfileMetaData = {ProfileCreated: number; ProfileLoadCount: number; Profil
 	The type for the global key.
 
 	@type GlobalKey {Key: string, Value: any, KeyId: number}
-	@within CanaryEngine
+	@within EasyProfile
 ]=]
 export type GlobalKey = {Key: string, Value: any, KeyId: number}
 
@@ -31,7 +31,7 @@ export type GlobalKey = {Key: string, Value: any, KeyId: number}
 	@field Connected boolean
 
 	@interface ScriptConnection
-	@within CanaryEngine
+	@within EasyProfile
 	@private
 ]=]
 type ScriptConnection = {
@@ -47,7 +47,7 @@ type ScriptConnection = {
 	@field Once (self: ScriptSignal<T>?, func: (data: {T}) -> ()) -> (ScriptConnection)
 
 	@interface ScriptSignal
-	@within CanaryEngine
+	@within EasyProfile
 	@private
 ]=]
 type ScriptSignal<T> = {
@@ -97,7 +97,7 @@ local ProfileObject = { }
 	A table of the currently loaded players in game. Do not edit this unless you know what you are doing.
 	
 	@server
-	@within Package
+	@within EasyProfile
 	@prop LoadedPlayers {Player}
 ]=]
 EasyProfile.LoadedPlayers = { }
