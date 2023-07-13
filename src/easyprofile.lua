@@ -11,7 +11,7 @@ type array = {[number]: any}
 		jobId: string,
 	}
 
-	@type ProfileMetaData
+	@interface ProfileMetaData
 	@within CanaryEngine
 ]=]
 type ProfileMetaData = {ProfileCreated: number; ProfileLoadCount: number; ProfileActiveSession: {placeId: number; jobId: string;}}
@@ -19,11 +19,7 @@ type ProfileMetaData = {ProfileCreated: number; ProfileLoadCount: number; Profil
 --[=[
 	The type for the global key.
 
-	@field Key string
-	@field Value any
-	@field KeyId number
-
-	@type GlobalKey
+	@type GlobalKey {Key: string, Value: any, KeyId: number}
 	@within CanaryEngine
 ]=]
 export type GlobalKey = {Key: string, Value: any, KeyId: number}
@@ -101,7 +97,7 @@ local ProfileObject = { }
 	A table of the currently loaded players in game. Do not edit this unless you know what you are doing.
 	
 	@server
-	@prop LoadedPlayers
+	@prop LoadedPlayers {Player}
 ]=]
 Package.LoadedPlayers = { }
 
@@ -123,7 +119,7 @@ assert(
 	Gets an existing profile store of creates one if it does not exist yet.
 	
 	@param name string? -- The name of the profile store to get, defaults to "Global"
-	@param defualtPlayerData dictionary -- The default data of player when loaded, only applies if this is their first time joining 
+	@param defaultPlayerData dictionary -- The default data of player when loaded, only applies if this is their first time joining 
 	
 	@return DataStoreObject?
 ]=]
