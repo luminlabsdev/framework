@@ -2,7 +2,7 @@
 -- // CanaryEngine
 
 --[=[
-	The parent class of all things CanaryEngine.
+	The parent of all classes.
 
 	@class CanaryEngine
 ]=]
@@ -36,8 +36,9 @@ local CanaryEngine = { }
 ]=]
 
 --[=[
-	A child class of CanaryEngine, server-sided.
-
+	CanaryEngine's server-sided interface.
+	
+	@server
 	@class CanaryEngineServer
 ]=]
 local CanaryEngineServer = { }
@@ -46,7 +47,6 @@ local CanaryEngineServer = { }
 	A reference to the Media folder on the Server, also gives access to replicated media.
 
 	@prop Media {Server: Folder, Replicated: Folder}
-	@server
 	@readonly
 
 	@within CanaryEngineServer
@@ -56,15 +56,15 @@ local CanaryEngineServer = { }
 	A reference to the Packages folder on the Server, also gives access to replicated Packages.
 
 	@prop Packages {Server: Folder, Replicated: Folder}
-	@server
 	@readonly
 
 	@within CanaryEngineServer
 ]=]
 
 --[=[
-	A child class of CanaryEngine, client-sided.
-
+	CanaryEngine's client-sided interface.
+	
+	@client
 	@class CanaryEngineClient
 ]=]
 local CanaryEngineClient = { }
@@ -73,7 +73,6 @@ local CanaryEngineClient = { }
 	A simple reference to the [Players.LocalPlayer].
 
 	@prop Player Player
-	@client
 	@readonly
 
 	@within CanaryEngineClient
@@ -83,7 +82,6 @@ local CanaryEngineClient = { }
 	A simple reference to the [Player.PlayerGui], useful for automatic typing and API simplicity.
 
 	@prop PlayerGui StarterGui
-	@client
 	@readonly
 
 	@within CanaryEngineClient
@@ -93,7 +91,6 @@ local CanaryEngineClient = { }
 	A simple reference to the player's [Backpack], useful for automatic typing and API simplicity.
 
 	@prop PlayerBackpack StarterPack
-	@client
 	@readonly
 
 	@within CanaryEngineClient
@@ -103,7 +100,6 @@ local CanaryEngineClient = { }
 	Local objects of the player.
 
 	@prop LocalObjects dictionary
-	@client
 	@readonly
 	@deprecated v2 -- Use PlayerBackpack and PlayerGui instead.
 
@@ -114,7 +110,6 @@ local CanaryEngineClient = { }
 	A reference to the Media folder on the client, also gives access to replicated media.
 
 	@prop Media {Client: Folder, Replicated: Folder}
-	@client
 	@readonly
 
 	@within CanaryEngineClient
@@ -124,7 +119,6 @@ local CanaryEngineClient = { }
 	A reference to the Packages folder on the client, also gives access to replicated Packages.
 
 	@prop Packages {Client: Folder, Replicated: Folder}
-	@client
 	@readonly
 
 	@within CanaryEngineClient
@@ -230,16 +224,8 @@ export type ServerNetworkController<T, U> = {
 --[=[
 	This is the server sided API for CanaryEngine.
 
-	@field Packages {
-		Server: typeof(script.Parent.Packages.Server),
-		Replicated: typeof(script.Parent.Packages.Replicated)
-	},
-
-	@field Media {
-		Server: typeof(script.Parent.Media.Server),
-		Replicated: typeof(script.Parent.Media.Replicated)
-	},
-
+	@field Packages {Server: typeof(script.Parent.Packages.Server), Replicated: typeof(script.Parent.Packages.Replicated)}
+	@field Media {Server: typeof(script.Parent.Media.Server), Replicated: typeof(script.Parent.Media.Replicated)}
 	@field CreateNetworkController (controllerName: string) -> (ServerNetworkController<any>)
 
 	@interface EngineServer
@@ -259,7 +245,7 @@ type EngineServer = {
 	
 	Matchmaking: typeof(require(script.Vendor.Network.MatchmakingService)),
 	Moderation: nil,
-	Data: typeof(require(script.Vendor.Data.DataService)),
+	Data: typeof(require(script.Vendor.Data.EasyProfile)),
 
 	CreateNetworkController: (controllerName: string) -> (ServerNetworkController<any, any>)
 }
@@ -267,19 +253,11 @@ type EngineServer = {
 --[=[
 	This is the client sided API for CanaryEngine.
 
-	@field Packages {
-		Client: typeof(script.Parent.Packages.Client),
-		Replicated: typeof(script.Parent.Packages.Replicated)
-	},
-
-	@field Media {
-		Client: typeof(script.Parent.Media.Client),
-		Replicated: typeof(script.Parent.Media.Replicated)
-	},
-
-	@field Player Player,
-	@field PlayerGui typeof(game:GetService("StarterGui")),
-	@field PlayerBackpack typeof(game:GetService("StarterPack")),
+	@field Packages {Client: typeof(script.Parent.Packages.Client), Replicated: typeof(script.Parent.Packages.Replicated)}
+	@field Media {Client: typeof(script.Parent.Media.Client), Replicated: typeof(script.Parent.Media.Replicated)}
+	@field Player Player
+	@field PlayerGui StarterGui
+	@field PlayerBackpack StarterPack
 	
 	@field CreateNetworkController (controllerName: string) -> (ClientNetworkController<any>)
 
@@ -366,29 +344,8 @@ CanaryEngine.DeveloperMode = IsDeveloperMode
 	@field GetEngineClient () -> (EngineClient),
 	@field CreateSignal () -> (ScriptSignal<any>),
 	@field GetLatestPackageVersionAsync (CanaryEngine: Instance, warnIfNotLatestVersion: boolean?, respectDebugger: boolean?) -> (number?),
-	
-	@field Runtime {
-		RuntimeSettings: {
-			StudioDebugEnabled: boolean,
-			CheckLatestVersion: boolean,
-			LiveGameDebugger: boolean,
-		},
-		
-		RuntimeContext {
-			Studio: boolean,
-			Server: boolean,
-			Client: boolean,
-			StudioPlay: boolean,
-		}
-	},
-	
-	@field Libraries {
-		Utility: typeof(Utility),
-		Benchmark: typeof(Benchmark),
-		Statistics: typeof(Statistics),
-		Serialize: typeof(Serialize),
-	}
-	
+	@field Runtime {RuntimeSettings: {StudioDebugEnabled: boolean, CheckLatestVersion: boolean, LiveGameDebugger: boolean}, RuntimeContext: {Studio: boolean, Server: boolean, Client: boolean, StudioPlay: boolean}},
+	@field Libraries {Utility: Utility, Benchmark: Benchmark, Statistics: Statistics,	Serialize: Serialize,}
 	@field DeveloperMode boolean
 	@field RuntimeCreatedSignals {[string]: ScriptSignal<any>}
 	@field RuntimeCreatedNetworkControllers {[string]: ServerNetworkController<any> | ClientNetworkController<any>}
@@ -433,7 +390,7 @@ type CanaryEngine = {
 -- // Functions
 
 --[=[
-	Gets the server-sided architecture of CanaryEngine
+	Gets the server-sided interface of CanaryEngine
 	
 	@server
 	@return EngineServer?
@@ -458,7 +415,7 @@ function CanaryEngine.GetEngineServer(): EngineServer?
 	
 	CanaryEngineServer.Matchmaking = require(Network.MatchmakingService)
 	CanaryEngineServer.Moderation = nil
-	CanaryEngineServer.Data = require(Data.DataService)
+	CanaryEngineServer.Data = require(Data.EasyProfile)
 
 	CanaryEngineServer.Media = {
 		Server = EngineServer.Media,
@@ -469,7 +426,7 @@ function CanaryEngine.GetEngineServer(): EngineServer?
 end
 
 --[=[
-	Gets the client-sided architecture of CanaryEngine
+	Gets the client-sided interface of CanaryEngine
 	
 	@yields
 	@client
@@ -569,7 +526,7 @@ end
 ]=]
 function CanaryEngine.CreateSignal(signalName: string): ScriptSignal<any>
 	if not CanaryEngine.RuntimeCreatedSignals[signalName] then
-		local NewSignal = Signal.CreateController(signalName)
+		local NewSignal = Signal.NewController(signalName)
 		
 		CanaryEngine.RuntimeCreatedSignals[signalName] = NewSignal
 		return NewSignal

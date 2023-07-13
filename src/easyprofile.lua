@@ -2,14 +2,11 @@ type dictionary = {[string]: any}
 type array = {[number]: any}
 
 --[=[
-	The type for the global key.
+	The metadata for a user's profile.
 
 	@field ProfileCreated number
 	@field ProfileLoadCount number
-	@field ProfileActiveSession {
-		placeId: number,
-		jobId: string,
-	}
+	@field ProfileActiveSession {placeId: number, jobId: string}
 
 	@interface ProfileMetaData
 	@within EasyProfile
@@ -62,6 +59,7 @@ type ScriptSignal<T> = {
 --[=[
 	The parent of all classes.
 
+	@server
 	@class EasyProfile
 ]=]
 local EasyProfile = { }
@@ -96,7 +94,6 @@ local ProfileObject = { }
 --[=[
 	A table of the currently loaded players in game. Do not edit this unless you know what you are doing.
 	
-	@server
 	@within EasyProfile
 	@prop LoadedPlayers {Player}
 ]=]
@@ -121,6 +118,7 @@ assert(
 	
 	@param name string? -- The name of the profile store to get, defaults to "Global"
 	@param defaultPlayerData dictionary -- The default data of player when loaded, only applies if this is their first time joining 
+	@param keyPattern string -- The pattern for the key to use, use '%d' as a placeholder for the player's `UserId`.
 	
 	@return DataStoreObject?
 ]=]
@@ -297,8 +295,6 @@ end
 	
 	@param player Player -- The player to unclaim the session lock of
 	@param valuesToSave dictionary? -- Values to save that are not already saved to the player data, for example attributes that need to be saved on player removing
-	
-	@yields
 ]=]
 function ProfileStoreObject:UnclaimSessionLock(player: Player, valuesToSave: dictionary?)
 	local PlayerProfile = EasyProfile.LoadedPlayers[player]
@@ -377,7 +373,7 @@ end
 --[=[
 	Gets the data for the profile that was loaded in.
 	
-	@return {GlobalKey}?
+	@return {[string]: any}?
 ]=]
 
 function ProfileObject:GetProfileData(): {[string]: any}?
@@ -477,18 +473,7 @@ end
 
 --[=[
 	Gets all metadata that is related to the player's profile.
-	
-	```
-	{
-		MetaData.ProfileCreated, -- The unix timestap when the profile was created
-		MetaData.ProfileLoadCount, -- The amount of times the profile has been loaded in game servers so far
-		MetaData.ProfileActiveSession {
-			ProfileActiveSession.placeId, -- The `placeId` of the place where the profile is currently active
-			ProfileActiveSession.jobId -- The `jobId` of the server that current has the profile loaded
-		}
-	}
-	```
-	
+
 	@return ProfileMetaData?
 ]=]
 function ProfileObject:GetMetaData(): ProfileMetaData?
