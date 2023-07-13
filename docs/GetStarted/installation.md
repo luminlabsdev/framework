@@ -1,5 +1,5 @@
 ---
-sidebar-position: 5
+sidebar-position: 4
 ---
 
 # Installation

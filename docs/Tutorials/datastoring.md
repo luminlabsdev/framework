@@ -132,7 +132,7 @@ First, in our `PlayerAdded` function, lets send a new global key out to ourselve
 local function PlayerAdded(player)
     local PlayerProfile = MyNewDataStore:LoadProfileAsync(player)
 
-    MyNewDataStore:SetGlobalKeyAsync(player.UserId, "GlobalKeyTest", {this = "is a test"}) -- The first argument is the player who is recieving it, and the others are the key name followed by the value
+    MyNewDataStore:SetGlobalKeyAsync(player.UserId, "GlobalKeyTest", "somerandomstringdata") -- The first argument is the player who is recieving it, and the others are the key name followed by the value
 end
 ```
 
@@ -146,7 +146,7 @@ local function PlayerAdded(player)
         print(data[1]) -- Output: {Key = "GlobalKeyTest", Value = {this = "is a test"}, KeyId = 1}
     end)
 
-    MyNewDataStore:SetGlobalKeyAsync(player.UserId, "GlobalKeyTest", {this = "is a test"})
+    MyNewDataStore:SetGlobalKeyAsync(player.UserId, "GlobalKeyTest", "somerandomstringdata")
 end
 ```
 
@@ -157,16 +157,18 @@ local function PlayerAdded(player)
     local PlayerProfile = MyNewDataStore:LoadProfileAsync(player)
 
     for _, globalKey in PlayerProfile:GetGlobalKeys() do
-        print(globalKey.Key, ":", globalKey.Value)
+        print(globalKey.Key, ":", globalKey.Value) -- Output: {Key = "GlobalKeyTest", Value = "somerandomstringdata", KeyId = 1}
     end
 
     PlayerProfile.GlobalKeyAdded:Connect(function(data)
-        print(data[1]) -- Output: {Key = "GlobalKeyTest", Value = {this = "is a test"}, KeyId = 1}
+        print(data[1]) -- Output: {Key = "GlobalKeyTest", Value = "somerandomstringdata", KeyId = 2}
     end)
 
-    MyNewDataStore:SetGlobalKeyAsync(player.UserId, "GlobalKeyTest", {this = "is a test"})
+    MyNewDataStore:SetGlobalKeyAsync(player.UserId, "GlobalKeyTest", "somerandomstringdata")
 end
 ```
+
+Please do note that there is a difference between `GlobalKey`'s and regular keys. `GlobalKey`'s are supposed to be global: they can be recieved globally, and regular keys are just for the individual player that owns the profile.
 
 ### Extras
 
