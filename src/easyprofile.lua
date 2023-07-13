@@ -62,9 +62,9 @@ type ScriptSignal<T> = {
 --[=[
 	The parent of all classes.
 
-	@class Package
+	@class EasyProfile
 ]=]
-local Package = { }
+local EasyProfile = { }
 local Vendor = script.Vendor
 
 local Players = game:GetService("Players")
@@ -100,7 +100,7 @@ local ProfileObject = { }
 	@within Package
 	@prop LoadedPlayers {Player}
 ]=]
-Package.LoadedPlayers = { }
+EasyProfile.LoadedPlayers = { }
 
 -- // Functions
 
@@ -124,7 +124,7 @@ assert(
 	
 	@return DataStoreObject?
 ]=]
-function Package.CreateProfileStore(name: string?, defaultPlayerData: dictionary, keyPattern: string?): typeof(setmetatable({ }, {__index = ProfileStoreObject}))?
+function EasyProfile.CreateProfileStore(name: string?, defaultPlayerData: dictionary, keyPattern: string?): typeof(setmetatable({ }, {__index = ProfileStoreObject}))?
 	if not name then
 		name = "Global"
 	end
@@ -248,7 +248,7 @@ function ProfileStoreObject:LoadProfileAsync(player: Player, reconcileData: bool
 
 	LoadedPlayerProfile:AddUserId(player.UserId)
 	LoadedPlayerProfile:ListenToRelease(function()
-		Package.LoadedPlayers[player] = nil
+		EasyProfile.LoadedPlayers[player] = nil
 		self.SessionLockUnclaimed:Fire({player})
 		
 		setmetatable(ProfileObjectMetatable, nil)
@@ -272,7 +272,7 @@ function ProfileStoreObject:LoadProfileAsync(player: Player, reconcileData: bool
 
 	self.SessionLockClaimed:Fire({player})
 
-	Package.LoadedPlayers[player] = LoadedPlayerProfile
+	EasyProfile.LoadedPlayers[player] = LoadedPlayerProfile
 	ProfileObject.Profile = LoadedPlayerProfile
 	
 	if Success then
@@ -301,7 +301,7 @@ end
 	@yields
 ]=]
 function ProfileStoreObject:UnclaimSessionLock(player: Player, valuesToSave: dictionary?)
-	local PlayerProfile = Package.LoadedPlayers[player]
+	local PlayerProfile = EasyProfile.LoadedPlayers[player]
 	
 	if not PlayerProfile then
 		warn("No profile loaded")
@@ -525,4 +525,4 @@ function ProfileObject:GetDataUsage(): number?
 	return (UsageLength / 4194304) * 100
 end
 
-return table.freeze(Package)
+return table.freeze(EasyProfile)

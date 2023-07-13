@@ -20,6 +20,11 @@ collapsed = false
 classes = ["CanaryEngine", "CanaryEngineServer", "CanaryEngineClient"]
 
 [[classOrder]]
+section = "EasyProfile"
+collapsed = true
+classes = ["EasyProfile", "ProfileStoreObject", "ProfileObject"]
+
+[[classOrder]]
 section = "Benchmark"
 collapsed = true
 classes = ["Benchmark", "BenchmarkObject"]
