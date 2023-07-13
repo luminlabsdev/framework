@@ -78,7 +78,7 @@ local IsProfileStoreAlreadyLoaded = false
 local CurrentLoadedProfileStore = nil
 
 --[=[
-	The object that holds the `ProfileStore`.
+	The object that holds the `ProfileStoreObject`.
 	
 	@server
 	@class ProfileStoreObject
@@ -86,7 +86,7 @@ local CurrentLoadedProfileStore = nil
 local ProfileStoreObject = { }
 
 --[=[
-	The child object of ProfileStoreObject.
+	The child object of `ProfileObject`.
 	
 	@server
 	@class ProfileObject
@@ -97,6 +97,7 @@ local ProfileObject = { }
 	A table of the currently loaded players in game. Do not edit this unless you know what you are doing.
 	
 	@server
+	@within Package
 	@prop LoadedPlayers {Player}
 ]=]
 Package.LoadedPlayers = { }
