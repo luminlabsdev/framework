@@ -19,6 +19,10 @@ section = "CanaryEngine"
 collapsed = false
 classes = ["CanaryEngine", "CanaryEngineServer", "CanaryEngineClient"]
 
+apiCategories = [
+    "Event",
+]
+
 [[classOrder]]
 section = "EasyProfile"
 collapsed = true

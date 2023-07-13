@@ -22,6 +22,7 @@ local Benchmark = { }
 	A signal that fires when the benchmark has been disposed of.
 
 	@prop Destroying ScriptSignal
+	@tag Event
 	@within BenchmarkObject
 ]=]
 
