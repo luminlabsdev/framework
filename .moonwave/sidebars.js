@@ -19,11 +19,11 @@ module.exports = {
         type: "category",
         label: "Tutorials",
         items: [
-            "Tutorials/packages",
-            "Tutorials/structure",
-            "Tutorials/customsignals",
-            "Tutorials/networking",
-            "Tutorials/datastoring"
+            "tutorials/packages",
+            "tutorials/structure",
+            "tutorials/customsignals",
+            "tutorials/networking",
+            "tutorials/datastoring"
         ],
       },
     ],
