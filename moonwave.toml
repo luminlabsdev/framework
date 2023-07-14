@@ -4,6 +4,10 @@ gitSourceBranch = "main"
 
 changelog = true
 
+apiCategories = [
+    "Event"
+]
+
 [[navbar.items]]
 href = "https://discord.gg/cwwcZtqJAt"
 label = "Discord"
@@ -18,10 +22,6 @@ position = "right"
 section = "CanaryEngine"
 collapsed = false
 classes = ["CanaryEngine", "CanaryEngineServer", "CanaryEngineClient"]
-
-apiCategories = [
-    "Event",
-]
 
 [[classOrder]]
 section = "EasyProfile"
@@ -44,22 +44,18 @@ favicon = "favicon.png"
 style = "dark"
 copyright = "Copyright © 2023 Canary. Built with Moonwave and Docusaurus"
 
-[navbar.logo]
-alt = "Canary"
-src = "favicon.png"
-
 [home]
 enabled = true
 includeReadme = false
 
 [[home.features]]
-title = "Type Safe"
-description = "Fully compatible with Roblox’s intellisense and Roblox LSP. Support for roblox-ts is coming soon."
+title = "Type Safe 🦺"
+description = "Strictly typed, along with native support for roblox-ts."
 
 [[home.features]]
-title = "Secure"
-description = "The framework is amazingly secure, 0 client code required. The built-in networking library is partially immune to popular networking exploits such as RemoteSpy."
+title = "Secure 🔐"
+description = "The networking system that CanaryEngine uses can actually partially prevent exploits like RemoteSpy from being easily useable."
 
 [[home.features]]
-title = "Lightweight"
-description = "Lightweight framework that does not need any external dependencies. Only 3 internal modules that are also super lightweight and performant."
+title = "Optimized 🏃‍♀️"
+description = "Extremely optimized, and in some circumstances starting up in as little as 0.5 milliseconds!"

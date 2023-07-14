@@ -119,7 +119,7 @@ local ProfileObject = { }
 	Fires when a global key has been recieved by the server.
 	
 	@within ProfileObject
-	@tag Event
+	@tag event
 	@prop GlobalKeyAdded ScriptSignal<GlobalKey>
 ]=]
 
