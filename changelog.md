@@ -14,7 +14,7 @@
 
 **Removed**
 
-* Ability to require modules with `require`
+* ~~Ability to require modules with `require`~~ (backwards compatible)
 
 ## v3.0.1
 
