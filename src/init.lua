@@ -614,6 +614,4 @@ end
 
 -- // Actions
 
-CanaryEngine.GetLatestPackageVersionAsync(script.Parent :: Instance)
-
 return table.freeze(CanaryEngine :: CanaryEngine)
