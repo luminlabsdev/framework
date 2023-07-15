@@ -192,6 +192,7 @@ export type ClientNetworkController<T, U> = {
 	Fire: (self: ClientNetworkController<T, U>?, data: ({T} | T)?) -> (),
 	InvokeAsync: (self: ClientNetworkController<T, U>?, data: ({T} | T)) -> ({U}),
 	
+	DisconnectAll: (self: ServerNetworkController<T, U>?) -> (),
 	Name: string,
 }
 
@@ -218,6 +219,7 @@ export type ServerNetworkController<T, U> = {
 	Fire: (self: ServerNetworkController<T, U>?, recipient: Player | {Player}, data: ({T} | T)?) -> (),
 	OnInvoke: (self: ServerNetworkController<T, U>?, callback: (sender: Player, data: {T}) -> ({U} | U)) -> (),
 	
+	DisconnectAll: (self: ServerNetworkController<T, U>?) -> (),
 	Name: string,
 }
 

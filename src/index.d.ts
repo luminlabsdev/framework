@@ -56,6 +56,9 @@ export interface ClientNetworkController<T> {
 
     Fire(self: ClientNetworkController<T>, data: (T | {T}) | null): void;
     InvokeAsync(self: ClientNetworkController<T>, data: (T | {T}) | null): {T};
+
+    DisconnectAll(): void
+    Name: string;
 }
 
 export interface ServerNetworkController<T> {
@@ -65,6 +68,9 @@ export interface ServerNetworkController<T> {
 
     Fire(self: ServerNetworkController<T>, recipient: any, data: (T | {T}) | null): void;
     OnInvoke(self: ServerNetworkController<T>, callback: (sender: any, data: {T}) => void): void;
+
+    DisconnectAll(): void
+    Name: string;
 }
 
 export namespace CanaryEngine {
