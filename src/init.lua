@@ -236,8 +236,8 @@ export type ServerNetworkController<T, U> = {
 ]=]
 type EngineServer = {
 	Packages: {
-		Server: typeof(script.Parent.Packages.Server),
-		Replicated: typeof(script.Parent.Packages.Replicated)
+		Server: typeof(require(game:GetService("ServerStorage").EngineServer.Intellisense)),
+		Replicated: typeof(require(game:GetService("ReplicatedStorage").EngineReplicated.Intellisense))
 	},
 
 	Media: {
@@ -269,8 +269,8 @@ type EngineServer = {
 ]=]
 type EngineClient = {
 	Packages: {
-		Client: typeof(script.Parent.Packages.Client),
-		Replicated: typeof(script.Parent.Packages.Replicated)
+		Client: typeof(require(game:GetService("ReplicatedStorage").EngineClient.Intellisense)),
+		Replicated: typeof(require(game:GetService("ReplicatedStorage").EngineReplicated.Intellisense))
 	},
 
 	Media: {

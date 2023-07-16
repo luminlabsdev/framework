@@ -16,8 +16,4 @@ return {
 		CheckLatestVersion = CanaryEngineFramework:GetAttribute("CheckLatestVersion");
 		LiveGameDebugger = CanaryEngineFramework:GetAttribute("LiveGameDebugger");
 	},
-	
-	IsStarted = function(): boolean
-		return CanaryEngineFramework.CanaryEngine:GetAttribute("Started")
-	end,
 }
