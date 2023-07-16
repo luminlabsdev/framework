@@ -305,8 +305,6 @@ local Libraries = Vendor.Libraries
 local Network = Vendor.Network
 local IsDeveloperMode = CanaryEngineFramework:GetAttribute("DeveloperMode")
 
-local Startup = require(script.Startup)
-local StartupResult = Startup.StartEngine(IsDeveloperMode)
 local Debugger = require(script.Debugger)
 local Runtime = require(script.Runtime) -- Get the RuntimeSettings, which are settings that are set during runtime
 
@@ -403,10 +401,6 @@ function CanaryEngine.GetEngineServer(): EngineServer?
 		return nil
 	end
 
-	if Runtime.IsStarted() then
-		Debugger.warn("Importing a Package while the game is running may cause internal issues, expect errors to occur")
-	end
-
 	local EngineServer = ServerStorage:WaitForChild("EngineServer")
 	local EngineReplicated = ReplicatedStorage:WaitForChild("EngineReplicated")
 
@@ -438,10 +432,6 @@ function CanaryEngine.GetEngineClient(): EngineClient?
 	if not RuntimeContext.Client then
 		Debugger.error("Failed to fetch 'EngineClient', Context must be client.")
 		return nil
-	end
-
-	if Runtime.IsStarted() then
-		Debugger.warn("Importing a Package while the game is running may cause internal issues, expect errors to occur")
 	end
 
 	local EngineClient = ReplicatedStorage:WaitForChild("EngineClient")
