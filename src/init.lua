@@ -298,42 +298,7 @@ CanaryEngine.DeveloperMode = IsDeveloperMode
 	@server
 	@return EngineServer?
 ]=]
-function CanaryEngine.GetEngineServer(): EngineServer?
-	--[=[
-		This is the server sided API for CanaryEngine.
-
-		@field Packages {Server: {[string]: {any}}, Replicated: {[string]: {any}}}
-		@field Media {Server: Folder, Replicated: Folder}
-
-		@field Matchmaking MatchmakingService
-		@field Moderation nil
-		@field Data EasyProfile
-
-		@field CreateNetworkController (controllerName: string) -> (ServerNetworkController<any>)
-
-		@interface EngineServer
-		@within CanaryEngine
-		@private
-	]=]
-
-	type EngineServer = {
-		Packages: {
-			Server: typeof(require(game:GetService("ServerStorage").EngineServer.Intellisense)),
-			Replicated: typeof(require(game:GetService("ReplicatedStorage").EngineReplicated.Intellisense))
-		},
-
-		Media: {
-			Server: typeof(script.Parent.Media.Server),
-			Replicated: typeof(script.Parent.Media.Replicated)
-		},
-
-		Matchmaking: typeof(require(script.Vendor.Network.MatchmakingService)),
-		Moderation: nil,
-		Data: typeof(require(script.Vendor.Data.EasyProfile)),
-
-		CreateNetworkController: (controllerName: string) -> (ServerNetworkController<any, any>)
-	}
-
+function CanaryEngine.GetEngineServer()
 	if not RuntimeContext.Server then
 		Debugger.error("Failed to fetch 'EngineServer', context must be server")
 		return nil
@@ -366,43 +331,7 @@ end
 	@client
 	@return EngineClient?
 ]=]
-function CanaryEngine.GetEngineClient(): EngineClient?
-	--[=[
-		This is the client sided API for CanaryEngine.
-
-		@field Packages {Client: {[string]: {any}}, Replicated: {[string]: {any}}}
-		@field Media {Client:Folder, Replicated: Folder}
-
-		@field Player Player
-		@field PlayerGui StarterGui
-		@field PlayerBackpack StarterPack
-	
-		@field CreateNetworkController (controllerName: string) -> (ClientNetworkController<any>)
-
-		@interface EngineClient
-		@within CanaryEngine
-		@private
-	]=]
-	
-	type EngineClient = {
-		Packages: {
-			Client: typeof(require(game:GetService("ReplicatedStorage").EngineClient.Intellisense)),
-			Replicated: typeof(require(game:GetService("ReplicatedStorage").EngineReplicated.Intellisense))
-		},
-
-		Media: {
-			Client: typeof(script.Parent.Media.Client),
-			Replicated: typeof(script.Parent.Media.Replicated)
-		},
-
-		Player: Player,
-
-		PlayerGui: typeof(game:GetService("StarterGui")),
-		PlayerBackpack: typeof(game:GetService("StarterPack")),
-
-		CreateNetworkController: (controllerName: string) -> (ClientNetworkController<any, any>)
-	}
-
+function CanaryEngine.GetEngineClient()
 	if not RuntimeContext.Client then
 		Debugger.error("Failed to fetch 'EngineClient', Context must be client.")
 		return nil
@@ -437,39 +366,9 @@ end
 	@server
 	@return PackageServer?
 ]=]
-function CanaryEngine.GetPackageServer(vendor: Folder): PackageServer?
+function CanaryEngine.GetPackageServer(vendor: Folder)
 	local EngineServer = ReplicatedStorage:WaitForChild("EngineServer")
 	local EngineReplicated = ReplicatedStorage:WaitForChild("EngineReplicated")
-
-	--[=[
-		This is the server-sided package API.
-
-		@field Media {Server: Folder, Replicated: Folder}
-
-		@field Matchmaking MatchmakingService
-		@field Moderation nil
-		@field Data EasyProfile
-	
-		@field CreateNetworkController (controllerName: string) -> (ServerNetworkController<any>)
-
-		@interface PackageServer
-		@within CanaryEngine
-		@private
-	]=]
-	
-	type PackageServer = {
-		Media: {
-			Server: typeof(EngineServer.Media),
-			Replicated: typeof(EngineReplicated.Media)
-		},
-
-		Player: Player,
-
-		PlayerGui: typeof(game:GetService("StarterGui")),
-		PlayerBackpack: typeof(game:GetService("StarterPack")),
-
-		CreateNetworkController: (controllerName: string) -> (ClientNetworkController<any, any>)
-	}
 
 	if not RuntimeContext.Server then
 		Debugger.error("Failed to fetch 'PackageServer', Context must be server.")
@@ -496,37 +395,7 @@ end
 	@client
 	@return PackageClient?
 ]=]
-function CanaryEngine.GetPackageClient(vendor: Folder): PackageClient?
-	--[=[
-		This is the client-sided package API.
-
-		@field Media {Client: Folder, Replicated: Folder}
-
-		@field Player Player
-		@field PlayerGui StarterGui
-		@field PlayerBackpack StarterPack
-	
-		@field CreateNetworkController (controllerName: string) -> (ClientNetworkController<any>)
-
-		@interface PackageClient
-		@within CanaryEngine
-		@private
-	]=]
-	
-	type PackageClient = {
-		Media: {
-			Client: typeof(script.Parent.Media.Client),
-			Replicated: typeof(script.Parent.Media.Replicated)
-		},
-
-		Player: Player,
-
-		PlayerGui: typeof(game:GetService("StarterGui")),
-		PlayerBackpack: typeof(game:GetService("StarterPack")),
-
-		CreateNetworkController: (controllerName: string) -> (ClientNetworkController<any, any>)
-	}
-
+function CanaryEngine.GetPackageClient(vendor: Folder)
 	if not RuntimeContext.Client then
 		Debugger.error("Failed to fetch 'PackageClient', Context must be client.")
 		return nil
@@ -692,7 +561,5 @@ function CanaryEngine.GetLatestPackageVersionAsync(package: Instance, warnIfNotL
 end
 
 -- // Actions
-
-CanaryEngine.GetPackageClient().CreateNetworkController("e"):InvokeAsync()
 
 return CanaryEngine
