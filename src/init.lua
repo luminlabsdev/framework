@@ -299,29 +299,29 @@ CanaryEngine.DeveloperMode = IsDeveloperMode
 	@return EngineServer?
 ]=]
 function CanaryEngine.GetEngineServer()
-	if not RuntimeContext.Server then
+	if RuntimeContext.Server then
+		local EngineServer = ServerStorage:WaitForChild("EngineServer")
+		local EngineReplicated = ReplicatedStorage:WaitForChild("EngineReplicated")
+
+		CanaryEngineServer.Packages = {
+			Server = require(EngineServer[".intellisense"]),
+			Replicated = require(EngineReplicated[".intellisense"]),
+		}
+
+		CanaryEngineServer.Matchmaking = require(Network.MatchmakingService)
+		CanaryEngineServer.Moderation = nil
+		CanaryEngineServer.Data = require(Data.EasyProfile)
+
+		CanaryEngineServer.Media = {
+			Server = EngineServer.Media,
+			Replicated = EngineReplicated.Media,
+		}
+
+		return CanaryEngineServer
+	else
 		Debugger.error("Failed to fetch 'EngineServer', context must be server")
 		return nil
 	end
-
-	local EngineServer = ServerStorage:WaitForChild("EngineServer")
-	local EngineReplicated = ReplicatedStorage:WaitForChild("EngineReplicated")
-
-	CanaryEngineServer.Packages = {
-		Server = EngineServer.Packages,
-		Replicated = EngineReplicated.Packages,
-	}
-	
-	CanaryEngineServer.Matchmaking = require(Network.MatchmakingService)
-	CanaryEngineServer.Moderation = nil
-	CanaryEngineServer.Data = require(Data.EasyProfile)
-
-	CanaryEngineServer.Media = {
-		Server = EngineServer.Media,
-		Replicated = EngineReplicated.Media,
-	}
-
-	return CanaryEngineServer
 end
 
 --[=[
@@ -343,8 +343,8 @@ function CanaryEngine.GetEngineClient()
 	local Player = PlayerService.LocalPlayer
 
 	CanaryEngineClient.Packages = {
-		Client = EngineClient.Packages,
-		Replicated = EngineReplicated.Packages,
+		Client = require(EngineClient[".intellisense"]),
+		Replicated = require(EngineReplicated[".intellisense"]),
 	}
 
 	CanaryEngineClient.Media = {
@@ -366,7 +366,7 @@ end
 	@server
 	@return PackageServer?
 ]=]
-function CanaryEngine.GetPackageServer(vendor: Folder)
+function CanaryEngine.GetPackageServer()
 	local EngineServer = ReplicatedStorage:WaitForChild("EngineServer")
 	local EngineReplicated = ReplicatedStorage:WaitForChild("EngineReplicated")
 
@@ -374,8 +374,6 @@ function CanaryEngine.GetPackageServer(vendor: Folder)
 		Debugger.error("Failed to fetch 'PackageServer', Context must be server.")
 		return nil
 	end
-
-	CanaryPackageServer.Vendor = require(vendor[".intellisense"])
 
 	CanaryPackageServer.Matchmaking = require(Network.MatchmakingService)
 	CanaryPackageServer.Moderation = nil
@@ -395,7 +393,7 @@ end
 	@client
 	@return PackageClient?
 ]=]
-function CanaryEngine.GetPackageClient(vendor: Folder)
+function CanaryEngine.GetPackageClient()
 	if not RuntimeContext.Client then
 		Debugger.error("Failed to fetch 'PackageClient', Context must be client.")
 		return nil
