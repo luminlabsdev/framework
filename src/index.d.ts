@@ -11,6 +11,10 @@ interface EngineServer {
         Replicated: any
     }
 
+    Matchmaking: {any}
+    Moderation: null
+    Data: {any}
+
 	CreateNetworkController(controllerName: string): ServerNetworkController<any>;
 }
 
@@ -32,6 +36,34 @@ interface EngineClient {
 
 	CreateNetworkController(controllerName: string): ClientNetworkController<any>;
 }
+
+interface PackageServer {
+    Media: {
+        Server: any
+        Replicated: any
+    }
+
+    Matchmaking: {any}
+    Moderation: null
+    Data: {any}
+
+    CreateNetworkController(controllerName: string): ServerNetworkController<any>;
+}
+
+interface PackageClient {
+    Media: {
+        Client: any
+        Replicated: any
+    }
+
+    Player: Player
+
+    PlayerGui: StarterGui
+    PlayerBackpack: StarterPack
+
+    CreateNetworkController(controllerName: string): ClientNetworkController<any>;
+}
+
 
 interface ScriptConnection {
     Disconnect(): void;
@@ -76,6 +108,10 @@ export interface ServerNetworkController<T> {
 export namespace CanaryEngine {
     export function GetEngineServer(): EngineServer;
 	export function GetEngineClient(): EngineClient;
+
+    export function GetPackageServer(): PackageServer;
+    export function GetPackageClient(): PackageClient;
+
 	export function CreateSignal(): ScriptSignal<any>;
 	export function GetLatestPackageVersionAsync(packageInstance: any, warnIfNotLatestVersion: boolean | null, respectDebugger: boolean | null): number | null;
 

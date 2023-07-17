@@ -3,9 +3,9 @@
 local Package = { }
 
 local CanaryEngine = require(game:GetService("ReplicatedStorage").CanaryEngineFramework.CanaryEngine)
-local EngineServer = CanaryEngine.GetEngineServer()
+local PackageServer = CanaryEngine.GetPackageServer(script.Vendor)
 
-local Vendor = script.Vendor
+local Vendor = PackageServer.Vendor
 
 -- // Variables
 
