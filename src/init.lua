@@ -286,6 +286,7 @@ CanaryEngine.Libraries = table.freeze({
 	Benchmark = Benchmark,
 	Statistics = Statistics,
 	Serialize = Serialize,
+	Debugger = Debugger,
 })
 
 CanaryEngine.DeveloperMode = IsDeveloperMode
@@ -332,32 +333,32 @@ end
 	@return EngineClient?
 ]=]
 function CanaryEngine.GetEngineClient()
-	if not RuntimeContext.Client then
+	if RuntimeContext.Server then
+		local EngineClient = ReplicatedStorage:WaitForChild("EngineClient")
+		local EngineReplicated = ReplicatedStorage:WaitForChild("EngineReplicated")
+	
+		local Player = PlayerService.LocalPlayer
+	
+		CanaryEngineClient.Packages = {
+			Client = require(EngineClient[".intellisense"]),
+			Replicated = require(EngineReplicated[".intellisense"]),
+		}
+	
+		CanaryEngineClient.Media = {
+			Client = EngineClient.Media,
+			Replicated = EngineReplicated.Media,
+		}
+	
+		CanaryEngineClient.Player = Player
+	
+		CanaryEngineClient.PlayerGui = Player:WaitForChild("PlayerGui")
+		CanaryEngineClient.PlayerBackpack = Player:WaitForChild("Backpack")
+	
+		return CanaryEngineClient
+	else
 		Debugger.error("Failed to fetch 'EngineClient', Context must be client.")
 		return nil
 	end
-
-	local EngineClient = ReplicatedStorage:WaitForChild("EngineClient")
-	local EngineReplicated = ReplicatedStorage:WaitForChild("EngineReplicated")
-
-	local Player = PlayerService.LocalPlayer
-
-	CanaryEngineClient.Packages = {
-		Client = require(EngineClient[".intellisense"]),
-		Replicated = require(EngineReplicated[".intellisense"]),
-	}
-
-	CanaryEngineClient.Media = {
-		Client = EngineClient.Media,
-		Replicated = EngineReplicated.Media,
-	}
-
-	CanaryEngineClient.Player = Player
-
-	CanaryEngineClient.PlayerGui = Player:WaitForChild("PlayerGui")
-	CanaryEngineClient.PlayerBackpack = Player:WaitForChild("Backpack")
-
-	return CanaryEngineClient
 end
 
 --[=[
