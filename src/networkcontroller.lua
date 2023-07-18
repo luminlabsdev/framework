@@ -15,12 +15,50 @@ local NetworkController = { }
 local NetworkControllerClient = { }
 
 --[=[
+	The name of the the network controller.
+
+	@readonly
+
+	@prop Name string
+	@within NetworkControllerClient
+]=]
+
+--[=[
+	The bridge for use in BridgeNet.
+
+	@readonly
+	@private
+
+	@prop _Bridge ClientBridge
+	@within NetworkControllerClient
+]=]
+
+--[=[
 	The NetworkControllerServer class.
 
 	@server
 	@class NetworkControllerServer
 ]=]
 local NetworkControllerServer = { }
+
+--[=[
+	The name of the the network controller.
+
+	@readonly
+
+	@prop Name string
+	@within NetworkControllerServer
+]=]
+
+--[=[
+	The bridge for use in BridgeNet.
+
+	@readonly
+	@private
+
+	@prop _Bridge ServerBridge
+	@within NetworkControllerServer
+]=]
 
 local Indexes = {
 	{__index = NetworkControllerClient},
