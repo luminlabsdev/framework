@@ -1,16 +1,33 @@
--- // Package
+-- // NetworkController
+--[=[
+	The parent of all classes.
 
-local Package = { }
+	@class NetworkController
+]=]
+local NetworkController = { }
 
-local Client = { }
-local Server = { }
+--[=[
+	The NetworkControllerServer class.
+
+	@client
+	@class NetworkControllerClient
+]=]
+local NetworkControllerClient = { }
+
+--[=[
+	The NetworkControllerServer class.
+
+	@server
+	@class NetworkControllerServer
+]=]
+local NetworkControllerServer = { }
 
 local Indexes = {
-	{__index = Client};
-	{__index = Server};
+	{__index = NetworkControllerClient},
+	{__index = NetworkControllerServer},
 }
 
-local Vendor = script:WaitForChild("Vendor")
+local Vendor = script.Vendor
 
 -- // Variables
 
@@ -18,7 +35,15 @@ local BridgeNet = require(Vendor.BridgeNet2)
 
 -- // Functions
 
-local function SanitizeData(data: any)
+--[=[
+	Sanitizes data sent through `:Fire`.
+
+	@private
+
+	@param data any -- The data to sanitize
+	@return {any}
+]=]
+function NetworkController.SanitizeData(data: any)
 	if type(data) ~= "table" then
 		return {data}
 	end
@@ -28,87 +53,191 @@ end
 
 -- // Constructors
 
-function Package.NewClientController(name: string)
+--[=[
+	Creates a new client network controller.
+
+	@ignore
+
+	@param name string -- The name of the new controller
+	@return NetworkControllerClient
+]=]
+function NetworkController.NewClientController(name: string)
 	local self = setmetatable({ }, Indexes[1])
 	
-	self._networkMain = BridgeNet.ReferenceBridge(`{name}_Signal`)
+	self._Bridge = BridgeNet.ReferenceBridge(name)
 	self.Name = name
 	
 	return self
 end
 
-function Package.NewServerController(name: string)
+--[=[
+	Creates a new server network controller.
+
+	@ignore
+
+	@param name string -- The name of the new controller
+	@return NetworkControllerServer
+]=]
+function NetworkController.NewServerController(name: string)
 	local self = setmetatable({ }, Indexes[2])
 
-	self._networkMain = BridgeNet.ReferenceBridge(`{name}_Signal`)
+	self._Bridge = BridgeNet.ReferenceBridge(name)
 	self.Name = name
 
 	return self
 end
 
--- // Network Controller Client
+--[=[
+	Fires an event which sends data to the server, equivalent to [RemoteEvent:FireServer]
 
-function Client:Fire(data: ({any} | any)?)
-	local NetworkMain = self._networkMain
-	
-	NetworkMain:Fire(SanitizeData(data))
+	:::tip
+
+	If you're firing a single piece of data, there is no need to wrap it in a table!
+
+	```lua
+	NetworkController:Fire("Hello, world!")
+	```
+
+	:::
+
+	@param data ({any} | any)? -- The data that should be sent to the server
+]=]
+function NetworkControllerClient:Fire(data: ({any} | any)?)
+	self._Bridge:Fire(NetworkController.SanitizeData(data))
 end
 
-function Client:Once(func: (data: {any}?) -> ())
-	return self._networkMain:Once(func)
+--[=[
+	Connects a function to the event that is fired when the server fires the network controller. When using `:Once`, the function is only run the first time and then the connection is disconnected automatically.
+
+	@param func (data: {any}) -> () -- The function to call when data is recieved from the server
+	@return ScriptConnection
+]=]
+function NetworkControllerClient:Once(func: (data: {any}?) -> ())
+	return self._Bridge:Once(func)
 end
 
-function Client:Connect(func: (data: {any}?) -> ())
-	return self._networkMain:Connect(func)
+--[=[
+	Connects a function to the event that is fired when the server fires the network controller.
+
+	@param func (data: {any}) -> () -- The function to call when data is recieved from the server
+	@return ScriptConnection
+]=]
+function NetworkControllerClient:Connect(func: (data: {any}?) -> ())
+	return self._Bridge:Connect(func)
 end
 
-function Client:Wait(): {any}?
-	return self._networkMain:Wait()
+--[=[
+	Yields the current thread until the server fires the network controller.
+
+	@yields
+	@return {any}
+]=]
+function NetworkControllerClient:Wait(): {any}?
+	return self._Bridge:Wait()
 end
 
-function Client:InvokeAsync(data: ({any} | any)?)
-	local NetworkMain = self._networkMain
-	
-	return SanitizeData(NetworkMain:InvokeServerAsync(SanitizeData(data)))
+--[=[
+	Invokes the server, equivalent to [RemoteFunction:InvokeServer].
+
+	@yields
+
+	@param data ({any} | any)? -- The data to invoke the server with
+	@return {any}
+]=]
+function NetworkControllerClient:InvokeAsync(data: ({any} | any)?)	
+	return NetworkController.SanitizeData(self._Bridge:InvokeServerAsync(NetworkController.SanitizeData(data)))
 end
 
 -- // Network Controller Server
 
-function Server:Fire(recipients: Player | {Player}, data: ({any} | any)?)
-	local NetworkMain = self._networkMain
+--[=[
+	Fires an event which sends data to the client, equivalent to [RemoteEvent:FireClient].
 
+	:::tip
+
+	If you need to fire the event to multiple players instead of one, you can use a table of players.
+
+	```lua
+	NetworkController:Fire({Player1, Player2, Player3}, {1, 2, 3})
+	```
+
+	:::
+
+	@param recipients Player | {Player} -- The players who should recieve the data and/or call
+	@param data ({any} | any)? -- The data that should be sent to the client
+]=]
+function NetworkControllerServer:Fire(recipients: Player | {Player}, data: ({any} | any)?)
 	if type(recipients) ~= "table" then
-		NetworkMain:Fire(recipients, SanitizeData(data))
+		self._Bridge:Fire(recipients, NetworkController.SanitizeData(data))
 		return
 	end
 	
-	NetworkMain:Fire(BridgeNet.Players(recipients), SanitizeData(data))
+	self._Bridge:Fire(BridgeNet.Players(recipients), NetworkController.SanitizeData(data))
 end
 
-function Server:FireAll(data: ({any} | any)?)
-	local NetworkMain = self._networkMain
-	
-	NetworkMain:Fire(BridgeNet.AllPlayers(), SanitizeData(data))
+--[=[
+	Fires an event which sends data to every client connected to the server, equivalent to [RemoteEvent:FireAllClients].
+
+	@param data ({any} | any)? -- The data that should be sent to each player
+]=]
+function NetworkControllerServer:FireAll(data: ({any} | any)?)
+	self._Bridge:Fire(BridgeNet.AllPlayers(), NetworkController.SanitizeData(data))
 end
 
-function Server:OnInvoke(callback: (sender: Player, data: {any}) -> (({any} | any)?))
-	local NetworkMain = self._networkMain
-	
-	NetworkMain.OnServerInvoke = callback
+--[=[
+	Fires an event which sends data to every client connected to the server, except for players in the `except` parameter.
+
+	@param except Player | {Player} -- The players which the call should not be sent to
+	@param data ({any} | any)? -- The data that should be sent to each player except `except`
+]=]
+function NetworkControllerServer:FireExcept(except: Player | {Player}, data: ({any} | any)?)
+	if type(except) ~= "table" then
+		self._Bridge:Fire(BridgeNet.PlayersExcept({except}), NetworkController.SanitizeData(data))
+		return
+	end
+
+	self._Bridge:Fire(BridgeNet.PlayersExcept(except), NetworkController.SanitizeData(data))
 end
 
-function Server:Once(func: (sender: Player, data: {any}?) -> ())
-	return self._networkMain:Once(func)
+--[=[
+	Recieves an invoke from the server, and runs the callback function which returns some data. Equivalent to [RemoteFunction.OnServerInvoke].
+
+	@param callback (sender: Player, data: {any}) -> (({any} | any)?) -- The callback function to run on invoke, must return at least 1 value.
+]=]
+function NetworkControllerServer:OnInvoke(callback: (sender: Player, data: {any}) -> (({any} | any)))
+	self._Bridge.OnServerInvoke = callback
 end
 
-function Server:Connect(func: (sender: Player, data: {any}?) -> ())
-	return self._networkMain:Connect(func)
+--[=[
+	Connects a function to the event that is fired when the client fires the network controller. When using `:Once`, the function is only run the first time and then the connection is disconnected automatically.
+
+	@param func (sender: Player, data: {any}) -> () -- The function to call when data is recieved from the client
+	@return ScriptConnection
+]=]
+function NetworkControllerServer:Once(func: (sender: Player, data: {any}?) -> ())
+	return self._Bridge:Once(func)
 end
 
-function Server:Wait(): (Player, {any})
-	return self._networkMain:Wait()
+--[=[
+	Connects a function to the event that is fired when the server fires the network controller.
+
+	@param func (sender: Player, data: {any}) -> () -- The function to call when data is recieved from the server
+	@return ScriptConnection
+]=]
+function NetworkControllerServer:Connect(func: (sender: Player, data: {any}?) -> ())
+	return self._Bridge:Connect(func)
+end
+
+--[=[
+	Yields the current thread until the client fires the network controller.
+
+	@yields
+	@return {any}
+]=]
+function NetworkControllerServer:Wait(): (Player, {any})
+	return self._Bridge:Wait()
 end
 
 -- // Actions
 
-return Package
+return NetworkController

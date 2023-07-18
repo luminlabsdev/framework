@@ -29,6 +29,11 @@ collapsed = true
 classes = ["CanaryPackageServer", "CanaryPackageClient"]
 
 [[classOrder]]
+section = "NetworkController"
+collapsed = true
+classes = ["NetworkController", "NetworkControllerServer", "NetworkControllerClient"]
+
+[[classOrder]]
 section = "EasyProfile"
 collapsed = true
 classes = ["EasyProfile", "ProfileStoreObject", "ProfileObject"]
