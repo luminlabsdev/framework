@@ -26,5 +26,10 @@ module.exports = {
             "tutorials/datastoring"
         ],
       },
+      {
+        type: "doc",
+        id: "featured",
+        label: "Featured",
+      },
     ],
   }
