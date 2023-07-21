@@ -1,7 +1,3 @@
----
-sidebar-position: 2
----
-
 # Signals
 
 CanaryEngine's signal system is essentially the successor of the well-known [BindableEvent](https://create.roblox.com/docs/reference/engine/classes/BindableEvent), but no special quirks come with it. Some of these issues include common memory leaks and overall slowness. Our signal implementation simply uses **[@stravant](https://github.com/stravant)**'s signal implementation which solely relies on the task scheduler to work.

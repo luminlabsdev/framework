@@ -1,7 +1,3 @@
----
-sidebar-position: 5
----
-
 # Data Management
 
 Since storing data for your players is really a must-have in almost any game, we have provided for you one of the best data storing solutions out there. `ProfileService`! Our implementation of `ProfileService` is extremely easy to learn, and is way quicker to setup then the classic ways you would do it.

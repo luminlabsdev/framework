@@ -1,7 +1,3 @@
----
-sidebar-position: 4
----
-
 # Package System
 
 One of Canary's greatest strengths is the built in package system, which allows for many more oppurtunities. Coming in later updates, we will be adding a type generator for package intellisense support!

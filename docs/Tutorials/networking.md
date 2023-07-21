@@ -1,7 +1,3 @@
----
-sidebar-position: 1
----
-
 # Networking
 
 CanaryEngine's networking system is very straightforward compared to some of the other game frameworks out there. It uses a method which reduces bandwidth by a lot, and in turn will help your game lag less. This document serves as a simple tutorial on the networking system, explaining all the functionality available in the `NetworkController`.

@@ -1,20 +1,21 @@
 # Changelog
 
-## v3.1.1
+## v3.1.4
 
 **Added**
 
-* Support for `roblox-ts` natively
-* New plugin that works much smoother
+* Native `roblox-ts` support
+* Docs for all APIs
+* Plugin now updates all files dynamically
 
 **Improvements**
 
-* Packages now can be autocompleted
-* More documentation
+* Improves default structure
+* Improved plugin
 
 **Removed**
 
-* ~~Ability to require modules with `require`~~ (backwards compatible)
+* Deprecated `.GetLatestPackageVersionAsync`
 
 ## v3.0.1
 
