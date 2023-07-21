@@ -59,7 +59,7 @@ export interface ClientNetworkController<T, U> {
     Once(self: ClientNetworkController<T, U>, func: (data: {T} | null) => (void)): ScriptConnection;
 
     Fire(self: ClientNetworkController<T, U>, data: (T | {T}) | null): void;
-    InvokeAsync(self: ClientNetworkController<T, U>, data: (U | {U}) | null): {U} | null;
+    InvokeAsync(self: ClientNetworkController<T, U>, data: (T | {T}) | null): {U} | null;
 
     DisconnectAll(): void
     Name: string;
@@ -74,7 +74,7 @@ export interface ServerNetworkController<T, U> {
     Fire(self: ServerNetworkController<T, U>, recipient: Player | {Player}, data: (T | {T}) | null): void;
     FireAll(self: ServerNetworkController<T, U>, data: (T | {T}) | null): void;
     FireExcept(self: ServerNetworkController<T, U>, except: Player | {Player}, data: (T | {T}) | null): void;
-    OnInvoke(self: ServerNetworkController<T, U>, callback: (sender: Player, data: {U}) => U): void;
+    OnInvoke(self: ServerNetworkController<T, U>, callback: (sender: Player, data: (T | {T}) | null) => U): void;
 
     DisconnectAll(): void
     Name: string;

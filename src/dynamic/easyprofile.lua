@@ -21,32 +21,11 @@ type ProfileMetaData = {ProfileCreated: number; ProfileLoadCount: number; Profil
 ]=]
 export type GlobalKey = {Key: string, Value: any, KeyId: number}
 
---[=[
-	A script connection, similar to an [RBXScriptConnection].
-
-	@field Disconnect (self: ScriptConnection) -> ()
-	@field Connected boolean
-
-	@interface ScriptConnection
-	@within EasyProfile
-	@private
-]=]
 type ScriptConnection = {
 	Disconnect: (self: ScriptConnection) -> (),
 	Connected: boolean,
 }
 
---[=[
-	A script signal, similar to an [RBXScriptSignal].
-
-	@field Connect (self: ScriptSignal<T>?, func: (data: {T}) -> ()) -> (ScriptConnection)
-	@field Wait (self: ScriptSignal<T>?) -> ({T})
-	@field Once (self: ScriptSignal<T>?, func: (data: {T}) -> ()) -> (ScriptConnection)
-
-	@interface ScriptSignal
-	@within EasyProfile
-	@private
-]=]
 type ScriptSignal<T> = {
 	Connect: (self: ScriptSignal<T>?, func: (data: {T}) -> ()) -> (ScriptConnection),
 	Wait: (self: ScriptSignal<T>?) -> ({T}),
