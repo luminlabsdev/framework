@@ -24,14 +24,9 @@ collapsed = false
 classes = ["CanaryEngine", "CanaryEngineServer", "CanaryEngineClient"]
 
 [[classOrder]]
-section = "CanaryPackage"
+section = "Controllers"
 collapsed = true
-classes = ["CanaryPackageServer", "CanaryPackageClient"]
-
-[[classOrder]]
-section = "NetworkController"
-collapsed = true
-classes = ["NetworkController", "NetworkControllerServer", "NetworkControllerClient"]
+classes = ["NetworkController", "NetworkControllerServer", "NetworkControllerClient", "SignalController"]
 
 [[classOrder]]
 section = "EasyProfile"
