@@ -377,7 +377,7 @@ end
 	
 	@yields
 ]=]
-function ProfileStoreObject:SetGlobalKeyAsync<a>(userId: number, key: string, value: a)
+function ProfileStoreObject:SetGlobalKeyAsync(userId: number, key: string, value: any)
 	if not CurrentLoadedProfileStore then
 		warn("No profile store loaded, make sure API requests are enabled")
 		return

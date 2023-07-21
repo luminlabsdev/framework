@@ -1,9 +1,6 @@
 -- // Engine
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Framework = ReplicatedStorage.CanaryEngineFramework
-
-local CanaryEngine = require(Framework.CanaryEngine.Script)
+local CanaryEngine = require(game:GetService("ReplicatedStorage").CanaryEngineFramework.CanaryEngine)
 local EngineServer = CanaryEngine.GetEngineServer()
 
 local Packages = EngineServer.Packages

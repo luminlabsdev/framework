@@ -2,31 +2,31 @@
 
 interface EngineServer {
     Packages: {
-        Server: any
-        Replicated: any
+        Server: Folder
+        Replicated: Folder
     }
 
     Media: {
-        Server: any
-        Replicated: any
+        Server: Folder
+        Replicated: Folder
     }
 
     Matchmaking: {any}
     Moderation: null
     Data: {any}
 
-	CreateNetworkController(controllerName: string): ServerNetworkController<any>;
+	CreateNetworkController(controllerName: string): ServerNetworkController<any, any>;
 }
 
 interface EngineClient {
     Packages: {
-        Client: any
-        Replicated: any
+        Client: Folder
+        Replicated: Folder
     }
 
     Media: {
-        Client: any
-        Replicated: any
+        Client: Folder
+        Replicated: Folder
     }
 
     Player: Player
@@ -34,36 +34,8 @@ interface EngineClient {
     PlayerGui: StarterGui
     PlayerBackpack: StarterPack
 
-	CreateNetworkController(controllerName: string): ClientNetworkController<any>;
+	CreateNetworkController(controllerName: string): ClientNetworkController<any, any>;
 }
-
-interface PackageServer {
-    Media: {
-        Server: any
-        Replicated: any
-    }
-
-    Matchmaking: {any}
-    Moderation: null
-    Data: {any}
-
-    CreateNetworkController(controllerName: string): ServerNetworkController<any>;
-}
-
-interface PackageClient {
-    Media: {
-        Client: any
-        Replicated: any
-    }
-
-    Player: Player
-
-    PlayerGui: StarterGui
-    PlayerBackpack: StarterPack
-
-    CreateNetworkController(controllerName: string): ClientNetworkController<any>;
-}
-
 
 interface ScriptConnection {
     Disconnect(): void;
@@ -81,25 +53,28 @@ export interface ScriptSignal<T> {
     Name: string
 }
 
-export interface ClientNetworkController<T> {
-    Connect(self: ClientNetworkController<T>, func: (data: {T}) => (void)): ScriptConnection;
-    Wait(self: ClientNetworkController<T>): {T};
-    Once(self: ClientNetworkController<T>, func: (data: {T}) => (void)): ScriptConnection;
+export interface ClientNetworkController<T, U> {
+    Connect(self: ClientNetworkController<T, U>, func: (data: {T} | null) => (void)): ScriptConnection;
+    Wait(self: ClientNetworkController<T, U>): {T} | null;
+    Once(self: ClientNetworkController<T, U>, func: (data: {T} | null) => (void)): ScriptConnection;
 
-    Fire(self: ClientNetworkController<T>, data: (T | {T}) | null): void;
-    InvokeAsync(self: ClientNetworkController<T>, data: (T | {T}) | null): {T};
+    Fire(self: ClientNetworkController<T, U>, data: (T | {T}) | null): void;
+    InvokeAsync(self: ClientNetworkController<T, U>, data: (U | {U}) | null): {U} | null;
 
     DisconnectAll(): void
     Name: string;
 }
 
-export interface ServerNetworkController<T> {
-    Connect(self: ServerNetworkController<T>, func: (sender: Player, data: {T}) => (void)): ScriptConnection;
-    Wait(self: ServerNetworkController<T>): [Player, {T}];
-    Once(self: ServerNetworkController<T>, func: (data: {T}) => (void)): ScriptConnection;
+export interface ServerNetworkController<T, U> {
+    Connect(self: ServerNetworkController<T, U>, func: (sender: Player, data: {T} | null) => (void)): ScriptConnection;
+    Wait(self: ServerNetworkController<T, U>): [Player, {T} | null];
+    Once(self: ServerNetworkController<T, U>, func: (sender: Player, data: {T} | null) => (void)): ScriptConnection;
+    SetRateLimit(self: ServerNetworkController<T, U>, maxInvokesPerSecond: number, invokeOverflowCallback: ((sender: Player) => (void)) | null);
 
-    Fire(self: ServerNetworkController<T>, recipient: any, data: (T | {T}) | null): void;
-    OnInvoke(self: ServerNetworkController<T>, callback: (sender: any, data: {T}) => void): void;
+    Fire(self: ServerNetworkController<T, U>, recipient: Player | {Player}, data: (T | {T}) | null): void;
+    FireAll(self: ServerNetworkController<T, U>, data: (T | {T}) | null): void;
+    FireExcept(self: ServerNetworkController<T, U>, except: Player | {Player}, data: (T | {T}) | null): void;
+    OnInvoke(self: ServerNetworkController<T, U>, callback: (sender: Player, data: {U}) => U): void;
 
     DisconnectAll(): void
     Name: string;
@@ -109,13 +84,10 @@ export namespace CanaryEngine {
     export function GetEngineServer(): EngineServer;
 	export function GetEngineClient(): EngineClient;
 
-    export function GetPackageServer(): PackageServer;
-    export function GetPackageClient(): PackageClient;
-
 	export function CreateSignal(): ScriptSignal<any>;
 	export function GetLatestPackageVersionAsync(packageInstance: any, warnIfNotLatestVersion: boolean | null, respectDebugger: boolean | null): number | null;
 
-    const Runtime: {
+    export const Runtime: {
         RuntimeSettings: {
             StudioDebugEnabled: boolean;
             CheckLatestVersion: boolean;
@@ -130,12 +102,10 @@ export namespace CanaryEngine {
         };
     }
 
-    const Libraries: {
+    export const Libraries: {
         Utility: any
         Benchmark: any
         Statistics: any
         Serialize: any
     }
-	
-	let DeveloperMode: boolean
 }

@@ -13,7 +13,6 @@ return {
 	
 	Settings = {
 		StudioDebugEnabled = CanaryEngineFramework:GetAttribute("StudioDebugger");
-		CheckLatestVersion = CanaryEngineFramework:GetAttribute("CheckLatestVersion");
 		LiveGameDebugger = CanaryEngineFramework:GetAttribute("LiveGameDebugger");
 	},
 }

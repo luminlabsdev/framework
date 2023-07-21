@@ -82,6 +82,10 @@ local BridgeNet = require(Vendor.BridgeNet2)
 	@return {any}
 ]=]
 function NetworkController.SanitizeData(data: any)
+	if data == nil then
+		return nil
+	end
+	
 	if type(data) ~= "table" then
 		return {data}
 	end
@@ -103,6 +107,7 @@ function NetworkController.NewClientController(name: string)
 	local self = setmetatable({ }, Indexes[1])
 	
 	self._Bridge = BridgeNet.ReferenceBridge(name)
+	self._Connections = { }
 	self.Name = name
 	
 	return self
@@ -120,6 +125,7 @@ function NetworkController.NewServerController(name: string)
 	local self = setmetatable({ }, Indexes[2])
 
 	self._Bridge = BridgeNet.ReferenceBridge(name)
+	self._Connections = { }
 	self.Name = name
 
 	return self
@@ -151,7 +157,10 @@ end
 	@return ScriptConnection
 ]=]
 function NetworkControllerClient:Once(func: (data: {any}?) -> ())
-	return self._Bridge:Once(func)
+	local Connection = self._Bridge:Connect(func)
+
+	table.insert(self._Connections, Connection)
+	return Connection
 end
 
 --[=[
@@ -161,7 +170,10 @@ end
 	@return ScriptConnection
 ]=]
 function NetworkControllerClient:Connect(func: (data: {any}?) -> ())
-	return self._Bridge:Connect(func)
+	local Connection = self._Bridge:Connect(func)
+
+	table.insert(self._Connections, Connection)
+	return Connection
 end
 
 --[=[
@@ -184,6 +196,15 @@ end
 ]=]
 function NetworkControllerClient:InvokeAsync(data: ({any} | any)?)	
 	return NetworkController.SanitizeData(self._Bridge:InvokeServerAsync(NetworkController.SanitizeData(data)))
+end
+
+--[=[
+	Disconnects all listeners from the current network controller.
+]=]
+function NetworkControllerClient:DisconnectAll()
+	for _, connection in self._Connections do
+		connection:Disconnect()
+	end
 end
 
 -- // Network Controller Server
@@ -247,13 +268,35 @@ function NetworkControllerServer:OnInvoke(callback: (sender: Player, data: {any}
 end
 
 --[=[
+	Sets a rate limit that is applied when invoking or firing a network controller from the client.
+
+	@param maxInvokesPerSecond number -- The maximum amount of invokes allowed per second, set to `-1` to disable the rate limit
+	@param invokeOverflowCallback ((sender: Player) -> ())? -- The callback function to run when the player has exceeded the current rate limit
+]=]
+function NetworkControllerServer:SetRateLimit(maxInvokesPerSecond: number, invokeOverflowCallback: ((sender: Player) -> ())?)
+	if maxInvokesPerSecond <= -1 then
+		self._Bridge:DisableRateLimit()
+		return
+	end
+
+	if not invokeOverflowCallback then
+		return
+	end
+
+	self._Bridge:RateLimit(maxInvokesPerSecond, invokeOverflowCallback)
+end
+
+--[=[
 	Connects a function to the event that is fired when the client fires the network controller. When using `:Once`, the function is only run the first time and then the connection is disconnected automatically.
 
 	@param func (sender: Player, data: {any}) -> () -- The function to call when data is recieved from the client
 	@return ScriptConnection
 ]=]
 function NetworkControllerServer:Once(func: (sender: Player, data: {any}?) -> ())
-	return self._Bridge:Once(func)
+	local Connection = self._Bridge:Once(func)
+
+	table.insert(self._Connections, Connection)
+	return Connection
 end
 
 --[=[
@@ -263,7 +306,10 @@ end
 	@return ScriptConnection
 ]=]
 function NetworkControllerServer:Connect(func: (sender: Player, data: {any}?) -> ())
-	return self._Bridge:Connect(func)
+	local Connection = self._Bridge:Connect(func)
+
+	table.insert(self._Connections, Connection)
+	return Connection
 end
 
 --[=[
@@ -274,6 +320,15 @@ end
 ]=]
 function NetworkControllerServer:Wait(): (Player, {any})
 	return self._Bridge:Wait()
+end
+
+--[=[
+	Disconnects all listeners from the current network controller.
+]=]
+function NetworkControllerServer:DisconnectAll()
+	for _, connection in self._Connections do
+		connection:Disconnect()
+	end
 end
 
 -- // Actions

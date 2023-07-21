@@ -26,6 +26,95 @@ local CanaryEngine = { }
 	@within CanaryEngine
 ]=]
 
+--[=[
+	CanaryEngine's server-sided interface.
+	
+	@server
+	@class CanaryEngineServer
+]=]
+local CanaryEngineServer = { }
+
+--[=[
+	A reference to the Media folder on the Server, also gives access to replicated media.
+
+	@prop Media {Server: Folder, Replicated: Folder}
+	@readonly
+
+	@within CanaryEngineServer
+]=]
+
+--[=[
+	A reference to the Packages folder on the Server, also gives access to replicated Packages.
+
+	@prop Packages {Server: Folder, Replicated: Folder}
+	@readonly
+
+	@within CanaryEngineServer
+]=]
+
+--[=[
+	CanaryEngine's client-sided interface.
+	
+	@client
+	@class CanaryEngineClient
+]=]
+local CanaryEngineClient = { }
+
+--[=[
+	A simple reference to the [Players.LocalPlayer].
+
+	@prop Player Player
+	@readonly
+
+	@within CanaryEngineClient
+]=]
+
+--[=[
+	A simple reference to the [Player.PlayerGui], useful for automatic typing and API simplicity.
+
+	@prop PlayerGui StarterGui
+	@readonly
+
+	@within CanaryEngineClient
+]=]
+
+--[=[
+	A simple reference to the player's [Backpack], useful for automatic typing and API simplicity.
+
+	@prop PlayerBackpack StarterPack
+	@readonly
+
+	@within CanaryEngineClient
+]=]
+
+--[=[
+	Local objects of the player.
+
+	@prop LocalObjects dictionary
+	@readonly
+	@deprecated v2 -- Use PlayerBackpack and PlayerGui instead.
+
+	@within CanaryEngineClient
+]=]
+
+--[=[
+	A reference to the Media folder on the client, also gives access to replicated media.
+
+	@prop Media {Client: Folder, Replicated: Folder}
+	@readonly
+
+	@within CanaryEngineClient
+]=]
+
+--[=[
+	A reference to the Packages folder on the client, also gives access to replicated Packages.
+
+	@prop Packages {Client: Folder, Replicated: Folder}
+	@readonly
+
+	@within CanaryEngineClient
+]=]
+
 -- // Types
 
 --[=[
@@ -35,8 +124,8 @@ local CanaryEngine = { }
 	@field Connected boolean
 
 	@interface ScriptConnection
-	@private
 	@within CanaryEngine
+	@private
 ]=]
 type ScriptConnection = {
 	Disconnect: (self: ScriptConnection) -> (),
@@ -58,8 +147,9 @@ type ScriptConnection = {
 
 	@interface ScriptSignal
 	@within CanaryEngine
+	@private
 ]=]
-export type ScriptSignal<T> = {
+type ScriptSignal<T> = {
 	Connect: (self: ScriptSignal<T>?, func: (data: {T}) -> ()) -> (ScriptConnection),
 	Wait: (self: ScriptSignal<T>?) -> ({T}),
 	Once: (self: ScriptSignal<T>?, func: (data: {T}) -> ()) -> (ScriptConnection),
@@ -89,10 +179,10 @@ export type ClientNetworkController<T, U> = {
 	Connect: (self: ClientNetworkController<T, U>?, func: (data: {T}) -> ()) -> (ScriptConnection),
 	Wait: (self: ClientNetworkController<T, U>?) -> ({T}),
 	Once: (self: ClientNetworkController<T, U>?, func: (data: {T}) -> ()) -> (ScriptConnection),
-
+	
 	Fire: (self: ClientNetworkController<T, U>?, data: ({T} | T)?) -> (),
 	InvokeAsync: (self: ClientNetworkController<T, U>?, data: ({T} | T)) -> ({U}),
-
+	
 	DisconnectAll: (self: ServerNetworkController<T, U>?) -> (),
 	Name: string,
 }
@@ -116,12 +206,75 @@ export type ServerNetworkController<T, U> = {
 	Connect: (self: ServerNetworkController<T, U>?, func: (sender: Player, data: {T}) -> ()) -> (ScriptConnection),
 	Wait: (self: ServerNetworkController<T, U>?) -> (Player, {T}),
 	Once: (self: ServerNetworkController<T, U>?, func: (sender: Player, data: {T}) -> ()) -> (ScriptConnection),
-
+	
 	Fire: (self: ServerNetworkController<T, U>?, recipient: Player | {Player}, data: ({T} | T)?) -> (),
 	OnInvoke: (self: ServerNetworkController<T, U>?, callback: (sender: Player, data: {T}) -> ({U} | U)) -> (),
-
+	
 	DisconnectAll: (self: ServerNetworkController<T, U>?) -> (),
 	Name: string,
+}
+
+--[=[
+	This is the server sided API for CanaryEngine.
+
+	@field Packages {Server: typeof(script.Parent.Packages.Server), Replicated: typeof(script.Parent.Packages.Replicated)}
+	@field Media {Server: typeof(script.Parent.Media.Server), Replicated: typeof(script.Parent.Media.Replicated)}
+	@field CreateNetworkController (controllerName: string) -> (ServerNetworkController<any>)
+
+	@interface EngineServer
+	@within CanaryEngine
+	@private
+]=]
+type EngineServer = {
+	Packages: {
+		Server: typeof(require(game:GetService("ServerStorage").EngineServer.Intellisense)),
+		Replicated: typeof(require(game:GetService("ReplicatedStorage").EngineReplicated.Intellisense))
+	},
+
+	Media: {
+		Server: typeof(script.Parent.Media.Server),
+		Replicated: typeof(script.Parent.Media.Replicated)
+	},
+	
+	Matchmaking: typeof(require(script.Vendor.Network.MatchmakingService)),
+	Moderation: nil,
+	Data: typeof(require(script.Vendor.Data.EasyProfile)),
+
+	CreateNetworkController: (controllerName: string) -> (ServerNetworkController<any, any>)
+}
+
+--[=[
+	This is the client sided API for CanaryEngine.
+
+	@field Packages {Client: typeof(script.Parent.Packages.Client), Replicated: typeof(script.Parent.Packages.Replicated)}
+	@field Media {Client: typeof(script.Parent.Media.Client), Replicated: typeof(script.Parent.Media.Replicated)}
+	@field Player Player
+	@field PlayerGui StarterGui
+	@field PlayerBackpack StarterPack
+	
+	@field CreateNetworkController (controllerName: string) -> (ClientNetworkController<any>)
+
+	@interface EngineClient
+	@within CanaryEngine
+	@private
+]=]
+type EngineClient = {
+	Packages: {
+		Client: typeof(require(game:GetService("ReplicatedStorage").EngineClient.Intellisense)),
+		Replicated: typeof(require(game:GetService("ReplicatedStorage").EngineReplicated.Intellisense))
+	},
+
+	Media: {
+		Client: typeof(script.Parent.Media.Client),
+		Replicated: typeof(script.Parent.Media.Replicated)
+	},
+
+	Player: Player,
+
+	PlayerGui: typeof(game:GetService("StarterGui")),
+	PlayerBackpack: typeof(game:GetService("StarterPack")),
+
+	CreateNetworkController: (controllerName: string) -> (ClientNetworkController<any, any>)
 }
 
 -- // Variables
@@ -131,19 +284,13 @@ local ServerStorage = game:GetService("ServerStorage")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local PlayerService = game:GetService("Players")
 
-if not ReplicatedStorage:FindFirstChild("CanaryEngineFramework") then
-	error("CanaryEngine must be parented to DataModel.ReplicatedStorage")
-end
-
-local CanaryEngineFramework = ReplicatedStorage:WaitForChild("CanaryEngineFramework")
-
-local Vendor = CanaryEngineFramework.CanaryEngine.Vendor
+local Vendor = script.Vendor
 local Data = Vendor.Data
 local Libraries = Vendor.Libraries
 local Network = Vendor.Network
 
-local Debugger = require(Vendor.Debugger)
-local Runtime = require(Vendor.Runtime) -- Get the RuntimeSettings, which are settings that are set during runtime
+local Debugger = require(script.Debugger)
+local Runtime = require(script.Runtime) -- Get the RuntimeSettings, which are settings that are set during runtime
 
 local RuntimeContext = Runtime.Context
 local RuntimeSettings = Runtime.Settings
@@ -170,10 +317,133 @@ CanaryEngine.Libraries = table.freeze({
 	Benchmark = Benchmark,
 	Statistics = Statistics,
 	Serialize = Serialize,
-	Debugger = Debugger,
 })
 
+--[=[
+	This is the main API for CanaryEngine
+
+	@field GetEngineServer () -> (EngineServer),
+	@field GetEngineClient () -> (EngineClient),
+	@field CreateSignal () -> (ScriptSignal<any>),
+	@field GetLatestPackageVersionAsync (CanaryEngine: Instance, warnIfNotLatestVersion: boolean?, respectDebugger: boolean?) -> (number?),
+	@field Runtime {RuntimeSettings: {StudioDebugEnabled: boolean, CheckLatestVersion: boolean, LiveGameDebugger: boolean}, RuntimeContext: {Studio: boolean, Server: boolean, Client: boolean, StudioPlay: boolean}},
+	@field Libraries {Utility: Utility, Benchmark: Benchmark, Statistics: Statistics,	Serialize: Serialize,}
+	@field RuntimeCreatedSignals {[string]: ScriptSignal<any>}
+	@field RuntimeCreatedNetworkControllers {[string]: ServerNetworkController<any, any> | ClientNetworkController<any, any>}
+
+	@interface CanaryEngine
+	@within CanaryEngine
+	@private
+]=]
+type CanaryEngine = {
+	GetEngineServer: () -> (EngineServer),
+	GetEngineClient: () -> (EngineClient),
+	CreateSignal: (signalName: string) -> (ScriptSignal<any>),
+	GetLatestPackageVersionAsync: (package: Instance, warnIfNotLatestVersion: boolean?, respectDebugger: boolean?) -> (number?),
+
+	Runtime: {
+		RuntimeSettings: {
+			StudioDebugEnabled: boolean,
+			CheckLatestVersion: boolean,
+			LiveGameDebugger: boolean,
+		},
+
+		RuntimeContext: {
+			Studio: boolean,
+			Server: boolean,
+			Client: boolean,
+			StudioPlay: boolean,
+		}
+	},
+
+	Libraries: {
+		Utility: typeof(Utility),
+		Benchmark: typeof(Benchmark),
+		Statistics: typeof(Statistics),
+		Serialize: typeof(Serialize),
+	},
+
+	RuntimeCreatedSignals: {[string]: ScriptSignal<any>},
+	RuntimeCreatedNetworkControllers: {[string]: ServerNetworkController<any, any> | ClientNetworkController<any, any>}
+}
+
 -- // Functions
+
+--[=[
+	Gets the server-sided interface of CanaryEngine
+	
+	@server
+	@return EngineServer?
+]=]
+function CanaryEngine.GetEngineServer(): EngineServer?
+	if not RuntimeContext.Server then
+		Debugger.error("Failed to fetch 'EngineServer', context must be server")
+		return nil
+	end
+
+	if Runtime.IsStarted() then
+		Debugger.warn("Importing a Package while the game is running may cause internal issues, expect errors to occur")
+	end
+
+	local EngineServer = ServerStorage:WaitForChild("EngineServer")
+	local EngineReplicated = ReplicatedStorage:WaitForChild("EngineReplicated")
+
+	CanaryEngineServer.Packages = {
+		Server = EngineServer.Packages,
+		Replicated = EngineReplicated.Packages,
+	}
+	
+	CanaryEngineServer.Matchmaking = require(Network.MatchmakingService)
+	CanaryEngineServer.Moderation = nil
+	CanaryEngineServer.Data = require(Data.EasyProfile)
+
+	CanaryEngineServer.Media = {
+		Server = EngineServer.Media,
+		Replicated = EngineReplicated.Media,
+	}
+
+	return CanaryEngineServer
+end
+
+--[=[
+	Gets the client-sided interface of CanaryEngine
+	
+	@yields
+	@client
+	@return EngineClient?
+]=]
+function CanaryEngine.GetEngineClient(): EngineClient?
+	if not RuntimeContext.Client then
+		Debugger.error("Failed to fetch 'EngineClient', Context must be client.")
+		return nil
+	end
+
+	if Runtime.IsStarted() then
+		Debugger.warn("Importing a Package while the game is running may cause internal issues, expect errors to occur")
+	end
+
+	local EngineClient = ReplicatedStorage:WaitForChild("EngineClient")
+	local EngineReplicated = ReplicatedStorage:WaitForChild("EngineReplicated")
+
+	local Player = PlayerService.LocalPlayer
+
+	CanaryEngineClient.Packages = {
+		Client = EngineClient.Packages,
+		Replicated = EngineReplicated.Packages,
+	}
+
+	CanaryEngineClient.Media = {
+		Client = EngineClient.Media,
+		Replicated = EngineReplicated.Media,
+	}
+
+	CanaryEngineClient.Player = Player
+
+	CanaryEngineClient.PlayerGui = Player:WaitForChild("PlayerGui")
+	CanaryEngineClient.PlayerBackpack = Player:WaitForChild("Backpack")
+
+	return CanaryEngineClient
+end
 
 --[=[
 	Creates a new network controller on the client, with the name of `controllerName`
@@ -183,20 +453,19 @@ CanaryEngine.Libraries = table.freeze({
 	You can set the data type of a network controller after it being made like the following:
 
 	```lua
-	local NetworkController: CanaryEngine.ClientNetworkController<boolean, boolean> = EngineClient.CreateNetworkController("MyNewNetworkController") -- assuming you are sending over and recieving a boolean
+	local NetworkController: CanaryEngine.ClientNetworkController<boolean> = EngineClient.CreateNetworkController("MyNewNetworkController") -- assuming you are sending over and recieving a boolean
 	```
 	:::
-	
-	@private
 	
 	@param controllerName string -- The name of the controller
 	@return ClientNetworkController<any>
 ]=]
-function CanaryEngine.CreateNetworkControllerClient(controllerName: string): ClientNetworkController<any, any>
+function CanaryEngineClient.CreateNetworkController(controllerName: string): ClientNetworkController<any, any>
 	if not CanaryEngine.RuntimeCreatedNetworkControllers[controllerName] then
 		local NewNetworkController = NetworkController.NewClientController(controllerName)
 
 		CanaryEngine.RuntimeCreatedNetworkControllers[controllerName] = NewNetworkController
+		return NewNetworkController
 	end
 
 	return CanaryEngine.RuntimeCreatedNetworkControllers[controllerName]
@@ -210,23 +479,22 @@ end
 	You can set the data type of a network controller after it being made like the following:
 
 	```lua
-	local NetworkController: CanaryEngine.ServerNetworkController<number, number> = EngineServer.CreateNetworkController("MyNewNetworkController") -- assuming you are sending over and recieving a number
+	local NetworkController: CanaryEngine.ServerNetworkController<number> = EngineServer.CreateNetworkController("MyNewNetworkController") -- assuming you are sending over and recieving a number
 	```
 
 	:::
 	
-	@private
-	
 	@param controllerName string -- The name of the controller
 	@return ServerNetworkController<any>
 ]=]
-function CanaryEngine.CreateNetworkControllerServer(controllerName: string): ServerNetworkController<any, any>
+function CanaryEngineServer.CreateNetworkController(controllerName: string): ServerNetworkController<any, any>
 	if not CanaryEngine.RuntimeCreatedNetworkControllers[controllerName] then
 		local NewNetworkController = NetworkController.NewServerController(controllerName)
-
+		
 		CanaryEngine.RuntimeCreatedNetworkControllers[controllerName] = NewNetworkController
+		return NewNetworkController
 	end
-
+	
 	return CanaryEngine.RuntimeCreatedNetworkControllers[controllerName]
 end
 
@@ -241,6 +509,7 @@ function CanaryEngine.CreateSignal(signalName: string): ScriptSignal<any>
 		local NewSignal = Signal.NewController(signalName)
 		
 		CanaryEngine.RuntimeCreatedSignals[signalName] = NewSignal
+		return NewSignal
 	end
 	
 	return CanaryEngine.RuntimeCreatedSignals[signalName]
@@ -323,4 +592,4 @@ end
 
 -- // Actions
 
-return CanaryEngine
+return table.freeze(CanaryEngine :: CanaryEngine)
