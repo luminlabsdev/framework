@@ -259,8 +259,8 @@ type EngineServer = {
 	},
 
 	Media: {
-		Server: typeof(script.Parent.Media.Server),
-		Replicated: typeof(script.Parent.Media.Replicated)
+		Client: typeof(game:GetService("ServerStorage").EngineServer.Media),
+		Replicated: typeof(game:GetService("ReplicatedStorage").EngineReplicated.Media)
 	},
 
 	Matchmaking: typeof(require(script.Vendor.Network.MatchmakingService)),
@@ -292,8 +292,8 @@ type EngineClient = {
 	},
 
 	Media: {
-		Client: typeof(script.Parent.Media.Client),
-		Replicated: typeof(script.Parent.Media.Replicated)
+		Client: typeof(game:GetService("ReplicatedStorage").EngineClient.Media),
+		Replicated: typeof(game:GetService("ReplicatedStorage").EngineReplicated.Media)
 	},
 
 	Player: Player,

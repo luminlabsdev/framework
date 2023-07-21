@@ -9,5 +9,6 @@
 	"Statistics",
 	"Utility",
     "SignalController",
-	"Controllers"
+	"Controllers",
+	"CanaryEngine"
 ]

@@ -24,6 +24,15 @@ local NetworkControllerClient = { }
 ]=]
 
 --[=[
+	A list of connections.
+
+	@private
+
+	@prop _Connections {ScriptConnection}
+	@within NetworkControllerClient
+]=]
+
+--[=[
 	The bridge for use in BridgeNet.
 
 	@readonly
@@ -51,6 +60,15 @@ local NetworkControllerServer = { }
 ]=]
 
 --[=[
+	A list of connections.
+
+	@private
+
+	@prop _Connections {ScriptConnection}
+	@within NetworkControllerServer
+]=]
+
+--[=[
 	The bridge for use in BridgeNet.
 
 	@readonly
@@ -70,28 +88,9 @@ local Vendor = script.Vendor
 -- // Variables
 
 local BridgeNet = require(Vendor.BridgeNet2)
+local Controllers = require(script.Parent.Parent)
 
 -- // Functions
-
---[=[
-	Sanitizes data sent through `:Fire`.
-
-	@private
-
-	@param data any -- The data to sanitize
-	@return {any}
-]=]
-function NetworkController.SanitizeData(data: any)
-	if data == nil then
-		return nil
-	end
-	
-	if type(data) ~= "table" then
-		return {data}
-	end
-	
-	return data
-end
 
 -- // Constructors
 
@@ -147,7 +146,7 @@ end
 	@param data ({any} | any)? -- The data that should be sent to the server
 ]=]
 function NetworkControllerClient:Fire(data: ({any} | any)?)
-	self._Bridge:Fire(NetworkController.SanitizeData(data))
+	self._Bridge:Fire(Controllers.SanitizeData(data))
 end
 
 --[=[
@@ -195,7 +194,7 @@ end
 	@return {any}
 ]=]
 function NetworkControllerClient:InvokeAsync(data: ({any} | any)?)	
-	return NetworkController.SanitizeData(self._Bridge:InvokeServerAsync(NetworkController.SanitizeData(data)))
+	return Controllers.SanitizeData(self._Bridge:InvokeServerAsync(Controllers.SanitizeData(data)))
 end
 
 --[=[
@@ -227,11 +226,11 @@ end
 ]=]
 function NetworkControllerServer:Fire(recipients: Player | {Player}, data: ({any} | any)?)
 	if type(recipients) ~= "table" then
-		self._Bridge:Fire(recipients, NetworkController.SanitizeData(data))
+		self._Bridge:Fire(recipients, Controllers.SanitizeData(data))
 		return
 	end
 	
-	self._Bridge:Fire(BridgeNet.Players(recipients), NetworkController.SanitizeData(data))
+	self._Bridge:Fire(BridgeNet.Players(recipients), Controllers.SanitizeData(data))
 end
 
 --[=[
@@ -240,7 +239,7 @@ end
 	@param data ({any} | any)? -- The data that should be sent to each player
 ]=]
 function NetworkControllerServer:FireAll(data: ({any} | any)?)
-	self._Bridge:Fire(BridgeNet.AllPlayers(), NetworkController.SanitizeData(data))
+	self._Bridge:Fire(BridgeNet.AllPlayers(), Controllers.SanitizeData(data))
 end
 
 --[=[
@@ -251,11 +250,11 @@ end
 ]=]
 function NetworkControllerServer:FireExcept(except: Player | {Player}, data: ({any} | any)?)
 	if type(except) ~= "table" then
-		self._Bridge:Fire(BridgeNet.PlayersExcept({except}), NetworkController.SanitizeData(data))
+		self._Bridge:Fire(BridgeNet.PlayersExcept({except}), Controllers.SanitizeData(data))
 		return
 	end
 
-	self._Bridge:Fire(BridgeNet.PlayersExcept(except), NetworkController.SanitizeData(data))
+	self._Bridge:Fire(BridgeNet.PlayersExcept(except), Controllers.SanitizeData(data))
 end
 
 --[=[

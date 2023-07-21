@@ -37,6 +37,16 @@ interface EngineClient {
 	CreateNetworkController(controllerName: string): ClientNetworkController<any, any>;
 }
 
+interface EngineReplicated {
+    Packages: {
+        Replicated: Folder
+    }
+
+    Media: {
+        Replicated: Folder
+    }
+}
+
 interface ScriptConnection {
     Disconnect(): void;
     Connected: boolean;
@@ -48,9 +58,9 @@ export interface ScriptSignal<T> {
     Once(func: (data: {T}) => (void)): ScriptConnection;
 
     Fire(data: (T | {T}) | null): void;
-    DisconnectAll(): void;
 
-    Name: string
+    DisconnectAll(): void;
+    Name: string;
 }
 
 export interface ClientNetworkController<T, U> {
@@ -61,7 +71,7 @@ export interface ClientNetworkController<T, U> {
     Fire(self: ClientNetworkController<T, U>, data: (T | {T}) | null): void;
     InvokeAsync(self: ClientNetworkController<T, U>, data: (T | {T}) | null): {U} | null;
 
-    DisconnectAll(): void
+    DisconnectAll(): void;
     Name: string;
 }
 
@@ -76,15 +86,16 @@ export interface ServerNetworkController<T, U> {
     FireExcept(self: ServerNetworkController<T, U>, except: Player | {Player}, data: (T | {T}) | null): void;
     OnInvoke(self: ServerNetworkController<T, U>, callback: (sender: Player, data: (T | {T}) | null) => U): void;
 
-    DisconnectAll(): void
+    DisconnectAll(): void;
     Name: string;
 }
 
 export namespace CanaryEngine {
     export function GetEngineServer(): EngineServer;
 	export function GetEngineClient(): EngineClient;
+    export function GetEngineReplicated(): EngineReplicated;
 
-	export function CreateSignal(): ScriptSignal<any>;
+	export function CreateSignal(signalName: string): ScriptSignal<any>;
 	export function GetLatestPackageVersionAsync(packageInstance: any, warnIfNotLatestVersion: boolean | null, respectDebugger: boolean | null): number | null;
 
     export const Runtime: {

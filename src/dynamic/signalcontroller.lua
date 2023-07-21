@@ -46,7 +46,7 @@ local Controllers = require(script.Parent.Parent)
 --[=[
 	Creates a new signal controller.
 
-	@ignore
+	@private
 
 	@param name string -- The name of the new controller
 	@return SignalControllerObject

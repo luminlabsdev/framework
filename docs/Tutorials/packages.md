@@ -4,7 +4,7 @@ sidebar-position: 4
 
 # Package System
 
-One of Canary's greatest strengths is the built in package system, which allows for many more oppurtunities. As of v3.2.0, intellisense is now a supported feature natively for packages! This also allows you to get an easy reference to all of your packages because they are now stored in an exclusive list.
+One of Canary's greatest strengths is the built in package system, which allows for many more oppurtunities. Coming in later updates, we will be adding a type generator for package intellisense support!
 
 ### Inserting Packages
 
@@ -16,7 +16,7 @@ Inserting new scripts is also a very straightforward process and very similar to
 
 ```lua
 local Packages = CanaryEngineServer.Packages.Server
-local MyPackage = Packages.MyPackage
+local MyPackage = require(Packages.MyPackage)
 
 MyPackage.MyFunction()
 ```

@@ -21,12 +21,12 @@ position = "right"
 [[classOrder]]
 section = "CanaryEngine"
 collapsed = false
-classes = ["CanaryEngine", "CanaryEngineServer", "CanaryEngineClient"]
+classes = ["CanaryEngine", "CanaryEngineServer", "CanaryEngineClient", "CanaryEngineReplicated"]
 
 [[classOrder]]
 section = "Controllers"
 collapsed = true
-classes = ["NetworkController", "NetworkControllerServer", "NetworkControllerClient", "SignalController", "SignalControllerObject"]
+classes = ["Controllers", "NetworkController", "NetworkControllerServer", "NetworkControllerClient", "SignalController", "SignalControllerObject"]
 
 [[classOrder]]
 section = "EasyProfile"

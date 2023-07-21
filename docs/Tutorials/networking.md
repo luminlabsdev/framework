@@ -39,9 +39,9 @@ local PlayerService = game:GetService("Players")
 
 print(SendInfoNetwork.Name) -- Output: SendInfoNetwork
 
-SendInfoNetwork:Fire(PlayerService:GetPlayers(), { -- When sending data on the server, you must pass a player argument. This can be a single player or a table of players. In this situation, we use Players:GetPlayers to send this to all players.
+SendInfoNetwork:FireAll({ -- When sending data on the server, you must pass a player argument. In this example though, we are firing to all players.
     "Sent through a",
-    "RemoteEvent"
+    "Network controller!"
 })
 ```
 
@@ -50,11 +50,13 @@ When we start the script, we should then see the the name in the output, and als
 ```lua
 {
     "Sent through a",
-    "RemoteEvent"
+    "Network controller!"
 }
 ```
 
 Please keep in mind that these can be used for many other things other than just passing strings through, also that if you just have a single piece of data you can send it through the fire method without wrapping it in a table. Though, keep in mind that the data you recieve will always be a table no matter how you pass the data originally.
+
+We also have available the `Fire`, `FireExcept` and `SetRateLimit` functions. Each of them are documented in their own API page.
 
 ### RemoteFunctions
 
