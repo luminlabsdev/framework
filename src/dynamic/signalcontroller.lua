@@ -3,7 +3,7 @@
 --[=[
 	The parent of all classes.
 
-	@class NetworkController
+	@class SignalController
 ]=]
 local SignalController = { }
 
