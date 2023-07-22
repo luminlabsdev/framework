@@ -79,13 +79,13 @@ export interface ServerNetworkController<T, U> {
     Connect(self: ServerNetworkController<T, U>, func: (sender: Player, data: {T} | null) => (void)): ScriptConnection;
     Wait(self: ServerNetworkController<T, U>): [Player, {T} | null];
     Once(self: ServerNetworkController<T, U>, func: (sender: Player, data: {T} | null) => (void)): ScriptConnection;
-    SetRateLimit(self: ServerNetworkController<T, U>, maxInvokesPerSecond: number, invokeOverflowCallback: ((sender: Player) => (void)) | null);
 
     Fire(self: ServerNetworkController<T, U>, recipient: Player | {Player}, data: (T | {T}) | null): void;
     FireAll(self: ServerNetworkController<T, U>, data: (T | {T}) | null): void;
     FireExcept(self: ServerNetworkController<T, U>, except: Player | {Player}, data: (T | {T}) | null): void;
     OnInvoke(self: ServerNetworkController<T, U>, callback: (sender: Player, data: (T | {T}) | null) => U): void;
 
+    SetRateLimit(self: ServerNetworkController<T, U>, maxInvokesPerSecond: number, invokeOverflowCallback: ((sender: Player) => (void)) | null);
     DisconnectAll(): void;
     Name: string;
 }

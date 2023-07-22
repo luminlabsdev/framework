@@ -237,6 +237,7 @@ export type ServerNetworkController<T, U> = {
 	FireExcept: (self: ServerNetworkController<T, U>?, except: Player | {Player}, data: ({T} | T)?) -> (),
 	OnInvoke: (self: ServerNetworkController<T, U>?, callback: (sender: Player, data: {T}) -> ({U} | U)) -> (),
 
+	SetRateLimit: (self: ServerNetworkController<T, U>?, maxInvokesPerSecond: number, invokeOverflowCallback: (sender: Player) -> ()) -> (),
 	DisconnectAll: (self: ServerNetworkController<T, U>?) -> (),
 	Name: string,
 }
