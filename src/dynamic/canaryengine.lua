@@ -492,13 +492,8 @@ end
 function CanaryEngine.GetEngineReplicated(): EngineReplicated?
 	local EngineReplicated = ReplicatedStorage:WaitForChild("EngineReplicated")
 
-	CanaryEngineReplicated.Packages = {
-		Replicated = EngineReplicated.Packages
-	}
-
-	CanaryEngineReplicated.Media = {
-		Replicated = EngineReplicated.Media
-	}
+	CanaryEngineReplicated.Packages = EngineReplicated.Packages
+	CanaryEngineReplicated.Media = EngineReplicated.Media
 
 	return CanaryEngineReplicated
 end
