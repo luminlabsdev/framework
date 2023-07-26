@@ -21,7 +21,7 @@ local SendInfoNetwork = CanaryEngineClient.CreateNetworkController("SendInfoNetw
 Now lets continue this code and make it so it can recieve info from the server:
 
 ```lua
-local SendInfoNetwork = CanaryEngineClient.CreateNetworkSignal("SendInfoNetwork")
+local SendInfoNetwork = CanaryEngineClient.CreateNetworkController("SendInfoNetwork")
 
 SendInfoNetwork:Connect(function(data)
     print(data)

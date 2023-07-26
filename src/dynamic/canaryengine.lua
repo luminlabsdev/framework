@@ -188,13 +188,14 @@ type ScriptSignal<T> = {
 --[=[
 	A ClientNetworkController is basically a mixed version of a [RemoteEvent] and [RemoteFunction]. It has better features and is more performant.
 
-	@field Connect (self: ClientNetworkController<T>?, func: (data: {T}) -> ()) -> (ScriptConnection)
-	@field Once (self: ClientNetworkController<T>?, func: (data: {T}) -> ()) -> (ScriptConnection)
-	@field Wait (self: ClientNetworkController<T>?) -> ({T})
+	@field Connect (self: ClientNetworkController<T, U>?, func: (data: {T}) -> ()) -> (ScriptConnection)
+	@field Once (self: ClientNetworkController<T, U>?, func: (data: {T}) -> ()) -> (ScriptConnection)
+	@field Wait (self: ClientNetworkController<T, U>?) -> ({T})
 	
-	@field Fire (self: ClientNetworkController<T>?, data: ({T} | T)?) -> ()
-	@field InvokeAsync (self: ClientNetworkController<T>?, data: ({T} | T)?) -> ({T})
-	
+	@field Fire (self: ClientNetworkController<T, U>?, data: ({T} | T)?) -> ()
+	@field InvokeAsync (self: ClientNetworkController<T, U>?, data: ({T} | T)?) -> ({U})
+
+	@field DisconnectAll (self: ClientNetworkController<T, U>?) -> ()
 	@field Name string
 
 	@interface ClientNetworkController
@@ -208,20 +209,22 @@ export type ClientNetworkController<T, U> = {
 	Fire: (self: ClientNetworkController<T, U>?, data: ({T} | T)?) -> (),
 	InvokeAsync: (self: ClientNetworkController<T, U>?, data: ({T} | T)) -> ({U}),
 
-	DisconnectAll: (self: ServerNetworkController<T, U>?) -> (),
+	DisconnectAll: (self: ClientNetworkController<T, U>?) -> (),
 	Name: string,
 }
 
 --[=[
 	A ServerNetworkController is basically a mixed version of a [RemoteEvent] and [RemoteFunction]. It has better features and is more performant, though this is the server-sided API.
 
-	@field Connect (self: ServerNetworkController<T>?, func: (sender: Player, data: {T}) -> ()) -> (ScriptConnection)
-	@field Once (self: ServerNetworkController<T>?, func: (sender: Player, data: {T}) -> ()) -> (ScriptConnection)
-	@field Wait (self: ServerNetworkController<T>?) -> (Player, {T})
+	@field Connect (self: ServerNetworkController<T, U>?, func: (sender: Player, data: {T}) -> ()) -> (ScriptConnection)
+	@field Once (self: ServerNetworkController<T, U>?, func: (sender: Player, data: {T}) -> ()) -> (ScriptConnection)
+	@field Wait (self: ServerNetworkController<T, U>?) -> (Player, {T})
 	
-	@field Fire (self: ServerNetworkController<T>?, recipient: Player | {Player}, data: ({T} | T)?) -> ()
-	@field OnInvoke (self: ServerNetworkController<T>?, callback: (sender: Player, data: {T}) -> ()) -> ()
+	@field Fire (self: ServerNetworkController<T, U>?, recipient: Player | {Player}, data: ({T} | T)?) -> ()
+	@field OnInvoke (self: ServerNetworkController<T, U>?, callback: (sender: Player, data: {T}) -> ()) -> ()
 	
+	@field SetRateLimit (self: ServerNetworkController<T, U>?, maxInvokesPerSecond: number, invokeOverflowCallback: (sender: Player) -> ()) -> ()
+	@field DisconnectAll (self: ServerNetworkController<T, U>?) -> ()
 	@field Name string
 
 	@interface ServerNetworkController
