@@ -9,7 +9,6 @@ return {
 		Server = RunService:IsServer(),
 		Client = RunService:IsClient(),
 		StudioPlay = RunService:IsRunning(),
-		StudioEdit = RunService:IsEdit(),
 	},
 	
 	Settings = {
