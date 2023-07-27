@@ -263,7 +263,7 @@ type EngineServer = {
 	},
 
 	Media: {
-		Client: typeof(game:GetService("ServerStorage").EngineServer.Media),
+		Server: typeof(game:GetService("ServerStorage").EngineServer.Media),
 		Replicated: typeof(game:GetService("ReplicatedStorage").EngineReplicated.Media)
 	},
 
