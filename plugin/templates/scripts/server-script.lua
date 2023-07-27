@@ -1,10 +1,11 @@
 -- // Engine
 
+local ServerStorage = game:GetService("ServerStorage")
 local CanaryEngine = require(game:GetService("ReplicatedStorage").CanaryEngineFramework.CanaryEngine)
 local EngineServer = CanaryEngine.GetEngineServer()
 
-local Packages = EngineServer.Packages
-local Media = EngineServer.Media
+local Packages = ServerStorage.EngineServer.Packages
+local Media = ServerStorage.EngineServer.Media
 
 -- // Variables
 

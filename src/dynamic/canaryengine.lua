@@ -37,6 +37,8 @@ local CanaryEngineServer = { }
 --[=[
 	A reference to the Media folder on the Server, also gives access to replicated media.
 
+	@deprecated v3.1.5 -- Deprecated in favor of newer and better package systems
+
 	@prop Media {Server: Folder, Replicated: Folder}
 	@readonly
 
@@ -45,6 +47,8 @@ local CanaryEngineServer = { }
 
 --[=[
 	A reference to the Packages folder on the Server, also gives access to replicated Packages.
+
+	@deprecated v3.1.5 -- Deprecated in favor of newer and better package systems
 
 	@prop Packages {Server: Folder, Replicated: Folder}
 	@readonly
@@ -100,6 +104,8 @@ local CanaryEngineClient = { }
 --[=[
 	A reference to the Media folder on the client, also gives access to replicated media.
 
+	@deprecated v3.1.5 -- Deprecated in favor of newer and better package systems
+
 	@prop Media {Client: Folder, Replicated: Folder}
 	@readonly
 
@@ -108,6 +114,8 @@ local CanaryEngineClient = { }
 
 --[=[
 	A reference to the Packages folder on the client, also gives access to replicated Packages.
+
+	@deprecated v3.1.5 -- Deprecated in favor of newer and better package systems
 
 	@prop Packages {Client: Folder, Replicated: Folder}
 	@readonly
@@ -125,6 +133,8 @@ local CanaryEngineReplicated = { }
 --[=[
 	A reference to the Packages folder that is replicated.
 
+	@deprecated v3.1.5 -- Deprecated in favor of newer and better package systems
+
 	@prop Packages Folder
 	@readonly
 
@@ -133,6 +143,8 @@ local CanaryEngineReplicated = { }
 
 --[=[
 	A reference to the Media folder that is replicated.
+
+	@deprecated v3.1.5 -- Deprecated in favor of newer and better package systems
 
 	@prop Media Folder
 	@readonly
@@ -376,7 +388,7 @@ CanaryEngine.Libraries = table.freeze({
 	@field GetEngineClient () -> (EngineClient),
 	@field CreateSignal () -> (ScriptSignal<any>),
 	@field GetLatestPackageVersionAsync (CanaryEngine: Instance, warnIfNotLatestVersion: boolean?, respectDebugger: boolean?) -> (number?),
-	@field Runtime {RuntimeSettings: {StudioDebugEnabled: boolean, CheckLatestVersion: boolean, LiveGameDebugger: boolean}, RuntimeContext: {Studio: boolean, Server: boolean, Client: boolean, StudioPlay: boolean}},
+	@field Runtime {RuntimeSettings: {StudioDebugEnabled: boolean, Version: number, LiveGameDebugger: boolean}, RuntimeContext: {Studio: boolean, Server: boolean, Client: boolean, StudioPlay: boolean}},
 	@field Libraries {Utility: Utility, Benchmark: Benchmark, Statistics: Statistics,	Serialize: Serialize,}
 	@field RuntimeCreatedSignals {[string]: ScriptSignal<any>}
 	@field RuntimeCreatedNetworkControllers {[string]: ServerNetworkController<any, any> | ClientNetworkController<any, any>}
@@ -396,7 +408,7 @@ type CanaryEngine = {
 		RuntimeSettings: {
 			StudioDebugEnabled: boolean,
 			CheckLatestVersion: boolean,
-			LiveGameDebugger: boolean,
+			Version: number,
 		},
 
 		RuntimeContext: {
