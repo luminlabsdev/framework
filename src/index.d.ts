@@ -96,6 +96,7 @@ export namespace CanaryEngine {
     export function GetEngineReplicated(): EngineReplicated;
 
 	export function CreateSignal(signalName: string): ScriptSignal<any>;
+    export function CreateAnonymousSignal(): ScriptSignal<any>;
 	export function GetLatestPackageVersionAsync(packageInstance: any, warnIfNotLatestVersion: boolean | null, respectDebugger: boolean | null): number | null;
 
     export const Runtime: {
