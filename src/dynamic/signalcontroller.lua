@@ -76,7 +76,7 @@ end
 	@param data ({any} | any)? -- The data that should be sent the other script
 ]=]
 function SignalControllerObject:Fire(data: ({any} | any)?)
-	self._signalMain:Fire(Controllers.SanitizeData(data))
+	self._Signal:Fire(Controllers.SanitizeData(data))
 end
 
 --[=[
@@ -86,7 +86,7 @@ end
 	@return ScriptConnection
 ]=]
 function SignalControllerObject:Connect(func: (data: {any}?) -> ())
-	return self._signalMain:Connect(func)
+	return self._Signal:Connect(func)
 end
 
 --[=[
@@ -96,7 +96,7 @@ end
 	@return ScriptConnection
 ]=]
 function SignalControllerObject:Once(func: (data: {any}?) -> ())
-	return self._signalMain:Once(func)
+	return self._Signal:Once(func)
 end
 
 --[=[
@@ -106,14 +106,14 @@ end
 	@return {any}
 ]=]
 function SignalControllerObject:Wait(): {any}?
-	return self._signalMain:Wait()
+	return self._Signal:Wait()
 end
 
 --[=[
 	Disconnects all listeners from the current signal controller.
 ]=]
 function SignalControllerObject:DisconnectAll()
-	self._signalMain:DisconnectAll()
+	self._Signal:DisconnectAll()
 end
 
 -- // Connections
