@@ -386,7 +386,8 @@ CanaryEngine.Libraries = table.freeze({
 
 	@field GetEngineServer () -> (EngineServer),
 	@field GetEngineClient () -> (EngineClient),
-	@field CreateSignal () -> (ScriptSignal<any>),
+	@field CreateSignal (signalName: string) -> (ScriptSignal<any>),
+	@field CreateAnonymousSignal () -> (ScriptSignal<any>),
 	@field GetLatestPackageVersionAsync (CanaryEngine: Instance, warnIfNotLatestVersion: boolean?, respectDebugger: boolean?) -> (number?),
 	@field Runtime {RuntimeSettings: {StudioDebugEnabled: boolean, Version: number, LiveGameDebugger: boolean}, RuntimeContext: {Studio: boolean, Server: boolean, Client: boolean, StudioPlay: boolean}},
 	@field Libraries {Utility: Utility, Benchmark: Benchmark, Statistics: Statistics,	Serialize: Serialize,}
@@ -402,6 +403,7 @@ type CanaryEngine = {
 	GetEngineClient: () -> (EngineClient),
 	GetEngineReplicated: () -> (EngineReplicated),
 	CreateSignal: (signalName: string) -> (ScriptSignal<any>),
+	CreateAnonymousSignal: () -> (ScriptSignal<any>),
 	GetLatestPackageVersionAsync: (package: Instance, warnIfNotLatestVersion: boolean?, respectDebugger: boolean?) -> (number?),
 
 	Runtime: {
@@ -579,6 +581,15 @@ function CanaryEngine.CreateSignal(signalName: string): ScriptSignal<any>
 	end
 
 	return CanaryEngine.RuntimeCreatedSignals[signalName]
+end
+
+--[=[
+	Creates a new anonymous signal.
+	
+	@return ScriptSignal<any>
+]=]
+function CanaryEngine.CreateAnonymousSignal(): ScriptSignal<any>
+	return Signal.NewController("Anonymous")
 end
 
 --[=[
