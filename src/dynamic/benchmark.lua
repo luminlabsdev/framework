@@ -43,7 +43,7 @@ local Benchmark = { }
 local BenchmarkObject = { }
 
 local Debugger = require(script.Parent.Parent.Debugger)
-local Signal = require(script.Vendor.Signal)
+local Signal = require(script.Parent.Parent.Controllers.Vendor.SignalController)
 
 --[=[
 	Creates a new Benchmark object to be used.
