@@ -8,7 +8,7 @@
                 "$className": "Folder",
                 "Benchmark": {
                     "$className": "ModuleScript",
-                    "%source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/dynamic/benchmark.lua"
+                    "$source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/dynamic/benchmark.lua"
                 },
 
                 "Statistics": {
