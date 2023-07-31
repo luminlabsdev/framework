@@ -326,6 +326,10 @@ end
 ]=]
 function NetworkControllerServer:DisconnectAll()
 	for _, connection in self._Connections do
+		if not connection.Connected then
+			continue
+		end
+		
 		connection:Disconnect()
 	end
 end
