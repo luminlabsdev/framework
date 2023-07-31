@@ -1,50 +1,69 @@
 {
     "CanaryEngine": {
+        "$className": "ModuleScript",
         "$source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/dynamic/canaryengine.lua",
         "Vendor": {
+            "$className": "Folder",
             "Libraries": {
+                "$className": "Folder",
                 "Benchmark": {
+                    "$className": "ModuleScript",
                     "%source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/dynamic/benchmark.lua"
                 },
 
                 "Statistics": {
+                    "$className": "ModuleScript",
                     "$source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/dynamic/statistics.lua"
                 },
 
                 "Utility": {
-                    "%source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/dynamic/utility.lua"
+                    "$className": "ModuleScript",
+                    "$source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/dynamic/utility.lua"
                 },
 
                 "EasyProfile": {
-                    "%source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/dynamic/easyprofile.lua",
+                    "$className": "ModuleScript",
+                    "$source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/dynamic/easyprofile.lua",
                     "Vendor": {
+                        "$className": "Folder",
                         "ProfileService": {
+                            "$className": "ModuleScript",
                             "$source": "https://raw.githubusercontent.com/MadStudioRoblox/ProfileService/master/ProfileService.lua"
                         }
                     }
                 },
 
                 "BlueSerializer": {
+                    "$className": "ModuleScript",
                     "$source": "https://raw.githubusercontent.com/commitblue/blueserializer/master/module/init.lua",
                     "serializerList": {
+                        "$className": "ModuleScript",
                         "$source": "https://raw.githubusercontent.com/commitblue/blueserializer/master/module/serializerList.lua"
                     }
                 }
             },
 
             "Controllers": {
+                "$className": "ModuleScript",
+                "$source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/dynamic/controllers.lua",
                 "Vendor": {
+                    "$className": "Folder",
                     "NetworkController": {
+                        "$className": "ModuleScript",
                         "$source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/dynamic/networkcontroller.lua",
                         "Vendor": {
+                            "$className": "Folder",
                             "BridgeNet2": "external"
                         }
                     },
 
                     "SignalController": {
+                        "$className": "ModuleScript=",
                         "$source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/dynamic/signalcontroller.lua",
                         "Vendor": {
+                            "$className": "Folder",
                             "Signal": {
+                                "$className": "ModuleScript",
                                 "$source": "https://raw.githubusercontent.com/stravant/goodsignal/master/src/init.lua"
                             }
                         }
@@ -53,10 +72,12 @@
             },
 
             "Debugger": {
+                "$className": "ModuleScript",
                 "$source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/dynamic/debugger.lua"
             },
 
             "Runtime": {
+                "$className": "ModuleScript",
                 "$source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/dynamic/runtime.lua"
             }
         }
