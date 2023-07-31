@@ -1,6 +1,3 @@
-type dictionary = {[string]: any}
-type array = {[number]: any}
-
 --[=[
 	The metadata for a user's profile.
 
@@ -21,17 +18,6 @@ type ProfileMetaData = {ProfileCreated: number; ProfileLoadCount: number; Profil
 ]=]
 export type GlobalKey = {Key: string, Value: any, KeyId: number}
 
-type ScriptConnection = {
-	Disconnect: (self: ScriptConnection) -> (),
-	Connected: boolean,
-}
-
-type ScriptSignal<T> = {
-	Connect: (self: ScriptSignal<T>?, func: (data: {T}) -> ()) -> (ScriptConnection),
-	Wait: (self: ScriptSignal<T>?) -> ({T}),
-	Once: (self: ScriptSignal<T>?, func: (data: {T}) -> ()) -> (ScriptConnection),
-}
-
 -- // Variables
 
 
@@ -49,7 +35,8 @@ local RunService = game:GetService("RunService")
 local HttpService = game:GetService("HttpService")
 
 local ProfileService = require(Vendor.ProfileService)
-local Signal = require(Vendor.Signal)
+local Types = require(script.Parent.Parent.Types)
+local Signal = require(script.Parent.Parent.Controllers.Vendor.SignalController)
 
 local IsProfileStoreAlreadyLoaded = false
 local CurrentLoadedProfileStore = nil
@@ -141,7 +128,7 @@ assert(
 	
 	@return DataStoreObject?
 ]=]
-function EasyProfile.CreateProfileStore(name: string?, defaultPlayerData: dictionary, keyPattern: string?): typeof(setmetatable({ }, {__index = ProfileStoreObject}))?
+function EasyProfile.CreateProfileStore(name: string?, defaultPlayerData: {[string]: any}, keyPattern: string?): typeof(setmetatable({ }, {__index = ProfileStoreObject}))?
 	if not name then
 		name = "Global"
 	end
@@ -166,8 +153,8 @@ function EasyProfile.CreateProfileStore(name: string?, defaultPlayerData: dictio
 	IsProfileStoreAlreadyLoaded = true
 	CurrentLoadedProfileStore = ProfileStore
 
-	ProfileStoreObject.SessionLockClaimed = Signal.new() :: ScriptSignal<Player>
-	ProfileStoreObject.SessionLockUnclaimed = Signal.new() :: ScriptSignal<Player>
+	ProfileStoreObject.SessionLockClaimed = Signal.NewController("SessionLockClaimed") :: Types.ScriptSignal<Player>
+	ProfileStoreObject.SessionLockUnclaimed = Signal.NewController("SessionLockUnclaimed") :: Types.ScriptSignal<Player>
 
 	ProfileStoreObject._Pattern = keyPattern
 
@@ -200,7 +187,7 @@ end
 	@param userId number -- The user id to get of the data of
 	@yields
 ]=]
-function ProfileStoreObject:GetProfileAsync(userId: number): dictionary?
+function ProfileStoreObject:GetProfileAsync(userId: number): {[string]: any}?
 	if not CurrentLoadedProfileStore then
 		warn("No profile store loaded, make sure API requests are enabled")
 		return
@@ -244,7 +231,7 @@ function ProfileStoreObject:LoadProfileAsync(player: Player, reconcileData: bool
 	local LoadedPlayerProfile = CurrentLoadedProfileStore:LoadProfileAsync(string.format(self._Pattern, player.UserId), profileClaimedHandler)
 	local Success = true
 
-	ProfileObject.GlobalKeyAdded = Signal.new() :: ScriptSignal<GlobalKey>
+	ProfileObject.GlobalKeyAdded = Signal.NewController("GlobalKeyAdded") :: Types.ScriptSignal<GlobalKey>
 
 	if not LoadedPlayerProfile then
 		player:Kick(`Data for user {player.UserId} could not be loaded, other JobId is trying to load this data already`)
@@ -315,7 +302,7 @@ end
 	@param player Player -- The player to unclaim the session lock of
 	@param valuesToSave dictionary? -- Values to save that are not already saved to the player data, for example attributes that need to be saved on player removing
 ]=]
-function ProfileStoreObject:UnclaimSessionLock(player: Player, valuesToSave: dictionary?)
+function ProfileStoreObject:UnclaimSessionLock(player: Player, valuesToSave: {[string]: any}?)
 	local PlayerProfile = EasyProfile.LoadedPlayers[player]
 
 	if not PlayerProfile then
