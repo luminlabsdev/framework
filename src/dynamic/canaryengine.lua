@@ -177,10 +177,7 @@ type EngineServer = {
 		Replicated: typeof(game:GetService("ReplicatedStorage").EngineReplicated.Media)
 	},
 
-	Matchmaking: typeof(require(script.Vendor.Network.MatchmakingService)),
-	Moderation: nil,
 	Data: typeof(require(script.Vendor.Data.EasyProfile)),
-	 
 	CreateNetworkController: (controllerName: string) -> (Types.ServerNetworkController<any, any>),
 }
 
@@ -248,7 +245,6 @@ local PlayerService = game:GetService("Players")
 local Vendor = script.Vendor
 local DataFolder = Vendor.Data
 local LibrariesFolder = Vendor.Libraries
-local NetworkFolder = Vendor.Network
 
 local Network = require(Vendor.Controllers.Vendor.NetworkController) -- Networking logic
 local Signal = require(Vendor.Controllers.Vendor.SignalController) -- Signal logic
@@ -329,7 +325,6 @@ type CanaryEngine = {
 	},
 	 
 	RuntimeCreatedSignals: {[string]: Types.ScriptSignal<any>},
-	 
 	RuntimeCreatedNetworkControllers: {[string]: Types.ServerNetworkController<any, any> | Types.ClientNetworkController<any, any>}
 }
 
@@ -355,8 +350,6 @@ function CanaryEngine.GetEngineServer(): EngineServer?
 		Replicated = EngineReplicated.Packages,
 	}
 
-	CanaryEngineServer.Matchmaking = require(NetworkFolder.MatchmakingService)
-	CanaryEngineServer.Moderation = nil
 	CanaryEngineServer.Data = require(DataFolder.EasyProfile)
 
 	CanaryEngineServer.Media = {

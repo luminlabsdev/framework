@@ -95,7 +95,6 @@ end
 function BenchmarkObject:SetFunction(timesToRun: number, func: (timesRan: number) -> ()): BenchmarkData
 	if timesToRun <= 0 then
 		Debugger.error("Field 'timesToRun' must be greater than 0.")
-		return
 	end
 
 	local CollectedBenchmarkData = { }
