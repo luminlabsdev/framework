@@ -180,7 +180,7 @@ type EngineServer = {
 	Matchmaking: typeof(require(script.Vendor.Network.MatchmakingService)),
 	Moderation: nil,
 	Data: typeof(require(script.Vendor.Data.EasyProfile)),
-
+	 
 	CreateNetworkController: (controllerName: string) -> (Types.ServerNetworkController<any, any>),
 }
 
@@ -214,7 +214,7 @@ type EngineClient = {
 
 	PlayerGui: typeof(game:GetService("StarterGui")),
 	PlayerBackpack: typeof(game:GetService("StarterPack")),
-
+	 
 	CreateNetworkController: (controllerName: string) -> (Types.ClientNetworkController<any, any>),
 }
 
@@ -300,7 +300,9 @@ type CanaryEngine = {
 	GetEngineServer: () -> (EngineServer),
 	GetEngineClient: () -> (EngineClient),
 	GetEngineReplicated: () -> (EngineReplicated),
+	 
 	CreateSignal: (signalName: string) -> (Types.ScriptSignal<any>),
+	 
 	CreateAnonymousSignal: () -> (Types.ScriptSignal<any>),
 	GetLatestPackageVersionAsync: (package: Instance, warnIfNotLatestVersion: boolean?, respectDebugger: boolean?) -> (number?),
 
@@ -325,8 +327,9 @@ type CanaryEngine = {
 		Statistics: typeof(Statistics),
 		Serialize: typeof(Serialize),
 	},
-
+	 
 	RuntimeCreatedSignals: {[string]: Types.ScriptSignal<any>},
+	 
 	RuntimeCreatedNetworkControllers: {[string]: Types.ServerNetworkController<any, any> | Types.ClientNetworkController<any, any>}
 }
 

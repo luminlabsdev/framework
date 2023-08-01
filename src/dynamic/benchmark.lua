@@ -1,5 +1,7 @@
+-- // Benchmark
+
 --[=[
-	The benchmark class.
+	The parent of all classes.
 
 	@class Benchmark
 ]=]
@@ -40,10 +42,25 @@ local Benchmark = { }
 	@within BenchmarkObject
 ]=]
 
+-- // Types
+
+--[=[
+	The data that is returned after a `:SetFunction` call is finished.
+
+	@type BenchmarkData {total: number, longest: number, shortest: number, average: number}
+	@within Benchmark
+]=]
+type BenchmarkData = {Total: number, Longest: number, Shortest: number, Average: number}
+
+-- // Variables
+
 local BenchmarkObject = { }
 
+local Statistics = require(script.Parent.Statistics)
 local Debugger = require(script.Parent.Parent.Debugger)
 local Signal = require(script.Parent.Parent.Controllers.Vendor.SignalController)
+
+-- // Functions
 
 --[=[
 	Creates a new Benchmark object to be used.
@@ -54,7 +71,7 @@ function Benchmark.CreateBenchmark()
 	local self = setmetatable({ }, {__index = BenchmarkObject})
 
 	self.IsCompleted = false
-	self.Destroying = Signal.new()
+	self.Destroying = Signal.NewController("Destroying")
 	self.StartTime = 0
 	self.EndTime = 0
 
@@ -73,31 +90,45 @@ end
 	@param timesToRun number -- The amount of times to run `func`.
 	@param func (timesRan: number) -> () -- The function to run for each `timesToRun` index, has a `timesRan` argument which is how many times the benchmark has run so far.
 
-	@return number?
+	@return BenchmarkData
 ]=]
-function BenchmarkObject:SetFunction(timesToRun: number, func: (timesRan: number) -> ()): number?
+function BenchmarkObject:SetFunction(timesToRun: number, func: (timesRan: number) -> ()): BenchmarkData
 	if timesToRun <= 0 then
 		Debugger.error("Field 'timesToRun' must be greater than 0.")
 		return
 	end
 
-	local result
+	local CollectedBenchmarkData = { }
+	self.StartTime = os.clock()
 
-	task.spawn(function()
-		self.StartTime = os.clock()
+	for index = 1, timesToRun do
+		func(index)
+		table.insert(CollectedBenchmarkData, os.clock() - self.StartTime)
+	end
 
-		for index = 1, timesToRun do
-			func(index)
-		end
+	return {
+		Total = self:Stop(),
+		Average = Statistics.GetMean(CollectedBenchmarkData),
+		Shortest = math.min(table.unpack(CollectedBenchmarkData)),
+		Longest = math.max(table.unpack(CollectedBenchmarkData)),
+	}
+end
 
-		result = self:Stop()
-	end)
+--[=[
+	Takes some [BenchmarkData] and formats it nicely in the output without a hassle.
 
-	return result
+	@param benchmarkData BenchmarkData -- The benchmark data to base off of
+]=]
+function BenchmarkObject:PrintBenchmark(benchmarkData: BenchmarkData)
+	for dataType, metric in benchmarkData do
+		print(`{dataType}: {metric * 1000}ms`)
+	end
 end
 
 --[=[
 	Starts the benchmark object.
+
+	@deprecated v3.2.4 -- Use :SetFunction instead.
 ]=]
 function BenchmarkObject:Start()
 	self.StartTime = os.clock()
@@ -141,5 +172,7 @@ function BenchmarkObject:Destroy()
 	table.clear(self)
 	setmetatable(self, nil)
 end
+
+-- // Actions
 
 return Benchmark

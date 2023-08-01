@@ -1,13 +1,20 @@
 -- // Types
 
 --[=[
+	The parent of all classes.
+
+	@class Types
+]=]
+local Types = { }
+
+--[=[
 	A script connection, similar to an [RBXScriptConnection]
 
 	@field Disconnect (self: ScriptConnection) -> ()
 	@field Connected boolean
 
 	@interface ScriptConnection
-	@within CanaryEngine
+	@within Types
 	@private
 ]=]
 type ScriptConnection = {
@@ -29,7 +36,7 @@ type ScriptConnection = {
 	@field Name string
 
 	@interface ScriptSignal
-	@within CanaryEngine
+	@within Types
 	@private
 ]=]
 export type ScriptSignal<T> = {
@@ -57,7 +64,7 @@ export type ScriptSignal<T> = {
 	@field Name string
 
 	@interface ClientNetworkController
-	@within CanaryEngine
+	@within Types
 ]=]
 export type ClientNetworkController<T, U> = {
 	Connect: (self: ClientNetworkController<T, U>?, func: (data: {T}) -> ()) -> (ScriptConnection),
@@ -86,7 +93,7 @@ export type ClientNetworkController<T, U> = {
 	@field Name string
 
 	@interface ServerNetworkController
-	@within CanaryEngine
+	@within Types
 ]=]
 export type ServerNetworkController<T, U> = {
 	Connect: (self: ServerNetworkController<T, U>?, func: (sender: Player, data: {T}) -> ()) -> (ScriptConnection),
@@ -102,3 +109,5 @@ export type ServerNetworkController<T, U> = {
 	DisconnectAll: (self: ServerNetworkController<T, U>?) -> (),
 	Name: string,
 }
+
+return Types
