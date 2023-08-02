@@ -55,6 +55,17 @@ type BenchmarkData = {Total: number, Longest: number, Shortest: number, Average:
 -- // Variables
 
 local BenchmarkObject = { }
+local ToString = {
+	__tostring = function(table)
+		local ConvertedString = ""
+
+		for dataType, metric in table do
+			ConvertedString = `{ConvertedString}{dataType}: {metric * 1000}ms\n`
+		end
+
+		return ConvertedString
+	end
+}
 
 local Statistics = require(script.Parent.Statistics)
 local Debugger = require(script.Parent.Parent.Debugger)
@@ -105,29 +116,18 @@ function BenchmarkObject:SetFunction(timesToRun: number, func: (timesRan: number
 		table.insert(CollectedBenchmarkData, os.clock() - self.StartTime)
 	end
 
-	return {
+	return setmetatable({
 		Total = self:Stop(),
 		Average = Statistics.GetMean(CollectedBenchmarkData),
 		Shortest = math.min(table.unpack(CollectedBenchmarkData)),
 		Longest = math.max(table.unpack(CollectedBenchmarkData)),
-	}
-end
-
---[=[
-	Takes some [BenchmarkData] and formats it nicely in the output without a hassle.
-
-	@param benchmarkData BenchmarkData -- The benchmark data to base off of
-]=]
-function BenchmarkObject:PrintBenchmark(benchmarkData: BenchmarkData)
-	for dataType, metric in benchmarkData do
-		print(`{dataType}: {metric * 1000}ms`)
-	end
+	}, ToString)
 end
 
 --[=[
 	Starts the benchmark object.
 
-	@deprecated v3.2.4 -- Use :SetFunction instead.
+	@deprecated 3.2.4 -- Deprecated, use BenchmarkObject:SetFunction instead
 ]=]
 function BenchmarkObject:Start()
 	self.StartTime = os.clock()
@@ -136,6 +136,7 @@ end
 --[=[
 	Stops the benchmark from running and destroys it, returns the amount of time it took to complete the code above it.
 
+	@deprecated 3.2.4 -- Deprecated, use BenchmarkObject:SetFunction instead
 	@return number
 ]=]
 function BenchmarkObject:Stop(): number
