@@ -116,6 +116,15 @@ function BenchmarkObject:SetFunction(timesToRun: number, func: (timesRan: number
 		table.insert(CollectedBenchmarkData, os.clock() - self.StartTime)
 	end
 
+	if timesToRun >= 8000 then
+		return setmetatable({
+			Total = self:Stop(),
+			Average = Statistics.GetMean(CollectedBenchmarkData),
+			Shortest = "unavailable",
+			Longest = "unavailable",
+		}, ToString)
+	end
+
 	return setmetatable({
 		Total = self:Stop(),
 		Average = Statistics.GetMean(CollectedBenchmarkData),
