@@ -120,8 +120,8 @@ function BenchmarkObject:SetFunction(timesToRun: number, func: (timesRan: number
 		return setmetatable({
 			Total = self:Stop(),
 			Average = Statistics.GetMean(CollectedBenchmarkData),
-			Shortest = "unavailable",
-			Longest = "unavailable",
+			Shortest = 0,
+			Longest = 0,
 		}, ToString)
 	end
 
