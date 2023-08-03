@@ -47,15 +47,15 @@ interface EngineReplicated {
     }
 }
 
-interface ScriptConnection {
+interface ControllerConnection {
     Disconnect(): void;
     Connected: boolean;
 }
 
-export interface ScriptSignal<T> {
-    Connect(func: (data: {T}) => (void)): ScriptConnection;
+export interface SignalController<T> {
+    Connect(func: (data: {T}) => (void)): ControllerConnection;
     Wait(): {T};
-    Once(func: (data: {T}) => (void)): ScriptConnection;
+    Once(func: (data: {T}) => (void)): ControllerConnection;
 
     Fire(data: (T | {T}) | null): void;
 
@@ -64,9 +64,9 @@ export interface ScriptSignal<T> {
 }
 
 export interface ClientNetworkController<T, U> {
-    Connect(self: ClientNetworkController<T, U>, func: (data: {T} | null) => (void)): ScriptConnection;
+    Connect(self: ClientNetworkController<T, U>, func: (data: {T} | null) => (void)): ControllerConnection;
     Wait(self: ClientNetworkController<T, U>): {T} | null;
-    Once(self: ClientNetworkController<T, U>, func: (data: {T} | null) => (void)): ScriptConnection;
+    Once(self: ClientNetworkController<T, U>, func: (data: {T} | null) => (void)): ControllerConnection;
 
     Fire(self: ClientNetworkController<T, U>, data: (T | {T}) | null): void;
     InvokeAsync(self: ClientNetworkController<T, U>, data: (T | {T}) | null): {U} | null;
@@ -76,9 +76,9 @@ export interface ClientNetworkController<T, U> {
 }
 
 export interface ServerNetworkController<T, U> {
-    Connect(self: ServerNetworkController<T, U>, func: (sender: Player, data: {T} | null) => (void)): ScriptConnection;
+    Connect(self: ServerNetworkController<T, U>, func: (sender: Player, data: {T} | null) => (void)): ControllerConnection;
     Wait(self: ServerNetworkController<T, U>): [Player, {T} | null];
-    Once(self: ServerNetworkController<T, U>, func: (sender: Player, data: {T} | null) => (void)): ScriptConnection;
+    Once(self: ServerNetworkController<T, U>, func: (sender: Player, data: {T} | null) => (void)): ControllerConnection;
 
     Fire(self: ServerNetworkController<T, U>, recipient: Player | {Player}, data: (T | {T}) | null): void;
     FireAll(self: ServerNetworkController<T, U>, data: (T | {T}) | null): void;
@@ -95,11 +95,12 @@ export namespace CanaryEngine {
 	export function GetEngineClient(): EngineClient;
     export function GetEngineReplicated(): EngineReplicated;
 
-	export function CreateSignal(signalName: string): ScriptSignal<any>;
-    export function CreateAnonymousSignal(): ScriptSignal<any>;
+	export function CreateSignal(signalName: string): SignalController<any>;
+    export function CreateAnonymousSignal(): SignalController<any>;
+
 	export function GetLatestPackageVersionAsync(packageInstance: any, warnIfNotLatestVersion: boolean | null, respectDebugger: boolean | null): number | null;
 
-    export const Runtime: {
+    export let Runtime: {
         RuntimeSettings: {
             StudioDebugEnabled: boolean;
             CheckLatestVersion: boolean;
@@ -112,6 +113,16 @@ export namespace CanaryEngine {
             Client: boolean;
             StudioPlay: boolean;
         };
+
+        RuntimeObjects: {
+            NetworkControllers: {
+                [key: string]: ClientNetworkController<any, any> | ServerNetworkController<any, any> 
+            },
+
+            SignalControllers: {
+                [key: string]: SignalController<any>
+            }
+        }
     }
 
     export const Libraries: {

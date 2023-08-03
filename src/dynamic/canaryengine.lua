@@ -10,7 +10,7 @@ local CanaryEngine = { }
 --[=[
 	The runtime property contains settings that are set during runtime, and the current context of the server/client.
 
-	@prop Runtime {RuntimeSettings: RuntimeSettings, RuntimeContext: RuntimeContext}
+	@prop Runtime {RuntimeSettings: RuntimeSettings, RuntimeContext: RuntimeContext, RuntimeObjects: {NetworkControllers: {[string]: (ServerNetworkController | ServerNetworkController)}, SignalControllers: {[string]: ScriptSignal}}}
 
 	@readonly
 	@within CanaryEngine
@@ -266,6 +266,10 @@ CanaryEngine.RuntimeCreatedNetworkControllers = { }
 CanaryEngine.Runtime = table.freeze({
 	RuntimeSettings = RuntimeSettings,
 	RuntimeContext = RuntimeContext,
+	RuntimeObjects = {
+		NetworkControllers = CanaryEngine.RuntimeCreatedNetworkControllers,
+		SignalControllers = CanaryEngine.RuntimeCreatedSignals,
+	},
 })
 
 CanaryEngine.Libraries = table.freeze({
@@ -275,6 +279,8 @@ CanaryEngine.Libraries = table.freeze({
 	Serialize = Serialize,
 })
 
+CanaryEngine.Types = Types
+
 --[=[
 	This is the main API for CanaryEngine
 
@@ -283,8 +289,8 @@ CanaryEngine.Libraries = table.freeze({
 	@field CreateSignal (signalName: string) -> (ScriptSignal<any>),
 	@field CreateAnonymousSignal () -> (ScriptSignal<any>),
 	@field GetLatestPackageVersionAsync (CanaryEngine: Instance, warnIfNotLatestVersion: boolean?, respectDebugger: boolean?) -> (number?),
-	@field Runtime {RuntimeSettings: {StudioDebugEnabled: boolean, Version: number, LiveGameDebugger: boolean}, RuntimeContext: {Studio: boolean, Server: boolean, Client: boolean, StudioPlay: boolean}},
-	@field Libraries {Utility: Utility, Benchmark: Benchmark, Statistics: Statistics,	Serialize: Serialize,}
+	@field Runtime {RuntimeSettings: {StudioDebugEnabled: boolean, Version: number, LiveGameDebugger: boolean}, RuntimeContext: {Studio: boolean, Server: boolean, Client: boolean, StudioPlay: boolean}, RuntimeObjects: },
+	@field Libraries {Utility: Utility, Benchmark: Benchmark, Statistics: Statistics, Serialize: Serialize}
 	@field RuntimeCreatedSignals {[string]: ScriptSignal<any>}
 	@field RuntimeCreatedNetworkControllers {[string]: ServerNetworkController<any, any> | ClientNetworkController<any, any>}
 
@@ -292,14 +298,15 @@ CanaryEngine.Libraries = table.freeze({
 	@within CanaryEngine
 	@private
 ]=]
+
 type CanaryEngine = {
 	GetEngineServer: () -> (EngineServer),
 	GetEngineClient: () -> (EngineClient),
 	GetEngineReplicated: () -> (EngineReplicated),
 	 
 	CreateSignal: (signalName: string) -> (Types.ScriptSignal<any>),
-	 
 	CreateAnonymousSignal: () -> (Types.ScriptSignal<any>),
+
 	GetLatestPackageVersionAsync: (package: Instance, warnIfNotLatestVersion: boolean?, respectDebugger: boolean?) -> (number?),
 
 	Runtime: {
@@ -314,7 +321,12 @@ type CanaryEngine = {
 			Server: boolean,
 			Client: boolean,
 			StudioPlay: boolean,
-		}
+		},
+
+		RuntimeObjects: {
+			NetworkControllers: {[string]: Types.ServerNetworkController<any, any> | Types.ClientNetworkController<any, any>},
+			SignalControllers: {[string]: Types.ScriptSignal<any>}
+		},
 	},
 
 	Libraries: {
@@ -421,11 +433,15 @@ end
 	local NetworkController: CanaryEngine.ClientNetworkController<boolean> = EngineClient.CreateNetworkController("MyNewNetworkController") -- assuming you are sending over and recieving a boolean
 	```
 	:::
+
+	@yields
 	
 	@param controllerName string -- The name of the controller
+	@param timeout number? -- The maxmimum amount of time to wait until the client errors
+	
 	@return ClientNetworkController<any>
 ]=]
-function CanaryEngineClient.CreateNetworkController(controllerName: string): Types.ClientNetworkController<any, any>
+function CanaryEngineClient.CreateNetworkController(controllerName: string, timeout: number?): Types.ClientNetworkController<any, any>
 	if not CanaryEngine.RuntimeCreatedNetworkControllers[controllerName] then
 		local NewNetworkController = Network.NewClientController(controllerName)
 
@@ -462,12 +478,16 @@ function CanaryEngineServer.CreateNetworkController(controllerName: string): Typ
 end
 
 --[=[
-	Creates a new signal that is then given a reference in the signals table.
+	Creates a new signal that is then given a reference in the signals table. Create a new anonymous signal by leaving the name blank.
 	
 	@param signalName string -- The name of the signal
 	@return ScriptSignal<any>
 ]=]
-function CanaryEngine.CreateSignal(signalName: string): Types.ScriptSignal<any>
+function CanaryEngine.CreateSignal(signalName: string?): Types.ScriptSignal<any>
+	if not signalName then
+		return Signal.NewController("Anonymous")
+	end
+
 	if not CanaryEngine.RuntimeCreatedSignals[signalName] then
 		local NewSignal = Signal.NewController(signalName)
 
@@ -478,7 +498,7 @@ function CanaryEngine.CreateSignal(signalName: string): Types.ScriptSignal<any>
 end
 
 --[=[
-	Creates a new anonymous signal.
+	Creates a new anonymous signal, this does not have a reference outside of the variable it was created in.
 	
 	@return ScriptSignal<any>
 ]=]

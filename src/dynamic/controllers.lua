@@ -10,9 +10,7 @@ local Controllers = { }
 -- // Functions
 
 --[=[
-	Sanitizes data sent through `:Fire` methods.
-
-	@private
+	Sanitizes data sent through `:Fire` methods, used usally only internally.
 
 	@param data any -- The data to sanitize
 	@return {any}?

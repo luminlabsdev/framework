@@ -1,6 +1,6 @@
 -- // Package
 
-local Package = { }
+local Debugger = { }
 
 -- // Variables
 
@@ -30,24 +30,24 @@ local function IsStudioAndDebugEnabled(debugType: "print" | "warn" | "error", ..
 	end
 end
 
-function Package.print(...: any)
+function Debugger.print(...: any)
 	IsStudioAndDebugEnabled("print", ...)
 end
 
-function Package.warn(...: any)
+function Debugger.warn(...: any)
 	IsStudioAndDebugEnabled("warn", ...)
 end
 
-function Package.silenterror<T>(msg: T)
+function Debugger.silenterror<T>(msg: T)
 	local thread = task.spawn(error, msg, 0)
 	task.cancel(thread)
 	thread = nil
 end
 
-function Package.error<T>(msg: T)
+function Debugger.error<T>(msg: T)
 	IsStudioAndDebugEnabled("error", msg)
 end
 
 -- // Actions
 
-return Package
+return Debugger

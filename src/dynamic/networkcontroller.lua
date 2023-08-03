@@ -2,6 +2,7 @@
 --[=[
 	The parent of all classes.
 
+	@ignore
 	@class NetworkController
 ]=]
 local NetworkController = { }
@@ -97,8 +98,6 @@ local Controllers = require(script.Parent.Parent)
 --[=[
 	Creates a new client network controller.
 
-	@ignore
-
 	@param name string -- The name of the new controller
 	@return NetworkControllerClient
 ]=]
@@ -114,8 +113,6 @@ end
 
 --[=[
 	Creates a new server network controller.
-
-	@ignore
 
 	@param name string -- The name of the new controller
 	@return NetworkControllerServer
@@ -315,7 +312,7 @@ end
 	Yields the current thread until the client fires the network controller.
 
 	@yields
-	@return {any}
+	@return (Player, {any})
 ]=]
 function NetworkControllerServer:Wait(): (Player, {any})
 	return self._Bridge:Wait()

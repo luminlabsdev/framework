@@ -8,44 +8,42 @@
 local Types = { }
 
 --[=[
-	A script connection, similar to an [RBXScriptConnection]
+	A controller connection, similar to an [RBXScriptConnection]
 
 	@field Disconnect (self: ScriptConnection) -> ()
 	@field Connected boolean
 
-	@interface ScriptConnection
+	@interface ControllerConnection
 	@within Types
 	@private
 ]=]
-type ScriptConnection = {
-	Disconnect: (self: ScriptConnection) -> (),
+type ControllerConnection = {
+	Disconnect: (self: ControllerConnection) -> (),
 	Connected: boolean,
 }
 
-
 --[=[
-	A script signal, similar to an [RBXScriptSignal]
+	A signal controller, similar to an [RBXScriptSignal]
 
-	@field Connect (self: ScriptSignalBasic<T>?, func: (data: {T}) -> ()) -> (ScriptConnection)
-	@field Wait (self: ScriptSignalBasic<T>?) -> ({T})
-	@field Once (self: ScriptSignalBasic<T>?, func: (data: {T}) -> ()) -> (ScriptConnection)
+	@field Connect (self: SignalController<T>?, func: (data: {T}) -> ()) -> (ControllerConnection)
+	@field Wait (self: SignalController<T>?) -> ({T})
+	@field Once (self: SignalController<T>?, func: (data: {T}) -> ()) -> (ControllerConnection)
 	
-	@field Fire (self: ScriptSignal<T>?, data: ({T} | T)?) -> ()
-	@field DisconnectAll (self: ScriptSignal<T>?) -> ()
+	@field Fire (self: SignalController<T>?, data: ({T} | T)?) -> ()
+	@field DisconnectAll (self: SignalController<T>?) -> ()
 	
 	@field Name string
 
-	@interface ScriptSignal
+	@interface SignalController
 	@within Types
-	@private
 ]=]
-export type ScriptSignal<T> = {
-	Connect: (self: ScriptSignal<T>?, func: (data: {T}) -> ()) -> (ScriptConnection),
-	Wait: (self: ScriptSignal<T>?) -> ({T}),
-	Once: (self: ScriptSignal<T>?, func: (data: {T}) -> ()) -> (ScriptConnection),
+export type SignalController<T> = {
+	Connect: (self: SignalController<T>?, func: (data: {T}) -> ()) -> (ControllerConnection),
+	Wait: (self: SignalController<T>?) -> ({T}),
+	Once: (self: SignalController<T>?, func: (data: {T}) -> ()) -> (ControllerConnection),
 
-	Fire: (self: ScriptSignal<T>?, data: ({T} | T)?) -> (),
-	DisconnectAll: (self: ScriptSignal<T>?) -> (),
+	Fire: (self: SignalController<T>?, data: ({T} | T)?) -> (),
+	DisconnectAll: (self: SignalController<T>?) -> (),
 
 	Name: string,
 }
@@ -53,8 +51,8 @@ export type ScriptSignal<T> = {
 --[=[
 	A ClientNetworkController is basically a mixed version of a [RemoteEvent] and [RemoteFunction]. It has better features and is more performant.
 
-	@field Connect (self: ClientNetworkController<T, U>?, func: (data: {T}) -> ()) -> (ScriptConnection)
-	@field Once (self: ClientNetworkController<T, U>?, func: (data: {T}) -> ()) -> (ScriptConnection)
+	@field Connect (self: ClientNetworkController<T, U>?, func: (data: {T}) -> ()) -> (ControllerConnection)
+	@field Once (self: ClientNetworkController<T, U>?, func: (data: {T}) -> ()) -> (ControllerConnection)
 	@field Wait (self: ClientNetworkController<T, U>?) -> ({T})
 	
 	@field Fire (self: ClientNetworkController<T, U>?, data: ({T} | T)?) -> ()
@@ -67,9 +65,9 @@ export type ScriptSignal<T> = {
 	@within Types
 ]=]
 export type ClientNetworkController<T, U> = {
-	Connect: (self: ClientNetworkController<T, U>?, func: (data: {T}) -> ()) -> (ScriptConnection),
+	Connect: (self: ClientNetworkController<T, U>?, func: (data: {T}) -> ()) -> (ControllerConnection),
 	Wait: (self: ClientNetworkController<T, U>?) -> ({T}),
-	Once: (self: ClientNetworkController<T, U>?, func: (data: {T}) -> ()) -> (ScriptConnection),
+	Once: (self: ClientNetworkController<T, U>?, func: (data: {T}) -> ()) -> (ControllerConnection),
 
 	Fire: (self: ClientNetworkController<T, U>?, data: ({T} | T)?) -> (),
 	InvokeAsync: (self: ClientNetworkController<T, U>?, data: ({T} | T)) -> ({U}),
@@ -81,8 +79,8 @@ export type ClientNetworkController<T, U> = {
 --[=[
 	A ServerNetworkController is basically a mixed version of a [RemoteEvent] and [RemoteFunction]. It has better features and is more performant, though this is the server-sided API.
 
-	@field Connect (self: ServerNetworkController<T, U>?, func: (sender: Player, data: {T}) -> ()) -> (ScriptConnection)
-	@field Once (self: ServerNetworkController<T, U>?, func: (sender: Player, data: {T}) -> ()) -> (ScriptConnection)
+	@field Connect (self: ServerNetworkController<T, U>?, func: (sender: Player, data: {T}) -> ()) -> (ControllerConnection)
+	@field Once (self: ServerNetworkController<T, U>?, func: (sender: Player, data: {T}) -> ()) -> (ControllerConnection)
 	@field Wait (self: ServerNetworkController<T, U>?) -> (Player, {T})
 	
 	@field Fire (self: ServerNetworkController<T, U>?, recipient: Player | {Player}, data: ({T} | T)?) -> ()
@@ -96,9 +94,9 @@ export type ClientNetworkController<T, U> = {
 	@within Types
 ]=]
 export type ServerNetworkController<T, U> = {
-	Connect: (self: ServerNetworkController<T, U>?, func: (sender: Player, data: {T}) -> ()) -> (ScriptConnection),
+	Connect: (self: ServerNetworkController<T, U>?, func: (sender: Player, data: {T}) -> ()) -> (ControllerConnection),
 	Wait: (self: ServerNetworkController<T, U>?) -> (Player, {T}),
-	Once: (self: ServerNetworkController<T, U>?, func: (sender: Player, data: {T}) -> ()) -> (ScriptConnection),
+	Once: (self: ServerNetworkController<T, U>?, func: (sender: Player, data: {T}) -> ()) -> (ControllerConnection),
 	
 	Fire: (self: ServerNetworkController<T, U>?, recipient: Player | {Player}, data: ({T} | T)?) -> (),
 	FireAll: (self: ServerNetworkController<T, U>?, data: ({T} | T)?) -> (),

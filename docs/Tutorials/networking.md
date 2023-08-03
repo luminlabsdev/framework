@@ -52,6 +52,10 @@ When we start the script, we should then see the the name in the output, and als
 
 Please keep in mind that these can be used for many other things other than just passing strings through, also that if you just have a single piece of data you can send it through the fire method without wrapping it in a table. Though, keep in mind that the data you recieve will always be a table no matter how you pass the data originally.
 
+:::danger
+You can in fact pass dictionaries through fire functions, but keep in mind these are bandwith-heavy and should be arrays instead.
+:::
+
 We also have available the `Fire`, `FireExcept` and `SetRateLimit` functions. Each of them are documented in their own API page.
 
 ### RemoteFunctions
