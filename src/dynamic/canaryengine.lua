@@ -277,6 +277,7 @@ CanaryEngine.Libraries = table.freeze({
 	Benchmark = Benchmark,
 	Statistics = Statistics,
 	Serialize = Serialize,
+	Fusion = require(LibrariesFolder.Fusion),
 })
 
 CanaryEngine.Types = Types
@@ -290,7 +291,7 @@ CanaryEngine.Types = Types
 	@field CreateAnonymousSignal () -> (SignalController<any>),
 	@field GetLatestPackageVersionAsync (CanaryEngine: Instance, warnIfNotLatestVersion: boolean?, respectDebugger: boolean?) -> (number?),
 	@field Runtime {RuntimeSettings: {StudioDebugEnabled: boolean, Version: number, LiveGameDebugger: boolean}, RuntimeContext: {Studio: boolean, Server: boolean, Client: boolean, StudioPlay: boolean}, RuntimeObjects: {NetworkControllers: {[string]: (ServerNetworkController<any, any> | ServerNetworkController<any, any>)}, SignalControllers: {[string]: SignalController<any>}}},
-	@field Libraries {Utility: Utility, Benchmark: Benchmark, Statistics: Statistics, Serialize: Serialize}
+	@field Libraries {Utility: Utility, Benchmark: Benchmark, Statistics: Statistics, Serialize: Serialize, Fusion: Fusion}
 	@field RuntimeCreatedSignals {[string]: SignalController<any>}
 	@field RuntimeCreatedNetworkControllers {[string]: ServerNetworkController<any, any> | ClientNetworkController<any, any>}
 
@@ -334,6 +335,7 @@ type CanaryEngine = {
 		Benchmark: typeof(Benchmark),
 		Statistics: typeof(Statistics),
 		Serialize: typeof(Serialize),
+		Fusion: typeof(require(LibrariesFolder.Fusion)),
 	},
 	 
 	RuntimeCreatedSignals: {[string]: Types.SignalController<any>},

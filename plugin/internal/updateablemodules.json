@@ -9,5 +9,6 @@
     "SignalController",
 	"Controllers",
 	"CanaryEngine",
-	"Types"
+	"Types",
+	"Signal"
 ]

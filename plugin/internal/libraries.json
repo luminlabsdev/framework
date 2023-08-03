@@ -5,5 +5,6 @@
     "Trove": "https://raw.githubusercontent.com/Sleitnick/RbxUtil/main/modules/trove/init.lua",
     "EnumList": "https://raw.githubusercontent.com/Sleitnick/RbxUtil/main/modules/enum-list/init.lua",
     "TableUtil": "https://raw.githubusercontent.com/Sleitnick/RbxUtil/main/modules/table-util/init.lua",
-    "RemotePacketSizeCount": "https://raw.githubusercontent.com/PysephWasntAvailable/RemotePacketSizeCounter/main/src/init.luau"
+    "RemotePacketSizeCount": "https://raw.githubusercontent.com/PysephWasntAvailable/RemotePacketSizeCounter/main/src/init.luau",
+    "Log": "https://raw.githubusercontent.com/Sleitnick/RbxUtil/main/modules/log/init.lua"
 }
