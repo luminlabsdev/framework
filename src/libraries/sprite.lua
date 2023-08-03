@@ -15,7 +15,7 @@ local RobloxMaxImageSize = 1024
     @param fps number? -- The amount of frames per second that the sprite should be played at. Defaults to 30
     @param imageId string? -- The image id that the image label should be set to, defaults to the initial image of the image label
 ]=]
-function Sprite.Animate(image: ImageLabel, frameSize: Vector2, frames: Vector2, fps: number?, imageId: string?)
+function Sprite.Animate(image: ImageLabel, imageSize: Vector2, frames: Vector2, frameNumber: number, fps: number?, imageId: string?)
 	fps = fps or 30
 	imageId = imageId or image.Image
 
@@ -26,7 +26,7 @@ function Sprite.Animate(image: ImageLabel, frameSize: Vector2, frames: Vector2, 
     end
 	
 	local RealWidth, RealHeight
-    local ImageWidth, ImageHeight = frameSize.X * frames.X, frameSize.Y * frames.X
+    local ImageWidth, ImageHeight = imageSize.X, imageSize.Y
 
 	if math.max(ImageWidth, ImageHeight) > RobloxMaxImageSize then -- Compensate roblox size
 		local Longest = ImageWidth > ImageHeight and "Width" or "Height"
@@ -43,7 +43,7 @@ function Sprite.Animate(image: ImageLabel, frameSize: Vector2, frames: Vector2, 
 	end
 	
 	local SingleFrameSize = Vector2.new(RealWidth/frames.Y, RealWidth/frames.X)
-    local TotalFrames = frames.X * frames.Y
+    local TotalFrames = frameNumber
 
 	image.ImageRectSize = SingleFrameSize
 	
