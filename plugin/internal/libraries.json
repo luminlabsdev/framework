@@ -1,10 +1,11 @@
 {
     "Spring": "https://raw.githubusercontent.com/Fraktality/spr/master/spr.lua",
     "Promise": "https://raw.githubusercontent.com/evaera/roblox-lua-promise/master/lib/init.lua",
-    "Base64": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/plugin/internal/libraries/base64.lua",
+    "Base64": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/libraries/base64.lua",
     "Trove": "https://raw.githubusercontent.com/Sleitnick/RbxUtil/main/modules/trove/init.lua",
     "EnumList": "https://raw.githubusercontent.com/Sleitnick/RbxUtil/main/modules/enum-list/init.lua",
     "TableUtil": "https://raw.githubusercontent.com/Sleitnick/RbxUtil/main/modules/table-util/init.lua",
     "RemotePacketSizeCount": "https://raw.githubusercontent.com/PysephWasntAvailable/RemotePacketSizeCounter/main/src/init.luau",
-    "Log": "https://raw.githubusercontent.com/Sleitnick/RbxUtil/main/modules/log/init.lua"
+    "Log": "https://raw.githubusercontent.com/Sleitnick/RbxUtil/main/modules/log/init.lua",
+    "Sprite": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/libraries/sprite.lua"
 }
