@@ -31,7 +31,7 @@ local SignalControllerObject = { }
 	@readonly
 	@private
 
-	@prop _Signal ScriptSignal<any>
+	@prop _Signal SignalController<any>
 	@within SignalControllerObject
 ]=]
 
@@ -82,7 +82,7 @@ end
 	Connects a function to the event that is fired when another script fires the controller.
 
 	@param func (data: {any}) -> () -- The function to call when data is recieved
-	@return ScriptConnection
+	@return ControllerConnection
 ]=]
 function SignalControllerObject:Connect(func: (data: {any}?) -> ())
 	return self._Signal:Connect(func)
@@ -92,7 +92,7 @@ end
 	Connects a function to the event that is fired when another script fires the controller. When using `:Once`, the function is only run the first time and then the connection is disconnected automatically.
 
 	@param func (data: {any}) -> () -- The function to call when data is recieved
-	@return ScriptConnection
+	@return ControllerConnection
 ]=]
 function SignalControllerObject:Once(func: (data: {any}?) -> ())
 	return self._Signal:Once(func)

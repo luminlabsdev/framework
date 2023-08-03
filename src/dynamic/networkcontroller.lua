@@ -29,7 +29,7 @@ local NetworkControllerClient = { }
 
 	@private
 
-	@prop _Connections {ScriptConnection}
+	@prop _Connections {ControllerConnection}
 	@within NetworkControllerClient
 ]=]
 
@@ -65,7 +65,7 @@ local NetworkControllerServer = { }
 
 	@private
 
-	@prop _Connections {ScriptConnection}
+	@prop _Connections {ControllerConnection}
 	@within NetworkControllerServer
 ]=]
 
@@ -150,7 +150,7 @@ end
 	Connects a function to the event that is fired when the server fires the network controller. When using `:Once`, the function is only run the first time and then the connection is disconnected automatically.
 
 	@param func (data: {any}) -> () -- The function to call when data is recieved from the server
-	@return ScriptConnection
+	@return ControllerConnection
 ]=]
 function NetworkControllerClient:Once(func: (data: {any}?) -> ())
 	local Connection = self._Bridge:Connect(func)
@@ -163,7 +163,7 @@ end
 	Connects a function to the event that is fired when the server fires the network controller.
 
 	@param func (data: {any}) -> () -- The function to call when data is recieved from the server
-	@return ScriptConnection
+	@return ControllerConnection
 ]=]
 function NetworkControllerClient:Connect(func: (data: {any}?) -> ())
 	local Connection = self._Bridge:Connect(func)
@@ -286,7 +286,7 @@ end
 	Connects a function to the event that is fired when the client fires the network controller. When using `:Once`, the function is only run the first time and then the connection is disconnected automatically.
 
 	@param func (sender: Player, data: {any}) -> () -- The function to call when data is recieved from the client
-	@return ScriptConnection
+	@return ControllerConnection
 ]=]
 function NetworkControllerServer:Once(func: (sender: Player, data: {any}?) -> ())
 	local Connection = self._Bridge:Once(func)
@@ -299,7 +299,7 @@ end
 	Connects a function to the event that is fired when the server fires the network controller.
 
 	@param func (sender: Player, data: {any}) -> () -- The function to call when data is recieved from the server
-	@return ScriptConnection
+	@return ControllerConnection
 ]=]
 function NetworkControllerServer:Connect(func: (sender: Player, data: {any}?) -> ())
 	local Connection = self._Bridge:Connect(func)

@@ -54,7 +54,7 @@ local ProfileStoreObject = { }
 	
 	@within ProfileStoreObject
 	@tag Event
-	@prop SessionLockClaimed ScriptSignal<Player>
+	@prop SessionLockClaimed SignalController<Player>
 ]=]
 
 --[=[
@@ -62,7 +62,7 @@ local ProfileStoreObject = { }
 	
 	@within ProfileStoreObject
 	@tag Event
-	@prop SessionLockUnclaimed ScriptSignal<Player>
+	@prop SessionLockUnclaimed SignalController<Player>
 ]=]
 
 --[=[
@@ -86,7 +86,7 @@ local ProfileObject = { }
 	
 	@within ProfileObject
 	@tag Event
-	@prop GlobalKeyAdded ScriptSignal<GlobalKey>
+	@prop GlobalKeyAdded SignalController<GlobalKey>
 ]=]
 
 --[=[
@@ -153,8 +153,8 @@ function EasyProfile.CreateProfileStore(name: string?, defaultPlayerData: {[stri
 	IsProfileStoreAlreadyLoaded = true
 	CurrentLoadedProfileStore = ProfileStore
 
-	ProfileStoreObject.SessionLockClaimed = Signal.NewController("SessionLockClaimed") :: Types.ScriptSignal<Player>
-	ProfileStoreObject.SessionLockUnclaimed = Signal.NewController("SessionLockUnclaimed") :: Types.ScriptSignal<Player>
+	ProfileStoreObject.SessionLockClaimed = Signal.NewController("SessionLockClaimed") :: Types.SignalController<Player>
+	ProfileStoreObject.SessionLockUnclaimed = Signal.NewController("SessionLockUnclaimed") :: Types.SignalController<Player>
 
 	ProfileStoreObject._Pattern = keyPattern
 
@@ -231,7 +231,7 @@ function ProfileStoreObject:LoadProfileAsync(player: Player, reconcileData: bool
 	local LoadedPlayerProfile = CurrentLoadedProfileStore:LoadProfileAsync(string.format(self._Pattern, player.UserId), profileClaimedHandler)
 	local Success = true
 
-	ProfileObject.GlobalKeyAdded = Signal.NewController("GlobalKeyAdded") :: Types.ScriptSignal<GlobalKey>
+	ProfileObject.GlobalKeyAdded = Signal.NewController("GlobalKeyAdded") :: Types.SignalController<GlobalKey>
 
 	if not LoadedPlayerProfile then
 		player:Kick(`Data for user {player.UserId} could not be loaded, other JobId is trying to load this data already`)

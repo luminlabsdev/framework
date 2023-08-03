@@ -10,7 +10,7 @@ local Types = { }
 --[=[
 	A controller connection, similar to an [RBXScriptConnection]
 
-	@field Disconnect (self: ScriptConnection) -> ()
+	@field Disconnect (self: ControllerConnection) -> ()
 	@field Connected boolean
 
 	@interface ControllerConnection

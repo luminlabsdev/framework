@@ -10,7 +10,7 @@ local CanaryEngine = { }
 --[=[
 	The runtime property contains settings that are set during runtime, and the current context of the server/client.
 
-	@prop Runtime {RuntimeSettings: RuntimeSettings, RuntimeContext: RuntimeContext, RuntimeObjects: {NetworkControllers: {[string]: (ServerNetworkController | ServerNetworkController)}, SignalControllers: {[string]: ScriptSignal}}}
+	@prop Runtime {RuntimeSettings: RuntimeSettings, RuntimeContext: RuntimeContext, RuntimeObjects: {NetworkControllers: {[string]: (ServerNetworkController<any, any> | ServerNetworkController<any, any>)}, SignalControllers: {[string]: SignalController<any>}}}
 
 	@readonly
 	@within CanaryEngine
@@ -286,12 +286,12 @@ CanaryEngine.Types = Types
 
 	@field GetEngineServer () -> (EngineServer),
 	@field GetEngineClient () -> (EngineClient),
-	@field CreateSignal (signalName: string) -> (ScriptSignal<any>),
-	@field CreateAnonymousSignal () -> (ScriptSignal<any>),
+	@field CreateSignal (signalName: string) -> (SignalController<any>),
+	@field CreateAnonymousSignal () -> (SignalController<any>),
 	@field GetLatestPackageVersionAsync (CanaryEngine: Instance, warnIfNotLatestVersion: boolean?, respectDebugger: boolean?) -> (number?),
-	@field Runtime {RuntimeSettings: {StudioDebugEnabled: boolean, Version: number, LiveGameDebugger: boolean}, RuntimeContext: {Studio: boolean, Server: boolean, Client: boolean, StudioPlay: boolean}, RuntimeObjects: },
+	@field Runtime {RuntimeSettings: {StudioDebugEnabled: boolean, Version: number, LiveGameDebugger: boolean}, RuntimeContext: {Studio: boolean, Server: boolean, Client: boolean, StudioPlay: boolean}, RuntimeObjects: {NetworkControllers: {[string]: (ServerNetworkController<any, any> | ServerNetworkController<any, any>)}, SignalControllers: {[string]: SignalController<any>}}},
 	@field Libraries {Utility: Utility, Benchmark: Benchmark, Statistics: Statistics, Serialize: Serialize}
-	@field RuntimeCreatedSignals {[string]: ScriptSignal<any>}
+	@field RuntimeCreatedSignals {[string]: SignalController<any>}
 	@field RuntimeCreatedNetworkControllers {[string]: ServerNetworkController<any, any> | ClientNetworkController<any, any>}
 
 	@interface CanaryEngine
@@ -304,8 +304,8 @@ type CanaryEngine = {
 	GetEngineClient: () -> (EngineClient),
 	GetEngineReplicated: () -> (EngineReplicated),
 	 
-	CreateSignal: (signalName: string) -> (Types.ScriptSignal<any>),
-	CreateAnonymousSignal: () -> (Types.ScriptSignal<any>),
+	CreateSignal: (signalName: string) -> (Types.SignalController<any>),
+	CreateAnonymousSignal: () -> (Types.SignalController<any>),
 
 	GetLatestPackageVersionAsync: (package: Instance, warnIfNotLatestVersion: boolean?, respectDebugger: boolean?) -> (number?),
 
@@ -325,7 +325,7 @@ type CanaryEngine = {
 
 		RuntimeObjects: {
 			NetworkControllers: {[string]: Types.ServerNetworkController<any, any> | Types.ClientNetworkController<any, any>},
-			SignalControllers: {[string]: Types.ScriptSignal<any>}
+			SignalControllers: {[string]: Types.SignalController<any>}
 		},
 	},
 
@@ -336,7 +336,7 @@ type CanaryEngine = {
 		Serialize: typeof(Serialize),
 	},
 	 
-	RuntimeCreatedSignals: {[string]: Types.ScriptSignal<any>},
+	RuntimeCreatedSignals: {[string]: Types.SignalController<any>},
 	RuntimeCreatedNetworkControllers: {[string]: Types.ServerNetworkController<any, any> | Types.ClientNetworkController<any, any>}
 }
 
@@ -481,9 +481,9 @@ end
 	Creates a new signal that is then given a reference in the signals table. Create a new anonymous signal by leaving the name blank.
 	
 	@param signalName string -- The name of the signal
-	@return ScriptSignal<any>
+	@return SignalController<any>
 ]=]
-function CanaryEngine.CreateSignal(signalName: string?): Types.ScriptSignal<any>
+function CanaryEngine.CreateSignal(signalName: string?): Types.SignalController<any>
 	if not signalName then
 		return Signal.NewController("Anonymous")
 	end
@@ -500,9 +500,9 @@ end
 --[=[
 	Creates a new anonymous signal, this does not have a reference outside of the variable it was created in.
 	
-	@return ScriptSignal<any>
+	@return SignalController<any>
 ]=]
-function CanaryEngine.CreateAnonymousSignal(): Types.ScriptSignal<any>
+function CanaryEngine.CreateAnonymousSignal(): Types.SignalController<any>
 	return Signal.NewController("Anonymous")
 end
 
