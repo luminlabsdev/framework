@@ -88,6 +88,8 @@ local Vendor = script.Vendor
 
 -- // Variables
 
+local PlayerService = game:GetService("Players")
+
 local BridgeNet = require(Vendor.BridgeNet2)
 local Controllers = require(script.Parent.Parent)
 
@@ -252,6 +254,18 @@ function NetworkControllerServer:FireExcept(except: Player | {Player}, data: ({a
 	end
 
 	self._Bridge:Fire(BridgeNet.PlayersExcept(except), Controllers.SanitizeData(data))
+end
+
+function NetworkControllerServer:FireInRange(comparePoint: Vector3, maximumRange: number, data: ({any} | any)?)
+	local PlayersToFireTo = { }
+
+	for _, player: Player in PlayerService:GetPlayers() do
+		if player:DistanceFromCharacter(comparePoint) <= maximumRange then
+			table.insert(PlayersToFireTo, player)
+		end
+	end
+
+	self:Fire(PlayersToFireTo, data)
 end
 
 --[=[
