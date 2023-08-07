@@ -1,5 +1,25 @@
 # Changelog
 
+## v3.2.4
+
+**Added**
+
+* `AnonymousSignals` ([#2](https://github.com/canary-development/CanaryEngine/pull/2), [koxx12](https://github.com/koxx12-dev))
+* `EngineReplicatedFirst`
+* Add new default loading screen
+
+**Improvements**
+
+* Fix all plugin bugs, now runs faster
+* Fix signals erroring constantly
+* Fix small bugs
+* Improve typings
+* Updated Benchmark + Debugger modules
+
+**Removed**
+
+Nothing!
+
 ## v3.1.4
 
 **Added**

@@ -84,6 +84,9 @@ export type ClientNetworkController<T, U> = {
 	@field Wait (self: ServerNetworkController<T, U>?) -> (Player, {T})
 	
 	@field Fire (self: ServerNetworkController<T, U>?, recipient: Player | {Player}, data: ({T} | T)?) -> ()
+	@field FireAll (self: ServerNetworkController<T, U>?, data: ({T} | T)?) -> ()
+	@field FireExcept (self: ServerNetworkController<T, U>?, except: Player | {Player}, data: ({T} | T)?) -> ()
+	@field FireInRange (self: ServerNetworkController<T, U>?, comparePoint: Vector3, maximumRange: number, data: ({T} | T)?) -> ()
 	@field OnInvoke (self: ServerNetworkController<T, U>?, callback: (sender: Player, data: {T}) -> ()) -> ()
 	
 	@field SetRateLimit (self: ServerNetworkController<T, U>?, maxInvokesPerSecond: number, invokeOverflowCallback: (sender: Player) -> ()) -> ()

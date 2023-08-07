@@ -256,6 +256,13 @@ function NetworkControllerServer:FireExcept(except: Player | {Player}, data: ({a
 	self._Bridge:Fire(BridgeNet.PlayersExcept(except), Controllers.SanitizeData(data))
 end
 
+--[=[
+	Fires an event which sends data to every client that is within `maximumRange` studs from `comparePoint`.
+
+	@param comparePoint Vector3 -- The point to compare from, can be a standalone Vector3 or a part's Vector3
+	@param maximumRange number -- The maximum range of which the player's characters have to be within to recieve the event
+	@param data ({any} | any)? -- The data that should be sent to each player within `maximumRange`
+]=]
 function NetworkControllerServer:FireInRange(comparePoint: Vector3, maximumRange: number, data: ({any} | any)?)
 	local PlayersToFireTo = { }
 
