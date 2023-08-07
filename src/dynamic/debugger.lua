@@ -94,7 +94,7 @@ function Debugger.GetCallStack(instance: Instance, stackName: string?): {[string
 	
 	StackTable.Name = stackName
 	StackTable.Source = Source
-	StackTable.DefinedLine = DefinedLine[#DefinedLine]
+	StackTable.DefinedLine = DefinedLine[#DefinedLine]:gsub("\n", "")
 	StackTable.Type = "Lua"
 	
 	Debugger.CachedStackTraces[stackName] = StackTable
