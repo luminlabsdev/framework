@@ -68,12 +68,27 @@ end
 	@param debugHandler (...string | string) -> () -- The function to run on debug, for example `Debugger.Debug(print, "Hello, world!")`
 	@param arguments {string} | string -- The contents to be passed to the function
 ]=]
-function Debugger.Debug(debugHandler: (...string | string) -> (), arguments: {string} | string)
+function Debugger.Debug<T>(debugHandler: (...string | T) -> (), arguments: {string} | T, prefix: string?, respectDebugger: boolean?)
+	prefix = prefix or Prefix
+
+	if respectDebugger == nil then
+		respectDebugger = true
+	end
+
+	if not respectDebugger then
+		if type(arguments) == "table" then
+			debugHandler(`{prefix}{table.unpack(arguments)}`)
+		else
+			debugHandler(`{prefix}{arguments}`)
+		end
+		return
+	end
+
 	if (RuntimeContext.Studio and RuntimeSettings.StudioDebugEnabled) or RuntimeSettings.LiveGameDebugger then
 		if type(arguments) == "table" then
-			debugHandler(`{Prefix}{table.unpack(arguments)}`)
+			debugHandler(`{prefix}{table.unpack(arguments)}`)
 		else
-			debugHandler(`{Prefix}{arguments}`)
+			debugHandler(`{prefix}{arguments}`)
 		end
 	end
 end
