@@ -33,16 +33,21 @@ local function GetAncestorsUntilParentFolder(instance: Instance): string
 		table.insert(Ancestors, instance)
 	until table.find(ValidCallstackNames, instance.Name) and instance:IsA("Folder")
 
-	for _, ancestor in Ancestors do
+	for index = #Ancestors, 1, -1 do
+		local ancestor = Ancestors[index]
+
 		if CompleteString == "" then
 			CompleteString = ancestor.Name
 			continue
 		end
 
+		if index == 1 then
+			CompleteString = `{CompleteString}.{instance.Name}`
+			return CompleteString
+		end
+
 		CompleteString = `{CompleteString}.{ancestor.Name}`
 	end
-
-	return CompleteString
 end
 
 --[=[
@@ -61,6 +66,12 @@ function Debugger.Debug(debugHandler: (...string | string) -> (), arguments: {st
 	end
 end
 
+--[=[
+	Gets the call stack of any instance.
+
+	@param instance Instance -- The instance to start at
+	@return string
+]=]
 function Debugger.GetCallStack(instance: Instance): string
 	return GetAncestorsUntilParentFolder(instance)
 end

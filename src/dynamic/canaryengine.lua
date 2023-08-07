@@ -286,13 +286,14 @@ CanaryEngine.Types = Types
 --[=[
 	This is the main API for CanaryEngine
 
-	@field GetEngineServer () -> (EngineServer),
-	@field GetEngineClient () -> (EngineClient),
-	@field CreateSignal (signalName: string) -> (SignalController<any>),
-	@field CreateAnonymousSignal () -> (SignalController<any>),
-	@field GetLatestPackageVersionAsync (CanaryEngine: Instance, warnIfNotLatestVersion: boolean?, respectDebugger: boolean?) -> (number?),
-	@field Runtime {RuntimeSettings: {StudioDebugEnabled: boolean, Version: number, LiveGameDebugger: boolean}, RuntimeContext: {Studio: boolean, Server: boolean, Client: boolean, StudioPlay: boolean}, RuntimeObjects: {NetworkControllers: {[string]: (ServerNetworkController<any, any> | ServerNetworkController<any, any>)}, SignalControllers: {[string]: SignalController<any>}}},
+	@field GetEngineServer () -> (EngineServer)
+	@field GetEngineClient () -> (EngineClient)
+	@field CreateSignal (signalName: string) -> (SignalController<any>)
+	@field CreateAnonymousSignal () -> (SignalController<any>)
+	@field GetLatestPackageVersionAsync (CanaryEngine: Instance, warnIfNotLatestVersion: boolean?, respectDebugger: boolean?) -> (number?)
+	@field Runtime {RuntimeSettings: {StudioDebugEnabled: boolean, Version: number, LiveGameDebugger: boolean}, RuntimeContext: {Studio: boolean, Server: boolean, Client: boolean, StudioPlay: boolean}, RuntimeObjects: {NetworkControllers: {[string]: (ServerNetworkController<any, any> | ServerNetworkController<any, any>)}, SignalControllers: {[string]: SignalController<any>}}}
 	@field Libraries {Utility: Utility, Benchmark: Benchmark, Statistics: Statistics, Serialize: Serialize, Fusion: Fusion}
+	@field Debugger Debugger
 	@field RuntimeCreatedSignals {[string]: SignalController<any>}
 	@field RuntimeCreatedNetworkControllers {[string]: ServerNetworkController<any, any> | ClientNetworkController<any, any>}
 
@@ -338,9 +339,11 @@ type CanaryEngine = {
 		Serialize: typeof(Serialize),
 		Fusion: typeof(require(LibrariesFolder.Fusion)),
 	},
+
+	Debugger: typeof(Debugger),
 	 
 	RuntimeCreatedSignals: {[string]: Types.SignalController<any>},
-	RuntimeCreatedNetworkControllers: {[string]: Types.ServerNetworkController<any, any> | Types.ClientNetworkController<any, any>}
+	RuntimeCreatedNetworkControllers: {[string]: Types.ServerNetworkController<any, any> | Types.ClientNetworkController<any, any>},
 }
 
 -- // Functions
