@@ -10,14 +10,40 @@ local Debugger = { }
 -- // Variables
 
 local Runtime = require(script.Parent.Runtime)
-local Utility = require()
-
 local RuntimeContext = Runtime.Context
 local RuntimeSettings = Runtime.Settings
 
 local Prefix = "[Debugger]: "
+local ValidCallstackNames = {
+	"EngineClient",
+	"EngineServer",
+	"EngineReplicated",
+	"EngineReplicatedFirst",
+	"EngineScripts",
+}
 
 -- // Functions
+
+local function GetAncestorsUntilParentFolder(instance: Instance): string
+	local Ancestors = { }
+	local CompleteString = ""
+
+	repeat
+		instance = instance.Parent
+		table.insert(Ancestors, instance)
+	until table.find(ValidCallstackNames, instance.Name) and instance:IsA("Folder")
+
+	for _, ancestor in Ancestors do
+		if CompleteString == "" then
+			CompleteString = ancestor.Name
+			continue
+		end
+
+		CompleteString = `{CompleteString}.{ancestor.Name}`
+	end
+
+	return CompleteString
+end
 
 --[=[
 	The main debug handler, adds a prefix to logs sent out and respects logging settings.
@@ -33,6 +59,10 @@ function Debugger.Debug(debugHandler: (...string | string) -> (), arguments: {st
 			debugHandler(`{Prefix}{arguments}`)
 		end
 	end
+end
+
+function Debugger.GetCallStack(instance: Instance): string
+	return GetAncestorsUntilParentFolder(instance)
 end
 
 -- // Actions
