@@ -24,12 +24,27 @@ local ValidCallstackNames = {
 
 -- // Functions
 
+local function dictionaryLen(d: {[any]: any})
+	return setmetatable(d, {
+		__len = function(t)
+			local count = 0
+			for key, value in pairs(d) do
+				count += 1
+			end
+			return count
+		end,
+	})
+end
+
+Debugger.CachedStackTraces = dictionaryLen({ })
+
 local function GetAncestorsUntilParentFolder(instance: Instance): string
 	local Ancestors = { }
+	local OriginalInstance = instance
 	local CompleteString = ""
 
 	repeat
-		instance = instance.Parent
+		instance = instance.Parent :: Instance
 		table.insert(Ancestors, instance)
 	until table.find(ValidCallstackNames, instance.Name) and instance:IsA("Folder")
 
@@ -41,13 +56,10 @@ local function GetAncestorsUntilParentFolder(instance: Instance): string
 			continue
 		end
 
-		if index == 1 then
-			CompleteString = `{CompleteString}.{instance.Name}`
-			return CompleteString
-		end
-
 		CompleteString = `{CompleteString}.{ancestor.Name}`
 	end
+	
+	return `{CompleteString}.{OriginalInstance.Name}`
 end
 
 --[=[
@@ -72,8 +84,22 @@ end
 	@param instance Instance -- The instance to start at
 	@return string
 ]=]
-function Debugger.GetCallStack(instance: Instance): string
-	return GetAncestorsUntilParentFolder(instance)
+function Debugger.GetCallStack(instance: Instance, stackName: string?): {[string]: string | number}
+	stackName = stackName or `Stack{#Debugger.CachedStackTraces + 1}`
+	
+	local Source = GetAncestorsUntilParentFolder(instance)
+	local DefinedLine = debug.traceback():split(":")
+	
+	local StackTable = { }
+	
+	StackTable.Name = stackName
+	StackTable.Source = Source
+	StackTable.DefinedLine = DefinedLine[#DefinedLine]
+	StackTable.Type = "Lua"
+	
+	Debugger.CachedStackTraces[stackName] = StackTable
+	
+	return StackTable
 end
 
 -- // Actions
