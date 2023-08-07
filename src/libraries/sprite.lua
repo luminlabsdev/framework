@@ -10,8 +10,9 @@ local RobloxMaxImageSize = 1024
 	Animates the given sprite to play like a GIF.
 
 	@param image ImageLabel -- The image label that the sprite should be animated on
-	@param frameSize Vector2 -- The size of each individual frame
+	@param imageSize Vector2 -- The size of the image
 	@param frames Vector2 -- The amount of frames on both the X and Y axis
+	@param frameNumber number -- The amount of frames in the sprite
 	@param fps number? -- The amount of frames per second that the sprite should be played at. Defaults to 30
 	@param imageId string? -- The image id that the image label should be set to, defaults to the initial image of the image label
 ]=]
