@@ -1,51 +1,38 @@
 -- // Package
 
+--[=[
+	The parent of all classes.
+
+	@class Debugger
+]=]
 local Debugger = { }
 
 -- // Variables
 
 local Runtime = require(script.Parent.Runtime)
+local Utility = require()
 
 local RuntimeContext = Runtime.Context
 local RuntimeSettings = Runtime.Settings
 
-local Prefix = "[Debugger]:"
-
-local ValidDebugFunctionList = {
-	["warn"] = warn;
-	["print"] = print;
-	["error"] = error;
-}
+local Prefix = "[Debugger]: "
 
 -- // Functions
 
-local function IsStudioAndDebugEnabled(debugType: "print" | "warn" | "error", ...: any)
-	if (RuntimeContext.Studio and RuntimeSettings.StudioDebugEnabled) or (RuntimeSettings.LiveGameDebugger) then
-		if debugType ~= "error" then
-			ValidDebugFunctionList[debugType](Prefix, ...)
-			return
+--[=[
+	The main debug handler, adds a prefix to logs sent out and respects logging settings.
+
+	@param debugHandler (...string | string) -> () -- The function to run on debug, for example `Debugger.Debug(print, "Hello, world!")`
+	@param arguments {string} | string -- The contents to be passed to the function
+]=]
+function Debugger.Debug(debugHandler: (...string | string) -> (), arguments: {string} | string)
+	if (RuntimeContext.Studio and RuntimeSettings.StudioDebugEnabled) or RuntimeSettings.LiveGameDebugger then
+		if type(arguments) == "table" then
+			debugHandler(`{Prefix}{table.unpack(arguments)}`)
+		else
+			debugHandler(`{Prefix}{arguments}`)
 		end
-		
-		ValidDebugFunctionList.error(string.format("%s %s", Prefix, ...), 0)
 	end
-end
-
-function Debugger.print(...: any)
-	IsStudioAndDebugEnabled("print", ...)
-end
-
-function Debugger.warn(...: any)
-	IsStudioAndDebugEnabled("warn", ...)
-end
-
-function Debugger.silenterror<T>(msg: T)
-	local thread = task.spawn(error, msg, 0)
-	task.cancel(thread)
-	thread = nil
-end
-
-function Debugger.error<T>(msg: T)
-	IsStudioAndDebugEnabled("error", msg)
 end
 
 -- // Actions

@@ -98,7 +98,7 @@ end
 ]=]
 function Utility.IsDictionary(t: {any}): boolean
 	if type(t) ~= "table" then
-		Debugger.error(`Field 't' expected table, got {typeof(t)}.`)
+		Debugger.Debug(error, `Field 't' expected table, got {typeof(t)}.`)
 		return false
 	end
 	return not t[1]
@@ -130,7 +130,7 @@ end
 ]=]
 function Utility.ArrayToDictionary<a, b>(t: {[number]: {a | b}}): {[a]: b}?
 	if Utility.IsDictionary(t) then
-		Debugger.error(`Field 't' expected array, got {typeof(t)}.`)
+		Debugger.Debug(error, `Field 't' expected array, got {typeof(t)}.`)
 		return
 	end
 
@@ -150,7 +150,7 @@ end
 ]=]
 function Utility.dictionaryLen(d: {[any]: any})
 	if not Utility.IsDictionary(d) then
-		Debugger.error("Field 'd' must be a dictionary.")
+		Debugger.Debug(error, "Field 'd' must be a dictionary.")
 	end
 	setmetatable(d, {
 		__len = function(t)
@@ -285,12 +285,12 @@ function Utility.TableToString(t: {[any]: any}, sep: string?, i: number?, j: num
 
 	if not Utility.IsDictionary(t) then
 		if i <= 0 or i > #t then
-			Debugger.error(`Field 'i' must be greater than 0 and less than or equal to {#t}.`)
+			Debugger.Debug(error, `Field 'i' must be greater than 0 and less than or equal to {#t}.`)
 			return
 		end
 
 		if j <= 0 or j > #t then
-			Debugger.error(`Field 'j' must be greater than 0 and less than or equal to {#t}.`)
+			Debugger.Debug(error, `Field 'j' must be greater than 0 and less than or equal to {#t}.`)
 			return
 		end
 	end

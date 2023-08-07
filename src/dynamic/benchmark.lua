@@ -105,7 +105,7 @@ end
 ]=]
 function BenchmarkObject:SetFunction(timesToRun: number, func: (timesRan: number) -> ()): BenchmarkData
 	if timesToRun <= 0 then
-		Debugger.error("Field 'timesToRun' must be greater than 0.")
+		Debugger.Debug(error, "Field 'timesToRun' must be greater than 0.")
 	end
 
 	local CollectedBenchmarkData = { }
@@ -166,7 +166,7 @@ end
 ]=]
 function BenchmarkObject:GetCurrentTime(): number?
 	if self.IsCompleted then
-		Debugger.warn("Benchmark timer must still be running to view the current time.")
+		Debugger.Debug(warn, "Benchmark timer must still be running to view the current time.")
 		return
 	end
 

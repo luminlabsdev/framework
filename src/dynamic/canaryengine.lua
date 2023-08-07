@@ -280,6 +280,7 @@ CanaryEngine.Libraries = table.freeze({
 	Fusion = require(LibrariesFolder.Fusion),
 })
 
+CanaryEngine.Debugger = Debugger
 CanaryEngine.Types = Types
 
 --[=[
@@ -352,7 +353,7 @@ type CanaryEngine = {
 ]=]
 function CanaryEngine.GetEngineServer(): EngineServer?
 	if not RuntimeContext.Server then
-		Debugger.error("Failed to fetch 'EngineServer', context must be server")
+		Debugger.Debug(error, "Failed to fetch 'EngineServer', context must be server")
 		return nil
 	end
 
@@ -383,7 +384,7 @@ end
 ]=]
 function CanaryEngine.GetEngineClient(): EngineClient?
 	if not RuntimeContext.Client then
-		Debugger.error("Failed to fetch 'EngineClient', Context must be client.")
+		Debugger.Debug(error, "Failed to fetch 'EngineClient', Context must be client.")
 		return nil
 	end
 
@@ -572,7 +573,7 @@ function CanaryEngine.GetLatestPackageVersionAsync(package: Instance, warnIfNotL
 	if SplitFetchedVersion ~= package:GetAttribute("VersionNumber") then
 		if warnIfNotLatestVersion then
 			if respectDebugger then
-				Debugger.warn(`Package '{MarketplaceInfo.Name}' is not up-to-date. Available version: {SplitFetchedVersion}`)
+				Debugger.Debug(warn, `Package '{MarketplaceInfo.Name}' is not up-to-date. Available version: {SplitFetchedVersion}`)
 				return SplitFetchedVersion
 			end
 			warn(`Package '{MarketplaceInfo.Name}' is not up-to-date. Available version: {SplitFetchedVersion}`)
@@ -580,7 +581,7 @@ function CanaryEngine.GetLatestPackageVersionAsync(package: Instance, warnIfNotL
 		return SplitFetchedVersion
 	end
 
-	Debugger.print(`Package '{MarketplaceInfo.Name}' is up-to-date.`)
+	Debugger.Debug(print, `Package '{MarketplaceInfo.Name}' is up-to-date.`)
 
 	return SplitFetchedVersion
 end

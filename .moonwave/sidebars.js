@@ -23,7 +23,8 @@ module.exports = {
             "tutorials/structure",
             "tutorials/customsignals",
             "tutorials/networking",
-            "tutorials/datastoring"
+            "tutorials/datastoring",
+            "tutorials/styleguide"
         ],
       },
       {
