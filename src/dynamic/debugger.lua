@@ -86,7 +86,7 @@ function Debugger.Debug<T>(debugHandler: (T, ...any) -> (), arguments: {T} | T, 
 
 	if (RuntimeContext.Studio and RuntimeSettings.StudioDebugEnabled) or RuntimeSettings.LiveGameDebugger then
 		if type(arguments) == "table" then
-			debugHandler(`{prefix}{table.unpack(arguments)}`)
+			debugHandler(`{prefix}`, table.unpack(arguments))
 		else
 			debugHandler(`{prefix}{arguments}`)
 		end
