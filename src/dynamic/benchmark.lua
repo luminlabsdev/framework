@@ -135,8 +135,6 @@ end
 
 --[=[
 	Starts the benchmark object.
-
-	@deprecated 3.2.4 -- Deprecated, use BenchmarkObject:SetFunction instead
 ]=]
 function BenchmarkObject:Start()
 	self.StartTime = os.clock()
@@ -145,7 +143,6 @@ end
 --[=[
 	Stops the benchmark from running and destroys it, returns the amount of time it took to complete the code above it.
 
-	@deprecated 3.2.4 -- Deprecated, use BenchmarkObject:SetFunction instead
 	@return number
 ]=]
 function BenchmarkObject:Stop(): number
