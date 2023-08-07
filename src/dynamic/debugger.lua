@@ -13,7 +13,7 @@ local Runtime = require(script.Parent.Runtime)
 local RuntimeContext = Runtime.Context
 local RuntimeSettings = Runtime.Settings
 
-local Prefix = "[Debugger]: "
+local Prefix = "[Debugger]:"
 local ValidCallstackNames = {
 	"EngineClient",
 	"EngineServer",
@@ -79,7 +79,7 @@ function Debugger.Debug<T>(debugHandler: (T | string, ...any) -> (), arguments: 
 		if type(arguments) == "table" then
 			debugHandler(prefix, table.unpack(arguments))
 		else
-			debugHandler(`{prefix}{arguments}`)
+			debugHandler(`{prefix} {arguments}`)
 		end
 		return
 	end
@@ -88,7 +88,7 @@ function Debugger.Debug<T>(debugHandler: (T | string, ...any) -> (), arguments: 
 		if type(arguments) == "table" then
 			debugHandler(prefix, table.unpack(arguments))
 		else
-			debugHandler(`{prefix}{arguments}`)
+			debugHandler(`{prefix} {arguments}`)
 		end
 	end
 end
