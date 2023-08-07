@@ -241,4 +241,4 @@ function Base64.decode(Data)
 	return table.concat(Output)
 end
 
-return base64
+return Base64
