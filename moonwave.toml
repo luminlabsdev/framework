@@ -34,14 +34,14 @@ collapsed = true
 classes = ["EasyProfile", "ProfileStoreObject", "ProfileObject"]
 
 [[classOrder]]
-section = "Libraries"
-collapsed = true
-classes = ["Debugger", "Sprite", "Base64"]
-
-[[classOrder]]
 section = "Benchmark"
 collapsed = true
 classes = ["Benchmark", "BenchmarkObject"]
+
+[[classOrder]]
+section = "Libraries"
+collapsed = true
+classes = ["Debugger", "Sprite", "Base64", "Statistics", "Utility"]
 
 [docusaurus]
 projectName = "CanaryEngine"

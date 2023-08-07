@@ -101,6 +101,7 @@ export type ServerNetworkController<T, U> = {
 	Fire: (self: ServerNetworkController<T, U>?, recipient: Player | {Player}, data: ({T} | T)?) -> (),
 	FireAll: (self: ServerNetworkController<T, U>?, data: ({T} | T)?) -> (),
 	FireExcept: (self: ServerNetworkController<T, U>?, except: Player | {Player}, data: ({T} | T)?) -> (),
+	FireInRange: (self: ServerNetworkController<T, U>?, comparePoint: Vector3, maximumRange: number, data: ({T} | T)?) -> (),
 	OnInvoke: (self: ServerNetworkController<T, U>?, callback: (sender: Player, data: {T}) -> ({U} | U)) -> (),
 
 	SetRateLimit: (self: ServerNetworkController<T, U>?, maxInvokesPerSecond: number, invokeOverflowCallback: (sender: Player) -> ()) -> (),
