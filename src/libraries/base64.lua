@@ -190,11 +190,22 @@ for C64 = 0, 63 do
 	DecodeM[Seq] = ""
 end
 
+--[=[
+	The parent of all classes.
+
+	@class Base64
+]=]
+local base64 = { }
+
 
 --Encode function
 
+--[=[
+	Encodes data into Base64.
 
-local function encode(Data)
+	@param Data any -- The data to encode
+]=]
+function base64.encode(Data)
 	local Output = {}
 
 	local outp = 1 --Current output index
@@ -211,8 +222,12 @@ end
 
 --Decode function
 
+--[=[
+	Decodes data out of Base64.
 
-local function decode(Data)
+	@param Data any -- The data to decode
+]=]
+function base64.decode(Data)
 	local Output = {}
 
 	local outp = 1 --Current output index
@@ -226,7 +241,4 @@ local function decode(Data)
 	return table.concat(Output)
 end
 
-return {
-	encode = encode,
-	decode = decode
-}
+return base64
