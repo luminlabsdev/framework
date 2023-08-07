@@ -68,7 +68,7 @@ end
 	@param debugHandler (...string | string) -> () -- The function to run on debug, for example `Debugger.Debug(print, "Hello, world!")`
 	@param arguments {string} | string -- The contents to be passed to the function
 ]=]
-function Debugger.Debug<T>(debugHandler: (...string | T) -> (), arguments: {string} | T, prefix: string?, respectDebugger: boolean?)
+function Debugger.Debug<T>(debugHandler: (T, ...any) -> (), arguments: {T} | T, prefix: string?, respectDebugger: boolean?)
 	prefix = prefix or Prefix
 
 	if respectDebugger == nil then
