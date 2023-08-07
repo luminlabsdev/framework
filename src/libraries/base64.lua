@@ -195,7 +195,7 @@ end
 
 	@class Base64
 ]=]
-local base64 = { }
+local Base64 = { }
 
 
 --Encode function
@@ -205,7 +205,7 @@ local base64 = { }
 
 	@param Data any -- The data to encode
 ]=]
-function base64.encode(Data)
+function Base64.encode(Data)
 	local Output = {}
 
 	local outp = 1 --Current output index
@@ -227,7 +227,7 @@ end
 
 	@param Data any -- The data to decode
 ]=]
-function base64.decode(Data)
+function Base64.decode(Data)
 	local Output = {}
 
 	local outp = 1 --Current output index
