@@ -83,6 +83,7 @@ export interface ServerNetworkController<T, U> {
     Fire(self: ServerNetworkController<T, U>, recipient: Player | {Player}, data: (T | {T}) | null): void;
     FireAll(self: ServerNetworkController<T, U>, data: (T | {T}) | null): void;
     FireExcept(self: ServerNetworkController<T, U>, except: Player | {Player}, data: (T | {T}) | null): void;
+    FireInRange(self: ServerNetworkController<T, U>, comparePoint: Vector3, maximumRange: number, data: (T | {T}) | null)
     OnInvoke(self: ServerNetworkController<T, U>, callback: (sender: Player, data: (T | {T}) | null) => U): void;
 
     SetRateLimit(self: ServerNetworkController<T, U>, maxInvokesPerSecond: number, invokeOverflowCallback: ((sender: Player) => (void)) | null);
