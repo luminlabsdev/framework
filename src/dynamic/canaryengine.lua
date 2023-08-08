@@ -218,21 +218,16 @@ type EngineClient = {
 --[=[
 	This is the global sided API for CanaryEngine.
 
-	@field Packages {Replicated: Folder}
-	@field Media {Replicated: Folder}
+	@field Packages Folder
+	@field Media Folder
 
 	@interface EngineReplicated
 	@within CanaryEngine
 	@private
 ]=]
 type EngineReplicated = {
-	Packages: {
-		Replicated: typeof(game:GetService("ReplicatedStorage").EngineReplicated.Packages),
-	},
-	
-	Media: {
-		Replicated: typeof(game:GetService("ReplicatedStorage").EngineReplicated.Media),
-	},
+	Packages: typeof(game:GetService("ReplicatedStorage").EngineReplicated.Packages),
+	Media: typeof(game:GetService("ReplicatedStorage").EngineReplicated.Media),
 }
 
 -- // Variables
