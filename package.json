@@ -1,9 +1,41 @@
 {
-    "dependencies": {
-        "@docusaurus/core": "2.4.0",
-        "@docusaurus/preset-classic": "2.4.0"
-    },
-    "devDependencies": {
-        "@rbxts/types": "^1.0.704"
-    }
+  "dependencies": {
+    "@docusaurus/core": "2.4.0",
+    "@docusaurus/preset-classic": "2.4.0"
+  },
+  "devDependencies": {
+    "@rbxts/types": "^1.0.704"
+  },
+  "name": "@rbxts/canaryengine",
+  "description": "CanaryEngine is a lightweight and performant game framework for beginners and power-users alike.",
+  "version": "3.2.4",
+  "main": "src/canaryengine.lua",
+  "typings": "src/index.d.ts",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/canary-development/CanaryEngine.git"
+  },
+  "keywords": [
+    "framework",
+    "roblox",
+    "fast",
+    "organized",
+    "simple",
+    "featurepacked",
+    "canary",
+    "canaryengine",
+    "secure"
+  ],
+  "author": "@rbxts",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/canary-development/CanaryEngine/issues"
+  },
+  "homepage": "https://canary-development.github.io/CanaryEngine"
 }
