@@ -1,3 +1,9 @@
+---
+title: About
+description: A page for extra information on how CanaryEngine works and what it is
+keywords: [roblox, game, framework, info, learn]
+---
+
 # About
 
 CanaryEngine is the all new framework for all your games and projects, no matter the size of them. I've personally used it for all of my projects, and it works great despite the scale of each one. I designed the framework to have a super optimized networking and signal system. It combines the usage of @ffrostfall's BridgeNet2 and and @stravant's GoodSignal modules, which helps it be optimized by a ton.

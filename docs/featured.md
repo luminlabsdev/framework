@@ -1,4 +1,10 @@
-# Featured Games
+---
+title: Featured
+description: Features trailers for games that use CanaryEngine, as example projects
+keywords: [roblox, game, trailer, featured, framework]
+---
+
+# Featured
 
 Here are a few games that use CanaryEngine as their game framework!
 

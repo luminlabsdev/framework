@@ -52,7 +52,7 @@ favicon = "favicon.png"
 
 [footer]
 style = "dark"
-copyright = "Copyright © 2023 Canary. Built with Moonwave and Docusaurus"
+copyright = "Copyright © 2023 Canary. Built with Moonwave"
 
 [home]
 enabled = true
@@ -60,7 +60,7 @@ includeReadme = false
 
 [[home.features]]
 title = "Type Safe 🦺"
-description = "Strictly typed, along with native support for roblox-ts."
+description = "Strictly typed, along with native support for roblox-ts that can be found on the NPM marketplace."
 
 [[home.features]]
 title = "Secure 🔐"
@@ -68,4 +68,4 @@ description = "The networking system that CanaryEngine uses can actually partial
 
 [[home.features]]
 title = "Optimized 🏃‍♀️"
-description = "Extremely optimized, and in some circumstances starting up in as little as 0.5 milliseconds!"
+description = "Extremely optimized, with most internal functions running fast along with custom signal and network implementations."

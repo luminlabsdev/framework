@@ -1,5 +1,7 @@
 ---
-sidebar-position: 1
+title: Features
+description: A list of features that CanaryEngine provides
+keywords: [roblox, game, framework, features, type safe, optimized, secure, documented]
 ---
 
 # Features

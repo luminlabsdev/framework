@@ -1,5 +1,7 @@
 ---
-sidebar-position: 4
+title: Installation
+description: A simple tutorial listing the different methods on how to install CanaryEngine
+keywords: [roblox, game, framework, install, tutorial, github, node]
 ---
 
 # Installation
@@ -16,6 +18,6 @@ sidebar-position: 4
 3. Open Roblox Studio, and drag `CanaryStudioPlugin.rbxm` from your download directory into studio.
 4. Right click the plugin, and choose `Save as Local Plugin`
 
-### Get on NPM
+### Command Line
 
 -- coming soon

@@ -1,5 +1,7 @@
 ---
-sidebar-position: 2
+title: Comparison
+description: Compares CanaryEngine to other competing frameworks, and which one is best for you
+keywords: [roblox, game, framework, compare, which, project, organization]
 ---
 
 # Comparison

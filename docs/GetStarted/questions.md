@@ -1,5 +1,7 @@
 ---
-sidebar-position: 3
+title: Questions
+description: Basic questions that many people ask and are answered
+keywords: [roblox, game, framework, install, tutorial, github, node]
 ---
 
 # Questions
