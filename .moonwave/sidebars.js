@@ -19,9 +19,11 @@ module.exports = {
         type: "category",
         label: "Tutorials",
         items: [
+            "tutorials/update",
             "tutorials/packages",
             "tutorials/structure",
             "tutorials/customsignals",
+            "tutorials/customloader",
             "tutorials/networking",
             "tutorials/datastoring",
             "tutorials/styleguide"

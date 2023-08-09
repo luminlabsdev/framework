@@ -35,7 +35,7 @@ local RunService = game:GetService("RunService")
 local HttpService = game:GetService("HttpService")
 
 local ProfileService = require(Vendor.ProfileService)
-local Types = require(script.Parent.Parent.Types)
+local Types = require(script.Parent.Parent.Parent.Types)
 local Signal = require(script.Parent.Parent.Controllers.Vendor.SignalController)
 
 local IsProfileStoreAlreadyLoaded = false

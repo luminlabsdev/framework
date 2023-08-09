@@ -205,7 +205,7 @@ local Base64 = { }
 
 	@param Data any -- The data to encode
 ]=]
-function Base64.encode(Data)
+function Base64.Encode(Data)
 	local Output = {}
 
 	local outp = 1 --Current output index
@@ -227,7 +227,7 @@ end
 
 	@param Data any -- The data to decode
 ]=]
-function Base64.decode(Data)
+function Base64.Decode(Data)
 	local Output = {}
 
 	local outp = 1 --Current output index
@@ -240,5 +240,8 @@ function Base64.decode(Data)
 
 	return table.concat(Output)
 end
+
+Base64.decode = Base64.Decode
+Base64.encode = Base64.Encode
 
 return Base64

@@ -7,6 +7,14 @@
 ]=]
 local Debugger = { }
 
+--[=[
+	The callstack type.
+
+	@type CallStack {Name: string, Source: string, DefinedLine: number}
+	@within Debugger
+]=]
+type CallStack = {Name: string, Source: string, DefinedLine: number}
+
 -- // Variables
 
 local Runtime = require(script.Parent.Runtime)
@@ -65,10 +73,12 @@ end
 --[=[
 	The main debug handler, adds a prefix to logs sent out and respects logging settings.
 
-	@param debugHandler (...string | string) -> () -- The function to run on debug, for example `Debugger.Debug(print, "Hello, world!")`
+	@param debugHandler (...T) -> () | (message: T, level: number) -> () -- The function to run on debug, for example `Debugger.Debug(print, "Hello, world!")`
 	@param arguments {string} | string -- The contents to be passed to the function
+	@param prefix string? -- The prefix to put in front of the debug
+	@param respectDebugger boolean? -- Whether or not to respect the debugger, should always be true for correct use
 ]=]
-function Debugger.Debug<T>(debugHandler: (T | string, ...any) -> (), arguments: {T} | T, prefix: string?, respectDebugger: boolean?)
+function Debugger.Debug<T>(debugHandler: (...T) -> () | (message: T, level: number) -> (), arguments: {T} | T, prefix: string?, respectDebugger: boolean?)
 	prefix = prefix or Prefix
 
 	if respectDebugger == nil then
@@ -97,9 +107,11 @@ end
 	Gets the call stack of any instance.
 
 	@param instance Instance -- The instance to start at
+	@param stackName string? -- The name of the stack, defaults to the stack number
+	
 	@return string
 ]=]
-function Debugger.GetCallStack(instance: Instance, stackName: string?): {[string]: string | number}
+function Debugger.GetCallStack(instance: Instance, stackName: string?): {Name: string, Source: string, DefinedLine: number}
 	stackName = stackName or `Stack{#Debugger.CachedStackTraces + 1}`
 	
 	local Source = GetAncestorsUntilParentFolder(instance)

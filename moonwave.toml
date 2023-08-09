@@ -21,7 +21,7 @@ position = "right"
 [[classOrder]]
 section = "CanaryEngine"
 collapsed = false
-classes = ["CanaryEngine", "CanaryEngineServer", "CanaryEngineClient", "CanaryEngineReplicated", "Types"]
+classes = ["CanaryEngine", "CanaryEngineServer", "CanaryEngineClient", "CanaryEngineReplicated", "EngineLoader", "Types"]
 
 [[classOrder]]
 section = "Controllers"

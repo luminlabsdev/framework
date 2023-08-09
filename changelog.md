@@ -1,3 +1,9 @@
+---
+title: Changelog
+description: The changelog for CanaryEngine
+keywords: [roblox, game, framework, changelog, updates]
+---
+
 # Changelog
 
 ## v3.2.4
@@ -35,6 +41,7 @@ Nothing!
 
 **Removed**
 
+* Remove `Runtime.IsStarted`
 * Deprecated `.GetLatestPackageVersionAsync`
 
 ## v3.0.1
@@ -152,13 +159,13 @@ Nothing!
 **Improvements**
 * Clean up code
 * Bug fixes
-* Fix up `random_gen
+* Fix up `random_gen`
 
 **Removed**
 
 * Remove `EngineClient.LocalObjects`
 * Remove `EngineClient.PreinstalledPackages`
-* Remove `EngineServer.PreinstalledPackages``
+* Remove `EngineServer.PreinstalledPackages`
 
 ## v1.2.0
 

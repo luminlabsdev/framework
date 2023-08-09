@@ -153,7 +153,7 @@ local CanaryEngineReplicated = { }
 
 -- // Types
 
-local Types = require(script.Vendor.Types) -- The types used for all libraries inside of the framework
+local Types = require(script.Types) -- The types used for all libraries inside of the framework
 
 --[=[
 	This is the server sided API for CanaryEngine.
@@ -276,7 +276,6 @@ CanaryEngine.Libraries = table.freeze({
 })
 
 CanaryEngine.Debugger = Debugger
-CanaryEngine.Types = Types
 
 --[=[
 	This is the main API for CanaryEngine

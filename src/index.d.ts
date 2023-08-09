@@ -1,5 +1,123 @@
 // Adding support for individual libraries soon
 
+interface ControllerConnection {
+    Disconnect(): void;
+    Connected: boolean;
+}
+
+export interface SignalController<T> {
+    Connect(func: (data: {[index: number]: T}) => (void)): ControllerConnection;
+    Wait(): {[index: number]: T};
+    Once(func: (data: {[index: number]: T}) => (void)): ControllerConnection;
+
+    Fire(data: (T | {[index: number]: T}) | undefined): void;
+
+    DisconnectAll(): void;
+    Name: string;
+}
+
+export interface ClientNetworkController<T, U> {
+    Connect(self: ClientNetworkController<T, U>, func: (data: {[index: number]: T} | undefined) => (void)): ControllerConnection;
+    Wait(self: ClientNetworkController<T, U>): {[index: number]: T} | undefined;
+    Once(self: ClientNetworkController<T, U>, func: (data: {[index: number]: T} | undefined) => (void)): ControllerConnection;
+
+    Fire(self: ClientNetworkController<T, U>, data: (T | {[index: number]: T}) | undefined): void;
+    InvokeAsync(self: ClientNetworkController<T, U>, data: (T | {[index: number]: T}) | undefined): {[index: number]: U} | undefined;
+
+    DisconnectAll(): void;
+    Name: string;
+}
+
+export interface ServerNetworkController<T, U> {
+    Connect(self: ServerNetworkController<T, U>, func: (sender: Player, data: {[index: number]: T} | undefined) => (void)): ControllerConnection;
+    Wait(self: ServerNetworkController<T, U>): [Player, {[index: number]: T} | undefined];
+    Once(self: ServerNetworkController<T, U>, func: (sender: Player, data: {[index: number]: T} | undefined) => (void)): ControllerConnection;
+
+    Fire(self: ServerNetworkController<T, U>, recipient: Player | {[index: number]: Player}, data: (T | {[index: number]: T}) | undefined): void;
+    FireAll(self: ServerNetworkController<T, U>, data: (T | {[index: number]: T}) | undefined): void;
+    FireExcept(self: ServerNetworkController<T, U>, except: Player | {[index: number]: Player}, data: (T | {[index: number]: T}) | undefined): void;
+    FireInRange(self: ServerNetworkController<T, U>, comparePoint: Vector3, maximumRange: number, data: (T | {[index: number]: T}) | undefined)
+    OnInvoke(self: ServerNetworkController<T, U>, callback: (sender: Player, data: (T | {[index: number]: T}) | undefined) => U): void;
+
+    SetRateLimit(self: ServerNetworkController<T, U>, maxInvokesPerSecond: number, invokeOverflowCallback: ((sender: Player) => (void)) | undefined);
+    DisconnectAll(): void;
+    Name: string;
+}
+
+export interface Sprite {
+    Animate(image: ImageLabel, imageSize: Vector2, frames: Vector2, fps: number | undefined, imageId: string | undefined): void;
+    StopAnimation(image: ImageLabel): void;
+}
+
+export interface Base64 {
+    Encode(data: any): string;
+    Decode(data: any): string;
+}
+
+export interface Statistics {
+    GetMedian(numberList: {number}): number;
+    GetMean(numberList: {number}): number;
+    GetMode(numberList: {number}): number;
+}
+
+type CallStack = {Name: string, Source: string, DefinedLine: number}
+
+export interface Debugger {
+    Debug<T>(debugHandler: ((...T) => (void)) | ((message: T, level: number) => (void)), arguments: {[index: number]: T} | T, prefix: string | undefined, respectDebugger: boolean | undefined): void;
+    GetCallStack(instance: Instance, stackName: string | undefined): CallStack;
+
+    CachedStackTraces: {[key: string]: CallStack}
+}
+
+type BenchmarkData = {Total: number, Longest: number, Shortest: number, Average: number};
+
+interface BenchmarkObject {
+    SetFunction(self: BenchmarkObject, timesToRun: number, func: (timesRan: number) => (void)): BenchmarkData;
+    Start(self: BenchmarkObject): void;
+    Stop(self: BenchmarkObject): void;
+    GetCurrentTime(self: BenchmarkObject): number | undefined;
+    Destroy(self: BenchmarkObject): void;
+}
+
+export interface Benchmark {
+    CreateBenchmark(): BenchmarkObject
+}
+
+export interface Serialize {
+    Serialize<T>(value: T): {[index: number]: any}
+    Deserialize<T>(value: {[index: number]: any}): T
+}
+
+export type GlobalKey = {Key: string, Value: any, KeyId: number}
+type ProfileMetaData = {ProfileCreated: number; ProfileLoadCount: number; ProfileActiveSession: {placeId: number; jobId: string;}}
+
+export interface ProfileObject {
+    GetProfileData(self: ProfileObject): {[key: string]: any} | undefined;
+    GetGlobalKeys(self: ProfileObject): {[index: number]: GlobalKey} | undefined;
+    AddUserIds(self: ProfileObject, userIds: number | {[index: number]: number}): void | undefined;
+    GetUserIds(self: ProfileObject): {[index: number]: number} | undefined;
+    RemoveUserIds(self: ProfileObject, userIds: {[index: number]: number} | undefined): void | undefined;
+    GetMetaData(self: ProfileObject): ProfileMetaData | undefined;
+    GetDataUsage(self: ProfileObject): number | undefined;
+}
+
+export interface ProfileStoreObject {
+    DeleteProfileAsync(self: ProfileStoreObject, userId: number): void;
+    GetProfileAsync(self: ProfileStoreObject, userId: number): {[key: string]: any} | undefined;
+    LoadProfileAsync(self: ProfileStoreObject, player: Player, reconcileData: boolean | undefined, profileClaimedHandler: ((placeId: number, gameJobId: string) => ("Forceload" | "Cancel")) | undefined): ProfileObject;
+    UnclaimSessionLock(self: ProfileStoreObject, player: Player, valuesToSave: {[key: string]: any} | undefined): void;
+    SetGlobalKeyAsync(self: ProfileStoreObject, userId: number, key: string, value: any): void;
+    RemoveGlobalKeyAsync(self: ProfileStoreObject, userId: number, keyId: number): void;
+
+    SessionLockClaimed: SignalController<Player>;
+    SessionLockUnclaimed: SignalController<Player>;
+}
+
+export interface EasyProfile {
+    CreateProfileStore(name: string | undefined, defaultPlayerData: {[key: string]: any}, keyPattern: string | undefined): ProfileStoreObject;
+    LoadedPlayers: {[index: number]: Player};
+}
+
 interface EngineServer {
     Packages: {
         Server: Folder
@@ -11,9 +129,7 @@ interface EngineServer {
         Replicated: Folder
     }
 
-    Matchmaking: {any}
-    Moderation: null
-    Data: {any}
+    Data: EasyProfile
 
 	CreateNetworkController(controllerName: string): ServerNetworkController<any, any>;
 }
@@ -38,57 +154,8 @@ interface EngineClient {
 }
 
 interface EngineReplicated {
-    Packages: {
-        Replicated: Folder
-    }
-
-    Media: {
-        Replicated: Folder
-    }
-}
-
-interface ControllerConnection {
-    Disconnect(): void;
-    Connected: boolean;
-}
-
-export interface SignalController<T> {
-    Connect(func: (data: {T}) => (void)): ControllerConnection;
-    Wait(): {T};
-    Once(func: (data: {T}) => (void)): ControllerConnection;
-
-    Fire(data: (T | {T}) | null): void;
-
-    DisconnectAll(): void;
-    Name: string;
-}
-
-export interface ClientNetworkController<T, U> {
-    Connect(self: ClientNetworkController<T, U>, func: (data: {T} | null) => (void)): ControllerConnection;
-    Wait(self: ClientNetworkController<T, U>): {T} | null;
-    Once(self: ClientNetworkController<T, U>, func: (data: {T} | null) => (void)): ControllerConnection;
-
-    Fire(self: ClientNetworkController<T, U>, data: (T | {T}) | null): void;
-    InvokeAsync(self: ClientNetworkController<T, U>, data: (T | {T}) | null): {U} | null;
-
-    DisconnectAll(): void;
-    Name: string;
-}
-
-export interface ServerNetworkController<T, U> {
-    Connect(self: ServerNetworkController<T, U>, func: (sender: Player, data: {T} | null) => (void)): ControllerConnection;
-    Wait(self: ServerNetworkController<T, U>): [Player, {T} | null];
-    Once(self: ServerNetworkController<T, U>, func: (sender: Player, data: {T} | null) => (void)): ControllerConnection;
-
-    Fire(self: ServerNetworkController<T, U>, recipient: Player | {Player}, data: (T | {T}) | null): void;
-    FireAll(self: ServerNetworkController<T, U>, data: (T | {T}) | null): void;
-    FireExcept(self: ServerNetworkController<T, U>, except: Player | {Player}, data: (T | {T}) | null): void;
-    FireInRange(self: ServerNetworkController<T, U>, comparePoint: Vector3, maximumRange: number, data: (T | {T}) | null)
-    OnInvoke(self: ServerNetworkController<T, U>, callback: (sender: Player, data: (T | {T}) | null) => U): void;
-
-    SetRateLimit(self: ServerNetworkController<T, U>, maxInvokesPerSecond: number, invokeOverflowCallback: ((sender: Player) => (void)) | null);
-    DisconnectAll(): void;
-    Name: string;
+    Packages: Folder
+    Media: Folder
 }
 
 export namespace CanaryEngine {
@@ -96,10 +163,10 @@ export namespace CanaryEngine {
 	export function GetEngineClient(): EngineClient;
     export function GetEngineReplicated(): EngineReplicated;
 
-	export function CreateSignal(signalName: string): SignalController<any>;
+	export function CreateSignal(signalName: string | undefined): SignalController<any>;
     export function CreateAnonymousSignal(): SignalController<any>;
 
-	export function GetLatestPackageVersionAsync(packageInstance: any, warnIfNotLatestVersion: boolean | null, respectDebugger: boolean | null): number | null;
+	export function GetLatestPackageVersionAsync(packageInstance: any, warnIfNotLatestVersion: boolean | undefined, respectDebugger: boolean | undefined): number | undefined;
 
     export let Runtime: {
         RuntimeSettings: {
@@ -128,8 +195,8 @@ export namespace CanaryEngine {
 
     export const Libraries: {
         Utility: any
-        Benchmark: any
-        Statistics: any
-        Serialize: any
+        Benchmark: Benchmark
+        Statistics: Statistics
+        Serialize: Serialize
     }
 }

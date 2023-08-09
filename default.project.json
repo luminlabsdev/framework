@@ -1,0 +1,75 @@
+{
+  "name": "CanaryEngineFramework",
+  "tree": {
+    "$className": "DataModel",
+
+    "ReplicatedStorage": {
+      "CanaryEngineFramework": {
+        "$className": "Folder",
+        "CanaryEngine": {
+            "$className": "ModuleScript"
+        }
+      },
+
+      "EngineClient": {
+        "$className": "Folder",
+        "Packages": {
+          "$className": "Folder",
+          "$path": "src/Client/Packages"
+        },
+        "Media": {
+          "$className": "Folder"
+        }
+      },
+
+      "EngineReplicated": {
+        "$className": "Folder",
+        "Packages": {
+          "$className": "Folder",
+          "$path": "src/Replicated/Packages"
+        },
+        "Media": {
+          "$className": "Folder"
+        }
+      },
+
+      "EngineScripts": {
+        "$className": "Folder",
+        "Client": {
+          "$className": "Folder",
+          "$path": "src/Client/Scripts"
+        },
+        "Server": {
+          "$className": "Folder",
+          "$path": "src/Server/Scripts"
+        }
+      }
+    },
+
+    "ReplicatedFirst": {
+        "EngineReplicatedFirst": {
+            "$className": "Folder",
+            "Internal": {
+                "$className": "Folder"
+            },
+            "Scripts": {
+                "$className": "Folder",
+                "$path": "src/ReplicatedFirst/Scripts"
+            }
+        }
+    },
+
+    "ServerStorage": {
+      "EngineServer": {
+        "$className": "Folder",
+        "Packages": {
+          "$className": "Folder",
+          "$path": "src/Server/Packages"
+        },
+        "Media": {
+          "$className": "Folder"
+        }
+      }
+    }
+  }
+}

@@ -2,7 +2,7 @@
 
 The CanaryEngine file structure aims to be easy to understand, easy to edit, and extremely customizable. Here's a look at the default file structure:
 
-![Default CanaryEngine file structure](images/default-explorer.png)
+![Default CanaryEngine file structure](images/structure-images/default-explorer.png)
 
 Notice how `Media` and `Packages` each have their own context specific folders? In each of these folders, goes the content for that context. For example, `EngineServer/Media/` shares the same behavior with [ServerStorage](https://create.roblox.com/docs/reference/engine/classes/ServerStorage). In this case, replicated shares behavior with [ReplicatedStorage](https://create.roblox.com/docs/reference/engine/classes/ReplicatedStorage).
 

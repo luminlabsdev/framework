@@ -1,14 +1,14 @@
-[
-    "Benchmark",
-	"Debugger",
-	"EasyProfile",
-	"NetworkController",
-	"Runtime",
-	"Statistics",
-	"Utility",
-    "SignalController",
-	"Controllers",
-	"CanaryEngine",
-	"Types",
-	"Signal"
-]
+{
+    "Benchmark": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/libraries/benchmark.lua",
+	"Debugger": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/libraries/debugger.lua",
+	"EasyProfile": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/internal/easyprofile.lua",
+	"NetworkController": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/internal/networkcontroller.lua",
+	"Runtime": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/internal/runtime.lua",
+	"Statistics": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/libraries/statistics.lua",
+	"Utility": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/libraries/utility.lua",
+    "SignalController": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/internal/signalcontroller.lua",
+	"Controllers": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/internal/_private/controllers.lua",
+	"CanaryEngine": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/init.lua",
+	"Types": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/internal/types.lua",
+	"Signal": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/internal/_private/signal.lua"
+}
