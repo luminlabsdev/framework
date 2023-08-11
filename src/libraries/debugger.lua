@@ -10,10 +10,24 @@ local Debugger = { }
 --[=[
 	The callstack type.
 
+	@private
+
 	@type CallStack {Name: string, Source: string, DefinedLine: number}
 	@within Debugger
 ]=]
 type CallStack = {Name: string, Source: string, DefinedLine: number}
+
+--[=[
+	This type contains every roblox user data and generic type.
+
+	@type ExpectedType "Axes" | "BrickColor" | "CatalogSearchParams" | "CFrame" | "Color3" | "ColorSequence" | "ColorSequenceKeypoint" | "Content" | "DateTime" | "DockWidgetPluginGuiInfo" | "Enum" | "EnumItem" | "Enums" | "Faces" | "FloatCurveKey" | "Font" | "Instance" | "NumberRange" | "NumberSequence" | "NumberSequenceKeyPoint" | "OverlapParams" | "PathWaypoint" | "PhysicalProperties" | "Random" | "Ray" | "RayastParams" | "RaycastResult" | "RBXScriptConnection" | "RBXScriptSignal" | "Rect" | "Region3" | "Region3int16" | "SharedTable" | "TweenInfo" | "UDim" | "UDim2" | "Vector2" | "Vector2int16" | "Vector3" | "Vector3int16" | "nil" | "boolean" | "number" | "string" | "function" | "userdata" | "thread" | "table"
+	@within Debugger
+]=]
+export type ExpectedType = "Axes" | "BrickColor" | "CatalogSearchParams" | "CFrame" | "Color3" | "ColorSequence" | "ColorSequenceKeypoint" | "Content" | "DateTime"
+| "DockWidgetPluginGuiInfo" | "Enum" | "EnumItem" | "Enums" | "Faces" | "FloatCurveKey" | "Font" | "Instance" | "NumberRange" | "NumberSequence"
+| "NumberSequenceKeyPoint" | "OverlapParams" | "PathWaypoint" | "PhysicalProperties" | "Random" | "Ray" | "RayastParams" | "RaycastResult" | "RBXScriptConnection"
+| "RBXScriptSignal" | "Rect" | "Region3" | "Region3int16" | "SharedTable" | "TweenInfo" | "UDim" | "UDim2" | "Vector2" | "Vector2int16" | "Vector3" | "Vector3int16"
+| "nil" | "boolean" | "number" | "string" | "function" | "userdata" | "thread" | "table"
 
 -- // Variables
 
@@ -56,15 +70,13 @@ local function GetAncestorsUntilParentFolder(instance: Instance): string
 		table.insert(Ancestors, instance)
 	until table.find(ValidCallstackNames, instance.Name) and instance:IsA("Folder")
 
-	for index = #Ancestors, 1, -1 do
-		local ancestor = Ancestors[index]
-
+	for _, ancestor in Ancestors do
 		if CompleteString == "" then
 			CompleteString = ancestor.Name
 			continue
 		end
 
-		CompleteString = `{CompleteString}.{ancestor.Name}`
+		CompleteString = `{ancestor.Name}.{CompleteString}`
 	end
 	
 	return `{CompleteString}.{OriginalInstance.Name}`
@@ -126,6 +138,22 @@ function Debugger.GetCallStack(instance: Instance, stackName: string?): {Name: s
 	Debugger.CachedStackTraces[stackName] = StackTable
 	
 	return StackTable
+end
+
+--[=[
+	Errors if the param does not have the same type as what is expected.
+
+	@param paramNumber number -- The number of which param errored, 1 would be the first param
+	@param funcName string -- The name of the function
+	@param expectedType ExpectedType -- The type that was expected of `param`
+	@param param T -- The param which caused the error
+]=]
+function Debugger.DebugInvalidData(paramNumber: number, funcName: string, expectedType: ExpectedType, param: unknown)
+	local ParamType = typeof(param)
+
+	if ParamType ~= expectedType then
+		error(`invalid argument #{paramNumber} to '{funcName}' ({expectedType} expected, got {ParamType})`)
+	end
 end
 
 -- // Actions

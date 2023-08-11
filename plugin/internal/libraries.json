@@ -7,5 +7,6 @@
     "RemotePacketSizeCount": "https://raw.githubusercontent.com/PysephWasntAvailable/RemotePacketSizeCounter/main/src/init.luau",
     "Log": "https://raw.githubusercontent.com/Sleitnick/RbxUtil/main/modules/log/init.lua",
     "Sprite": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/libraries/sprite.lua",
-    "TableKit": "https://raw.githubusercontent.com/ffrostflame/TableKit/master/src/init.luau"
+    "TableKit": "https://raw.githubusercontent.com/ffrostflame/TableKit/master/src/init.luau",
+    "Fetch": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/libraries/fetch.lua"
 }

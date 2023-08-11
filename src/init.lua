@@ -73,6 +73,15 @@ local CanaryEngineClient = { }
 ]=]
 
 --[=[
+	A simple reference to the [Player.Character].
+
+	@prop Character Character & Model
+	@readonly
+
+	@within CanaryEngineClient
+]=]
+
+--[=[
 	A simple reference to the [Player.PlayerGui], useful for automatic typing and API simplicity.
 
 	@prop PlayerGui StarterGui
@@ -187,6 +196,7 @@ type EngineServer = {
 	@field Packages {Client: Folder, Replicated: Folder}
 	@field Media {Client: Folder, Replicated: Folder}
 	@field Player Player
+	@field Character Character & Model
 	@field PlayerGui StarterGui
 	@field PlayerBackpack StarterPack
 	
@@ -208,6 +218,7 @@ type EngineClient = {
 	},
 
 	Player: Player,
+	Character: (Types.Character & Model)?,
 
 	PlayerGui: typeof(game:GetService("StarterGui")),
 	PlayerBackpack: typeof(game:GetService("StarterPack")),
@@ -401,6 +412,10 @@ function CanaryEngine.GetEngineClient(): EngineClient?
 	}
 
 	CanaryEngineClient.Player = Player
+
+	task.defer(function()
+		CanaryEngineClient.Character = Player.Character or Player.CharacterAdded:Wait()
+	end)
 
 	CanaryEngineClient.PlayerGui = Player:WaitForChild("PlayerGui")
 	CanaryEngineClient.PlayerBackpack = Player:WaitForChild("Backpack")

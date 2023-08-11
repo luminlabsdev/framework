@@ -1,5 +1,3 @@
-// Adding support for individual libraries soon
-
 interface ControllerConnection {
     Disconnect(): void;
     Connected: boolean;
@@ -26,6 +24,10 @@ export interface ClientNetworkController<T, U> {
 
     DisconnectAll(): void;
     Name: string;
+}
+
+export interface Example {
+    Hello(possibilyNull?: number): void;
 }
 
 export interface ServerNetworkController<T, U> {
@@ -61,10 +63,16 @@ export interface Statistics {
 }
 
 type CallStack = {Name: string, Source: string, DefinedLine: number}
+type ExpectedType = "Axes" | "BrickColor" | "CatalogSearchParams" | "CFrame" | "Color3" | "ColorSequence" | "ColorSequenceKeypoint" | "Content" | "DateTime"
+| "DockWidgetPluginGuiInfo" | "Enum" | "EnumItem" | "Enums" | "Faces" | "FloatCurveKey" | "Font" | "Instance" | "NumberRange" | "NumberSequence"
+| "NumberSequenceKeyPoint" | "OverlapParams" | "PathWaypoint" | "PhysicalProperties" | "Random" | "Ray" | "RayastParams" | "RaycastResult" | "RBXScriptConnection"
+| "RBXScriptSignal" | "Rect" | "Region3" | "Region3int16" | "SharedTable" | "TweenInfo" | "UDim" | "UDim2" | "Vector2" | "Vector2int16" | "Vector3" | "Vector3int16"
+| "nil" | "boolean" | "number" | "string" | "function" | "userdata" | "thread" | "table"
 
 export interface Debugger {
     Debug<T>(debugHandler: ((...T) => (void)) | ((message: T, level: number) => (void)), arguments: {[index: number]: T} | T, prefix: string | undefined, respectDebugger: boolean | undefined): void;
     GetCallStack(instance: Instance, stackName: string | undefined): CallStack;
+    DebugInvalidData(paramNumber: number, funcName: string, expectedType: ExpectedType, param: unknown): void;
 
     CachedStackTraces: {[key: string]: CallStack}
 }
@@ -115,7 +123,7 @@ export interface ProfileStoreObject {
 
 export interface EasyProfile {
     CreateProfileStore(name: string | undefined, defaultPlayerData: {[key: string]: any}, keyPattern: string | undefined): ProfileStoreObject;
-    LoadedPlayers: {[index: number]: Player};
+    LoadedPlayers: {[key: string]: {[key: string]: ProfileObject}};
 }
 
 interface EngineServer {
@@ -130,8 +138,60 @@ interface EngineServer {
     }
 
     Data: EasyProfile
-
 	CreateNetworkController(controllerName: string): ServerNetworkController<any, any>;
+}
+
+export interface Character {
+	["Body Colors"]: BodyColors,
+	HumanoidRootPart: Part,
+	Humanoid: Humanoid & {
+		HumanoidDescription: HumanoidDescription,
+		Animator: Animator,
+	},
+	Head: Part & {
+		face: Decal,
+		Mesh: SpecialMesh,
+	},
+	Animate: LocalScript & {
+		PlayEmote: BindableFunction,
+		ScaleDampeningPercent: NumberValue,
+		climb: StringValue & {
+			ClimbAnim: Animation
+		},
+		fall: StringValue & {
+			FallAnim: Animation
+		},
+		idle: StringValue & {
+			Animation1: Animation & {
+				Weight: NumberValue
+			},
+			Animation2: Animation & {
+				Weight: NumberValue
+			}
+		},
+		jump: StringValue & {
+			JumpAnim: Animation
+		},
+		run: StringValue & {
+			RunAnim: Animation
+		},
+		sit: StringValue & {
+			SitAnim: Animation
+		},
+		toolnone: StringValue & {
+			ToolNoneAnim: Animation
+		},
+		walk: StringValue & {
+			WalkAnim: Animation
+		}
+	},
+	["Left Arm"]: Part,
+	["Left Leg"]: Part,
+	["Right Arm"]: Part,
+	["Right Leg"]: Part,
+	["Torso"]: Part & {
+		roblox: Decal
+	}
 }
 
 interface EngineClient {
@@ -146,6 +206,7 @@ interface EngineClient {
     }
 
     Player: Player
+    Character: Character & Model
 
     PlayerGui: StarterGui
     PlayerBackpack: StarterPack

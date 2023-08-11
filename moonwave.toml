@@ -41,7 +41,7 @@ classes = ["Benchmark", "BenchmarkObject"]
 [[classOrder]]
 section = "Libraries"
 collapsed = true
-classes = ["Debugger", "Sprite", "Base64", "Statistics", "Utility"]
+classes = ["Debugger", "Sprite", "Base64", "Statistics", "Utility", "Fetch"]
 
 [docusaurus]
 projectName = "CanaryEngine"

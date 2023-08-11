@@ -38,12 +38,12 @@ type ControllerConnection = {
 	@within Types
 ]=]
 export type SignalController<T> = {
-	Connect: (self: SignalController<T>?, func: (data: {T}) -> ()) -> (ControllerConnection),
-	Wait: (self: SignalController<T>?) -> ({T}),
-	Once: (self: SignalController<T>?, func: (data: {T}) -> ()) -> (ControllerConnection),
+	Connect: (self: SignalController<T>, func: (data: {T}) -> ()) -> (ControllerConnection),
+	Wait: (self: SignalController<T>) -> ({T}),
+	Once: (self: SignalController<T>, func: (data: {T}) -> ()) -> (ControllerConnection),
 
-	Fire: (self: SignalController<T>?, data: ({T} | T)?) -> (),
-	DisconnectAll: (self: SignalController<T>?) -> (),
+	Fire: (self: SignalController<T>, data: ({T} | T)?) -> (),
+	DisconnectAll: (self: SignalController<T>) -> (),
 
 	Name: string,
 }
@@ -65,14 +65,14 @@ export type SignalController<T> = {
 	@within Types
 ]=]
 export type ClientNetworkController<T, U> = {
-	Connect: (self: ClientNetworkController<T, U>?, func: (data: {T}) -> ()) -> (ControllerConnection),
-	Wait: (self: ClientNetworkController<T, U>?) -> ({T}),
-	Once: (self: ClientNetworkController<T, U>?, func: (data: {T}) -> ()) -> (ControllerConnection),
+	Connect: (self: ClientNetworkController<T, U>, func: (data: {T}) -> ()) -> (ControllerConnection),
+	Wait: (self: ClientNetworkController<T, U>) -> ({T}),
+	Once: (self: ClientNetworkController<T, U>, func: (data: {T}) -> ()) -> (ControllerConnection),
 
-	Fire: (self: ClientNetworkController<T, U>?, data: ({T} | T)?) -> (),
-	InvokeAsync: (self: ClientNetworkController<T, U>?, data: ({T} | T)) -> ({U}),
+	Fire: (self: ClientNetworkController<T, U>, data: ({T} | T)?) -> (),
+	InvokeAsync: (self: ClientNetworkController<T, U>, data: ({T} | T)) -> ({U}),
 
-	DisconnectAll: (self: ClientNetworkController<T, U>?) -> (),
+	DisconnectAll: (self: ClientNetworkController<T, U>) -> (),
 	Name: string,
 }
 
@@ -97,19 +97,90 @@ export type ClientNetworkController<T, U> = {
 	@within Types
 ]=]
 export type ServerNetworkController<T, U> = {
-	Connect: (self: ServerNetworkController<T, U>?, func: (sender: Player, data: {T}) -> ()) -> (ControllerConnection),
-	Wait: (self: ServerNetworkController<T, U>?) -> (Player, {T}),
-	Once: (self: ServerNetworkController<T, U>?, func: (sender: Player, data: {T}) -> ()) -> (ControllerConnection),
+	Connect: (self: ServerNetworkController<T, U>, func: (sender: Player, data: {T}) -> ()) -> (ControllerConnection),
+	Wait: (self: ServerNetworkController<T, U>) -> (Player, {T}),
+	Once: (self: ServerNetworkController<T, U>, func: (sender: Player, data: {T}) -> ()) -> (ControllerConnection),
 	
-	Fire: (self: ServerNetworkController<T, U>?, recipient: Player | {Player}, data: ({T} | T)?) -> (),
-	FireAll: (self: ServerNetworkController<T, U>?, data: ({T} | T)?) -> (),
-	FireExcept: (self: ServerNetworkController<T, U>?, except: Player | {Player}, data: ({T} | T)?) -> (),
-	FireInRange: (self: ServerNetworkController<T, U>?, comparePoint: Vector3, maximumRange: number, data: ({T} | T)?) -> (),
-	OnInvoke: (self: ServerNetworkController<T, U>?, callback: (sender: Player, data: {T}) -> ({U} | U)) -> (),
+	Fire: (self: ServerNetworkController<T, U>, recipient: Player | {Player}, data: ({T} | T)?) -> (),
+	FireAll: (self: ServerNetworkController<T, U>, data: ({T} | T)?) -> (),
+	FireExcept: (self: ServerNetworkController<T, U>, except: Player | {Player}, data: ({T} | T)?) -> (),
+	FireInRange: (self: ServerNetworkController<T, U>, comparePoint: Vector3, maximumRange: number, data: ({T} | T)?) -> (),
+	OnInvoke: (self: ServerNetworkController<T, U>, callback: (sender: Player, data: {T}) -> ({U} | U)) -> (),
 
-	SetRateLimit: (self: ServerNetworkController<T, U>?, maxInvokesPerSecond: number, invokeOverflowCallback: (sender: Player) -> ()) -> (),
-	DisconnectAll: (self: ServerNetworkController<T, U>?) -> (),
+	SetRateLimit: (self: ServerNetworkController<T, U>, maxInvokesPerSecond: number, invokeOverflowCallback: (sender: Player) -> ()) -> (),
+	DisconnectAll: (self: ServerNetworkController<T, U>) -> (),
 	Name: string,
+}
+
+--[=[
+	A basic type of an R6 character rig. Should be combined with model using the `&` syntax.
+
+	@field Body Colors BodyColors
+	@field HumanoidRootPart Part
+	@field Humanoid Humanoid
+	@field Torso Part
+	@field Head Part
+	@field Animate localScript
+	@field Left Arm Part
+	@field Left Leg Part
+	@field Right Arm Part
+	@field Right Leg Part
+
+
+	@interface Character
+	@within Types
+]=]
+export type Character = {
+	["Body Colors"]: BodyColors,
+	HumanoidRootPart: Part,
+	Humanoid: Humanoid & {
+		HumanoidDescription: HumanoidDescription,
+		Animator: Animator,
+	},
+	Head: Part & {
+		face: Decal,
+		Mesh: SpecialMesh,
+	},
+	Animate: LocalScript & {
+		PlayEmote: BindableFunction,
+		ScaleDampeningPercent: NumberValue,
+		climb: StringValue & {
+			ClimbAnim: Animation
+		},
+		fall: StringValue & {
+			FallAnim: Animation
+		},
+		idle: StringValue & {
+			Animation1: Animation & {
+				Weight: NumberValue
+			},
+			Animation2: Animation & {
+				Weight: NumberValue
+			}
+		},
+		jump: StringValue & {
+			JumpAnim: Animation
+		},
+		run: StringValue & {
+			RunAnim: Animation
+		},
+		sit: StringValue & {
+			SitAnim: Animation
+		},
+		toolnone: StringValue & {
+			ToolNoneAnim: Animation
+		},
+		walk: StringValue & {
+			WalkAnim: Animation
+		}
+	},
+	["Left Arm"]: Part,
+	["Left Leg"]: Part,
+	["Right Arm"]: Part,
+	["Right Leg"]: Part,
+	["Torso"]: Part & {
+		roblox: Decal
+	}
 }
 
 return Types
