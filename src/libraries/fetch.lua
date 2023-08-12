@@ -9,7 +9,7 @@ local Fetch = { }
 	Cached data from previously made requests.
 
 	@prop RequestCache {[string]: any}
-    @within Fetch
+	@within Fetch
 ]=]
 
 local HttpService = game:GetService("HttpService")
@@ -39,7 +39,8 @@ end
 
 	@param requestUrl string -- The url to make the request to
 	@param decodeContent boolean? -- Whether or not the request should be decoded
-    @param requestCachePool {string | boolean}? -- Decides if the request is cached in [Fetch.RequestCache]. `returnValue` decides whether or not to return the value on the initial request.
+	@param maxRetries number? -- The maximum amount of retries if the request fails
+	@param requestCachePool string -- Decides if the request is cached in [Fetch.RequestCache]
 
 	@return any
 ]=]

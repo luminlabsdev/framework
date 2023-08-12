@@ -96,6 +96,11 @@ export interface Serialize {
     Deserialize<T>(value: {[index: number]: any}): T
 }
 
+export interface Fetch {
+    RequestCache: {[key: string]: any},
+    FetchAsync(requestUrl: string, decodeContent: boolean | undefined, maxRetries: number | undefined, requestCachePool: string | undefined): any | undefined
+}
+
 export type GlobalKey = {Key: string, Value: any, KeyId: number}
 type ProfileMetaData = {ProfileCreated: number; ProfileLoadCount: number; ProfileActiveSession: {placeId: number; jobId: string;}}
 
