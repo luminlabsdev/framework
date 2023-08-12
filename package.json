@@ -8,7 +8,7 @@
   },
   "name": "@rbxts/canaryengine",
   "description": "CanaryEngine is a lightweight and performant game framework for beginners and power-users alike.",
-  "version": "3.2.5",
+  "version": "3.3.4",
   "main": "src/init.lua",
   "typings": "src/index.d.ts",
   "directories": {
