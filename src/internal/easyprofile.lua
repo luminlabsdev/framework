@@ -31,7 +31,6 @@ export type GlobalKey = {Key: string, Value: any, KeyId: number}
 local EasyProfile = { }
 local Vendor = script.Vendor
 
-local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local HttpService = game:GetService("HttpService")
 
@@ -53,7 +52,7 @@ local ProfileStoreObject = { }
 	
 	@within ProfileStoreObject
 	@tag Event
-	@prop SessionLockClaimed SignalController<Player>
+	@prop SessionLockClaimed SignalController<Player | string>
 ]=]
 
 --[=[
@@ -61,7 +60,7 @@ local ProfileStoreObject = { }
 	
 	@within ProfileStoreObject
 	@tag Event
-	@prop SessionLockUnclaimed SignalController<Player>
+	@prop SessionLockUnclaimed SignalController<Player | string>
 ]=]
 
 --[=[
@@ -97,16 +96,16 @@ local ProfileObject = { }
 ]=]
 
 --[=[
-	A table of the currently loaded players in game, each key is based on a profile store.
+	A table of the currently loaded profiles in game, each key is based on a profile store.
 	
 	@within EasyProfile
-	@prop LoadedPlayers {[string]: {[Player]: ProfileObject}}
+	@prop LoadedData {[string]: {[Player | string]: ProfileObject}}
 ]=]
-EasyProfile.LoadedPlayers = { }
+EasyProfile.LoadedData = { }
 
 type EasyProfile = {
-	LoadedPlayers: {[string]: {[Player]: ProfileObject}},
-	CreateProfileStore: (name: string?, defaultPlayerData: {[string]: any}, keyPattern: string?) -> (ProfileStoreObject)
+	LoadedData: {[string]: {[Player | string]: ProfileObject}},
+	CreateProfileStore: (name: string, defaultProfileData: {[string]: any}, playerKeyPattern: string?) -> (ProfileStoreObject)
 }
 
 export type ProfileObject = {
@@ -120,15 +119,15 @@ export type ProfileObject = {
 }
 
 export type ProfileStoreObject = {
-	SessionLockClaimed: Types.SignalController<Player>,
-	SessionLockUnclaimed: Types.SignalController<Player>,
+	SessionLockClaimed: Types.SignalController<Player | string>,
+	SessionLockUnclaimed: Types.SignalController<Player | string>,
 
-	DeleteProfileAsync: (self: ProfileStoreObject, userId: number) -> (),
-	GetProfileAsync: (self: ProfileStoreObject, userId: number) -> ({[string]: any}?),
-	LoadProfileAsync: (self: ProfileStoreObject, player: Player, reconcileData: boolean?, profileClaimedHandler: (((placeId: number, gameJobId: string) -> (ProfileLoadType)) | ProfileLoadType)?) -> (ProfileObject),
-	UnclaimSessionLock: (self: ProfileStoreObject, player: Player, valuesToSave: {[string]: any}, hopReadyCallback: (() -> ())?) -> (),
-	SetGlobalKeyAsync: (self: ProfileStoreObject, userId: number, key: string, value: any) -> (),
-	RemoveGlobalKeyAsync: (self: ProfileStoreObject, userId: number, keyId: number) -> (),
+	DeleteProfileAsync: (self: ProfileStoreObject, owner: number | string) -> (),
+	GetProfileAsync: (self: ProfileStoreObject, owner: number | string) -> ({[string]: any}?),
+	LoadProfileAsync: (self: ProfileStoreObject, owner: Player | string, reconcileData: boolean?, profileClaimedHandler: (((placeId: number, gameJobId: string) -> (ProfileLoadType)) | ProfileLoadType)?) -> (ProfileObject),
+	UnclaimSessionLock: (self: ProfileStoreObject, owner: Player | string, valuesToSave: {[string]: any}, hopReadyCallback: (() -> ())?) -> (),
+	SetGlobalKeyAsync: (self: ProfileStoreObject, target: number | string, key: string, value: any) -> (),
+	RemoveGlobalKeyAsync: (self: ProfileStoreObject, target: number | string, keyId: number) -> (),
 }
 
 -- // Functions
@@ -141,28 +140,28 @@ end
 	Gets an existing profile store of creates one if it does not exist yet.
 	
 	@param name string? -- The name of the profile store to get, defaults to "Global"
-	@param defaultPlayerData dictionary -- The default data of player when loaded, only applies if this is their first time joining 
-	@param keyPattern string -- The pattern for the key to use, use '%d' as a placeholder for the player's `UserId`.
+	@param defaultProfileData dictionary -- The default data of profie when loaded, only applies if this is their first time joining 
+	@param playerKeyPattern string -- The pattern for the key to use if used to store player data, use '%d' as a placeholder for the player's `UserId`.
 	
 	@return ProfileStoreObject?
 ]=]
-function EasyProfile.CreateProfileStore(name: string?, defaultPlayerData: {[string]: any}, keyPattern: string?): ProfileStoreObject?
-	if not defaultPlayerData then
-		Debugger.Debug(warn, "Default player data is required")
+function EasyProfile.CreateProfileStore(name: string?, defaultProfileData: {[string]: any}, playerKeyPattern: string?): ProfileStoreObject?
+	if not defaultProfileData then
+		Debugger.Debug(warn, "Default profile data is required")
 		return nil
 	end
-	
-	local ProfileStoreObjectMetatable = setmetatable({ }, {__index = ProfileStoreObject})
-	local ProfileStore = ProfileService.GetProfileStore(name or "Global", defaultPlayerData)
 
-	ProfileStoreObjectMetatable.SessionLockClaimed = Signal.NewController("SessionLockClaimed") :: Types.SignalController<Player>
-	ProfileStoreObjectMetatable.SessionLockUnclaimed = Signal.NewController("SessionLockUnclaimed") :: Types.SignalController<Player>
+	local ProfileStoreObjectMetatable = setmetatable({ }, {__index = ProfileStoreObject})
+	local ProfileStore = ProfileService.GetProfileStore(name or "Global", defaultProfileData)
+
+	ProfileStoreObjectMetatable.SessionLockClaimed = Signal.NewController("SessionLockClaimed") :: Types.SignalController<Player | string>
+	ProfileStoreObjectMetatable.SessionLockUnclaimed = Signal.NewController("SessionLockUnclaimed") :: Types.SignalController<Player | string>
 
 	ProfileStoreObjectMetatable._ProfileStore = ProfileStore
-	ProfileStoreObjectMetatable._Pattern = keyPattern or "user_%d"
+	ProfileStoreObjectMetatable._Pattern = playerKeyPattern or "user_%d"
 	ProfileStoreObjectMetatable._Name = name or "Global"
 
-	EasyProfile.LoadedPlayers[ProfileStoreObjectMetatable._Name] = { }
+	EasyProfile.LoadedData[ProfileStoreObjectMetatable._Name] = { }
 
 	return ProfileStoreObjectMetatable
 end
@@ -173,17 +172,25 @@ end
 	@param userId number -- The user id to erase the data of
 	@yields
 ]=]
-function ProfileStoreObject:DeleteProfileAsync(userId: number)
+function ProfileStoreObject:DeleteProfileAsync(target: number | string)
 	local CurrentLoadedProfileStore = self._ProfileStore
 	if not CurrentLoadedProfileStore then
 		warn("No profile store loaded, make sure API requests are enabled")
 		return
 	end
 
-	CurrentLoadedProfileStore:WipeProfileAsync(string.format(
-		self._Pattern,
-		userId)
-	)
+	local str: string
+
+	if typeof(target) == "string" then
+		str = target
+	elseif typeof(target) == "number" then
+		str = string.format(self._Pattern, target)
+	else
+		Debugger.Debug(warn, `Cannot delete profile of type {typeof(target)}`)
+		return
+	end
+
+	CurrentLoadedProfileStore:WipeProfileAsync(str)
 end
 
 --[=[
@@ -192,20 +199,28 @@ end
 	@param userId number -- The user id to get of the data of
 	@yields
 ]=]
-function ProfileStoreObject:GetProfileAsync(userId: number): {[string]: any}?
+function ProfileStoreObject:GetProfileAsync(target: number | string): {[string]: any}?
 	local CurrentLoadedProfileStore = self._ProfileStore
 	if not CurrentLoadedProfileStore then
 		warn("No profile store loaded, make sure API requests are enabled")
 		return
 	end
 
-	local RequestedData = CurrentLoadedProfileStore:ViewProfileAsync(string.format(
-		self._Pattern,
-		userId)
-	).Data
+	local str: string
+
+	if typeof(target) == "string" then
+		str = target
+	elseif typeof(target) == "number" then
+		str = string.format(self._Pattern, target)
+	else
+		Debugger.Debug(warn, `Cannot get profile of type {typeof(target)}`)
+		return nil
+	end
+
+	local RequestedData = CurrentLoadedProfileStore:ViewProfileAsync(str).Data
 
 	if not RequestedData then
-		warn("Requested data for user", userId, "does not exist")
+		warn("Requested data for target", target, "does not exist")
 		return nil
 	end
 
@@ -217,13 +232,13 @@ end
 
 	@yields
 	
-	@param player Player -- The player to load the data of
-	@param reconcileData boolean? -- Whether or not to reconcile the data of the player, defaults to true
-	@param profileClaimedHandler ((placeId: number, gameJobId: string) -> (ProfileLoadType))? -- The function to run when the profile of the player is already claimed
+	@param owner Player | string-- The owner of profile to load the data of
+	@param reconcileData boolean? -- Whether or not to reconcile the data of the profile, defaults to true
+	@param profileClaimedHandler ((placeId: number, gameJobId: string) -> (ProfileLoadType))? -- The function to run when the profile is already claimed
 	
 	@return ProfileObject?
 ]=]
-function ProfileStoreObject:LoadProfileAsync(player: Player, reconcileData: boolean?, profileClaimedHandler: (((placeId: number, gameJobId: string) -> (ProfileLoadType)) | ProfileLoadType)?): ProfileObject?
+function ProfileStoreObject:LoadProfileAsync(owner: Player | string, reconcileData: boolean?, profileClaimedHandler: (((placeId: number, gameJobId: string) -> (ProfileLoadType)) | ProfileLoadType)?): ProfileObject?
 	local ProfileObjectMetatable = setmetatable({ }, {__index = ProfileObject})
 	local CurrentLoadedProfileStore = self._ProfileStore
 
@@ -232,61 +247,73 @@ function ProfileStoreObject:LoadProfileAsync(player: Player, reconcileData: bool
 		return nil
 	end
 
-	if not player then
-		Debugger.Debug(warn, "Cannot unclaim session lock for a player that is non-existent")
+	if not owner then
+		Debugger.Debug(warn, "Cannot unclaim session lock for a owner that is non-existent")
 		return nil
 	end
 
-	local LoadedPlayerProfile = CurrentLoadedProfileStore:LoadProfileAsync(string.format(self._Pattern, player.UserId), profileClaimedHandler)
+	local str: string
+
+	if typeof(owner) == "string" then
+		str = owner
+	elseif typeof(owner) == "Instance" and owner:IsA("Player") then
+		str = string.format(self._Pattern, owner.UserId)
+	else
+		Debugger.Debug(warn, `Cannot load profile of type {typeof(owner)}`)
+		return nil
+	end
+
+	local LoadedProfile = CurrentLoadedProfileStore:LoadProfileAsync(str, profileClaimedHandler) :: any
 	local Success = true
 
 	ProfileObjectMetatable.GlobalKeyAdded = Signal.NewController("GlobalKeyAdded") :: Types.SignalController<GlobalKey>
 
-	if not LoadedPlayerProfile then
-		player:Kick(`Data for user {player.UserId} could not be loaded, other JobId is trying to load this data already`)
-		warn(`Data for user {player.UserId} could not be loaded, other JobId is trying to load this data already`)
-		Success = false
-		return nil
-	end
-
-	if not player:IsDescendantOf(Players) then
-		LoadedPlayerProfile:Release()
+	if not LoadedProfile then
+		if typeof(owner) == "Instance" and owner:IsA("Player") then
+			owner:Kick(`Data for profile {owner} could not be loaded, other JobId is trying to load this data already`)
+		end
+		warn(`Data for profile {owner} could not be loaded, other JobId is trying to load this data already`)
 		Success = false
 		return nil
 	end
 
 	if reconcileData then
-		LoadedPlayerProfile:Reconcile()
+		LoadedProfile:Reconcile()
 	end
 
-	LoadedPlayerProfile:AddUserId(player.UserId)
-	LoadedPlayerProfile:ListenToRelease(function()
-		EasyProfile.LoadedPlayers[self._Name][player] = nil
-		self.SessionLockUnclaimed:Fire({player})
+	if typeof(owner) == "Instance" and owner:IsA("Player") then
+		LoadedProfile:AddUserId(owner.UserId)
+	end
+
+	LoadedProfile:ListenToRelease(function()
+		EasyProfile.LoadedData[self._Name][owner] = nil
+		self.SessionLockUnclaimed:Fire({owner})
 
 		setmetatable(ProfileObjectMetatable, nil)
 		table.clear(ProfileObjectMetatable)
 
-		player:Kick(`Data for user {player.UserId} active on another server, please try again`)
+		if typeof(owner) == "Instance" and owner:IsA("Player") then
+			owner:Kick(`Data for user {owner.UserId} active on another server, please try again`)
+		end
 	end)
 
-	for _, globalKey in LoadedPlayerProfile.GlobalUpdates:GetActiveUpdates() do
-		LoadedPlayerProfile.GlobalUpdates:LockActiveUpdate(globalKey[1])
+	for _, globalKey in LoadedProfile.GlobalUpdates:GetActiveUpdates() do
+		LoadedProfile.GlobalUpdates:LockActiveUpdate(globalKey[1])
 	end
 
-	LoadedPlayerProfile.GlobalUpdates:ListenToNewActiveUpdate(function(keyId: number, data: any)
-		LoadedPlayerProfile.GlobalUpdates:LockActiveUpdate(keyId)
+	LoadedProfile.GlobalUpdates:ListenToNewActiveUpdate(function(keyId: number, data: any)
+		LoadedProfile.GlobalUpdates:LockActiveUpdate(keyId)
 	end)
 
-	LoadedPlayerProfile.GlobalUpdates:ListenToNewLockedUpdate(function(keyId: number, data: any)
+	LoadedProfile.GlobalUpdates:ListenToNewLockedUpdate(function(keyId: number, data: any)
 		ProfileObjectMetatable.GlobalKeyAdded:Fire({{Key = data.Key; Value = data.Value; KeyId = keyId;}})
-		LoadedPlayerProfile.GlobalUpdates:ClearLockedUpdate(keyId)
+		LoadedProfile.GlobalUpdates:ClearLockedUpdate(keyId)
 	end)
 
-	self.SessionLockClaimed:Fire({player})
+	self.SessionLockClaimed:Fire({owner})
 
-	EasyProfile.LoadedPlayers[self._Name][player] = ProfileObjectMetatable
-	ProfileObjectMetatable.Profile = LoadedPlayerProfile
+	EasyProfile.LoadedData[self._Name][owner] = ProfileObjectMetatable
+	ProfileObjectMetatable.Profile = LoadedProfile
 
 	if Success then
 		return ProfileObjectMetatable
@@ -296,9 +323,9 @@ function ProfileStoreObject:LoadProfileAsync(player: Player, reconcileData: bool
 end
 
 --[=[
-	Unclaims the session lock that `player` holds, throwing a warning if they are not session locked. This is usually because you did not load the player data correctly.
+	Unclaims the session lock that the profile holds, throwing a warning if they are not session locked. This is usually because you did not load the profile data correctly.
 	
-	`valuesToSave` Usage:
+	`valuesToSave` Example usage:
 	
 	```lua
 	Players.PlayerRemoving:Connect(function(player)
@@ -308,15 +335,15 @@ end
 	end)
 	```
 	
-	@param player Player -- The player to unclaim the session lock of
-	@param valuesToSave dictionary? -- Values to save that are not already saved to the player data, for example attributes that need to be saved on player removing
+	@param owner Player | string -- The owner of the profile to unclaim the session lock of
+	@param valuesToSave dictionary? -- Values to save that are not already saved to the profile data, for example attributes that need to be saved on player removing
 	@param hopReadyCallback? -- The function to run when a server hop is ready, leaving this blank will disable this feature
 ]=]
-function ProfileStoreObject:UnclaimSessionLock(player: Player, valuesToSave: {[string]: any}?, hopReadyCallback: (() -> ())?)
+function ProfileStoreObject:UnclaimSessionLock(owner: Player | string, valuesToSave: {[string]: any}?, hopReadyCallback: (() -> ())?)
 	local CurrentLoadedProfileStore = self._ProfileStore
-	local PlayerProfile = EasyProfile.LoadedPlayers[self._Name][player].Profile
+	local Profile = EasyProfile.LoadedData[self._Name][owner].Profile
 
-	if not PlayerProfile then
+	if not Profile then
 		warn("No profile loaded")
 		return
 	end
@@ -326,46 +353,57 @@ function ProfileStoreObject:UnclaimSessionLock(player: Player, valuesToSave: {[s
 		return
 	end
 
-	if not player then
-		warn("Cannot unclaim session lock for a player that is non-existent")
+	if not owner then
+		warn("Cannot unclaim session lock for a owner that is non-existent")
 		return
 	end
 
 	if valuesToSave then
 		for key, value in valuesToSave do
-			if not PlayerProfile.Data[key] then
+			if not Profile.Data[key] then
 				Debugger.Debug(warn, `Invalid key: {key} is an instance/primitive type or does not exist.`)
 				continue
 			end
 
-			PlayerProfile.Data[key] = value
+			Profile.Data[key] = value
 		end
 	end
 
-	PlayerProfile:Release()
+	Profile:Release()
 
 	if hopReadyCallback then
-		PlayerProfile:ListenToHopReady(hopReadyCallback)
+		Profile:ListenToHopReady(hopReadyCallback)
 	end
 end
 
 --[=[
-	Sets a global key for `userId`, regardless of whether they share the same `JobId` as the sender or they are offline.
+	Sets a global key for target profile, regardless of whether they share the same `JobId` as the sender or they are offline.
 	
-	@param userId number -- The player to set the global key of
-	@param key string -- The key to send to `userId`
+	@param target number | string -- The target to set the global key of
+	@param key string -- The key to send to the target
 	@param value any -- The value of `key`
 	
 	@yields
 ]=]
-function ProfileStoreObject:SetGlobalKeyAsync(userId: number, key: string, value: any)
+function ProfileStoreObject:SetGlobalKeyAsync(target: number | string, key: string, value: any)
 	local CurrentLoadedProfileStore = self._ProfileStore
 	if not CurrentLoadedProfileStore then
 		warn("No profile store loaded, make sure API requests are enabled")
 		return
 	end
 
-	CurrentLoadedProfileStore:GlobalUpdateProfileAsync(string.format(self._Pattern, userId), function(globalUpdates)
+	local str: string
+
+	if typeof(target) == "string" then
+		str = target
+	elseif typeof(target) == "number" then
+		str = string.format(self._Pattern, target)
+	else
+		Debugger.Debug(warn, `Cannot set global key of type {typeof(target)}`)
+		return
+	end
+
+	CurrentLoadedProfileStore:GlobalUpdateProfileAsync(str, function(globalUpdates)
 		globalUpdates:AddActiveUpdate({
 			Key = key;
 			Value = value;
@@ -376,19 +414,30 @@ end
 --[=[
 	Removes the global key that sent by using `ProfileStoreObject:SetGlobalKeyAsync` with the key ID of `keyId`. This only applies if it has not been recieved yet.
 	
-	@param userId number -- The player to remove the global key of
+	@param target number | string -- The target to remove the global key of
 	@param keyId number -- The `keyId` of the key to remove
 	
 	@yields
 ]=]
-function ProfileStoreObject:RemoveGlobalKeyAsync(userId: number, keyId: number)
+function ProfileStoreObject:RemoveGlobalKeyAsync(target: number | string, keyId: number)
 	local CurrentLoadedProfileStore = self._ProfileStore
 	if not CurrentLoadedProfileStore then
 		warn("No profile store loaded, make sure API requests are enabled")
 		return
 	end
 
-	CurrentLoadedProfileStore:GlobalUpdateProfileAsync(string.format(self._Pattern, userId), function(globalUpdates)
+	local str: string
+
+	if typeof(target) == "string" then
+		str = target
+	elseif typeof(target) == "number" then
+		str = string.format(self._Pattern, target)
+	else
+		Debugger.Debug(warn, `Cannot remove global key of type {typeof(target)}`)
+		return
+	end
+
+	CurrentLoadedProfileStore:GlobalUpdateProfileAsync(str, function(globalUpdates)
 		globalUpdates:ClearActiveUpdate(keyId)
 	end)
 end
@@ -399,117 +448,117 @@ end
 	@return {[string]: any}?
 ]=]
 function ProfileObject:GetProfileData(): {[string]: any}?
-	local PlayerProfile = self.Profile
+	local Profile = self.Profile
 
-	if not PlayerProfile then
+	if not Profile then
 		warn("No profile loaded")
 		return nil
 	end
 
-	return PlayerProfile.Data
+	return Profile.Data
 end
 
 --[=[
-	Gets all of the global keys that were recieved when the player was offline.
+	Gets all of the global keys that were recieved when the target was offline.
 	
 	@return {GlobalKey}?
 ]=]
 function ProfileObject:GetGlobalKeys(): {GlobalKey}?
-	local PlayerProfile = self.Profile
+	local Profile = self.Profile
 
-	if not PlayerProfile then
+	if not Profile then
 		warn("No profile loaded")
 		return nil
 	end
 
 	local GlobalKeys = { }
 
-	for _, globalKey in PlayerProfile.GlobalUpdates:GetLockedUpdates() do
+	for _, globalKey in Profile.GlobalUpdates:GetLockedUpdates() do
 		table.insert(GlobalKeys, {Key = globalKey[2].Key; Value = globalKey[2].Value; KeyId = globalKey[1]})
-		PlayerProfile.GlobalUpdates:ClearLockedUpdate(globalKey[1])
+		Profile.GlobalUpdates:ClearLockedUpdate(globalKey[1])
 	end
 
 	return table.freeze(GlobalKeys)
 end
 
 --[=[
-	Adds `UserId`'s to the player's profile.
+	Adds `UserId`'s to the target profile.
 	
 	@param userIds number | {number} -- The `UserId`s to add.
 ]=]
 function ProfileObject:AddUserIds(userIds: number | {number})
-	local PlayerProfile = self.Profile
+	local Profile = self.Profile
 
-	if not PlayerProfile then
+	if not Profile then
 		warn("No profile loaded")
-		return nil
+		return
 	end
 
 	if type(userIds) == "number" then
-		PlayerProfile:AddUserId(userIds)
+		Profile:AddUserId(userIds)
 		return
 	end
 
 	for _, userId in userIds do
-		PlayerProfile:AddUserId(userId)
+		Profile:AddUserId(userId)
 	end
 end
 
 --[=[
-	Gets all the associated `UserId`'s of the player's profile.
+	Gets all the associated `UserId`'s of the target profile.
 	
 	@return {number}?
 ]=]
 function ProfileObject:GetUserIds(): {number}?
-	local PlayerProfile = self.Profile
+	local Profile = self.Profile
 
-	if not PlayerProfile then
+	if not Profile then
 		warn("No profile loaded")
 		return nil
 	end
 
-	return PlayerProfile.UserIds
+	return Profile.UserIds
 end
 
 --[=[
-	Removes all the associated `UserId`'s off of the player's profile, leave `userIds` blank to clear all user IDs.
+	Removes all the associated `UserId`'s off of the target profile, leave `userIds` blank to clear all user IDs.
 	
-	@param userIds {number}? -- The `userId`'s to clear off the player's profile
+	@param userIds {number}? -- The `userId`'s to clear off the target profile
 ]=]
 function ProfileObject:RemoveUserIds(userIds: {number}?)
-	local PlayerProfile = self.Profile
+	local Profile = self.Profile
 
-	if not PlayerProfile then
+	if not Profile then
 		warn("No profile loaded")
-		return nil
+		return
 	end
 
 	if not userIds then
-		userIds = PlayerProfile.UserIds
+		userIds = Profile.UserIds
 	end
 
 	for _, userId in userIds :: {number} do
-		PlayerProfile:RemoveUserId(userId)
+		Profile:RemoveUserId(userId)
 	end
 end
 
 --[=[
-	Gets all metadata that is related to the player's profile.
+	Gets all metadata that is related to the target profile.
 
 	@return ProfileMetaData?
 ]=]
 function ProfileObject:GetMetaData(): ProfileMetaData?
-	local PlayerProfile = self.Profile
+	local Profile = self.Profile
 
-	if not PlayerProfile then
+	if not Profile then
 		warn("No profile loaded")
 		return nil
 	end
 
 	return table.freeze({
-		ProfileCreated = PlayerProfile.MetaData.ProfileCreateTime;
-		ProfileLoadCount = PlayerProfile.MetaData.SessionLoadCount;
-		ProfileActiveSession = {placeId = PlayerProfile.MetaData.ActiveSession[1], jobId = PlayerProfile.MetaData.ActiveSession[2]}
+		ProfileCreated = Profile.MetaData.ProfileCreateTime;
+		ProfileLoadCount = Profile.MetaData.SessionLoadCount;
+		ProfileActiveSession = {placeId = Profile.MetaData.ActiveSession[1], jobId = Profile.MetaData.ActiveSession[2]}
 	})
 end
 
@@ -519,14 +568,14 @@ end
 	@return number?
 ]=]
 function ProfileObject:GetDataUsage(): number?
-	local PlayerProfile = self.Profile
+	local Profile = self.Profile
 
-	if not PlayerProfile then
+	if not Profile then
 		warn("No profile loaded")
 		return nil
 	end
 
-	local EncodedUsage = HttpService:JSONEncode(PlayerProfile.Data)
+	local EncodedUsage = HttpService:JSONEncode(Profile.Data)
 	local UsageLength = string.len(EncodedUsage)
 
 	return (UsageLength / 4194304) * 100
