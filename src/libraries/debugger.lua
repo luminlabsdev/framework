@@ -90,7 +90,7 @@ end
 	@param prefix string? -- The prefix to put in front of the debug
 	@param respectDebugger boolean? -- Whether or not to respect the debugger, should always be true for correct use
 ]=]
-function Debugger.Debug<T>(debugHandler: (...T) -> () | (message: T, level: number) -> (), arguments: {T} | T, prefix: string?, respectDebugger: boolean?)
+function Debugger.Debug(debugHandler: (...any) -> (), arguments: {any} | any, prefix: string?, respectDebugger: boolean?)
 	prefix = prefix or Prefix
 
 	if respectDebugger == nil then
@@ -123,7 +123,12 @@ end
 	
 	@return string
 ]=]
-function Debugger.GetCallStack(instance: Instance, stackName: string?): {Name: string, Source: string, DefinedLine: number}
+function Debugger.GetCallStack(instance: Script | ModuleScript, stackName: string?): {Name: string, Source: string, DefinedLine: number}
+	if not (instance:IsA("ModuleScript") or instance:IsA("Script")) then
+		Debugger.DebugInvalidData(1, "GetCallStack", "Instance", instance)
+		return
+	end
+
 	stackName = stackName or `Stack{#Debugger.CachedStackTraces + 1}`
 	
 	local Source = GetAncestorsUntilParentFolder(instance)
@@ -148,11 +153,16 @@ end
 	@param expectedType ExpectedType -- The type that was expected of `param`
 	@param param T -- The param which caused the error
 ]=]
-function Debugger.DebugInvalidData(paramNumber: number, funcName: string, expectedType: ExpectedType, param: unknown)
+function Debugger.DebugInvalidData(paramNumber: number, funcName: string, expectedType: ExpectedType, param: unknown, debugHander: (...any) -> ())
 	local ParamType = typeof(param)
 
 	if ParamType ~= expectedType then
-		error(`invalid argument #{paramNumber} to '{funcName}' ({expectedType} expected, got {ParamType})`)
+		local ErrorString = `invalid argument #{paramNumber} to '{funcName}' ({expectedType} expected, got {ParamType})`
+		if debugHander then
+			debugHander(ErrorString)
+			return
+		end
+		error(ErrorString)
 	end
 end
 

@@ -109,6 +109,8 @@ type EasyProfile = {
 }
 
 export type ProfileObject = {
+	GlobalKeyAdded: Types.SignalController<GlobalKey>,
+
 	GetProfileData: (self: ProfileObject) -> ({[string]: any}),
 	GetGlobalKeys: (self: ProfileObject) -> ({GlobalKey}?),
 	AddUserIds: (self:ProfileObject, userIds: {number} | number) -> (),
@@ -259,7 +261,7 @@ function ProfileStoreObject:LoadProfileAsync(owner: Player | string, reconcileDa
 	elseif typeof(owner) == "Instance" and owner:IsA("Player") then
 		str = string.format(self._Pattern, owner.UserId)
 	else
-		Debugger.Debug(warn, `Cannot load profile of type {typeof(owner)}`)
+		Debugger.DebugInvalidData(1, "LoadProfileAsync", "Instance or string", owner, warn)
 		return nil
 	end
 

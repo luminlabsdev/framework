@@ -1,6 +1,7 @@
 --[=[
 	The parent of all classes.
 
+	@ignore
 	@class Controllers
 ]=]
 local Controllers = { }
