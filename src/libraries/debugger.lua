@@ -125,7 +125,7 @@ end
 ]=]
 function Debugger.GetCallStack(instance: Script | ModuleScript, stackName: string?): {Name: string, Source: string, DefinedLine: number}
 	if not (instance:IsA("ModuleScript") or instance:IsA("Script")) then
-		Debugger.DebugInvalidData(1, "GetCallStack", "Instance", instance)
+		Debugger.DebugInvalidData(1, "GetCallStack", "LuaSourceContainer", instance)
 		return
 	end
 
