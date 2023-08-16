@@ -105,7 +105,10 @@ export type GlobalKey = {Key: string, Value: any, KeyId: number}
 type ProfileMetaData = {ProfileCreated: number; ProfileLoadCount: number; ProfileActiveSession: {placeId: number; jobId: string;}}
 
 export interface ProfileObject {
+    GlobalKeyAdded: SignalController<GlobalKey>;
+
     GetProfileData(self: ProfileObject): {[key: string]: any} | undefined;
+    CreateProfileLeaderstats(self: ProfileObject, player: Player, statsToAdd: {[index: number]: string} | undefined): Folder | undefined;
     GetGlobalKeys(self: ProfileObject): {[index: number]: GlobalKey} | undefined;
     AddUserIds(self: ProfileObject, userIds: number | {[index: number]: number}): void | undefined;
     GetUserIds(self: ProfileObject): {[index: number]: number} | undefined;

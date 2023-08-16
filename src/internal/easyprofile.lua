@@ -102,14 +102,6 @@ local ProfileObject = { }
 ]=]
 
 --[=[
-	The loaded profile's player.
-	
-	@within ProfileObject
-	@private
-	@prop Profile any
-]=]
-
---[=[
 	A table of the currently loaded profiles in game, each key is based on a profile store.
 	
 	@within EasyProfile
@@ -125,7 +117,7 @@ type EasyProfile = {
 export type ProfileObject = {
 	GlobalKeyAdded: Types.SignalController<GlobalKey>,
 
-	CreateProfileLeaderstats: (self: ProfileObject, statsToAdd: {string}?) -> (),
+	CreateProfileLeaderstats: (self: ProfileObject, player: Player, statsToAdd: {string}?) -> (),
 	GetProfileData: (self: ProfileObject) -> ({[string]: any}),
 	GetGlobalKeys: (self: ProfileObject) -> ({GlobalKey}?),
 	AddUserIds: (self: ProfileObject, userIds: {number} | number) -> (),

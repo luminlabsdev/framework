@@ -94,6 +94,21 @@ end
 
 We can do quite a bit with this, such as increase the user's cash each time they join, or even remove specific items. When we join back, the iron sword should persist if you set up the profile store correctly. Though, there is one more thing you should learn: `GlobalKey`s.
 
+### Leaderstats
+
+When using EasyProfile, Roblox's player list `leaderstats` are rather easy to setup. You only need to call 1 function. Here's an example of leaderstats being set up when the player joins:
+
+```lua
+local function PlayerAdded(player)
+    local PlayerProfile = MyNewDataStore:LoadProfileAsync(player)
+    local ProfileData = PlayerProfile:GetProfileData()
+
+    PlayerProfile:CreateProfileLeaderstats(player, {"Cash", "Gems"})
+end
+```
+
+When they join, your leaderboard should look just like this: 
+
 ### Global Keys
 
 Global keys are a better way of handling cross server communication with data, and you can even send data to offline `UserId`'s. It uses the Global Updates feature of ProfileService internally, and that system is very confusing which is why we made our own. There's really only 3 functions to learn, so it should be pretty straightforward to learn.
