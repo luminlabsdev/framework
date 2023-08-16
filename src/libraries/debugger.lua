@@ -138,7 +138,7 @@ function Debugger.GetCallStack(instance: Script | ModuleScript, stackName: strin
 	
 	StackTable.Name = stackName
 	StackTable.Source = Source
-	StackTable.DefinedLine = tonumber(DefinedLine[#DefinedLine]:gsub("\n", ""))
+	StackTable.DefinedLine = tonumber(DefinedLine[#DefinedLine]:gsub("\n", ""), nil)
 	
 	Debugger.CachedStackTraces[stackName] = StackTable
 	

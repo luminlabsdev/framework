@@ -39,6 +39,12 @@ local Types = require(script.Parent.Parent.Parent.Types)
 local Debugger = require(script.Parent.Parent.Debugger)
 local Signal = require(script.Parent.Parent.Controllers.Vendor.SignalController)
 
+local ValidLeaderboardTypes = {
+	"boolean",
+	"number",
+	"string",
+}
+
 --[=[
 	The object that holds the `ProfileStoreObject`.
 	
@@ -96,6 +102,14 @@ local ProfileObject = { }
 ]=]
 
 --[=[
+	The loaded profile's player.
+	
+	@within ProfileObject
+	@private
+	@prop Profile any
+]=]
+
+--[=[
 	A table of the currently loaded profiles in game, each key is based on a profile store.
 	
 	@within EasyProfile
@@ -111,9 +125,10 @@ type EasyProfile = {
 export type ProfileObject = {
 	GlobalKeyAdded: Types.SignalController<GlobalKey>,
 
+	CreateProfileLeaderstats: (self: ProfileObject, statsToAdd: {string}?) -> (),
 	GetProfileData: (self: ProfileObject) -> ({[string]: any}),
 	GetGlobalKeys: (self: ProfileObject) -> ({GlobalKey}?),
-	AddUserIds: (self:ProfileObject, userIds: {number} | number) -> (),
+	AddUserIds: (self: ProfileObject, userIds: {number} | number) -> (),
 	GetUserIds: (self: ProfileObject) -> ({number}?),
 	RemoveUserIds: (self: ProfileObject, userIds: {number}?) -> (),
 	GetMetaData: (self: ProfileObject) -> (ProfileMetaData),
@@ -458,6 +473,51 @@ function ProfileObject:GetProfileData(): {[string]: any}?
 	end
 
 	return Profile.Data
+end
+
+--[=[
+	Creates leaderstats for Roblox's leaderboard based on provided values from the profile. If a value isn't supported, it won't be added to the leaderboard. Here is a list of natively supported types:
+
+	|Type|
+	|-|
+	|`boolean`|
+	|`number`|
+	|`string`|
+	
+	@param player Player -- The player to parent the leaderstats to, required because the owner of the profile can be the player **or** a set string
+	@param statsToAdd {string}? -- Specific stats to add, leaving this nil will account for all data on the profile
+
+	@return Folder?
+]=]
+function ProfileObject:CreateProfileLeaderstats(player: Player, statsToAdd: {string}?): Folder?
+	local Profile = self.Profile
+
+	if not Profile then
+		warn("No profile loaded")
+		return nil
+	end
+
+	local LeaderstatsFolder = Instance.new("Folder")
+
+	for key, value in statsToAdd or Profile.Data do
+		local ValueType = type(value)
+
+		if not table.find(ValidLeaderboardTypes, ValueType) then
+			continue
+		end
+
+		local StatClass = `{ValueType:gsub("^%l", string.upper)}Value`
+		local NewStat = Instance.new(StatClass)
+
+		NewStat.Name = key
+		NewStat.Value = value
+		NewStat.Parent = LeaderstatsFolder
+	end
+
+	LeaderstatsFolder.Name = "leaderstats"
+	LeaderstatsFolder.Parent = player
+
+	return LeaderstatsFolder
 end
 
 --[=[

@@ -452,11 +452,9 @@ end
 	@yields
 	
 	@param controllerName string -- The name of the controller
-	@param timeout number? -- The maxmimum amount of time to wait until the client errors
-	
 	@return ClientNetworkController<any>
 ]=]
-function CanaryEngineClient.CreateNetworkController(controllerName: string, timeout: number?): Types.ClientNetworkController<any, any>
+function CanaryEngineClient.CreateNetworkController(controllerName: string): Types.ClientNetworkController<any, any>
 	if not CanaryEngine.RuntimeCreatedNetworkControllers[controllerName] then
 		local NewNetworkController = Network.NewClientController(controllerName)
 
