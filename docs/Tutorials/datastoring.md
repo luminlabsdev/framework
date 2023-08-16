@@ -109,6 +109,8 @@ end
 
 When they join, your leaderboard should look just like this: 
 
+![Player list example](images/datastoring-images/playerlist-example.png)
+
 ### Global Keys
 
 Global keys are a better way of handling cross server communication with data, and you can even send data to offline `UserId`'s. It uses the Global Updates feature of ProfileService internally, and that system is very confusing which is why we made our own. There's really only 3 functions to learn, so it should be pretty straightforward to learn.
