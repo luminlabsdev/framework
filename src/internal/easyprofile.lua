@@ -178,7 +178,7 @@ end
 --[=[
 	Completely wipes the data of the key `userId`, good for complying with GDPR practices.
 	
-	@param userId number -- The user id to erase the data of
+	@param target number | string -- The user id / key to erase the data of
 	@yields
 ]=]
 function ProfileStoreObject:DeleteProfileAsync(target: number | string)
@@ -205,7 +205,7 @@ end
 --[=[
 	Fetches the data off the key `userId`, this will only read data and does not load it.
 	
-	@param userId number -- The user id to get of the data of
+	@param target number | string -- The user id / key to get of the data of
 	@yields
 ]=]
 function ProfileStoreObject:GetProfileAsync(target: number | string): {[string]: any}?
