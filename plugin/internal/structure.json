@@ -64,7 +64,13 @@
                         "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/libraries/utility.lua"
                     }
                 },
-                "Fusion": "Fusion"
+                "Fusion": "Fusion",
+                "ModuleScript$UIShelf": {
+                    "$properties": {
+                        "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/libraries/uishelfv2.lua"
+                    },
+                    "Vendor": "UIShelfVendor"
+                }
             },
             "ModuleScript$Controllers": {
                 "$properties": {

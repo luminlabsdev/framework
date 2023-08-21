@@ -45,6 +45,23 @@ local ValidLeaderboardTypes = {
 	"string",
 }
 
+local ValidAttributeTypes = {
+	"string",
+	"boolean",
+	"number",
+	"UDim",
+	"UDim2",
+	"BrickColor",
+	"Color3",
+	"Vector2",
+	"Vector3",
+	"EnumItem",
+	"NumberSequence",
+	"ColorSequence",
+	"NumberRange",
+	"Rect",
+}
+
 --[=[
 	The object that holds the `ProfileStoreObject`.
 	
@@ -481,7 +498,7 @@ end
 
 	@return Folder?
 ]=]
-function ProfileObject:CreateProfileLeaderstats(player: Player, statsToAdd: {string}?): Folder?
+function ProfileObject:CreateProfileLeaderstats(player: Player, statsToAdd: {string}?, isAttributes: boolean?): Folder?
 	local Profile = self.Profile
 
 	if not Profile then
@@ -489,27 +506,37 @@ function ProfileObject:CreateProfileLeaderstats(player: Player, statsToAdd: {str
 		return nil
 	end
 
-	local LeaderstatsFolder = Instance.new("Folder")
+	if isAttributes then
+		local LeaderstatsFolder = Instance.new("Folder")
 
-	for key, value in statsToAdd or Profile.Data do
-		local ValueType = type(value)
+		for key, value in statsToAdd or Profile.Data do
+			local ValueType = type(value)
 
-		if not table.find(ValidLeaderboardTypes, ValueType) then
-			continue
+			if not table.find(ValidLeaderboardTypes, ValueType) then
+				continue
+			end
+
+			local StatClass = `{ValueType:gsub("^%l", string.upper)}Value`
+			local NewStat = Instance.new(StatClass)
+
+			NewStat.Name = key
+			NewStat.Value = value
+			NewStat.Parent = LeaderstatsFolder
 		end
 
-		local StatClass = `{ValueType:gsub("^%l", string.upper)}Value`
-		local NewStat = Instance.new(StatClass)
+		LeaderstatsFolder.Name = "leaderstats"
+		LeaderstatsFolder.Parent = player
 
-		NewStat.Name = key
-		NewStat.Value = value
-		NewStat.Parent = LeaderstatsFolder
+		return LeaderstatsFolder
+	else
+		for attribute, value in statsToAdd or Profile.Data do
+			if not table.find(ValidAttributeTypes, typeof(value)) then
+				continue
+			end
+			
+			player:SetAttribute(attribute, value)
+		end
 	end
-
-	LeaderstatsFolder.Name = "leaderstats"
-	LeaderstatsFolder.Parent = player
-
-	return LeaderstatsFolder
 end
 
 --[=[
