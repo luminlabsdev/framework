@@ -386,7 +386,7 @@ end
 	Creates a new topbar spacer, acts a spacer to other icons.
 
 	@param properties {string | number} -- The properties to set on the spacer
-    @return TopbarSpacer
+	@return TopbarSpacer
 ]=]
 function UIShelf.CreateSpacer(properties: {string | number}): TopbarSpacer
 	local self = setmetatable({ }, UIShelfSpacer)
