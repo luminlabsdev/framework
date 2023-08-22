@@ -324,7 +324,7 @@ end
 --[=[
 	Binds multiple key codes to activate the icons `Activated` event.
 
-    @param keyCodes {Enum.KeyCode}? -- The key codes to listen to, if it is nil it will reset to no key codes
+	@param keyCodes {Enum.KeyCode}? -- The key codes to listen to, if it is nil it will reset to no key codes
 ]=]
 function UIShelf:BindKeyCodes(keyCodes: {Enum.KeyCode}?)
 	self._KeyCodeConnections = { }
