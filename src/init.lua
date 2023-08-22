@@ -411,6 +411,7 @@ function CanaryEngine.GetEngineClient(): EngineClient?
 		Replicated = EngineReplicated.Media,
 	}
 
+	CanaryEngineClient.UIShelf = require(Vendor.Libraries.UIShelf)
 	CanaryEngineClient.Player = Player
 
 	task.defer(function()
