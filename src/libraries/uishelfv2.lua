@@ -183,6 +183,7 @@ function UIShelf.CreateIcon(properties: {string | number}): TopbarIcon?
 	self.CurrentState = "Default"
 	
     self._KeyCodeConnections = nil
+	self._NoticeConnection = nil
 
 	IconBackground.MouseButton1Up:Connect(function()
 		if UserInputService.MouseEnabled then
@@ -293,27 +294,29 @@ function UIShelf:SetIconNotices(notices: number?, noticeCap: number?)
 	
 	local CachedNoticeCap = `{noticeCap}+`
 
-    TopbarIcon:GetAttributeChangedSignal("Notices"):Connect(function()
-        local NewValue = TopbarIcon:GetAttribute("Notices")
-        BadgeText.Text = NewValue
-
-        if NewValue >= 1 then
-            BadgeContainer.Visible = true
-        elseif NewValue == 0 then
-            BadgeContainer.Visible = false
-		end
-		
-		if NewValue > noticeCap then
-			BadgeText.Text = CachedNoticeCap
-		end
-		
-		if NewValue <= 9 then
-			Badge.Size = UDim2.fromOffset(24, 24)
-			return
-		end
-		
-		Badge.Size = UDim2.fromOffset(BadgeText.TextBounds.X + NOTICE_UI_PADDING, 24)
-	end)
+	if not self._NoticeConnection then
+		TopbarIcon:GetAttributeChangedSignal("Notices"):Connect(function()
+			local NewValue = TopbarIcon:GetAttribute("Notices")
+			BadgeText.Text = NewValue
+	
+			if NewValue >= 1 then
+				BadgeContainer.Visible = true
+			elseif NewValue == 0 then
+				BadgeContainer.Visible = false
+			end
+			
+			if NewValue > noticeCap then
+				BadgeText.Text = CachedNoticeCap
+			end
+			
+			if NewValue <= 9 then
+				Badge.Size = UDim2.fromOffset(24, 24)
+				return
+			end
+			
+			Badge.Size = UDim2.fromOffset(BadgeText.TextBounds.X + NOTICE_UI_PADDING, 24)
+		end)
+	end
 	
 	TopbarIcon:SetAttribute("Notices", TopbarIcon:GetAttribute("Notices") + notices)
 	
