@@ -219,43 +219,27 @@ CanaryEngine.Debugger = Debugger
 	@server
 	@return EngineServer?
 ]=]
-function CanaryEngine.GetEngineServer(): EngineServer?
-	type EngineServer = {
-		Packages: {
-			Server: typeof(game:GetService("ServerStorage").EngineServer.Packages),
-			Replicated: typeof(game:GetService("ReplicatedStorage").EngineReplicated.Packages)
-		},
-	
-		Media: {
-			Server: typeof(game:GetService("ServerStorage").EngineServer.Media),
-			Replicated: typeof(game:GetService("ReplicatedStorage").EngineReplicated.Media)
-		},
-	
-		Data: typeof(require(script.Vendor.Data.EasyProfile)),
-		CreateNetworkController: (controllerName: string) -> (Types.ServerNetworkController<any, any>),
-	}
+function CanaryEngine.GetEngineServer()
+	if RuntimeContext.Server then
+		local EngineServer = ServerStorage:WaitForChild("EngineServer")
+		local EngineReplicated = ReplicatedStorage:WaitForChild("EngineReplicated")
 
-	if not RuntimeContext.Server then
+		CanaryEngineServer.Packages = {
+			Server = EngineServer.Packages,
+			Replicated = EngineReplicated.Packages,
+		}
+
+		CanaryEngineServer.Data = require(DataFolder.EasyProfile)
+
+		CanaryEngineServer.Media = {
+			Server = EngineServer.Media,
+			Replicated = EngineReplicated.Media,
+		}
+
+		return CanaryEngineServer
+	else
 		Debugger.Debug(error, "Failed to fetch 'EngineServer', context must be server")
-		return nil
 	end
-
-	local EngineServer = ServerStorage:WaitForChild("EngineServer")
-	local EngineReplicated = ReplicatedStorage:WaitForChild("EngineReplicated")
-
-	CanaryEngineServer.Packages = {
-		Server = EngineServer.Packages,
-		Replicated = EngineReplicated.Packages,
-	}
-
-	CanaryEngineServer.Data = require(DataFolder.EasyProfile)
-
-	CanaryEngineServer.Media = {
-		Server = EngineServer.Media,
-		Replicated = EngineReplicated.Media,
-	}
-
-	return CanaryEngineServer
 end
 
 --[=[
@@ -265,65 +249,40 @@ end
 	@client
 	@return EngineClient?
 ]=]
-function CanaryEngine.GetEngineClient(): EngineClient?
-	type EngineClient = {
-		Packages: {
-			Client: typeof(ReplicatedStorage.EngineClient.Packages),
-			Replicated: typeof(ReplicatedStorage.EngineReplicated.Packages)
-		},
-	
-		Media: {
-			Client: typeof(ReplicatedStorage.EngineClient.Media),
-			Replicated: typeof(ReplicatedStorage.EngineReplicated.Media)
-		},
-	
-		Libraries: {
-			UIShelf: typeof(require(Vendor.Libraries.UIShelf))
-		},
-	
-		Player: Player,
-		Character: (Types.Character & Model)?,
-	
-		PlayerGui: typeof(game:GetService("StarterGui")),
-		PlayerBackpack: typeof(game:GetService("StarterPack")),
-		 
-		CreateNetworkController: (controllerName: string) -> (Types.ClientNetworkController<any, any>),
-	}
+function CanaryEngine.GetEngineClient()
+	if RuntimeContext.Client then
+		local EngineClient = ReplicatedStorage:WaitForChild("EngineClient")
+		local EngineReplicated = ReplicatedStorage:WaitForChild("EngineReplicated")
 
-	if not RuntimeContext.Client then
+		local Player = PlayerService.LocalPlayer
+
+		CanaryEngineClient.Packages = {
+			Client = EngineClient.Packages,
+			Replicated = EngineReplicated.Packages,
+		}
+
+		CanaryEngineClient.Media = {
+			Client = EngineClient.Media,
+			Replicated = EngineReplicated.Media,
+		}
+
+		CanaryEngineClient.Libraries = {
+			UIShelf = require(Vendor.Libraries.UIShelf)
+		}
+
+		CanaryEngineClient.Player = Player :: Player
+
+		task.defer(function()
+			CanaryEngineClient.Character = Player.Character or Player.CharacterAdded:Wait()  :: Types.Character & Model
+		end)
+
+		CanaryEngineClient.PlayerGui = Player:WaitForChild("PlayerGui") :: StarterGui
+		CanaryEngineClient.PlayerBackpack = Player:WaitForChild("Backpack") :: StarterPack
+
+		return CanaryEngineClient
+	else
 		Debugger.Debug(error, "Failed to fetch 'EngineClient', Context must be client.")
-		return nil
 	end
-
-	local EngineClient = ReplicatedStorage:WaitForChild("EngineClient")
-	local EngineReplicated = ReplicatedStorage:WaitForChild("EngineReplicated")
-
-	local Player = PlayerService.LocalPlayer
-
-	CanaryEngineClient.Packages = {
-		Client = EngineClient.Packages,
-		Replicated = EngineReplicated.Packages,
-	}
-
-	CanaryEngineClient.Media = {
-		Client = EngineClient.Media,
-		Replicated = EngineReplicated.Media,
-	}
-
-	CanaryEngineClient.Libraries = {
-		UIShelf = require(Vendor.Libraries.UIShelf)
-	}
-	
-	CanaryEngineClient.Player = Player
-
-	task.defer(function()
-		CanaryEngineClient.Character = Player.Character or Player.CharacterAdded:Wait()
-	end)
-
-	CanaryEngineClient.PlayerGui = Player:WaitForChild("PlayerGui")
-	CanaryEngineClient.PlayerBackpack = Player:WaitForChild("Backpack")
-
-	return CanaryEngineClient
 end
 
 --[=[
@@ -331,12 +290,7 @@ end
 	
 	@return EngineReplicated?
 ]=]
-function CanaryEngine.GetEngineReplicated(): EngineReplicated?
-	type EngineReplicated = {
-		Packages: typeof(game:GetService("ReplicatedStorage").EngineReplicated.Packages),
-		Media: typeof(game:GetService("ReplicatedStorage").EngineReplicated.Media),
-	}
-
+function CanaryEngine.GetEngineReplicated()
 	local EngineReplicated = ReplicatedStorage:WaitForChild("EngineReplicated")
 
 	CanaryEngineReplicated.Packages = EngineReplicated.Packages
@@ -506,4 +460,4 @@ end
 
 -- // Actions
 
-return CanaryEngine :: CanaryEngine
+return CanaryEngine
