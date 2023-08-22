@@ -164,83 +164,6 @@ local CanaryEngineReplicated = { }
 
 local Types = require(script.Types) -- The types used for all libraries inside of the framework
 
---[=[
-	This is the server sided API for CanaryEngine.
-
-	@field Packages {Server: Folder, Folder}
-	@field Media {Server: Folder, Replicated: Folder}
-	@field CreateNetworkController (controllerName: string) -> (ServerNetworkController<any, any>)
-
-	@interface EngineServer
-	@within CanaryEngine
-	@private
-]=]
-type EngineServer = {
-	Packages: {
-		Server: typeof(game:GetService("ServerStorage").EngineServer.Packages),
-		Replicated: typeof(game:GetService("ReplicatedStorage").EngineReplicated.Packages)
-	},
-
-	Media: {
-		Server: typeof(game:GetService("ServerStorage").EngineServer.Media),
-		Replicated: typeof(game:GetService("ReplicatedStorage").EngineReplicated.Media)
-	},
-
-	Data: typeof(require(script.Vendor.Data.EasyProfile)),
-	CreateNetworkController: (controllerName: string) -> (Types.ServerNetworkController<any, any>),
-}
-
---[=[
-	This is the client sided API for CanaryEngine.
-
-	@field Packages {Client: Folder, Replicated: Folder}
-	@field Media {Client: Folder, Replicated: Folder}
-	@field Player Player
-	@field Character Character & Model
-	@field PlayerGui StarterGui
-	@field PlayerBackpack StarterPack
-	
-	@field CreateNetworkController (controllerName: string) -> (ClientNetworkController<any, any>)
-
-	@interface EngineClient
-	@within CanaryEngine
-	@private
-]=]
-type EngineClient = {
-	Packages: {
-		Client: typeof(game:GetService("ReplicatedStorage").EngineClient.Packages),
-		Replicated: typeof(game:GetService("ReplicatedStorage").EngineReplicated.Packages)
-	},
-
-	Media: {
-		Client: typeof(game:GetService("ReplicatedStorage").EngineClient.Media),
-		Replicated: typeof(game:GetService("ReplicatedStorage").EngineReplicated.Media)
-	},
-
-	Player: Player,
-	Character: (Types.Character & Model)?,
-
-	PlayerGui: typeof(game:GetService("StarterGui")),
-	PlayerBackpack: typeof(game:GetService("StarterPack")),
-	 
-	CreateNetworkController: (controllerName: string) -> (Types.ClientNetworkController<any, any>),
-}
-
---[=[
-	This is the global sided API for CanaryEngine.
-
-	@field Packages Folder
-	@field Media Folder
-
-	@interface EngineReplicated
-	@within CanaryEngine
-	@private
-]=]
-type EngineReplicated = {
-	Packages: typeof(game:GetService("ReplicatedStorage").EngineReplicated.Packages),
-	Media: typeof(game:GetService("ReplicatedStorage").EngineReplicated.Media),
-}
-
 -- // Variables
 
 local MarketplaceService = game:GetService("MarketplaceService")
@@ -288,69 +211,6 @@ CanaryEngine.Libraries = table.freeze({
 
 CanaryEngine.Debugger = Debugger
 
---[=[
-	This is the main API for CanaryEngine
-
-	@field GetEngineServer () -> (EngineServer)
-	@field GetEngineClient () -> (EngineClient)
-	@field CreateSignal (signalName: string) -> (SignalController<any>)
-	@field CreateAnonymousSignal () -> (SignalController<any>)
-	@field GetLatestPackageVersionAsync (CanaryEngine: Instance, warnIfNotLatestVersion: boolean?, respectDebugger: boolean?) -> (number?)
-	@field Runtime {RuntimeSettings: {StudioDebugEnabled: boolean, Version: number, LiveGameDebugger: boolean}, RuntimeContext: {Studio: boolean, Server: boolean, Client: boolean, StudioPlay: boolean}, RuntimeObjects: {NetworkControllers: {[string]: (ServerNetworkController<any, any> | ServerNetworkController<any, any>)}, SignalControllers: {[string]: SignalController<any>}}}
-	@field Libraries {Utility: Utility, Benchmark: Benchmark, Statistics: Statistics, Serialize: Serialize, Fusion: Fusion}
-	@field Debugger Debugger
-	@field RuntimeCreatedSignals {[string]: SignalController<any>}
-	@field RuntimeCreatedNetworkControllers {[string]: ServerNetworkController<any, any> | ClientNetworkController<any, any>}
-
-	@interface CanaryEngine
-	@within CanaryEngine
-	@private
-]=]
-
-type CanaryEngine = {
-	GetEngineServer: () -> (EngineServer),
-	GetEngineClient: () -> (EngineClient),
-	GetEngineReplicated: () -> (EngineReplicated),
-	 
-	CreateSignal: (signalName: string) -> (Types.SignalController<any>),
-	CreateAnonymousSignal: () -> (Types.SignalController<any>),
-
-	GetLatestPackageVersionAsync: (package: Instance, warnIfNotLatestVersion: boolean?, respectDebugger: boolean?) -> (number?),
-
-	Runtime: {
-		RuntimeSettings: {
-			StudioDebugEnabled: boolean,
-			CheckLatestVersion: boolean,
-			Version: number,
-		},
-
-		RuntimeContext: {
-			Studio: boolean,
-			Server: boolean,
-			Client: boolean,
-			StudioPlay: boolean,
-		},
-
-		RuntimeObjects: {
-			NetworkControllers: {[string]: Types.ServerNetworkController<any, any> | Types.ClientNetworkController<any, any>},
-			SignalControllers: {[string]: Types.SignalController<any>}
-		},
-	},
-
-	Libraries: {
-		Utility: typeof(Utility),
-		Benchmark: typeof(Benchmark),
-		Statistics: typeof(Statistics),
-		Serialize: typeof(Serialize),
-		Fusion: typeof(require(LibrariesFolder.Fusion)),
-	},
-
-	Debugger: typeof(Debugger),
-	 
-	RuntimeCreatedSignals: {[string]: Types.SignalController<any>},
-	RuntimeCreatedNetworkControllers: {[string]: Types.ServerNetworkController<any, any> | Types.ClientNetworkController<any, any>},
-}
-
 -- // Functions
 
 --[=[
@@ -360,6 +220,21 @@ type CanaryEngine = {
 	@return EngineServer?
 ]=]
 function CanaryEngine.GetEngineServer(): EngineServer?
+	type EngineServer = {
+		Packages: {
+			Server: typeof(game:GetService("ServerStorage").EngineServer.Packages),
+			Replicated: typeof(game:GetService("ReplicatedStorage").EngineReplicated.Packages)
+		},
+	
+		Media: {
+			Server: typeof(game:GetService("ServerStorage").EngineServer.Media),
+			Replicated: typeof(game:GetService("ReplicatedStorage").EngineReplicated.Media)
+		},
+	
+		Data: typeof(require(script.Vendor.Data.EasyProfile)),
+		CreateNetworkController: (controllerName: string) -> (Types.ServerNetworkController<any, any>),
+	}
+
 	if not RuntimeContext.Server then
 		Debugger.Debug(error, "Failed to fetch 'EngineServer', context must be server")
 		return nil
@@ -391,6 +266,30 @@ end
 	@return EngineClient?
 ]=]
 function CanaryEngine.GetEngineClient(): EngineClient?
+	type EngineClient = {
+		Packages: {
+			Client: typeof(ReplicatedStorage.EngineClient.Packages),
+			Replicated: typeof(ReplicatedStorage.EngineReplicated.Packages)
+		},
+	
+		Media: {
+			Client: typeof(ReplicatedStorage.EngineClient.Media),
+			Replicated: typeof(ReplicatedStorage.EngineReplicated.Media)
+		},
+	
+		Libraries: {
+			UIShelf: typeof(require(Vendor.Libraries.UIShelf))
+		},
+	
+		Player: Player,
+		Character: (Types.Character & Model)?,
+	
+		PlayerGui: typeof(game:GetService("StarterGui")),
+		PlayerBackpack: typeof(game:GetService("StarterPack")),
+		 
+		CreateNetworkController: (controllerName: string) -> (Types.ClientNetworkController<any, any>),
+	}
+
 	if not RuntimeContext.Client then
 		Debugger.Debug(error, "Failed to fetch 'EngineClient', Context must be client.")
 		return nil
@@ -433,6 +332,11 @@ end
 	@return EngineReplicated?
 ]=]
 function CanaryEngine.GetEngineReplicated(): EngineReplicated?
+	type EngineReplicated = {
+		Packages: typeof(game:GetService("ReplicatedStorage").EngineReplicated.Packages),
+		Media: typeof(game:GetService("ReplicatedStorage").EngineReplicated.Media),
+	}
+
 	local EngineReplicated = ReplicatedStorage:WaitForChild("EngineReplicated")
 
 	CanaryEngineReplicated.Packages = EngineReplicated.Packages
