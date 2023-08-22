@@ -41,6 +41,10 @@ SendInfoNetwork:FireAll({ -- When sending data on the server, you must pass a pl
 })
 ```
 
+:::danger
+You cannot really create a replicated network controller. This is because it would be accessed both by the server/client, so you would have to explicity check if is the server or client. This is considered a bad practice anyway, you shouldn't be using server or client exclusive things with shared packages.
+:::
+
 When we start the script, we should then see the the name in the output, and also see the following in the client output:
 
 ```lua
