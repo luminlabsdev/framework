@@ -46,14 +46,14 @@ TopbarScreenGui.Parent = PlayerGui
 TopbarScreenGui.Archivable = false
 
 --[=[
-    @field Image string | number
-    @field Name string
-    @field Order number
-    @field Area number
+	@field Image string | number
+	@field Name string
+	@field Order number
+	@field Area number
 
-    @field SetIconEnabled (self: TopbarIcon, enabled: boolean) -> ()
-    @field SetIconNotices (self: TopbarIcon, notices: number) -> ()
-    @field Destroy (self: TopbarIcon) -> ()
+	@field SetIconEnabled (self: TopbarIcon, enabled: boolean) -> ()
+	@field SetIconNotices (self: TopbarIcon, notices: number) -> ()
+	@field Destroy (self: TopbarIcon) -> ()
 
 	@interface TopbarIcon
 	@within UIShelf
@@ -79,12 +79,12 @@ export type TopbarIcon = {
 }
 
 --[=[
-    @field Name string
-    @field Order number
-    @field Area number
+	@field Name string
+	@field Order number
+	@field Area number
     
-    @field SetSpacerEnabled (self: TopbarIcon, enabled: boolean) -> ()
-    @field Destroy (self: TopbarIcon) -> ()
+	@field SetSpacerEnabled (self: TopbarIcon, enabled: boolean) -> ()
+	@field Destroy (self: TopbarIcon) -> ()
 
 	@interface TopbarSpacer
 	@within UIShelfSpacer
@@ -99,8 +99,8 @@ export type TopbarSpacer = {
 }
 
 --[=[
-    @field CreatedIcons {TopbarIcon}
-    @field CreateIcon (properties: {string | number}) -> (TopbarIcon)
+	@field CreatedIcons {TopbarIcon}
+	@field CreateIcon (properties: {string | number}) -> (TopbarIcon)
 
 	@interface UIShelf
 	@within UIShelf
@@ -146,7 +146,7 @@ end)
 	Creates a new topbar icon, with declared properties.
 
 	@param properties {string | number} -- The properties to set on the icon
-    @return TopbarIcon
+	@return TopbarIcon
 ]=]
 function UIShelf.CreateIcon(properties: {string | number}): TopbarIcon?
     local self = setmetatable({ }, UIShelf)
