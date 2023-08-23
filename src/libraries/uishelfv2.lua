@@ -99,7 +99,7 @@ export type TopBarIcon = {
 	@field Destroy (self: TopbarIcon) -> ()
 
 	@interface TopBarSpacer
-	@within UIShelfSpacer
+	@within TopBarSpacer
 ]=]
 export type TopBarSpacer = {
 	Name: string,
