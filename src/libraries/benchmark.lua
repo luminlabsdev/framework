@@ -60,7 +60,7 @@ local ToString = {
 		local ConvertedString = ""
 
 		for dataType, metric in table do
-			ConvertedString = `{ConvertedString}\n{dataType}: {metric * 1000}ms`
+			ConvertedString = `{ConvertedString}\n\t{dataType}: {metric * 1000}ms`
 		end
 
 		return ConvertedString

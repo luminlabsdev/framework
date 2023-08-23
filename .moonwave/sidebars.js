@@ -19,6 +19,16 @@ module.exports = {
         type: "category",
         label: "Tutorials",
         items: [
+            {
+              type: "category",
+              label: "Libraries",
+              items: [
+                "tutorials/libraries/uishelf",
+                "tutorials/libraries/benchmark",
+                "tutorials/libraries/debugger",
+                "tutorials/libraries/fetch"
+              ]
+            },
             "tutorials/update",
             "tutorials/packages",
             "tutorials/structure",
