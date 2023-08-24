@@ -19,6 +19,8 @@ local TopBarIconObject = { }
 ]=]
 local TopBarSpacerObject = { }
 
+-- // Variables
+
 TopBarSpacerObject.__index = TopBarSpacerObject
 TopBarIconObject.__index = TopBarIconObject
 UIShelf.__index = UIShelf
@@ -56,6 +58,8 @@ local NOTICE_UI_PADDING = 14
 
 TopbarScreenGui.Parent = PlayerGui
 TopbarScreenGui.Archivable = false
+
+-- // Types
 
 --[=[
 	@field Image string | number
@@ -129,39 +133,7 @@ if not RunService:IsClient() then
 	error("Can only run UIShelf locally")
 end
 
-task.defer(function()
-	while true do
-		if StarterGui:GetCoreGuiEnabled(Enum.CoreGuiType.Chat) then
-			ChatSpacer.Visible = true
-		else
-			ChatSpacer.Visible = false
-		end
-
-		if StarterGui:GetCoreGuiEnabled(Enum.CoreGuiType.PlayerList) or StarterGui:GetCoreGuiEnabled(Enum.CoreGuiType.Backpack) or StarterGui:GetCoreGuiEnabled(Enum.CoreGuiType.EmotesMenu) then
-			MoreSpacer.Visible = true
-		else
-			MoreSpacer.Visible = false
-		end
-
-		task.wait(1.5)
-	end
-end)
-
-if VoiceChatService:IsVoiceEnabledForUserIdAsync(Player.UserId) then
-	local VoiceChatSpacer = UIShelf.CreateSpacer({
-		"VoiceChatSpacer",
-		-999,
-		1,
-	}, true):SetSpacerSize(54)
-end
-
-GuiService.MenuOpened:Connect(function()
-	TopbarScreenGui.Enabled = false
-end)
-
-GuiService.MenuClosed:Connect(function()
-	TopbarScreenGui.Enabled = true
-end)
+-- // Functions
 
 --[=[
 	Creates a new topbar icon, with declared properties.
@@ -491,5 +463,41 @@ function TopBarSpacerObject:Destroy()
 
 	setmetatable(self, nil)
 end
+
+-- // Actions
+
+task.defer(function()
+	while true do
+		if StarterGui:GetCoreGuiEnabled(Enum.CoreGuiType.Chat) then
+			ChatSpacer.Visible = true
+		else
+			ChatSpacer.Visible = false
+		end
+
+		if StarterGui:GetCoreGuiEnabled(Enum.CoreGuiType.PlayerList) or StarterGui:GetCoreGuiEnabled(Enum.CoreGuiType.Backpack) or StarterGui:GetCoreGuiEnabled(Enum.CoreGuiType.EmotesMenu) then
+			MoreSpacer.Visible = true
+		else
+			MoreSpacer.Visible = false
+		end
+
+		task.wait(1.5)
+	end
+end)
+
+if VoiceChatService:IsVoiceEnabledForUserIdAsync(Player.UserId) then
+	UIShelf.CreateSpacer({
+		"VoiceChatSpacer",
+		-999,
+		1,
+	}, true):SetSpacerSize(54)
+end
+
+GuiService.MenuOpened:Connect(function()
+	UIShelf.SetTopBarEnabled(false)
+end)
+
+GuiService.MenuClosed:Connect(function()
+	UIShelf.SetTopBarEnabled(true)
+end)
 
 return UIShelf :: UIShelf
