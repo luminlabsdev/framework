@@ -276,8 +276,8 @@ function CanaryEngine.GetEngineClient()
 			CanaryEngineClient.Character = Player.Character or Player.CharacterAdded:Wait()  :: Types.Character & Model
 		end)
 
-		CanaryEngineClient.PlayerGui = Player:WaitForChild("PlayerGui") :: StarterGui
-		CanaryEngineClient.PlayerBackpack = Player:WaitForChild("Backpack") :: StarterPack
+		CanaryEngineClient.PlayerGui = Player:WaitForChild("PlayerGui") :: typeof(game.StarterGui)
+		CanaryEngineClient.PlayerBackpack = Player:WaitForChild("Backpack") :: typeof(game.StarterPack)
 
 		return CanaryEngineClient
 	else
