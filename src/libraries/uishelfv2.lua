@@ -32,6 +32,7 @@ local GuiService = game:GetService("GuiService")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local StarterGui = game:GetService("StarterGui")
+local VoiceChatService = game:GetService("VoiceChatService")
 
 local Player = PlayerService.LocalPlayer
 local PlayerGui = Player:WaitForChild("PlayerGui")
@@ -145,6 +146,14 @@ task.defer(function()
 		task.wait(1.5)
 	end
 end)
+
+if VoiceChatService:IsVoiceEnabledForUserIdAsync(Player.UserId) then
+	local VoiceChatSpacer = UIShelf.CreateSpacer({
+		"VoiceChatSpacer",
+		-999,
+		1,
+	}, true):SetSpacerSize(54)
+end
 
 GuiService.MenuOpened:Connect(function()
 	TopbarScreenGui.Enabled = false
@@ -411,13 +420,15 @@ end
 	Creates a new topbar spacer, acts a spacer to other icons.
 
 	@param properties {string | number} -- The properties to set on the spacer
+	@param bypass boolean? -- Allows you to bypass the order restrictions, should only be used internally
+
 	@return TopbarSpacer
 ]=]
-function UIShelf.CreateSpacer(properties: {string | number}): TopbarSpacer?
+function UIShelf.CreateSpacer(properties: {string | number}, bypass: boolean?): TopbarSpacer?
 	local self = setmetatable({ }, TopBarSpacerObject)
 	local SpacerClone = TopbarSpacer:Clone()
 
-	if properties[2] <= 0 then
+	if properties[2] <= 0 and not bypass then
 		Debugger.Debug(error, "Order cannot be less than 0")
 		return nil
 	end
@@ -452,6 +463,17 @@ function TopBarSpacerObject:SetSpacerEnabled(enabled: boolean)
 	local TopBarSpacer = self._Element
 
 	TopBarSpacer.Visible = enabled
+end
+
+--[=[
+	Sets the size of the spacer on the X scale.
+
+	@param size number -- The size to set the spacer to
+]=]
+function TopBarSpacerObject:SetSpacerSize(size: number)
+	local TopBarSpacer = self._Element
+
+	TopBarSpacer.Size.X.Offset = size
 end
 
 --[=[
