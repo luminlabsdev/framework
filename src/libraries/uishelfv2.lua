@@ -445,7 +445,7 @@ end
 function TopBarSpacerObject:SetSpacerSize(size: number)
 	local TopBarSpacer = self._Element
 
-	TopBarSpacer.Size.X.Offset = size
+	TopBarSpacer.Size = UDim2.fromOffset(size, TopBarSpacer.Size.Y.Offset)
 end
 
 --[=[
