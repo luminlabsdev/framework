@@ -8,7 +8,7 @@
 local Benchmark = { }
 
 --[=[
-	The benchmark object itself.
+	The parent of all classes.
 
 	@class BenchmarkObject
 ]=]

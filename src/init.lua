@@ -26,6 +26,15 @@ local CanaryEngine = { }
 ]=]
 
 --[=[
+	The internal engine debugger, has useful functions to abide by debug settings.
+
+	@prop Debugger EngineDebugger
+
+	@readonly
+	@within CanaryEngine
+]=]
+
+--[=[
 	CanaryEngine's server-sided interface.
 	
 	@server
@@ -95,16 +104,6 @@ local CanaryEngineClient = { }
 
 	@prop PlayerBackpack StarterPack
 	@readonly
-
-	@within CanaryEngineClient
-]=]
-
---[=[
-	Local objects of the player.
-
-	@prop LocalObjects dictionary
-	@readonly
-	@deprecated v2 -- Use PlayerBackpack and PlayerGui instead.
 
 	@within CanaryEngineClient
 ]=]
@@ -314,11 +313,13 @@ end
 	@yields
 	
 	@param controllerName string -- The name of the controller
+	@param controllerTimeout number? -- Sets the maximum timeout when waiting for network controllers on the server, defaults to 3 seconds
+
 	@return ClientNetworkController<any>
 ]=]
-function CanaryEngineClient.CreateNetworkController(controllerName: string): Types.ClientNetworkController<any, any>
+function CanaryEngineClient.CreateNetworkController(controllerName: string, controllerTimeout: number?): Types.ClientNetworkController<any, any>
 	if not CanaryEngine.RuntimeCreatedNetworkControllers[controllerName] then
-		local NewNetworkController = Network.NewClientController(controllerName)
+		local NewNetworkController = Network.NewClientController(controllerName, controllerTimeout or 3)
 
 		CanaryEngine.RuntimeCreatedNetworkControllers[controllerName] = NewNetworkController
 	end

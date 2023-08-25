@@ -3,9 +3,23 @@
 --[=[
 	The parent of all classes.
 
-	@class Debugger
+	@class EngineDebugger
 ]=]
-local Debugger = { }
+local EngineDebugger = { }
+
+--[=[
+	A list of cached stack traces for the current environment.
+
+	@prop CachedStackTraces {[string]: CallStack}
+	@within EngineDebugger
+]=]
+
+--[=[
+	A list of cached debug calls for the current environment.
+
+	@prop CachedDebugCalls {string | {string}}
+	@within EngineDebugger
+]=]
 
 --[=[
 	The callstack type.
@@ -13,7 +27,7 @@ local Debugger = { }
 	@private
 
 	@type CallStack {Name: string, Source: string, DefinedLine: number}
-	@within Debugger
+	@within EngineDebugger
 ]=]
 type CallStack = {Name: string, Source: string, DefinedLine: number}
 
@@ -21,7 +35,7 @@ type CallStack = {Name: string, Source: string, DefinedLine: number}
 	This type contains every roblox user data and generic type.
 
 	@type ExpectedType "Axes" | "BrickColor" | "CatalogSearchParams" | "CFrame" | "Color3" | "ColorSequence" | "ColorSequenceKeypoint" | "Content" | "DateTime" | "DockWidgetPluginGuiInfo" | "Enum" | "EnumItem" | "Enums" | "Faces" | "FloatCurveKey" | "Font" | "Instance" | "NumberRange" | "NumberSequence" | "NumberSequenceKeyPoint" | "OverlapParams" | "PathWaypoint" | "PhysicalProperties" | "Random" | "Ray" | "RayastParams" | "RaycastResult" | "RBXScriptConnection" | "RBXScriptSignal" | "Rect" | "Region3" | "Region3int16" | "SharedTable" | "TweenInfo" | "UDim" | "UDim2" | "Vector2" | "Vector2int16" | "Vector3" | "Vector3int16" | "nil" | "boolean" | "number" | "string" | "function" | "userdata" | "thread" | "table"
-	@within Debugger
+	@within EngineDebugger
 ]=]
 export type ExpectedType = "Axes" | "BrickColor" | "CatalogSearchParams" | "CFrame" | "Color3" | "ColorSequence" | "ColorSequenceKeypoint" | "Content" | "DateTime"
 | "DockWidgetPluginGuiInfo" | "Enum" | "EnumItem" | "Enums" | "Faces" | "FloatCurveKey" | "Font" | "Instance" | "NumberRange" | "NumberSequence"
@@ -30,6 +44,8 @@ export type ExpectedType = "Axes" | "BrickColor" | "CatalogSearchParams" | "CFra
 | "nil" | "boolean" | "number" | "string" | "function" | "userdata" | "thread" | "table"
 
 -- // Variables
+
+local LogService = game:GetService("LogService")
 
 local Runtime = require(script.Parent.Runtime)
 local RuntimeContext = Runtime.Context
@@ -41,7 +57,6 @@ local ValidCallstackNames = {
 	"EngineServer",
 	"EngineReplicated",
 	"EngineReplicatedFirst",
-	"EngineScripts",
 }
 
 -- // Functions
@@ -58,9 +73,10 @@ local function dictionaryLen(d: {[any]: any})
 	})
 end
 
-Debugger.CachedStackTraces = dictionaryLen({ })
+EngineDebugger.CachedStackTraces = dictionaryLen({ })
+EngineDebugger.CachedDebugCalls = { }
 
-local function GetAncestorsUntilParentFolder(instance: Instance): string
+local function GetAncestorsUntilParentFolder(instance: Instance): {string | {Instance}}
 	local Ancestors = { }
 	local OriginalInstance = instance
 	local CompleteString = ""
@@ -79,7 +95,10 @@ local function GetAncestorsUntilParentFolder(instance: Instance): string
 		CompleteString = `{ancestor.Name}.{CompleteString}`
 	end
 	
-	return `{CompleteString}.{OriginalInstance.Name}`
+	return {
+		`{CompleteString}.{OriginalInstance.Name}`,
+		Ancestors,
+	}
 end
 
 --[=[
@@ -90,12 +109,14 @@ end
 	@param prefix string? -- The prefix to put in front of the debug
 	@param respectDebugger boolean? -- Whether or not to respect the debugger, should always be true for correct use
 ]=]
-function Debugger.Debug(debugHandler: (...any) -> (), arguments: {any} | any, prefix: string?, respectDebugger: boolean?)
+function EngineDebugger.Debug(debugHandler: (...any) -> (), arguments: {any} | any, prefix: string?, respectDebugger: boolean?)
 	prefix = prefix or Prefix
 
 	if respectDebugger == nil then
 		respectDebugger = true
 	end
+
+	table.insert(EngineDebugger.CachedDebugCalls, arguments)
 
 	if not respectDebugger then
 		if type(arguments) == "table" then
@@ -116,6 +137,37 @@ function Debugger.Debug(debugHandler: (...any) -> (), arguments: {any} | any, pr
 end
 
 --[=[
+	Clears the output and cached stack traces, with the option of also clearing cached debug calls.
+
+	@param clearDebugCallCache boolean? -- Decides whether or not the debug call cache should be cleared too
+]=]
+function EngineDebugger.ClearOutput(clearDebugCallCache: boolean?)
+	if clearDebugCallCache then
+		table.clear(EngineDebugger.CachedDebugCalls)
+	end
+
+	table.clear(EngineDebugger.CachedStackTraces)
+	LogService:ClearOutput()
+end
+
+--[=[
+	Checks if a value is nil / false and runs the provided handler. This always respects the debugger.
+
+	@param assertionHandler (...any) -> () -- The handler to run if the assertion is not truthy
+	@param assertion T -- The value to assert, this is checked
+	@param message string -- The message to pass to the handler
+	@param ... string -- Any values to format from message, functions identically to `string.format`
+
+	@return T
+]=]
+function EngineDebugger.Assert<T>(assertionHandler: (...any) -> (), assertion: T, message: string, ...: string): T
+	if not assertion then
+		EngineDebugger.Debug(assertionHandler, string.format(message, ...))
+	end
+	return assertion
+end
+
+--[=[
 	Gets the call stack of any instance.
 
 	@param instance Instance -- The instance to start at
@@ -123,13 +175,13 @@ end
 	
 	@return string
 ]=]
-function Debugger.GetCallStack(instance: Script | ModuleScript, stackName: string?): {Name: string, Source: string, DefinedLine: number}
+function EngineDebugger.GetCallStack(instance: Script | ModuleScript, stackName: string?): {Name: string, Source: string, DefinedLine: number}
 	if not (instance:IsA("ModuleScript") or instance:IsA("Script")) then
-		Debugger.DebugInvalidData(1, "GetCallStack", "LuaSourceContainer", instance)
+		EngineDebugger.DebugInvalidData(1, "GetCallStack", "LuaSourceContainer", instance)
 		return
 	end
 
-	stackName = stackName or `Stack{#Debugger.CachedStackTraces + 1}`
+	stackName = stackName or `Stack{#EngineDebugger.CachedStackTraces + 1}`
 	
 	local Source = GetAncestorsUntilParentFolder(instance)
 	local DefinedLine = debug.traceback():split(":")
@@ -137,10 +189,11 @@ function Debugger.GetCallStack(instance: Script | ModuleScript, stackName: strin
 	local StackTable = { }
 	
 	StackTable.Name = stackName
-	StackTable.Source = Source
+	StackTable.Source = Source[1]
+	StackTable.SourceTree = Source[2]
 	StackTable.DefinedLine = tonumber(DefinedLine[#DefinedLine]:gsub("\n", ""), nil)
 	
-	Debugger.CachedStackTraces[stackName] = StackTable
+	EngineDebugger.CachedStackTraces[stackName] = StackTable
 	
 	return StackTable
 end
@@ -153,7 +206,7 @@ end
 	@param expectedType ExpectedType -- The type that was expected of `param`
 	@param param T -- The param which caused the error
 ]=]
-function Debugger.DebugInvalidData(paramNumber: number, funcName: string, expectedType: ExpectedType, param: unknown, debugHander: (...any) -> ())
+function EngineDebugger.DebugInvalidData(paramNumber: number, funcName: string, expectedType: ExpectedType, param: unknown, debugHander: (...any) -> ())
 	local ParamType = typeof(param)
 
 	if ParamType ~= expectedType then
@@ -168,4 +221,4 @@ end
 
 -- // Actions
 
-return Debugger
+return EngineDebugger

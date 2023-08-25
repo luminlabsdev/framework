@@ -6,6 +6,13 @@
 local UIShelf = { }
 
 --[=[
+	A table of every topbar icon created.
+
+	@prop CreatedIcons {TopBarIcon}
+	@within UIShelf
+]=]
+
+--[=[
 	The parent of all classes.
 
 	@class TopBarIconObject
@@ -13,11 +20,108 @@ local UIShelf = { }
 local TopBarIconObject = { }
 
 --[=[
+	The image to display on the icon.
+
+	@prop Image string | number
+	@within TopBarIconObject
+]=]
+
+--[=[
+	The name of the icon.
+
+	@prop Name string
+	@within TopBarIconObject
+]=]
+
+--[=[
+	The layout order of the icon.
+
+	@prop Order number
+	@within TopBarIconObject
+]=]
+
+--[=[
+	The area of the icon. `1` is Left and `2` is Right.
+
+	@prop Area number
+	@within TopBarIconObject
+]=]
+
+--[=[
+	Fires whenever the state of the icon changes. For example: Hovering -> Default
+
+	@tag Event
+
+	@prop StateChanged SignalController<string>
+	@within TopBarIconObject
+]=]
+
+--[=[
+	Fires when the icon is activated, by any supported input type. Also passes in the user input type enum.
+
+	@tag Event
+
+	@prop Activated SignalController<Enum.UserInputType>
+	@within TopBarIconObject
+]=]
+
+--[=[
+	Fires whenever a notice is added to the icon.
+
+	@tag Event
+
+	@prop NoticeAdded SignalController<number>
+	@within TopBarIconObject
+]=]
+
+--[=[
+	The amount of notices the icon actually has.
+
+	@prop Notices number
+	@within TopBarIconObject
+]=]
+
+--[=[
+	The notice cap string, an example of this is "99+" for the default.
+
+	@prop NoticeCap string
+	@within TopBarIconObject
+]=]
+
+--[=[
+	Describes the current state of the icon, works like how [TopBarIconObject.StateChanged] does.
+
+	@prop CurrentState string
+	@within TopBarIconObject
+]=]
+
+--[=[
 	The parent of all classes.
 
 	@class TopBarSpacerObject
 ]=]
 local TopBarSpacerObject = { }
+
+--[=[
+	The name of the spacer.
+
+	@prop Name string
+	@within TopBarSpacerObject
+]=]
+
+--[=[
+	The layout order of the spacer.
+
+	@prop Order number
+	@within TopBarSpacerObject
+]=]
+
+--[=[
+	The area of the spacer. `1` is Left and `2` is Right.
+
+	@prop Area number
+	@within TopBarSpacerObject
+]=]
 
 -- // Variables
 
@@ -67,9 +171,11 @@ TopbarScreenGui.Archivable = false
 	@field Order number
 	@field Area number
 
-	@field SetIconEnabled (self: TopbarIcon, enabled: boolean) -> ()
-	@field SetIconNotices (self: TopbarIcon, notices: number) -> ()
-	@field Destroy (self: TopbarIcon) -> ()
+	@field SetImageSize (self: TopBarIcon, imageSize: Vector2) -> ()
+	@field SetIconEnabled (self: TopBarIcon, enabled: boolean) -> ()
+	@field BindKeyCodes (self: TopBarIcon, keyCodes: {Enum.KeyCode}?) -> ()
+	@field SetIconNotices (self: TopBarIcon, notices: number) -> ()
+	@field Destroy (self: TopBarIcon) -> ()
 
 	@interface TopBarIcon
 	@within UIShelf
@@ -100,8 +206,9 @@ export type TopBarIcon = {
 	@field Order number
 	@field Area number
     
-	@field SetSpacerEnabled (self: TopbarIcon, enabled: boolean) -> ()
-	@field Destroy (self: TopbarIcon) -> ()
+	@field SetSpacerEnabled (self: TopBarIcon, enabled: boolean) -> ()
+	@field SetSpacerSize (self: TopBarSpacer, size: number) -> ()
+	@field Destroy (self: TopBarIcon) -> ()
 
 	@interface TopBarSpacer
 	@within TopBarSpacerObject
@@ -112,12 +219,13 @@ export type TopBarSpacer = {
 	Area: number,
 
 	SetSpacerEnabled: (self: TopBarSpacer, enabled: boolean) -> (),
+	SetSpacerSize: (self: TopBarSpacer, size: number) -> (),
 	Destroy: (self: TopBarSpacer) -> (),
 }
 
 --[=[
-	@field CreatedIcons {TopbarIcon}
-	@field CreateIcon (properties: {string | number}) -> (TopbarIcon)
+	@field CreatedIcons {TopBarIcon}
+	@field CreateIcon (properties: {string | number}) -> (TopBarIcon)
 
 	@interface UIShelf
 	@within UIShelf
@@ -139,9 +247,9 @@ end
 	Creates a new topbar icon, with declared properties.
 
 	@param properties {string | number} -- The properties to set on the icon
-	@return TopbarIcon
+	@return TopBarIconObject
 ]=]
-function UIShelf.CreateIcon(properties: {string | number}): TopbarIcon?
+function UIShelf.CreateIcon(properties: {string | number}): TopBarIcon?
 	local self = setmetatable({ }, TopBarIconObject)
 	local IconClone = TopbarIcon:Clone()
 
@@ -394,9 +502,9 @@ end
 	@param properties {string | number} -- The properties to set on the spacer
 	@param bypass boolean? -- Allows you to bypass the order restrictions, should only be used internally
 
-	@return TopbarSpacer
+	@return TopBarSpacerObject
 ]=]
-function UIShelf.CreateSpacer(properties: {string | number}, bypass: boolean?): TopbarSpacer?
+function UIShelf.CreateSpacer(properties: {string | number}, bypass: boolean?): TopBarSpacer?
 	local self = setmetatable({ }, TopBarSpacerObject)
 	local SpacerClone = TopbarSpacer:Clone()
 

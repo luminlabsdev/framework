@@ -21,7 +21,8 @@ export interface ClientNetworkController<T, U> {
 
     Fire(self: ClientNetworkController<T, U>, data: (T | {[index: number]: T}) | undefined): void;
     InvokeAsync(self: ClientNetworkController<T, U>, data: (T | {[index: number]: T}) | undefined): {[index: number]: U} | undefined;
-
+    
+    Destroy(): void;
     DisconnectAll(): void;
     Name: string;
 }
@@ -42,6 +43,7 @@ export interface ServerNetworkController<T, U> {
     OnInvoke(self: ServerNetworkController<T, U>, callback: (sender: Player, data: (T | {[index: number]: T}) | undefined) => U): void;
 
     SetRateLimit(self: ServerNetworkController<T, U>, maxInvokesPerSecond: number, invokeOverflowCallback: ((sender: Player) => (void)) | undefined);
+    Destroy(): void;
     DisconnectAll(): void;
     Name: string;
 }
@@ -219,7 +221,7 @@ interface EngineClient {
     PlayerGui: StarterGui
     PlayerBackpack: StarterPack
 
-	CreateNetworkController(controllerName: string): ClientNetworkController<any, any>;
+	CreateNetworkController(controllerName: string, controllerTimeout: number | undefined): ClientNetworkController<any, any>;
 }
 
 interface EngineReplicated {

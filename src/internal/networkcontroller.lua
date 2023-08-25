@@ -103,10 +103,10 @@ local Controllers = require(script.Parent.Parent)
 	@param name string -- The name of the new controller
 	@return NetworkControllerClient
 ]=]
-function NetworkController.NewClientController(name: string)
+function NetworkController.NewClientController(name: string, timeout: number)
 	local self = setmetatable({ }, Indexes[1])
 	
-	self._Bridge = BridgeNet.ReferenceBridge(name)
+	self._Bridge = BridgeNet.ClientBridge(name, timeout)
 	self._Connections = { }
 	self.Name = name
 	
@@ -122,7 +122,7 @@ end
 function NetworkController.NewServerController(name: string)
 	local self = setmetatable({ }, Indexes[2])
 
-	self._Bridge = BridgeNet.ReferenceBridge(name)
+	self._Bridge = BridgeNet.ServerBridge(name)
 	self._Connections = { }
 	self.Name = name
 
@@ -203,6 +203,15 @@ function NetworkControllerClient:DisconnectAll()
 	for _, connection in self._Connections do
 		connection:Disconnect()
 	end
+end
+
+--[=[
+	Destroys the current network controller.
+]=]
+function NetworkControllerClient:Destroy()
+	self._Bridge:Destroy()
+	table.clear(self)
+	setmetatable(self, nil)
 end
 
 -- // Network Controller Server
@@ -350,6 +359,15 @@ function NetworkControllerServer:DisconnectAll()
 		
 		connection:Disconnect()
 	end
+end
+
+--[=[
+	Destroys the current network controller.
+]=]
+function NetworkControllerServer:Destroy()
+	self._Bridge:Destroy()
+	table.clear(self)
+	setmetatable(self, nil)
 end
 
 -- // Actions

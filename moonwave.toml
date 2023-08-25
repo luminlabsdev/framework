@@ -8,6 +8,10 @@ apiCategories = [
     "Event"
 ]
 
+[navbar.logo]
+alt = "CanaryEngine"
+src = "navbar.png"
+
 [[navbar.items]]
 href = "https://discord.gg/cwwcZtqJAt"
 label = "Discord"
@@ -19,34 +23,44 @@ label = "Trello"
 position = "right"
 
 [[classOrder]]
-section = "CanaryEngine"
-collapsed = false
-classes = ["CanaryEngine", "CanaryEngineServer", "CanaryEngineClient", "CanaryEngineReplicated", "EngineLoader", "Types"]
-
-[[classOrder]]
-section = "Controllers"
+section = "🕹 Framework API"
 collapsed = true
-classes = ["NetworkControllerServer", "NetworkControllerClient", "SignalControllerObject"]
+classes = ["CanaryEngine", "CanaryEngineServer", "CanaryEngineClient", "CanaryEngineReplicated"]
 
 [[classOrder]]
-section = "EasyProfile"
+section = "🖥 Networking API"
+collapsed = true
+classes = ["NetworkControllerServer", "NetworkControllerClient"]
+
+[[classOrder]]
+section = "📢 Signal API"
+collapsed = true
+classes = ["SignalControllerObject"]
+
+[[classOrder]]
+section = "💾 Data API"
 collapsed = true
 classes = ["EasyProfile", "ProfileStoreObject", "ProfileObject"]
 
 [[classOrder]]
-section = "UIShelf"
+section = "🧱 Engine API"
 collapsed = true
-classes = ["UIShelf", "TopBarIconObject", "TopBarSpacerObject"]
+classes = ["EngineLoader", "EngineDebugger", "EngineTypes"]
 
 [[classOrder]]
-section = "Benchmark"
+section = "⏲ Benchmark API"
 collapsed = true
 classes = ["Benchmark", "BenchmarkObject"]
 
 [[classOrder]]
-section = "Libraries"
+section = "📦 Library API"
 collapsed = true
-classes = ["Debugger", "Sprite", "Base64", "Statistics", "Utility", "Fetch"]
+classes = ["Sprite", "Base64", "Statistics", "Utility", "Fetch", "UIShelf"]
+
+[[classOrder]]
+section = "💬 API Objects"
+collapsed = true
+classes = ["TopBarIconObject", "TopBarSpacerObject"]
 
 [docusaurus]
 projectName = "CanaryEngine"
@@ -57,7 +71,7 @@ favicon = "favicon.png"
 
 [footer]
 style = "dark"
-copyright = "Copyright © 2023 Canary. Built with Moonwave"
+copyright = "Copyright © 2023 canary. Built with Moonwave"
 
 [home]
 enabled = true

@@ -7,7 +7,7 @@
       "CanaryEngineFramework": {
         "$className": "Folder",
         "CanaryEngine": {
-            "$className": "ModuleScript"
+            "$path": "src"
         }
       },
 
@@ -30,18 +30,6 @@
         },
         "Media": {
           "$className": "Folder"
-        }
-      },
-
-      "EngineScripts": {
-        "$className": "Folder",
-        "Client": {
-          "$className": "Folder",
-          "$path": "src/Client/Scripts"
-        },
-        "Server": {
-          "$className": "Folder",
-          "$path": "src/Server/Scripts"
         }
       }
     },

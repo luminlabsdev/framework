@@ -6,15 +6,45 @@ keywords: [roblox, game, framework, changelog, updates]
 
 # Changelog
 
+## 3.3.5
+
+---
+
+### Added
+
+* 2 new debugger functions
+* UIShelf library
+* Documentation blog page
+
+### Improvements
+
+* Improve `networkControllerTimeout`
+* Improve API docs
+* Improve tutorials, 4 new
+* Improve types
+* Improve performance
+
+### Removed
+
+Nothing!
+
+## 3.2.5
+
+---
+
+No information available, mainly small bug fixes.
+
 ## v3.2.4
 
-**Added**
+---
+
+### Added
 
 * `AnonymousSignals` ([#2](https://github.com/canary-development/CanaryEngine/pull/2), [koxx12](https://github.com/koxx12-dev))
 * `EngineReplicatedFirst`
 * Add new default loading screen
 
-**Improvements**
+### Improvements
 
 * Fix all plugin bugs, now runs faster
 * Fix signals erroring constantly
@@ -22,46 +52,52 @@ keywords: [roblox, game, framework, changelog, updates]
 * Improve typings
 * Updated Benchmark + Debugger modules
 
-**Removed**
+### Removed
 
 Nothing!
 
 ## v3.1.4
 
-**Added**
+---
+
+### Added
 
 * Native `roblox-ts` support
 * Docs for all APIs
 * Plugin now updates all files dynamically
 
-**Improvements**
+### Improvements
 
 * Improves default structure
 * Improved plugin
 
-**Removed**
+### Removed
 
 * Remove `Runtime.IsStarted`
 * Deprecated `.GetLatestPackageVersionAsync`
 
 ## v3.0.1
 
-**Added**
+---
+
+### Added
 
 * Nothing!
 
-**Improvements**
+### Improvements
 
 * Typings have been improved to contain an additional argument for network controllers
 * Signals now use a wrapper
 
-**Removed**
+### Removed
 
 * Nothing!
 
 ## v3.0.0
 
-**Added**
+---
+
+### Added
 
 * Add `CanaryEngine.RuntimeCreatedSignals`
 * Add `CanaryEngine.RuntimeCreatedNetworkControllers`
@@ -76,7 +112,7 @@ Nothing!
 * Add `Promise` to default packages
 * Add `MatchmakingService`
 
-**Improvements**
+### Improvements
 
 * Turn `NetworkSignal` into `NetworkController`
 * Add `signalName` parameter to `CanaryEngine.CreateSignal` for easier signal access across scripts (breaking change)
@@ -88,7 +124,7 @@ Nothing!
 * Improve BridgeNet wrapper to be more clean + efficient
 * Internal tooling is extremely easier to access
 
-**Removed**
+### Removed
 
 * Remove `CanaryEngineServer.GetDataService`
 * Remove `CanaryEngineServer.Media`
@@ -96,44 +132,50 @@ Nothing!
 
 ## v2.2.1
 
-**Added**
+---
+
+### Added
 
 * Add Once + Disconnect to `NetworkSignals`
 
-**Improvements**
+### Improvements
 
 * Fix bugs
 * Clean Code
 * Framework starts earlier for better server security
 
-**Removed**
+### Removed
 
 * Nothing!
 
 ## v2.2.0
 
-**Added**
+---
+
+### Added
 
 * Add 'Statistics Library'
 * Add support for EasyDocs
 * Add `PlayerGui` to `EngineClient`.
 
-**Improvements**
+### Improvements
 
 * Fix bugs
 * Clean Code
 
-**Removed**
+### Removed
 
 * Nothing!
 
 ## v2.1.0
 
-**Added**
+---
+
+### Added
 
 * Add Vendor folder under new packages
 
-**Improvements**
+### Improvements
 
 * Make it so that return data from regular `Signal`s return in a table instead of a tuple for consistency
 * Create wrapper for BridgeNet instead of editing the source code
@@ -142,13 +184,15 @@ Nothing!
 * Fix support for Wait
 * Update `base64` by @Gooncreeper
 
-**Removed**
+### Removed
 
 * Nothing!
 
 ## v2.0.0
 
-**Added**
+---
+
+### Added
 
 * Added option to install default packages in the plugin
 * Added new `Utility` functions to the module
@@ -156,12 +200,12 @@ Nothing!
 * Add `EngineServer.GetDataService()`
 * Add support for debugging in live games
 
-**Improvements**
+### Improvements
 * Clean up code
 * Bug fixes
 * Fix up `random_gen`
 
-**Removed**
+### Removed
 
 * Remove `EngineClient.LocalObjects`
 * Remove `EngineClient.PreinstalledPackages`
@@ -169,22 +213,26 @@ Nothing!
 
 ## v1.2.0
 
-**Added**
+---
+
+### Added
 
 * Added install and uninstall to plugin
 * Added `Utility`, `Benchmark`, and `Serialize` (BlueSerializer by @commitblue) libs to the main module
 * Add support for checking framework version automatically with `GetLatestPackageVersionAsync`, it is now an attribute under the main module.
 * Better `NetworkSignal` typing
 
-**Improvements**
+### Improvements
 
 * A few QOL fixes
 * Bug fixes
 
-**Removed**
+### Removed
 
 * Removed intellisense from plugin, it's sadly impossible
 
 ## v1.1.0
 
-* Public release!
+---
+
+* Public release! 🥳
