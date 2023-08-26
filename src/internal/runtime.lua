@@ -35,6 +35,34 @@ local EngineRuntimeContext = {
 }
 
 --[=[
+	Whether the current client is connected to studio.
+
+	@prop Studio boolean
+	@within EngineRuntimeContext
+]=]
+
+--[=[
+	Whether the current environment is the server.
+
+	@prop Server boolean
+	@within EngineRuntimeContext
+]=]
+
+--[=[
+	Whether the current environment is the client.
+
+	@prop Client boolean
+	@within EngineRuntimeContext
+]=]
+
+--[=[
+	Whether the current client is playtesting in studio.
+
+	@prop StudioPlay boolean
+	@within EngineRuntimeContext
+]=]
+
+--[=[
 	The parent of all classes.
 
 	@class EngineRuntimeSettings
