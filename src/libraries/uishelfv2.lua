@@ -588,7 +588,7 @@ task.defer(function()
 			MoreSpacer.Visible = false
 		end
 
-		task.wait(1.5)
+		task.wait(0.75)
 	end
 end)
 

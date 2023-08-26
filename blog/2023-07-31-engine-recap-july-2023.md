@@ -31,6 +31,10 @@ We have added a folder for `ReplicatedFirst`! Now you can have custom loader scr
 
 Introducing the engine loader! This is a custom loading screen made directly for CanaryEngine, and it functions better in performance than most loading screens. It also shares extensive info, like the current asset completed percentage, and even failed assets once finished! You can view the API under **Engine API > EngineLoader**.
 
+### `roblox-ts` Typings
+
+You can now use CanaryEngine with the new `roblox-ts` typings. Lots of people requested this feature and it is finally here!
+
 ### Other Improvements
 
 * Improves types

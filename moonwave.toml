@@ -23,42 +23,42 @@ label = "Trello"
 position = "right"
 
 [[classOrder]]
-section = "🕹 Framework API"
+section = "Framework API"
 collapsed = true
 classes = ["CanaryEngine", "CanaryEngineServer", "CanaryEngineClient", "CanaryEngineReplicated"]
 
 [[classOrder]]
-section = "🖥 Networking API"
+section = "Networking API"
 collapsed = true
 classes = ["NetworkControllerServer", "NetworkControllerClient"]
 
 [[classOrder]]
-section = "📢 Signal API"
+section = "Signal API"
 collapsed = true
 classes = ["SignalControllerObject"]
 
 [[classOrder]]
-section = "💾 Data API"
+section = "Data API"
 collapsed = true
 classes = ["EasyProfile", "ProfileStoreObject", "ProfileObject"]
 
 [[classOrder]]
-section = "🧱 Engine API"
+section = "Engine API"
 collapsed = true
 classes = ["EngineLoader", "EngineDebugger", "EngineTypes"]
 
 [[classOrder]]
-section = "⏲ Benchmark API"
+section = "Benchmark API"
 collapsed = true
 classes = ["Benchmark", "BenchmarkObject"]
 
 [[classOrder]]
-section = "📦 Library API"
+section = "Library API"
 collapsed = true
 classes = ["Sprite", "Base64", "Statistics", "Utility", "Fetch", "UIShelf"]
 
 [[classOrder]]
-section = "💬 API Objects"
+section = "Library Objects API"
 collapsed = true
 classes = ["TopBarIconObject", "TopBarSpacerObject"]
 
