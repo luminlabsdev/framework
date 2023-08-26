@@ -10,7 +10,7 @@ local CanaryEngine = { }
 --[=[
 	The runtime property contains settings that are set during runtime, and the current context of the server/client.
 
-	@prop Runtime {RuntimeSettings: RuntimeSettings, RuntimeContext: RuntimeContext, RuntimeObjects: {NetworkControllers: {[string]: (ServerNetworkController<any, any> | ServerNetworkController<any, any>)}, SignalControllers: {[string]: SignalController<any>}}}
+	@prop Runtime {RuntimeSettings: EngineRuntimeSettings, RuntimeContext: EngineRuntimeContext, RuntimeObjects: {NetworkControllers: {[string]: (ServerNetworkController<any, any> | ServerNetworkController<any, any>)}, SignalControllers: {[string]: SignalController<any>}}}
 
 	@readonly
 	@within CanaryEngine

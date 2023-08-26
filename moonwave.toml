@@ -48,6 +48,11 @@ collapsed = true
 classes = ["EngineLoader", "EngineDebugger", "EngineTypes"]
 
 [[classOrder]]
+section = "Runtime API"
+collapsed = true
+classes = ["EngineRuntime", "EngineRuntimeContext", "EngineRuntimeSettings"]
+
+[[classOrder]]
 section = "Benchmark API"
 collapsed = true
 classes = ["Benchmark", "BenchmarkObject"]
