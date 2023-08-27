@@ -8,7 +8,21 @@ local UIShelf = { }
 --[=[
 	A table of every topbar icon created.
 
-	@prop CreatedIcons {TopBarIcon}
+	@prop CreatedIcons {TopBarIconObject}
+	@within UIShelf
+]=]
+
+--[=[
+	Whether or not voice chat is enabled in your game, this must be toggled accordingly or your icons will display incorrectly.
+
+	@prop VoiceChatEnabled boolean
+	@within UIShelf
+]=]
+
+--[=[
+	Whether or not the topbar is enabled for UIShelf.
+
+	@prop TopBarEnabled boolean
 	@within UIShelf
 ]=]
 
@@ -130,6 +144,8 @@ TopBarIconObject.__index = TopBarIconObject
 UIShelf.__index = UIShelf
 
 UIShelf.CreatedIcons = { }
+UIShelf.VoiceChatEnabled = false
+UIShelf.TopBarEnabled = true
 
 local Vendor = script.Vendor
 
@@ -165,21 +181,6 @@ TopbarScreenGui.Archivable = false
 
 -- // Types
 
---[=[
-	@field Image string | number
-	@field Name string
-	@field Order number
-	@field Area number
-
-	@field SetImageSize (self: TopBarIcon, imageSize: Vector2) -> ()
-	@field SetIconEnabled (self: TopBarIcon, enabled: boolean) -> ()
-	@field BindKeyCodes (self: TopBarIcon, keyCodes: {Enum.KeyCode}?) -> ()
-	@field SetIconNotices (self: TopBarIcon, notices: number) -> ()
-	@field Destroy (self: TopBarIcon) -> ()
-
-	@interface TopBarIcon
-	@within UIShelf
-]=]
 export type TopBarIcon = {
 	Image: string | number,
 	Name: string,
@@ -201,18 +202,6 @@ export type TopBarIcon = {
 	Destroy: (self: TopBarIcon) -> (),
 }
 
---[=[
-	@field Name string
-	@field Order number
-	@field Area number
-    
-	@field SetSpacerEnabled (self: TopBarIcon, enabled: boolean) -> ()
-	@field SetSpacerSize (self: TopBarSpacer, size: number) -> ()
-	@field Destroy (self: TopBarIcon) -> ()
-
-	@interface TopBarSpacer
-	@within TopBarSpacerObject
-]=]
 export type TopBarSpacer = {
 	Name: string,
 	Order: number,
@@ -223,15 +212,10 @@ export type TopBarSpacer = {
 	Destroy: (self: TopBarSpacer) -> (),
 }
 
---[=[
-	@field CreatedIcons {TopBarIcon}
-	@field CreateIcon (properties: {string | number}) -> (TopBarIcon)
-
-	@interface UIShelf
-	@within UIShelf
-]=]
-export type UIShelf = {
+type UIShelf = {
 	CreatedIcons: {TopBarIcon},
+	VoiceChatEnabled: boolean,
+	TopBarEnabled: boolean,
 	CreateIcon: (properties: {string | number}) -> (TopBarIcon),
 	CreateSpacer: (properties: {string | number}) -> (TopBarSpacer),
 	SetTopBarEnabled: (enabled: boolean) -> ()
@@ -359,6 +343,7 @@ end
 ]=]
 function UIShelf.SetTopBarEnabled(enabled: boolean)
 	TopbarScreenGui.Enabled = enabled
+	UIShelf.TopBarEnabled = enabled
 end
 
 --[=[
@@ -592,7 +577,7 @@ task.defer(function()
 	end
 end)
 
-if VoiceChatService:IsVoiceEnabledForUserIdAsync(Player.UserId) then
+if VoiceChatService:IsVoiceEnabledForUserIdAsync(Player.UserId) and UIShelf.VoiceChatEnabled then
 	UIShelf.CreateSpacer({
 		"VoiceChatSpacer",
 		-999,
@@ -601,11 +586,11 @@ if VoiceChatService:IsVoiceEnabledForUserIdAsync(Player.UserId) then
 end
 
 GuiService.MenuOpened:Connect(function()
-	UIShelf.SetTopBarEnabled(false)
+	TopbarScreenGui.Enabled = false
 end)
 
 GuiService.MenuClosed:Connect(function()
-	UIShelf.SetTopBarEnabled(true)
+	TopbarScreenGui.Enabled = UIShelf.TopBarEnabled
 end)
 
 return UIShelf :: UIShelf

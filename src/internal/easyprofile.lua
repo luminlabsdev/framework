@@ -21,7 +21,6 @@ export type GlobalKey = {Key: string, Value: any, KeyId: number}
 
 -- // Variables
 
-
 --[=[
 	The parent of all classes.
 

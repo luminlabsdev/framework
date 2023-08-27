@@ -216,7 +216,7 @@ CanaryEngine.Debugger = Debugger
 	Gets the server-sided interface of CanaryEngine
 	
 	@server
-	@return EngineServer?
+	@return CanaryEngineServer?
 ]=]
 function CanaryEngine.GetEngineServer()
 	if RuntimeContext.Server then
@@ -246,7 +246,7 @@ end
 	
 	@yields
 	@client
-	@return EngineClient?
+	@return CanaryEngineClient?
 ]=]
 function CanaryEngine.GetEngineClient()
 	if RuntimeContext.Client then
@@ -287,7 +287,7 @@ end
 --[=[
 	Gets the global-sided interface of CanaryEngine. Recommended that use this only in replicated packages, this is a bad practice anywhere else.
 	
-	@return EngineReplicated?
+	@return CanaryEngineReplicated?
 ]=]
 function CanaryEngine.GetEngineReplicated()
 	local EngineReplicated = ReplicatedStorage:WaitForChild("EngineReplicated")
