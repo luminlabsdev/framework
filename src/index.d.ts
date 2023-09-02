@@ -15,12 +15,12 @@ export interface SignalController<T> {
 }
 
 export interface ClientNetworkController<T, U> {
-    Connect(self: ClientNetworkController<T, U>, func: (data: {[index: number]: T} | undefined) => (void)): ControllerConnection;
-    Wait(self: ClientNetworkController<T, U>): {[index: number]: T} | undefined;
-    Once(self: ClientNetworkController<T, U>, func: (data: {[index: number]: T} | undefined) => (void)): ControllerConnection;
+    Connect(func: (data: {[index: number]: T} | undefined) => (void)): ControllerConnection;
+    Wait(): {[index: number]: T} | undefined;
+    Once(func: (data: {[index: number]: T} | undefined) => (void)): ControllerConnection;
 
-    Fire(self: ClientNetworkController<T, U>, data: (T | {[index: number]: T}) | undefined): void;
-    InvokeAsync(self: ClientNetworkController<T, U>, data: (T | {[index: number]: T}) | undefined): {[index: number]: U} | undefined;
+    Fire(data: (T | {[index: number]: T}) | undefined): void;
+    InvokeAsync(data: (T | {[index: number]: T}) | undefined): {[index: number]: U} | undefined;
     
     Destroy(): void;
     DisconnectAll(): void;
@@ -32,17 +32,14 @@ export interface Example {
 }
 
 export interface ServerNetworkController<T, U> {
-    Connect(self: ServerNetworkController<T, U>, func: (sender: Player, data: {[index: number]: T} | undefined) => (void)): ControllerConnection;
-    Wait(self: ServerNetworkController<T, U>): [Player, {[index: number]: T} | undefined];
-    Once(self: ServerNetworkController<T, U>, func: (sender: Player, data: {[index: number]: T} | undefined) => (void)): ControllerConnection;
+    Connect(func: (sender: Player, data: {[index: number]: T} | undefined) => (void)): ControllerConnection;
+    Wait(): [Player, {[index: number]: T} | undefined];
+    Once(func: (sender: Player, data: {[index: number]: T} | undefined) => (void)): ControllerConnection;
 
-    Fire(self: ServerNetworkController<T, U>, recipient: Player | {[index: number]: Player}, data: (T | {[index: number]: T}) | undefined): void;
-    FireAll(self: ServerNetworkController<T, U>, data: (T | {[index: number]: T}) | undefined): void;
-    FireExcept(self: ServerNetworkController<T, U>, except: Player | {[index: number]: Player}, data: (T | {[index: number]: T}) | undefined): void;
-    FireInRange(self: ServerNetworkController<T, U>, comparePoint: Vector3, maximumRange: number, data: (T | {[index: number]: T}) | undefined)
-    OnInvoke(self: ServerNetworkController<T, U>, callback: (sender: Player, data: (T | {[index: number]: T}) | undefined) => U): void;
-
-    SetRateLimit(self: ServerNetworkController<T, U>, maxInvokesPerSecond: number, invokeOverflowCallback: ((sender: Player) => (void)) | undefined);
+    Fire(recipient: Player | {[index: number]: Player}, data: (T | {[index: number]: T}) | undefined): void;
+    FireAll(data: (T | {[index: number]: T}) | undefined): void;
+    FireExcept(except: Player | {[index: number]: Player}, data: (T | {[index: number]: T}) | undefined): void;
+    OnInvoke(callback: (sender: Player, data: (T | {[index: number]: T}) | undefined) => U): void;
     Destroy(): void;
     DisconnectAll(): void;
     Name: string;
@@ -59,9 +56,9 @@ export interface Base64 {
 }
 
 export interface Statistics {
-    GetMedian(numberList: {number}): number;
-    GetMean(numberList: {number}): number;
-    GetMode(numberList: {number}): number;
+    GetMedian(numberList: number[]): number;
+    GetMean(numberList: number[]): number;
+    GetMode(numberList: number[]): number;
 }
 
 type CallStack = {Name: string, Source: string, DefinedLine: number}
@@ -72,7 +69,7 @@ type ExpectedType = "Axes" | "BrickColor" | "CatalogSearchParams" | "CFrame" | "
 | "nil" | "boolean" | "number" | "string" | "function" | "userdata" | "thread" | "table"
 
 export interface Debugger {
-    Debug<T>(debugHandler: ((...T) => (void)) | ((message: T, level: number) => (void)), arguments: {[index: number]: T} | T, prefix: string | undefined, respectDebugger: boolean | undefined): void;
+    Debug<T>(debugHandler: ((...arg0: T[]) => (void)) | ((message: T, level: number) => (void)), arguments: {[index: number]: T} | T, prefix: string | undefined, respectDebugger: boolean | undefined): void;
     GetCallStack(instance: Instance, stackName: string | undefined): CallStack;
     DebugInvalidData(paramNumber: number, funcName: string, expectedType: ExpectedType, param: unknown): void;
 
@@ -136,19 +133,34 @@ export interface EasyProfile {
     LoadedPlayers: {[key: string]: {[key: string]: ProfileObject}};
 }
 
-interface EngineServer {
-    Packages: {
+// interface EngineServer {
+//     Packages: {
+//         Server: Folder
+//         Replicated: Folder
+//     }
+
+//     Media: {
+//         Server: Folder
+//         Replicated: Folder
+//     }
+
+//     Data: EasyProfile
+// 	CreateNetworkController(controllerName: string): ServerNetworkController<any, any>;
+// }
+
+export namespace EngineServer {
+    const Packages: {
         Server: Folder
         Replicated: Folder
     }
 
-    Media: {
+    const Media: {
         Server: Folder
         Replicated: Folder
     }
 
-    Data: EasyProfile
-	CreateNetworkController(controllerName: string): ServerNetworkController<any, any>;
+    const Data: EasyProfile
+	const CreateNetworkController: (controllerName: string) => ServerNetworkController<any, any>;
 }
 
 export interface Character {
@@ -204,35 +216,60 @@ export interface Character {
 	}
 }
 
-interface EngineClient {
-    Packages: {
+// interface EngineClient {
+//     Packages: {
+//         Client: Folder
+//         Replicated: Folder
+//     }
+
+//     Media: {
+//         Client: Folder
+//         Replicated: Folder
+//     }
+
+//     Player: Player
+//     Character: Character & Model
+
+//     PlayerGui: StarterGui
+//     PlayerBackpack: StarterPack
+
+// 	CreateNetworkController(controllerName: string, controllerTimeout: number | undefined): ClientNetworkController<any, any>;
+// }
+
+export namespace EngineClient {
+    const Packages: {
+        Client: Folder
+        Replicated: Folder
+    };
+
+    const Media: {
         Client: Folder
         Replicated: Folder
     }
 
-    Media: {
-        Client: Folder
-        Replicated: Folder
-    }
+    const Player: Player
+    const Character: Character & Model
 
-    Player: Player
-    Character: Character & Model
+    const PlayerGui: StarterGui
+    const PlayerBackpack: StarterPack
 
-    PlayerGui: StarterGui
-    PlayerBackpack: StarterPack
-
-	CreateNetworkController(controllerName: string, controllerTimeout: number | undefined): ClientNetworkController<any, any>;
+	const CreateNetworkController: (controllerName: string, controllerTimeout: number | undefined) => ClientNetworkController<any, any>;
 }
 
-interface EngineReplicated {
-    Packages: Folder
-    Media: Folder
+// interface EngineReplicated {
+//     Packages: Folder
+//     Media: Folder
+// }
+
+export namespace EngineReplicated {
+    const Packages: Folder;
+    const Media: Folder;
 }
 
 export namespace CanaryEngine {
-    export function GetEngineServer(): EngineServer;
-	export function GetEngineClient(): EngineClient;
-    export function GetEngineReplicated(): EngineReplicated;
+    export function GetEngineServer(): typeof EngineServer;
+	export function GetEngineClient(): typeof EngineClient;
+    export function GetEngineReplicated(): typeof EngineReplicated;
 
 	export function CreateSignal(signalName: string | undefined): SignalController<any>;
     export function CreateAnonymousSignal(): SignalController<any>;

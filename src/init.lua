@@ -461,4 +461,6 @@ end
 
 -- // Actions
 
-return CanaryEngine
+return {
+	CanaryEngine = CanaryEngine
+}

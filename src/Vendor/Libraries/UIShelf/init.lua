@@ -1,3 +1,194 @@
+local function import_vendor()
+    local Vendor = Instance.new("Folder")
+Vendor.Name = "Vendor"
+
+local Badge = Instance.new("Frame")
+Badge.Name = "Badge"
+Badge.Size = UDim2.new(0, 24, 0, 24)
+Badge.BackgroundTransparency = 1
+Badge.Position = UDim2.new(0, 18, 0, 2)
+Badge.Parent = Vendor
+
+local Inner = Instance.new("ImageLabel")
+Inner.Name = "Inner"
+Inner.ZIndex = 3
+Inner.AnchorPoint = Vector2.new(0.5, 0.5)
+Inner.Size = UDim2.new(1, -4, 1, -4)
+Inner.BackgroundTransparency = 1
+Inner.Position = UDim2.new(0.5, 0, 0.5, 0)
+Inner.ScaleType = Enum.ScaleType.Slice
+Inner.ImageRectOffset = Vector2.new(340, 490)
+Inner.ImageRectSize = Vector2.new(21, 21)
+Inner.Image = "rbxassetid://9832706464"
+Inner.SliceCenter = Rect.new(12, 12, 13, 13)
+Inner.Parent = Badge
+
+local TextLabel = Instance.new("TextLabel")
+TextLabel.ZIndex = 100
+TextLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+TextLabel.Size = UDim2.new(1, 0, 1, 0)
+TextLabel.BackgroundTransparency = 1
+TextLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
+TextLabel.FontSize = Enum.FontSize.Size14
+TextLabel.TextSize = 14
+TextLabel.TextColor3 = Color3.fromRGB(57, 59, 61)
+TextLabel.Text = "0"
+TextLabel.TextWrapped = true
+TextLabel.TextWrap = true
+TextLabel.Font = Enum.Font.Gotham
+TextLabel.Parent = Inner
+
+local Background = Instance.new("ImageLabel")
+Background.Name = "Background"
+Background.ZIndex = 2
+Background.Size = UDim2.new(1, 0, 1, 0)
+Background.BackgroundTransparency = 1
+Background.ScaleType = Enum.ScaleType.Slice
+Background.ImageColor3 = Color3.fromRGB(35, 37, 39)
+Background.ImageRectOffset = Vector2.new(486, 0)
+Background.ImageRectSize = Vector2.new(25, 25)
+Background.Image = "rbxassetid://9832706464"
+Background.SliceCenter = Rect.new(14, 14, 15, 15)
+Background.Parent = Badge
+
+local Spacer = Instance.new("Frame")
+Spacer.Name = "Spacer"
+Spacer.LayoutOrder = 1
+Spacer.Size = UDim2.new(0, 32, 1, 0)
+Spacer.BackgroundTransparency = 1
+Spacer.Parent = Vendor
+
+local Icon = Instance.new("Frame")
+Icon.Name = "Icon"
+Icon.LayoutOrder = 1
+Icon.Size = UDim2.new(0, 32, 1, 0)
+Icon.BackgroundTransparency = 1
+Icon.Parent = Vendor
+
+local Background1 = Instance.new("ImageButton")
+Background1.Name = "Background"
+Background1.AnchorPoint = Vector2.new(0, 1)
+Background1.Size = UDim2.new(0, 32, 0, 32)
+Background1.BackgroundTransparency = 1
+Background1.Position = UDim2.new(0, 0, 1, 0)
+Background1.Image = "rbxasset://textures/ui/TopBar/iconBase.png"
+Background1.Parent = Icon
+
+local StateOverlay = Instance.new("ImageLabel")
+StateOverlay.Name = "StateOverlay"
+StateOverlay.ZIndex = 2
+StateOverlay.Size = UDim2.new(1, 0, 1, 0)
+StateOverlay.BackgroundTransparency = 1
+StateOverlay.ScaleType = Enum.ScaleType.Slice
+StateOverlay.ImageTransparency = 1
+StateOverlay.ImageRectOffset = Vector2.new(79, 484)
+StateOverlay.ImageRectSize = Vector2.new(17, 17)
+StateOverlay.Image = "rbxassetid://9735619251"
+StateOverlay.SliceCenter = Rect.new(8, 8, 8, 8)
+StateOverlay.Parent = Background1
+
+local Icon1 = Instance.new("ImageLabel")
+Icon1.Name = "Icon"
+Icon1.AnchorPoint = Vector2.new(0.5, 0.5)
+Icon1.Size = UDim2.new(0, 24, 0, 24)
+Icon1.BackgroundTransparency = 1
+Icon1.Position = UDim2.new(0.499999, 0, 0.5, 0)
+Icon1.Parent = Background1
+
+local BadgeContainer = Instance.new("Frame")
+BadgeContainer.Name = "BadgeContainer"
+BadgeContainer.ZIndex = 2
+BadgeContainer.Visible = false
+BadgeContainer.Size = UDim2.new(1, 0, 1, 0)
+BadgeContainer.BackgroundTransparency = 1
+BadgeContainer.Parent = Icon
+
+local SelectionImageObject = Instance.new("Frame")
+SelectionImageObject.Name = "SelectionImageObject"
+SelectionImageObject.Size = UDim2.new(1, 0, 1, 0)
+SelectionImageObject.BorderColor3 = Color3.fromRGB(0, 0, 0)
+SelectionImageObject.BackgroundTransparency = 1
+SelectionImageObject.BorderSizePixel = 0
+SelectionImageObject.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+SelectionImageObject.Parent = Vendor
+
+local UIStroke = Instance.new("UIStroke")
+UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+UIStroke.Thickness = 2
+UIStroke.Color = Color3.fromRGB(255, 255, 255)
+UIStroke.Parent = SelectionImageObject
+
+local UICorner = Instance.new("UICorner")
+UICorner.Parent = SelectionImageObject
+
+local Topbar = Instance.new("ScreenGui")
+Topbar.Name = "Topbar"
+Topbar.ResetOnSpawn = false
+Topbar.ScreenInsets = Enum.ScreenInsets.DeviceSafeInsets
+Topbar.IgnoreGuiInset = true
+Topbar.DisplayOrder = 999999999
+Topbar.Parent = Vendor
+
+local TopBarFrame = Instance.new("Frame")
+TopBarFrame.Name = "TopBarFrame"
+TopBarFrame.Size = UDim2.new(1, 0, 0, 36)
+TopBarFrame.BackgroundTransparency = 1
+TopBarFrame.Parent = Topbar
+
+local LeftFrame = Instance.new("Frame")
+LeftFrame.Name = "LeftFrame"
+LeftFrame.Size = UDim2.new(0.4461444, -16, 1, 0)
+LeftFrame.BackgroundTransparency = 1
+LeftFrame.Position = UDim2.new(0, 60, 0, 0)
+LeftFrame.Parent = TopBarFrame
+
+local Layout = Instance.new("UIListLayout")
+Layout.Name = "Layout"
+Layout.FillDirection = Enum.FillDirection.Horizontal
+Layout.VerticalAlignment = Enum.VerticalAlignment.Center
+Layout.SortOrder = Enum.SortOrder.LayoutOrder
+Layout.Padding = UDim.new(0, 12)
+Layout.Parent = LeftFrame
+
+local ChatSpacer = Instance.new("Frame")
+ChatSpacer.Name = "ChatSpacer"
+ChatSpacer.LayoutOrder = -999999999
+ChatSpacer.Visible = false
+ChatSpacer.Size = UDim2.new(0, 32, 1, 0)
+ChatSpacer.BackgroundTransparency = 1
+ChatSpacer.Parent = LeftFrame
+
+local RightFrame = Instance.new("Frame")
+RightFrame.Name = "RightFrame"
+RightFrame.AnchorPoint = Vector2.new(1, 0)
+RightFrame.Size = UDim2.new(0.5, -16, 1, 0)
+RightFrame.BackgroundTransparency = 1
+RightFrame.Position = UDim2.new(1, -16, 0, 0)
+RightFrame.Parent = TopBarFrame
+
+local Layout1 = Instance.new("UIListLayout")
+Layout1.Name = "Layout"
+Layout1.FillDirection = Enum.FillDirection.Horizontal
+Layout1.HorizontalAlignment = Enum.HorizontalAlignment.Right
+Layout1.VerticalAlignment = Enum.VerticalAlignment.Center
+Layout1.SortOrder = Enum.SortOrder.LayoutOrder
+Layout1.Padding = UDim.new(0, 12)
+Layout1.Parent = RightFrame
+
+local MoreSpacer = Instance.new("Frame")
+MoreSpacer.Name = "MoreSpacer"
+MoreSpacer.LayoutOrder = 999999999
+MoreSpacer.Visible = false
+MoreSpacer.Size = UDim2.new(0, 32, 1, 0)
+MoreSpacer.BackgroundTransparency = 1
+MoreSpacer.Parent = RightFrame
+
+Background1.SelectionImageObject = SelectionImageObject
+Vendor.Parent =script;
+end
+
+import_vendor();
+
 --[=[
 	The parent of all classes.
 
