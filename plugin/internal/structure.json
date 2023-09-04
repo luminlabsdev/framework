@@ -37,7 +37,7 @@
                 },
                 "ModuleScript$EasyProfile": {
                     "$properties": {
-                        "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/internal/easyprofile.lua"
+                        "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/framework/easyprofile.lua"
                     },
                     "Folder$Vendor": {
                         "ModuleScript$ProfileService": {
@@ -51,35 +51,35 @@
             "Folder$Libraries": {
                 "ModuleScript$Benchmark": {
                     "$properties": {
-                        "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/libraries/benchmark.lua"
+                        "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/libraries/benchmark/benchmark.lua"
                     }
                 },
                 "ModuleScript$Statistics": {
                     "$properties": {
-                        "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/libraries/statistics.lua"
+                        "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/libraries/statistics/statistics.lua"
                     }
                 },
                 "ModuleScript$Utility": {
                     "$properties": {
-                        "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/libraries/utility.lua"
+                        "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/libraries/utility/utility.lua"
                     }
                 },
                 "Fusion": "Fusion",
                 "ModuleScript$UIShelf": {
                     "$properties": {
-                        "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/libraries/uishelfv2.lua"
+                        "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/libraries/uishelf2/uishelf2.lua"
                     },
                     "UIShelfVendor": "Vendor"
                 }
             },
             "ModuleScript$Controllers": {
                 "$properties": {
-                    "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/internal/_private/controllers.lua"
+                    "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/framework/controllers.lua"
                 },
                 "Folder$Vendor": {
                     "ModuleScript$NetworkController": {
                         "$properties": {
-                            "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/internal/networkcontroller.lua"
+                            "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/framework/networkcontroller.lua"
                         },
                         "Folder$Vendor": {
                             "BridgeNet2": "BridgeNet2"
@@ -87,12 +87,12 @@
                     },
                     "ModuleScript$SignalController": {
                         "$properties": {
-                            "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/internal/signalcontroller.lua"
+                            "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/framework/signalcontroller.lua"
                         },
                         "Folder$Vendor": {
                             "ModuleScript$Signal": {
                                 "$properties": {
-                                    "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/internal/_private/signal.lua"
+                                    "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/framework/signal.lua"
                                 }
                             }
                         }
@@ -101,18 +101,18 @@
             },
             "ModuleScript$Debugger": {
                 "$properties": {
-                    "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/libraries/debugger.lua"
+                    "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/libraries/debugger/debugger.lua"
                 }
             },
             "ModuleScript$Runtime": {
                 "$properties": {
-                    "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/internal/runtime.lua"
+                    "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/framework/runtime.lua"
                 }
             }
         },
         "ModuleScript$Types": {
             "$properties": {
-                "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/internal/types.lua"
+                "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/framework/types.lua"
             }
         }
     }

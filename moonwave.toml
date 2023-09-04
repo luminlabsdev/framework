@@ -23,47 +23,47 @@ label = "Trello"
 position = "right"
 
 [[classOrder]]
-section = "Framework API"
+section = "Framework APIs"
 collapsed = true
 classes = ["CanaryEngine", "CanaryEngineServer", "CanaryEngineClient", "CanaryEngineReplicated"]
 
 [[classOrder]]
-section = "Networking API"
+section = "Networking"
 collapsed = true
 classes = ["NetworkControllerServer", "NetworkControllerClient"]
 
 [[classOrder]]
-section = "Signal API"
+section = "Signals"
 collapsed = true
 classes = ["SignalControllerObject"]
 
 [[classOrder]]
-section = "Data API"
+section = "Data APIs"
 collapsed = true
 classes = ["EasyProfile", "ProfileStoreObject", "ProfileObject"]
 
 [[classOrder]]
-section = "Engine API"
+section = "Engine APIs"
 collapsed = true
 classes = ["EngineLoader", "EngineDebugger", "EngineTypes"]
 
 [[classOrder]]
-section = "Runtime API"
+section = "Runtime"
 collapsed = true
 classes = ["EngineRuntime", "EngineRuntimeContext", "EngineRuntimeSettings"]
 
 [[classOrder]]
-section = "Benchmark API"
+section = "Benchmarking"
 collapsed = true
 classes = ["Benchmark", "BenchmarkObject"]
 
 [[classOrder]]
-section = "Library API"
+section = "Libraries"
 collapsed = true
-classes = ["Sprite", "Base64", "Statistics", "Utility", "Fetch", "UIShelf"]
+classes = ["Sprite", "Base64", "Statistics", "Utility", "Fetch", "UIShelf", "MDify"]
 
 [[classOrder]]
-section = "Library Objects API"
+section = "Library Objects"
 collapsed = true
 classes = ["TopBarIconObject", "TopBarSpacerObject"]
 
@@ -76,7 +76,7 @@ favicon = "favicon.png"
 
 [footer]
 style = "dark"
-copyright = "Copyright © 2023 canary. Built with Moonwave"
+copyright = "Copyright © 2023 Canary. Built with Moonwave"
 
 [home]
 enabled = true

@@ -211,7 +211,7 @@ function ProfileStoreObject:DeleteProfileAsync(target: number | string)
 	elseif typeof(target) == "number" then
 		str = string.format(self._Pattern, target)
 	else
-		Debugger.Debug(warn, `Cannot delete profile of type {typeof(target)}`)
+		Debugger.Debug(warn, `Cannot delete profile of type {typeof(target)}`, nil, false)
 		return
 	end
 
@@ -238,7 +238,7 @@ function ProfileStoreObject:GetProfileAsync(target: number | string): {[string]:
 	elseif typeof(target) == "number" then
 		str = string.format(self._Pattern, target)
 	else
-		Debugger.Debug(warn, `Cannot get profile of type {typeof(target)}`)
+		Debugger.Debug(warn, `Cannot get profile of type {typeof(target)}`, nil, false)
 		return nil
 	end
 
@@ -259,7 +259,7 @@ end
 	
 	@param owner Player | string-- The owner of profile to load the data of
 	@param reconcileData boolean? -- Whether or not to reconcile the data of the profile, defaults to true
-	@param profileClaimedHandler ((placeId: number, gameJobId: string) -> (ProfileLoadType))? -- The function to run when the profile is already claimed
+	@param profileClaimedHandler ((placeId: number, gameJobId: string) -> (ProfileLoadType)) | ProfileLoadType? -- The function to run when the profile is already claimed
 	
 	@return ProfileObject?
 ]=]
@@ -484,6 +484,22 @@ function ProfileObject:GetProfileData(): {[string]: any}?
 end
 
 --[=[
+	Gets the meta tags for the profile that was loaded in.
+	
+	@return {[string]: any}?
+]=]
+function ProfileObject:GetProfileTags(): {[string]: any}?
+	local Profile = self.Profile
+
+	if not Profile then
+		warn("No profile loaded")
+		return nil
+	end
+
+	return Profile.MetaData.MetaTags
+end
+
+--[=[
 	Creates leaderstats for Roblox's leaderboard based on provided values from the profile. If a value isn't supported, it won't be added to the leaderboard. Here is a list of natively supported types:
 
 	|Type|
@@ -505,7 +521,7 @@ function ProfileObject:CreateProfileLeaderstats(player: Player, statsToAdd: {str
 		return nil
 	end
 
-	if isAttributes then
+	if not isAttributes then
 		local LeaderstatsFolder = Instance.new("Folder")
 
 		for key, value in statsToAdd or Profile.Data do
