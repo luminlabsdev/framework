@@ -41,7 +41,7 @@ local RichTextSyntax = {
 	{"<font color='rgb(255,231,96)'>", "</font>"},
 }
 
-local LuaEmoji = require(script.Vendor["lua-emoji"])
+local LuaEmoji = require(script.Parent.Vendor["lua-emoji"])
 
 -- // Functions
 
