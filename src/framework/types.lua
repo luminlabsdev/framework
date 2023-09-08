@@ -38,13 +38,15 @@ type ControllerConnection = {
 	@within EngineTypes
 ]=]
 export type SignalController<T> = {
-	Connect: (self: SignalController<T>, func: (data: {T}) -> ()) -> (ControllerConnection),
-	Wait: (self: SignalController<T>) -> ({T}),
-	Once: (self: SignalController<T>, func: (data: {T}) -> ()) -> (ControllerConnection),
-
-	Fire: (self: SignalController<T>, data: ({T} | T)?) -> (),
-
 	DisconnectAll: (self: SignalController<T>) -> (),
+	Fire: (self: PublicSignalController<T>, data: ({T} | T)?) -> (),
+} & PublicSignalController<T>
+
+export type PublicSignalController<T> = {
+	Connect: (self: PublicSignalController<T>, func: (data: {T}) -> ()) -> (ControllerConnection),
+	Wait: (self: PublicSignalController<T>) -> ({T}),
+	Once: (self: PublicSignalController<T>, func: (data: {T}) -> ()) -> (ControllerConnection),
+
 	Name: string,
 }
 
@@ -103,7 +105,7 @@ export type ServerNetworkController<T, U> = {
 	Connect: (self: ServerNetworkController<T, U>, func: (sender: Player, data: {T}) -> ()) -> (ControllerConnection),
 	Wait: (self: ServerNetworkController<T, U>) -> (Player, {T}),
 	Once: (self: ServerNetworkController<T, U>, func: (sender: Player, data: {T}) -> ()) -> (ControllerConnection),
-	
+
 	Fire: (self: ServerNetworkController<T, U>, recipient: Player | {Player}, data: ({T} | T)?) -> (),
 	FireAll: (self: ServerNetworkController<T, U>, data: ({T} | T)?) -> (),
 	FireExcept: (self: ServerNetworkController<T, U>, except: Player | {Player}, data: ({T} | T)?) -> (),

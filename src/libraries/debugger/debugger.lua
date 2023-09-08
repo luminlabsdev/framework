@@ -75,6 +75,7 @@ end
 
 EngineDebugger.CachedStackTraces = dictionaryLen({ })
 EngineDebugger.CachedDebugCalls = { }
+EngineDebugger.CachedLogs = { }
 
 local function GetAncestorsUntilParentFolder(instance: Instance): {string | {Instance}}
 	local Ancestors = { }
@@ -168,15 +169,15 @@ function EngineDebugger.Assert<T>(assertionHandler: (...any) -> (), assertion: T
 end
 
 --[=[
-	Gets the call stack of any instance.
+	Gets the call stack of any script.
 
-	@param instance Instance -- The instance to start at
+	@param instance LuaSourceContainer -- The script to start at
 	@param stackName string? -- The name of the stack, defaults to the stack number
 	
-	@return string
+	@return CallStack
 ]=]
-function EngineDebugger.GetCallStack(instance: Script | ModuleScript, stackName: string?): {Name: string, Source: string, DefinedLine: number}
-	if not (instance:IsA("ModuleScript") or instance:IsA("Script")) then
+function EngineDebugger.GetCallStack(instance: LuaSourceContainer, stackName: string?): CallStack
+	if not instance:IsA("LuaSourceContainer") then
 		EngineDebugger.DebugInvalidData(1, "GetCallStack", "LuaSourceContainer", instance)
 		return
 	end
@@ -216,6 +217,25 @@ function EngineDebugger.DebugInvalidData(paramNumber: number, funcName: string, 
 			return
 		end
 		error(ErrorString)
+	end
+end
+
+--[=[
+	Logs an event in a script, which is then stored in a cache for that script. This allows you to make sure code is running while not cluttering the output in the live game.
+
+	@param instance LuaSourceContainer -- The instance to cache the debug logs at
+	@param eventName string -- The name to print and log it as
+	@param printLog boolean? -- Whether or not to pring the log using [EngineDebugger.Debug], defaults to true
+]=]
+function EngineDebugger.LogEvent(instance: LuaSourceContainer, eventName: string, printLog: boolean?)
+	if not EngineDebugger.CachedLogs[instance] then
+		EngineDebugger.CachedDebugCalls[instance] = { }
+	end
+
+	table.insert(EngineDebugger.CachedDebugCalls[instance], eventName)
+
+	if printLog then
+		EngineDebugger.Debug(print, eventName, "[Event Log]:")
 	end
 end
 
