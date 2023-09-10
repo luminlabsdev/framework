@@ -1,0 +1,109 @@
+{
+    "EngineClient": {
+        "Packages": { },
+        "Media": { },
+        "Scripts": { }
+    },
+    "EngineReplicated": {
+        "Packages": { },
+        "Media": { }
+    },
+    "EngineReplicatedFirst": {
+        "Internal": { },
+        "Scripts": { }
+    },
+    "EngineServer": {
+        "Packages": { },
+        "Media": { },
+        "Scripts": { }
+    },
+    "CanaryEngineFramework": {
+        "Vendor": {
+            "Controllers": {
+                "Vendor": {
+                    "SanitizeData": {
+                        "$className": "ModuleScript",
+                        "$properties": {
+                            "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Controllers/Vendor/SanitizeData.luau"
+                        }
+                    },
+                    "NetworkController": {
+                        "Vendor": {
+                            "BridgeNet2": "BridgeNet2Package"
+                        },
+                        "NetworkController": {
+                            "$className": "ModuleScript",
+                            "$properties": {
+                                "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Controllers/Vendor/NetworkController/init.luau"
+                            }
+                        }
+                    },
+                    "SignalController": {
+                        "Vendor": {
+                            "Signal": {
+                                "$className": "ModuleScript",
+                                "$properties": {
+                                    "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Controllers/Vendor/SignalController/Vendor/Signal.luau"
+                                }
+                            }
+                        },
+                        "SignalController": {
+                            "$className": "ModuleScript",
+                            "$properties": {
+                                "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Controllers/Vendor/SignalController/init.luau"
+                            }
+                        }
+                    }
+                },
+                "Controllers": {
+                    "$className": "ModuleScript",
+                    "$properties": {
+                        "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Controllers/Controllers.luau"
+                    }
+                }
+            },
+            "Libraries": {
+                "EasyProfile": {
+                    "EasyProfile": {
+                        "$className": "ModuleScript",
+                        "$properties": {
+                            "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Libraries/EasyProfile/init.luau"
+                        }
+                    },
+                    "Vendor": {
+                        "ProfileService": {
+                            "$className": "ModuleScript",
+                            "$properties": {
+                                "Source": "https://raw.githubusercontent.com/MadStudioRoblox/ProfileService/master/ProfileService.lua"
+                            }
+                        }
+                    }
+                }
+            },
+            "Debugger": {
+                "$className": "ModuleScript",
+                "$properties": {
+                    "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Debugger.luau"
+                }
+            },
+            "Runtime": {
+                "$className": "ModuleScript",
+                "$properties": {
+                    "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Runtime.luau"
+                }
+            },
+            "Types": {
+                "$className": "ModuleScript",
+                "$properties": {
+                    "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Types.luau"
+                }
+            }
+        },
+        "CanaryEngine": {
+            "$className": "ModuleScript",
+            "$properties": {
+                "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/init.luau"
+            }
+        }
+    }
+}

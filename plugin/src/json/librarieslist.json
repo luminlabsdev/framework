@@ -1,0 +1,70 @@
+{
+    "Base64": {
+        "$className": "ModuleScript",
+        "$properties": {
+            "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/libraries/base64/init.luau"
+        }
+    },
+    "Spring": {
+        "Eq": {
+            "$className": "ModuleScript",
+            "$properties": {
+                "Source": "https://raw.githubusercontent.com/bhristt/Spring-Module/main/src/Eq.lua"
+            }
+        },
+        "Spring": {
+            "$className": "ModuleScript",
+            "$properties": {
+                "Source": "https://raw.githubusercontent.com/bhristt/Spring-Module/main/src/Spring.lua"
+            }
+        }
+    },
+    "Promise": {
+        "$className": "ModuleScript",
+        "$properties": {
+            "Source": "https://raw.githubusercontent.com/evaera/roblox-lua-promise/master/lib/init.lua"
+        }
+    },
+    "Trove": {
+        "$className": "ModuleScript",
+        "$properties": {
+            "Source": "https://raw.githubusercontent.com/Sleitnick/RbxUtil/main/modules/trove/init.lua"
+        }
+    },
+    "RemotePacketSizeCount": {
+        "$className": "ModuleScript",
+        "$properties": {
+            "Source": "https://raw.githubusercontent.com/PysephWasntAvailable/RemotePacketSizeCounter/main/src/init.luau"
+        }
+    },
+    "Sprite": {
+        "$className": "ModuleScript",
+        "$properties": {
+            "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/libraries/sprite/init.lua"
+        }
+    },
+    "TableKit": {
+        "$className": "ModuleScript",
+        "$properties": {
+            "Source": "https://raw.githubusercontent.com/ffrostflame/TableKit/master/src/init.luau"
+        }
+    },
+    "Fetch": {
+        "$className": "ModuleScript",
+        "$properties": {
+            "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/libraries/fetch/fetch.lua"
+        }
+    },
+    "Statistics": {
+        "$className": "ModuleScript",
+        "$properties": {
+            "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/libraries/statistics/init.lua"
+        }
+    },
+    "Benchmark": {
+        "$className": "ModuleScript",
+        "$properties": {
+            "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/libraries/benchmark/init.lua"
+        }
+    }
+}

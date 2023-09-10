@@ -5,7 +5,8 @@ gitSourceBranch = "main"
 changelog = true
 
 apiCategories = [
-    "Event"
+    "Event",
+    "Enum"
 ]
 
 [navbar.logo]
@@ -23,9 +24,19 @@ label = "Trello"
 position = "right"
 
 [[classOrder]]
-section = "Framework APIs"
+section = "Framework"
 collapsed = true
 classes = ["CanaryEngine", "CanaryEngineServer", "CanaryEngineClient", "CanaryEngineReplicated"]
+
+[[classOrder]]
+section = "Engine"
+collapsed = true
+classes = ["EngineLoader", "EngineDebugger", "EngineTypes"]
+
+[[classOrder]]
+section = "Runtime"
+collapsed = true
+classes = ["EngineRuntime", "EngineRuntimeContext", "EngineRuntimeSettings"]
 
 [[classOrder]]
 section = "Networking"
@@ -38,38 +49,18 @@ collapsed = true
 classes = ["SignalControllerObject"]
 
 [[classOrder]]
-section = "Data APIs"
+section = "Data Management"
 collapsed = true
 classes = ["EasyProfile", "ProfileStoreObject", "ProfileObject"]
 
 [[classOrder]]
-section = "Engine APIs"
-collapsed = true
-classes = ["EngineLoader", "EngineDebugger", "EngineTypes"]
-
-[[classOrder]]
-section = "Runtime"
-collapsed = true
-classes = ["EngineRuntime", "EngineRuntimeContext", "EngineRuntimeSettings"]
-
-[[classOrder]]
-section = "Benchmarking"
-collapsed = true
-classes = ["Benchmark", "BenchmarkObject"]
-
-[[classOrder]]
 section = "Libraries"
 collapsed = true
-classes = ["Sprite", "Base64", "Statistics", "Utility", "Fetch", "UIShelf", "MDify"]
-
-[[classOrder]]
-section = "Library Objects"
-collapsed = true
-classes = ["TopBarIconObject", "TopBarSpacerObject"]
+classes = ["Sprite", "Base64", "Statistics", "Fetch", "UIShelf", "TopBarIconObject", "TopBarSpacerObject", "MDify", "Benchmark", "BenchmarkObject"]
 
 [docusaurus]
 projectName = "CanaryEngine"
-tagline = "The lightweight and optimized framework"
+tagline = "A lightweight framework with both performance & usability in mind"
 onBrokenLinks = "throw"
 onBrokenMarkdownLinks = "warn"
 favicon = "favicon.png"
@@ -84,7 +75,7 @@ includeReadme = false
 
 [[home.features]]
 title = "Type Safe 🦺"
-description = "Strictly typed, along with native support for roblox-ts that can be found on the NPM marketplace."
+description = "Strictly typed, with multiple interfaces available for each included library. A roblox-ts file is also included to use."
 
 [[home.features]]
 title = "Secure 🔐"

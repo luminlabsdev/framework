@@ -11,7 +11,7 @@ Creating an icon is rather simple, all it requires is the following 4 arguments 
 * Order
 * Area
 
-When inputting these into your table, they must be in correct order or the code will malfunction. The image can either be an id or a direct URI. The order is basically just the layout order, and will be correctly accomodated for depending on if it was placed on the left/right. The `Area` element decides which side the icon is on, `1` is the left side, while `2` is the right side.
+When inputting these into your table, they must be in correct order or the code will malfunction. The image can either be an id or a direct URI. The order is basically just the layout order, and will be correctly accomodated for depending on if it was placed on the left/right. The `Area` element decides which side the icon is on, `1` is the left side, while `2` is the right side. You can also use `UIShelf.HorizontalAlignment` if it's easier to remember.
 
 If you're confused, here is an example of it layed out:
 
@@ -20,7 +20,7 @@ local Icon = UIShelf.CreateIcon({
 	"MyFavoriteIcon",
 	"rbxassetid://12515281752",
 	1,
-	1,
+	UIShelf.HorizontalAlignment.Left,
 })
 ```
 
@@ -74,3 +74,6 @@ local Spacer = UIShelf.CreateSpacer({
 	1,
 }) -- Same format as CreateIcon, just doesn't have image URI/ID element
 ```
+
+### Tooltips
+

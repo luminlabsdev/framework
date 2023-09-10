@@ -21,7 +21,4 @@ Extremely optimized, with most internal functions running fast along with custom
 * **Secure** 🔐
 The networking system that CanaryEngine uses can actually partially prevent exploits like RemoteSpy from being easily useable.
 
-* **Node Package** 📦
-Comes with a native node package for all of you power users on the command line, with Rojo support by default.
-
 ... and much more!
