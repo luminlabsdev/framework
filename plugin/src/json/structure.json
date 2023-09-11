@@ -1,12 +1,23 @@
 {
     "EngineClient": {
         "Packages": { },
-        "Media": { },
+        "Media": {
+            "Models": { },
+            "Effects": { },
+            "Animations": { },
+            "Sounds": { },
+            "Interfaces": { }
+        },
         "Scripts": { }
     },
     "EngineReplicated": {
         "Packages": { },
-        "Media": { }
+        "Media": {
+            "Sounds": { },
+            "Models": { },
+            "Animations": { },
+            "Effects": { }
+        }
     },
     "EngineReplicatedFirst": {
         "Internal": { },
@@ -14,7 +25,12 @@
     },
     "EngineServer": {
         "Packages": { },
-        "Media": { },
+        "Media": {
+            "Models": { },
+            "Tools": { },
+            "Effects": { },
+            "Animations": { }
+        },
         "Scripts": { }
     },
     "CanaryEngineFramework": {
