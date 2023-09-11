@@ -1,3 +1,5 @@
+--!nocheck
+
 -- // Variables
 
 local VersionController = { }
@@ -12,10 +14,12 @@ local SelectionService = game:GetService("Selection")
 local Vendor = script.Parent.Parent
 
 local TableKit = require(Vendor.TableKit)
-local WindowController = require(Vendor.Core.WindowController)
+local WindowList = require(Vendor.Core.WindowList)
+local WindowController = require(Vendor.Core.WindowController)(WindowList)
 local Fetch = require(Vendor.Fetch)
+local Signal = require(Vendor.Signal)
 local HttpCache = require(Vendor.Core.HttpCache)
-local CanaryStudioSettings = require(Vendor.Settings)
+local CanaryStudioSettings = require(Vendor.Settings.Settings)
 
 local FinishedFiles = 0
 local UpdateDebounce = false
@@ -26,11 +30,11 @@ local ERROR_COLOR = Color3.fromRGB(255, 129, 129)
 local UPDATE_COOLDOWN_SECONDS = 30
 
 local RequiredEngineInstances = {
-    "Server",
-    "Client",
-    "Replicated",
-    "Framework",
-    "ReplicatedFirst",
+	"Server",
+	"Client",
+	"Replicated",
+	"Framework",
+	"ReplicatedFirst",
 }
 
 local FolderToService = {
@@ -39,6 +43,8 @@ local FolderToService = {
 	EngineReplicatedFirst = ReplicatedFirst,
 	EngineServer = ServerStorage,
 }
+
+VersionController.FilesUpdated = Signal.new()
 
 -- // Functions
 
@@ -50,12 +56,12 @@ function VersionController.GetDirectoryFromStructureJSON(json: {any}, parent: In
 			if not InstanceToGet then
 				continue
 			end
-			
+
 			local InstanceToGetClone = InstanceToGet:Clone()
-			
+
 			InstanceToGetClone.Name = instanceName
 			InstanceToGetClone.Parent = parent
-			
+
 			continue
 		end
 
@@ -78,7 +84,7 @@ function VersionController.GetDirectoryFromStructureJSON(json: {any}, parent: In
 					end
 					
 					FinishedFiles += 1
-					print(`{math.round((FinishedFiles / Fetch.RequestCache.GitHubTotalFiles) * 100)}%`)
+					VersionController.FilesUpdated:Fire(FinishedFiles)
 
 					InstanceFromClass[propertyName] = Source
 				elseif type(propertyName) == "string" then
@@ -120,7 +126,7 @@ function VersionController.GetCurrentInstance(ignoreNil: boolean?): {[string]: F
 end
 
 function VersionController.UninstallFramework()
-    local CurrentInstance = VersionController.GetCurrentInstance(true)
+	local CurrentInstance = VersionController.GetCurrentInstance(true)
 
 	if not CurrentInstance then
 		WindowController.SetMessageWindow("Framework is not installed; cannot uninstall")
@@ -154,6 +160,7 @@ function VersionController.UpdateFramework()
 
 	task.defer(function()
 		StructureCache:ClearAllChildren()
+		WindowController.SetWindow("UpdateStatusWindow", true)
 		VersionController.GetDirectoryFromStructureJSON(
 			Fetch.FetchAsync("https://raw.githubusercontent.com/canary-development/CanaryEngine/main/plugin/src/json/structure.json", true),
 			StructureCache
@@ -170,10 +177,14 @@ function VersionController.UpdateFramework()
 		local CanaryEngineStructure = StructureCache.CanaryEngineFramework
 
 		if CurrentInstance.Framework then
-			CanaryEngineStructure.Parent = CurrentInstance.Framework
+			CurrentInstance.Framework:Destroy()
+			CurrentInstance.Framework = CanaryEngineStructure
 			CanaryEngineStructure:SetAttribute("Version", HttpCache.ReleaseLatest.tag_name)
 		end
-
+		
+		WindowController.SetWindow("UpdateStatusWindow", false)
+		WindowController.SetMessageWindow("Framework updated successfully!", Color3.fromRGB(205, 255, 151))
+		
 		task.wait(UPDATE_COOLDOWN_SECONDS)
 		UpdateDebounce = false
 	end)
@@ -194,6 +205,7 @@ function VersionController.InstallFramework()
 
 	task.defer(function()
 		StructureCache:ClearAllChildren()
+		WindowController.SetWindow("UpdateStatusWindow", true)
 		VersionController.GetDirectoryFromStructureJSON(
 			Fetch.FetchAsync("https://raw.githubusercontent.com/canary-development/CanaryEngine/main/plugin/src/json/structure.json", true),
 			StructureCache
@@ -206,15 +218,15 @@ function VersionController.InstallFramework()
 				InstanceToFind.Parent = parentType
 			end
 		end
-
+		
 		StructureCache.CanaryEngineFramework:SetAttribute("Version", HttpCache.ReleaseLatest.tag_name)
-		StructureCache.CanaryEngineFramework = ReplicatedStorage
+		StructureCache.CanaryEngineFramework.Parent = ReplicatedStorage
 
 		local NewInstance = VersionController.GetCurrentInstance()
 
 		if not CanaryStudioSettings.CanaryStudioInstaller["Enable Media Templates"] then
 			for _, folderName in RequiredEngineInstances do
-				if folderName ~= "Framework" or folderName ~= "ReplicatedFirst" then
+				if folderName ~= "Framework" and folderName ~= "ReplicatedFirst" then
 					NewInstance[folderName].Media:ClearAllChildren()
 				end
 			end
@@ -232,7 +244,8 @@ function VersionController.InstallFramework()
 			local RemoveIllegalCharacters = string.gsub(settingName, " ", "")
 			StructureCache.CanaryEngineFramework:SetAttribute(RemoveIllegalCharacters, settingValue)
 		end
-
+		
+		WindowController.SetWindow("UpdateStatusWindow", false)
 		WindowController.SetMessageWindow("Framework installed successfully!", Color3.fromRGB(205, 255, 151))
 
 		FinishedFiles = 0
@@ -241,13 +254,19 @@ function VersionController.InstallFramework()
 	end)
 end
 
-function VersionController.CreateNewInstanceFromName(name: string, instanceType: "ModuleScript" | "Script", context: "Server" | "Client" | "Replicated")
+function VersionController.CreateNewInstanceFromName(name: string, instanceType: "Package" | "Script" | "ModuleScript", context: "Server" | "Client" | "Replicated")
 	local CurrentInstance = VersionController.GetCurrentInstance()
 
 	if not CurrentInstance then
-		WindowController.ShowMessageWindow("Cannot create instance; framework not installed")
+		WindowController.SetMessageWindow("Cannot create instance; framework not installed")
 		return
 	end
+	
+	if instanceType == "Package" then
+		instanceType = "ModuleScript"
+	end
+	
+	name = string.gsub(name, " ", "_")
 
 	local NewInstance = Instance.new(instanceType)
 
@@ -270,12 +289,14 @@ function VersionController.CreateNewInstanceFromName(name: string, instanceType:
 
 		if CanaryStudioSettings.CanaryStudio["Create Package Vendor"] then
 			local NewVendor = Instance.new("Folder")
-	
+
 			NewVendor.Name = "Vendor"
 			NewVendor.Parent = InstanceFolder
 		end
 
 		NewInstance.Name = "Init"
+		NewInstance.Parent = InstanceFolder
+		
 		InstanceFolder.Name = name
 		InstanceFolder.Parent = CurrentInstance[context].Packages
 	elseif instanceType == "Script" then
@@ -294,3 +315,5 @@ end
 -- // Connections
 
 -- // Actions
+
+return VersionController

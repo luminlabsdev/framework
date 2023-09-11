@@ -50,7 +50,7 @@ function Fetch.FetchAsync(requestUrl: string, decodeContent: boolean?, maxRetrie
 	end
 
 	local success, result = pcallRetry(HttpService.GetAsync, maxRetries, HttpService, requestUrl)
-	
+
 	if not success then
 		warn(`Fatal: Could not get the contents of '{requestUrl}'`)
 		return
