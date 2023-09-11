@@ -242,7 +242,7 @@ function VersionController.InstallFramework()
 
 		for settingName, settingValue in CanaryStudioSettings.CanaryStudioInstaller do
 			local RemoveIllegalCharacters = string.gsub(settingName, " ", "")
-			StructureCache.CanaryEngineFramework:SetAttribute(RemoveIllegalCharacters, settingValue)
+			NewInstance.Framework:SetAttribute(RemoveIllegalCharacters, settingValue)
 		end
 		
 		WindowController.SetWindow("UpdateStatusWindow", false)
