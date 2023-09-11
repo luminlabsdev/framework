@@ -150,10 +150,6 @@ local CanaryEngineReplicated = { }
 	@within CanaryEngineReplicated
 ]=]
 
--- // Types
-
-local Types = require(script.Types) -- The types used for all libraries inside of the framework
-
 -- // Variables
 
 local MarketplaceService = game:GetService("MarketplaceService")
@@ -161,7 +157,13 @@ local ServerStorage = game:GetService("ServerStorage")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local PlayerService = game:GetService("Players")
 
-local EngineVendor = script.Vendor
+local EngineVendor = script.Parent.Vendor
+
+-- // Types
+
+local Types = require(EngineVendor.Types) -- The types used for all libraries inside of the framework
+
+----
 
 local Controllers = require(EngineVendor.Controllers.Controllers)
 local Network = Controllers.NetworkController -- Networking logic

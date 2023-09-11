@@ -182,7 +182,6 @@ end
 function EngineDebugger.GetCallStack(instance: LuaSourceContainer, stackName: string?): CallStack
 	if not instance:IsA("LuaSourceContainer") then
 		EngineDebugger.DebugInvalidData(1, "GetCallStack", "LuaSourceContainer", instance)
-		return
 	end
 
 	stackName = stackName or `Stack{#EngineDebugger.CachedStackTraces + 1}`

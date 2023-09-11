@@ -37,7 +37,7 @@ local HttpService = game:GetService("HttpService")
 local ProfileService = require(Vendor.ProfileService)
 local Types = require(EngineVendor.Types)
 local Debugger = require(EngineVendor.Debugger)
-local Signal = require(script.Parent.Parent.Controllers.Vendor.SignalController)
+local Signal = require(EngineVendor.Controllers.Vendor.SignalController.SignalController)
 
 local ValidLeaderboardTypes = {
 	"boolean",
