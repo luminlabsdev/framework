@@ -89,7 +89,7 @@ local Indexes = {
 local Vendor = script.Parent.Vendor
 local PlayerService = game:GetService("Players")
 
-local BridgeNet = require(Vendor.BridgeNet2)
+local BridgeNet = require(Vendor.BridgeNet2.BridgeNet2)
 local SanitizeData = require(Vendor.Parent.Parent.SanitizeData)
 
 -- // Functions
