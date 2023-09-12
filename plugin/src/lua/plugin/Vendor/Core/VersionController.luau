@@ -83,7 +83,7 @@ function VersionController.GetDirectoryFromStructureJSON(json: {any}, parent: In
 						warn("Could not fetch source:", propertyValue)
 						continue
 					end
-					
+
 					FinishedFiles += 1
 					VersionController.FilesUpdated:Fire(FinishedFiles)
 
@@ -182,10 +182,10 @@ function VersionController.UpdateFramework()
 			CurrentInstance.Framework = CanaryEngineStructure
 			CanaryEngineStructure:SetAttribute("Version", HttpCache.ReleaseLatest.tag_name)
 		end
-		
+
 		WindowController.SetWindow("UpdateStatusWindow", false)
 		WindowController.SetMessageWindow("Framework updated successfully!", Color3.fromRGB(205, 255, 151))
-		
+
 		task.wait(UPDATE_COOLDOWN_SECONDS)
 		UpdateDebounce = false
 	end)
@@ -219,7 +219,7 @@ function VersionController.InstallFramework()
 				InstanceToFind.Parent = parentType
 			end
 		end
-		
+
 		StructureCache.CanaryEngineFramework:SetAttribute("Version", HttpCache.ReleaseLatest.tag_name)
 		StructureCache.CanaryEngineFramework.Parent = ReplicatedStorage
 
@@ -237,10 +237,10 @@ function VersionController.InstallFramework()
 			local RemoveIllegalCharacters = string.gsub(settingName, " ", "")
 			NewInstance.Framework:SetAttribute(RemoveIllegalCharacters, settingValue)
 		end
-		
+
 		WindowController.SetWindow("UpdateStatusWindow", false)
 		WindowController.SetMessageWindow("Framework installed successfully!", Color3.fromRGB(205, 255, 151))
-			
+
 		for libraryName, libraryJSON in HttpCache.LibrariesList do
 			if not CanaryStudioSettings.CanaryStudioInstallerPackages[libraryName] or typeof(libraryJSON) == "Instance" then
 				continue
@@ -253,8 +253,11 @@ function VersionController.InstallFramework()
 			if not (installedPackage:IsA("ModuleScript") or installedPackage:IsA("Folder")) then
 				continue
 			end
-
-			installedPackage.Parent = NewInstance[string.split(installedPackage.Name, "_")[2]["Packages"]]
+			
+			local SplitName = string.split(installedPackage.Name, "_")
+			
+			installedPackage.Name = string.gsub(installedPackage.Name, SplitName[2], "")
+			installedPackage.Parent = NewInstance[SplitName[2]["Packages"]]
 			print(`Installed {installedPackage.Name}`)
 		end
 
@@ -272,11 +275,11 @@ function VersionController.CreateNewInstanceFromName(name: string, instanceType:
 		WindowController.SetMessageWindow("Cannot create instance; framework not installed")
 		return
 	end
-	
+
 	if instanceType == "Package" then
 		instanceType = "ModuleScript"
 	end
-	
+
 	name = string.gsub(name, "[^%a_]", "")
 
 	local NewInstance = Instance.new(instanceType)
@@ -307,7 +310,7 @@ function VersionController.CreateNewInstanceFromName(name: string, instanceType:
 
 		NewInstance.Name = "Init"
 		NewInstance.Parent = InstanceFolder
-		
+
 		InstanceFolder.Name = name
 		InstanceFolder.Parent = CurrentInstance[context].Packages
 	elseif instanceType == "Script" then
