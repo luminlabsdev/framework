@@ -51,7 +51,7 @@
         "Sprite": {
             "$className": "ModuleScript",
             "$properties": {
-                "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/libraries/sprite/init.lua"
+                "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/lua/libraries/sprite/init.lua"
             }
         }
     },
@@ -67,7 +67,7 @@
         "Fetch": {
             "$className": "ModuleScript",
             "$properties": {
-                "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/libraries/fetch/fetch.lua"
+                "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/lua/libraries/fetch/fetch.lua"
             }
         }
     },
@@ -75,7 +75,7 @@
         "Statistics": {
             "$className": "ModuleScript",
             "$properties": {
-                "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/libraries/statistics/init.lua"
+                "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/lua/libraries/statistics/init.lua"
             }
         }
     },
@@ -83,7 +83,7 @@
         "Benchmark": {
             "$className": "ModuleScript",
             "$properties": {
-                "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/libraries/benchmark/init.lua"
+                "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/lua/libraries/benchmark/init.lua"
             }
         }
     }
