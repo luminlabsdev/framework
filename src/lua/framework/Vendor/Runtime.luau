@@ -1,5 +1,4 @@
-local RunService = game:GetService("RunService")
-local CanaryEngineFramework = game:GetService("ReplicatedStorage").CanaryEngineFramework
+-- // Runtime
 
 --[=[
 	The parent of all classes.
@@ -7,6 +6,9 @@ local CanaryEngineFramework = game:GetService("ReplicatedStorage").CanaryEngineF
 	@class EngineRuntime
 ]=]
 local EngineRuntime = { }
+
+local RunService = game:GetService("RunService")
+local CanaryEngineFramework = game:GetService("ReplicatedStorage").CanaryEngineFramework
 
 --[=[
 	Shows different runtime contexts.
