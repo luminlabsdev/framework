@@ -32,10 +32,10 @@ if not AlreadyRan then
 			WindowList.HomeWindow = Iris.Window(`Canary Studio - Home`, {isOpened = false, size = Vector2.new(355, 211)}) do
 				Iris.MenuBar() do
 					Iris.Menu("File") do
-						if Iris.MenuItem("Update Framework").clicked() then
-							WindowController.SetConfirmWindow("Update Framework?\n\nUpdating will remove all current files inside of the framework itself.", VersionController.UpdateFramework)
+						if Iris.MenuItem("Release Notes").clicked() then
+							WindowController.SetWindow("ReleaseNotesWindow")
 						end
-
+						
 						if Iris.MenuItem("Settings").clicked() then
 							WindowController.SetWindow("SettingsWindow")
 						end
@@ -48,34 +48,37 @@ if not AlreadyRan then
 					end Iris.End()
 
 					Iris.Menu("Edit") do
-						Iris.MenuItem({"Create Package", Enum.KeyCode.One, Enum.ModifierKey.Alt})
-						Iris.MenuItem({"Create Script", Enum.KeyCode.Two, Enum.ModifierKey.Alt})
+						if Iris.MenuItem("Update Framework").clicked() then
+							WindowController.SetConfirmWindow("Update Framework?\n\nUpdating will remove all current files inside of the framework itself.", VersionController.UpdateFramework)
+						end
+
+						if Iris.MenuItem({"Create Package", Enum.KeyCode.One, Enum.ModifierKey.Alt}).clicked() then
+							WindowController.SetWindow("InstanceCreationWindow", true)
+						end
+						
+						if Iris.MenuItem({"Create Script", Enum.KeyCode.Two, Enum.ModifierKey.Alt}).clicked() then
+							WindowController.SetWindow("InstanceCreationWindow", true)
+						end
 					end Iris.End()
 
 					Iris.Menu("View") do
-						if Iris.MenuItem("Install Framework").clicked() then
+						if Iris.MenuItem("Framework Installer").clicked() then
 							WindowController.SetWindow("InstallerWindow")
-						end
-
-						if Iris.MenuItem("Uninstall Framework").clicked() then
-							WindowController.SetConfirmWindow("Uninstall Framework?\n\nUninstalling will remove all traces of the framework in your game, including your own files.", VersionController.UninstallFramework)
 						end
 
 						if Iris.MenuItem("Instance Creator").clicked() then
 							WindowController.SetWindow("InstanceCreationWindow")
 						end
 
-						if Iris.MenuItem("Release Notes").clicked() then
-							WindowController.SetWindow("ReleaseNotesWindow")
+						if Iris.MenuItem("Package Manager").clicked() then
+							WindowController.SetWindow("PackageManagerWindow")
 						end
-
-						Iris.MenuItem("Package Manager")
 					end Iris.End()
 				end Iris.End()
 
 				Iris.Text(`Welcome back, {PlayerName}!`)
 				Iris.Separator()
-				Iris.Text(HttpCache.ReleaseLatest.body)
+				Iris.Text(HttpCache.ExternalSettings.CanaryStudioChangelog, true)
 			end Iris.End()
 
 			WindowList.InstallerWindow = Iris.Window("Canary Studio - Installer", {isOpened = false}) do
@@ -93,10 +96,16 @@ if not AlreadyRan then
 					end
 				end Iris.End()
 
-				if Iris.Button("Install").clicked() then
-					WindowController.SetWindow("InstallerWindow", false)
-					VersionController.InstallFramework()
-				end
+				Iris.SameLine() do
+					if Iris.Button("Install").clicked() then
+						WindowController.SetWindow("InstallerWindow", false)
+						VersionController.InstallFramework()
+					end
+
+					if Iris.Button("Uninstall").clicked() then
+						WindowController.SetConfirmWindow("Uninstall Framework?\n\nUninstalling will remove all traces of the framework in your game, including your own files.", VersionController.UninstallFramework)
+					end
+				end Iris.End()
 			end Iris.End()
 
 			WindowList.SettingsWindow = Iris.Window({"Canary Studio - Settings", [Iris.Args.Window.NoResize] = true}, {isOpened = false, size = Vector2.new(292, 238)}) do
@@ -118,7 +127,7 @@ if not AlreadyRan then
 					InstanceContextDropdown = Iris.ComboArray("Context", {index = "Server"}, {"Server", "Client", "Replicated"})
 				end
 
-				if Iris.Button(`Create {InstanceTypeDropdown.state.index:get()} '{NameInput.state.text:get():gsub(" ", "_")}'`).clicked() then
+				if Iris.Button(`Create {InstanceTypeDropdown.state.index:get()} {NameInput.state.text:get():gsub("[^%a_]", "")}`).clicked() then
 					VersionController.CreateNewInstanceFromName(NameInput.state.text:get(), InstanceTypeDropdown.state.index:get(), InstanceContextDropdown.state.index:get())
 				end
 			end Iris.End()
@@ -130,15 +139,19 @@ if not AlreadyRan then
 				Iris.Text(`Published At: {FormattedPublishDate}`)
 			end Iris.End()
 			
-			WindowList.UpdateStatusWindow = Iris.Window({`Updating ({math.floor((FinishedFiles:get() / HttpCache.ExternalSettings.Files) * 100)}%)`, [Iris.Args.Window.NoResize] = true}, {isOpened = false, size = Vector2.new(334, 109)}) do
-				Iris.Text("Updating framework to latest version, hang tight!")
-				Iris.Text(`{FinishedFiles:get()} of {HttpCache.ExternalSettings.Files}`)
+			WindowList.UpdateStatusWindow = Iris.Window({`Updating ({math.floor((FinishedFiles:get() / HttpCache.ExternalSettings.Files) * 100)}%)`, [Iris.Args.Window.NoClose] = true, [Iris.Args.Window.NoResize] = true}, {isOpened = false, size = Vector2.new(334, 109)}) do
+				Iris.Text("Updating framework to latest version")
+				Iris.Text(`{FinishedFiles:get()} of {HttpCache.ExternalSettings.Files} files`)
 			end Iris.End()
-
+			
+			WindowList.PackageManagerWindow = Iris.Window("Canary Studio - Package Manager", {isOpened = false}) do
+				
+			end Iris.End()
+			
 			WindowList.ConfirmWindow = Iris.Window({"Confirm", [Iris.Args.Window.NoClose] = true, [Iris.Args.Window.NoTitleBar] = true}, {isOpened = false, size = Vector2.new(432, 122)}) do
 				Iris.Text(PluginGuiContents.ConfirmWindow.MessageText, true)
 				Iris.SameLine() do
-					if Iris.Button("Continue").clicked() then
+					if Iris.Button("OK").clicked() then
 						PluginGuiContents.ConfirmWindow.ConfirmFunction()
 						WindowController.SetWindow("ConfirmWindow", false)
 					end

@@ -21,7 +21,7 @@ local CanaryStudioPluginToolbar = plugin:CreateToolbar(PluginToolbarName)
 local CanaryStudioPluginButton = CanaryStudioPluginToolbar:CreateButton("Canary Studio", "Open Canary Studio", "rbxassetid://14374171289")
 
 local PluginFinishedLoading = false
-local IsTesting = true
+local IsTesting = false
 
 Fetch.SetHttpCacheTable(Vendor.Core.HttpCache)
 
@@ -39,14 +39,15 @@ if IsTesting then
 			}
 		elseif cacheName == "LibrariesList" then
 			HttpCache[cacheName] = {
-				Roblox = true,
-				Is = true,
-				Cool = true,
-				["B)"] = true,
+				Roblox = '"TestPackage": {"$className": "ModuleScript"}',
+				Is = '"TestPackage": {"$className": "ModuleScript"}',
+				Cool = '"TestPackage": {"$className": "ModuleScript"}',
+				["B)"] = '"TestPackage": {"$className": "ModuleScript"}',
 			}
 		elseif cacheName == "ExternalSettings" then
 			HttpCache[cacheName] = {
-				Files = 11
+				Files = 11,
+				CanaryStudioChangelog = "We've made some large changes since the last update to the plugin and have fixed lots of bugs!\n\nInstalling has been revamped - The process is now a lot quicker and more performant\nRedesigned Home Page - The home page now has a menu bar and shows this changelog\nInternal code rework - It's now a lot easier to fix issues and add new features"
 			}
 		end
 	end

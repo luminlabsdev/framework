@@ -25,6 +25,7 @@ local FinishedFiles = 0
 local UpdateDebounce = false
 local FrameworkPackages = Vendor.FrameworkPackages
 local StructureCache = Vendor.StructureCache
+local PackageInstallCache = Vendor.InstallPackageCache
 
 local ERROR_COLOR = Color3.fromRGB(255, 129, 129)
 local UPDATE_COOLDOWN_SECONDS = 30
@@ -232,14 +233,6 @@ function VersionController.InstallFramework()
 			end
 		end
 
-		for libraryName, libraryParent in HttpCache.LibrariesList do
-			if not CanaryStudioSettings.CanaryStudioInstallerPackages[libraryName] then
-				continue
-			end
-
-			libraryParent.Parent = NewInstance.Replicated.Packages
-		end
-
 		for settingName, settingValue in CanaryStudioSettings.CanaryStudioInstaller do
 			local RemoveIllegalCharacters = string.gsub(settingName, " ", "")
 			NewInstance.Framework:SetAttribute(RemoveIllegalCharacters, settingValue)
@@ -247,8 +240,20 @@ function VersionController.InstallFramework()
 		
 		WindowController.SetWindow("UpdateStatusWindow", false)
 		WindowController.SetMessageWindow("Framework installed successfully!", Color3.fromRGB(205, 255, 151))
+			
+		for libraryName, libraryJSON in HttpCache.LibrariesList do
+			if not CanaryStudioSettings.CanaryStudioInstallerPackages[libraryName] or typeof(libraryJSON) == "Instance" then
+				continue
+			end
+
+			VersionController.GetDirectoryFromStructureJSON(libraryJSON, PackageInstallCache)
+			PackageInstallCache:FindFirstChild(libraryName).Parent = NewInstance[libraryJSON["$parent"] or NewInstance.Replicated.Packages]
+			
+			print(`installed {libraryName}`)
+		end
 
 		FinishedFiles = 0
+		VersionController.FilesUpdated:Fire(0)
 		task.wait(UPDATE_COOLDOWN_SECONDS)
 		UpdateDebounce = false
 	end)
@@ -266,7 +271,7 @@ function VersionController.CreateNewInstanceFromName(name: string, instanceType:
 		instanceType = "ModuleScript"
 	end
 	
-	name = string.gsub(name, " ", "_")
+	name = string.gsub(name, "[^%a_]", "")
 
 	local NewInstance = Instance.new(instanceType)
 
