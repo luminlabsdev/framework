@@ -246,19 +246,11 @@ function VersionController.InstallFramework()
 				continue
 			end
 
-			VersionController.GetDirectoryFromStructureJSON(libraryJSON, PackageInstallCache)
-		end
-
-		for _, installedPackage in PackageInstallCache:GetChildren() do
-			if not (installedPackage:IsA("ModuleScript") or installedPackage:IsA("Folder")) then
-				continue
+			if not PackageInstallCache:FindFirstChild(libraryName) then
+				VersionController.GetDirectoryFromStructureJSON(libraryJSON, PackageInstallCache)
 			end
-			
-			local SplitName = string.split(installedPackage.Name, "_")
-			
-			installedPackage.Name = string.gsub(installedPackage.Name, SplitName[2], "")
-			installedPackage.Parent = NewInstance[SplitName[2]["Packages"]]
-			print(`Installed {installedPackage.Name}`)
+
+			PackageInstallCache:FindFirstChild(libraryName):Clone().Parent = NewInstance[libraryJSON["$parent"]["Packages"] or NewInstance.Replicated.Packages]
 		end
 
 		FinishedFiles = 0
