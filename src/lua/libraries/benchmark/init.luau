@@ -67,9 +67,10 @@ local ToString = {
 	end
 }
 
-local Statistics = require(script.Parent.Statistics)
-local Debugger = require(script.Parent.Parent.Debugger)
-local Signal = require(script.Parent.Parent.Controllers.Vendor.SignalController)
+local Vendor = script.Parent.Vendor
+
+local Signal = require(Vendor.Signal)
+local Statistics = require(Vendor.Statistics)
 
 -- // Functions
 
@@ -82,7 +83,7 @@ function Benchmark.CreateBenchmark()
 	local self = setmetatable({ }, {__index = BenchmarkObject})
 
 	self.IsCompleted = false
-	self.Destroying = Signal.NewController("Destroying")
+	self.Destroying = Signal.new()
 	self.StartTime = 0
 	self.EndTime = 0
 
@@ -105,7 +106,7 @@ end
 ]=]
 function BenchmarkObject:SetFunction(timesToRun: number, func: (timesRan: number) -> ()): BenchmarkData
 	if timesToRun <= 0 then
-		Debugger.Debug(error, "Field 'timesToRun' must be greater than 0.")
+		error("Field 'timesToRun' must be greater than 0.", 0)
 	end
 
 	local CollectedBenchmarkData = { }
@@ -163,7 +164,7 @@ end
 ]=]
 function BenchmarkObject:GetCurrentTime(): number?
 	if self.IsCompleted then
-		Debugger.Debug(warn, "Benchmark timer must still be running to view the current time.")
+		warn("Benchmark timer must still be running to view the current time.")
 		return
 	end
 

@@ -9,16 +9,14 @@
     },
     "Spring": {
         "Spring": {
+            "$className": "ModuleScript",
+            "$properties": {
+                "Source": "https://raw.githubusercontent.com/bhristt/Spring-Module/main/src/Spring.lua"
+            },
             "Eq": {
                 "$className": "ModuleScript",
                 "$properties": {
                     "Source": "https://raw.githubusercontent.com/bhristt/Spring-Module/main/src/Eq.lua"
-                }
-            },
-            "Spring": {
-                "$className": "ModuleScript",
-                "$properties": {
-                    "Source": "https://raw.githubusercontent.com/bhristt/Spring-Module/main/src/Spring.lua"
                 }
             }
         }
@@ -67,7 +65,7 @@
         "Fetch": {
             "$className": "ModuleScript",
             "$properties": {
-                "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/lua/libraries/fetch/fetch.luau"
+                "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/lua/libraries/fetch/init.luau"
             }
         }
     },
@@ -81,9 +79,25 @@
     },
     "Benchmark": {
         "Benchmark": {
-            "$className": "ModuleScript",
-            "$properties": {
-                "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/lua/libraries/benchmark/init.luau"
+            "Vendor": {
+                "Signal": {
+                    "$className": "ModuleScript",
+                    "$properties": {
+                        "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/lua/libraries/benchmark/Vendor/Signal.luau"
+                    }
+                },
+                "Statistics": {
+                    "$className": "ModuleScript",
+                    "$properties": {
+                        "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/lua/libraries/benchmark/Vendor/Statistics.luau"
+                    }
+                }
+            },
+            "Init": {
+                "$className": "ModuleScript",
+                "$properties": {
+                    "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/lua/libraries/benchmark/init.luau"
+                }
             }
         }
     }
