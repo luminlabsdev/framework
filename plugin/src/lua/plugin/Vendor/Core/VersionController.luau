@@ -45,7 +45,7 @@ local FolderToService = {
 	EngineServer = ServerStorage,
 }
 
-VersionController.FilesUpdated = Signal.new()
+VersionController.DataUpdated = Signal.new()
 
 -- // Functions
 
