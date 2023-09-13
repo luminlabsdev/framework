@@ -51,6 +51,10 @@ VersionController.FilesUpdated = Signal.new()
 
 function VersionController.GetDirectoryFromStructureJSON(json: {any}, parent: Instance)
 	for instanceName, children in json do
+		if instanceName == "$parent" then
+			continue
+		end
+		
 		if type(instanceName) == "string" and type(children) == "string" then
 			local InstanceToGet = FrameworkPackages:FindFirstChild(children)
 
@@ -85,7 +89,7 @@ function VersionController.GetDirectoryFromStructureJSON(json: {any}, parent: In
 					end
 
 					FinishedFiles += 1
-					VersionController.FilesUpdated:Fire(FinishedFiles)
+					VersionController.FilesUpdated:Fire(FinishedFiles, HttpCache.ExternalSettings.Files, "Updating", "Updating framework to latest version")
 
 					InstanceFromClass[propertyName] = Source
 				elseif type(propertyName) == "string" then
@@ -237,10 +241,9 @@ function VersionController.InstallFramework()
 			local RemoveIllegalCharacters = string.gsub(settingName, " ", "")
 			NewInstance.Framework:SetAttribute(RemoveIllegalCharacters, settingValue)
 		end
-
-		WindowController.SetWindow("UpdateStatusWindow", false)
-		WindowController.SetMessageWindow("Framework installed successfully!", Color3.fromRGB(205, 255, 151))
-
+		
+		FinishedFiles = 0
+		
 		for libraryName, libraryJSON in HttpCache.LibrariesList do
 			if not CanaryStudioSettings.CanaryStudioInstallerPackages[libraryName] or typeof(libraryJSON) == "Instance" then
 				continue
@@ -250,11 +253,17 @@ function VersionController.InstallFramework()
 				VersionController.GetDirectoryFromStructureJSON(libraryJSON, PackageInstallCache)
 			end
 
-			PackageInstallCache:FindFirstChild(libraryName):Clone().Parent = NewInstance[libraryJSON["$parent"]["Packages"] or NewInstance.Replicated.Packages]
+			PackageInstallCache:FindFirstChild(libraryName):Clone().Parent = NewInstance[libraryJSON["$parent"] or "Replicated"].Packages
+			FinishedFiles += 1
+			VersionController.FilesUpdated:Fire(FinishedFiles, HttpCache.ExternalSettings.Files, "Installing...", "Installing latest version of packages")
 		end
-
+		
 		FinishedFiles = 0
-		VersionController.FilesUpdated:Fire(0)
+		
+		VersionController.FilesUpdated:Fire(FinishedFiles, HttpCache.ExternalSettings.Files, "Updating", "Updating framework to latest version")
+		WindowController.SetWindow("UpdateStatusWindow", false)
+		WindowController.SetMessageWindow("Framework installed successfully!", Color3.fromRGB(205, 255, 151))
+
 		task.wait(UPDATE_COOLDOWN_SECONDS)
 		UpdateDebounce = false
 	end)

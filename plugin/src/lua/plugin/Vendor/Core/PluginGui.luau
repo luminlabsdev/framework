@@ -21,6 +21,9 @@ if not AlreadyRan then
 		local PlayerName = PlayerService:GetNameFromUserIdAsync(StudioService:GetUserId())
 		local FormattedPublishDate = DateTime.fromIsoDate(HttpCache.ReleaseLatest.published_at):FormatLocalTime("lll", LocalizationService.SystemLocaleId)
 		local FinishedFiles = Iris.State(0)
+		local TotalFiles = Iris.State(1)
+		local TitleMessage = Iris.State("Updating ")
+		local BelowMessage = Iris.State("Updating framework to latest version")
 		
 		Iris.UpdateGlobalConfig(Iris.TemplateConfig.sizeClear)
 		Iris.UpdateGlobalConfig(Iris.TemplateConfig[`color{StudioSettings.Theme.Name}`])
@@ -139,8 +142,8 @@ if not AlreadyRan then
 				Iris.Text(`Published At: {FormattedPublishDate}`)
 			end Iris.End()
 			
-			WindowList.UpdateStatusWindow = Iris.Window({`Updating ({math.floor((FinishedFiles:get() / HttpCache.ExternalSettings.Files) * 100)}%)`, [Iris.Args.Window.NoClose] = true, [Iris.Args.Window.NoResize] = true}, {isOpened = false, size = Vector2.new(334, 109)}) do
-				Iris.Text("Updating framework to latest version")
+			WindowList.UpdateStatusWindow = Iris.Window({`{TitleMessage:get()}({math.floor((FinishedFiles:get() / TotalFiles:get()) * 100)}%)`, [Iris.Args.Window.NoClose] = true, [Iris.Args.Window.NoResize] = true}, {isOpened = false, size = Vector2.new(334, 109)}) do
+				Iris.Text(BelowMessage:get())
 				Iris.Text(`{FinishedFiles:get()} of {HttpCache.ExternalSettings.Files} files`)
 			end Iris.End()
 			
@@ -175,8 +178,11 @@ if not AlreadyRan then
 		WindowController = require(Vendor.Core.WindowController)(WindowList)
 		VersionController = require(Vendor.Core.VersionController)
 		
-		VersionController.FilesUpdated:Connect(function(files)
+		VersionController.DataUpdated:Connect(function(files, totalfiles, title, body)
 			FinishedFiles:set(files)
+			TotalFiles:set(totalfiles)
+			TitleMessage:set(title)
+			BelowMessage:set(body)
 		end)
 
 		return WindowList
