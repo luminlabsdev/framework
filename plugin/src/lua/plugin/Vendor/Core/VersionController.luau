@@ -89,7 +89,7 @@ function VersionController.GetDirectoryFromStructureJSON(json: {any}, parent: In
 					end
 
 					FinishedFiles += 1
-					VersionController.FilesUpdated:Fire(FinishedFiles, HttpCache.ExternalSettings.Files, "Updating", "Updating framework to latest version")
+					VersionController.DataUpdated:Fire(FinishedFiles, HttpCache.ExternalSettings.Files, "Updating", "Updating framework to latest version")
 
 					InstanceFromClass[propertyName] = Source
 				elseif type(propertyName) == "string" then
