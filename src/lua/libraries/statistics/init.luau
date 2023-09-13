@@ -65,30 +65,7 @@ end
 	@return number?
 ]=]
 function Statistics.GetMode(numberList: {number}): number?
-	local CalculatedList = { }
-
-	table.sort(numberList)
-
-	for index, number in numberList do
-		if not CalculatedList[number] then
-			CalculatedList[number] = 1
-			continue
-		end
-
-		CalculatedList[number] += 1
-	end
-
-	local SortedList = Utility.DictionaryToArray(CalculatedList)
-
-	table.sort(SortedList, function(a, b)
-		return a[2] > b[2]
-	end)
-
-	if SortedList[1][1] == 1 and CalculatedList[SortedList[1][1]] == 1 then
-		return nil
-	end
-
-	return SortedList[1][1]
+	print("deprecated")
 end
 
 return Statistics
