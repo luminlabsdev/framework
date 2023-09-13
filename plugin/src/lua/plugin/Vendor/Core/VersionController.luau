@@ -255,12 +255,12 @@ function VersionController.InstallFramework()
 
 			PackageInstallCache:FindFirstChild(libraryName):Clone().Parent = NewInstance[libraryJSON["$parent"] or "Replicated"].Packages
 			FinishedFiles += 1
-			VersionController.FilesUpdated:Fire(FinishedFiles, HttpCache.ExternalSettings.Files, "Installing...", "Installing latest version of packages")
+			VersionController.DataUpdated:Fire(FinishedFiles, HttpCache.ExternalSettings.Files, "Installing...", "Installing latest version of packages")
 		end
 		
 		FinishedFiles = 0
 		
-		VersionController.FilesUpdated:Fire(FinishedFiles, HttpCache.ExternalSettings.Files, "Updating", "Updating framework to latest version")
+		VersionController.DataUpdated:Fire(FinishedFiles, HttpCache.ExternalSettings.Files, "Updating", "Updating framework to latest version")
 		WindowController.SetWindow("UpdateStatusWindow", false)
 		WindowController.SetMessageWindow("Framework installed successfully!", Color3.fromRGB(205, 255, 151))
 

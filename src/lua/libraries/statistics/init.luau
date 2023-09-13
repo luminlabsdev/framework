@@ -4,7 +4,6 @@
 	@class Statistics
 ]=]
 local Statistics = { }
-local Utility = require(script.Parent.Utility)
 
 --[=[
 	Gets the number that is in the middle of the dataset, more info can be found [here](https://en.wikipedia.org/wiki/Median). Here's an example scenario:
