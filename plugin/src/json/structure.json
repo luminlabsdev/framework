@@ -33,14 +33,14 @@
         },
         "Scripts": { }
     },
-    "CanaryEngineFramework": {
+    "Framework": {
         "Vendor": {
             "Controllers": {
                 "Vendor": {
                     "SanitizeData": {
                         "$className": "ModuleScript",
                         "$properties": {
-                            "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Controllers/Vendor/SanitizeData.luau"
+                            "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Controllers/Vendor/SanitizeData.lua"
                         }
                     },
                     "NetworkController": {
@@ -50,7 +50,7 @@
                         "NetworkController": {
                             "$className": "ModuleScript",
                             "$properties": {
-                                "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Controllers/Vendor/NetworkController/init.luau"
+                                "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Controllers/Vendor/NetworkController/init.lua"
                             }
                         }
                     },
@@ -59,14 +59,14 @@
                             "Signal": {
                                 "$className": "ModuleScript",
                                 "$properties": {
-                                    "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Controllers/Vendor/SignalController/Vendor/Signal.luau"
+                                    "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Controllers/Vendor/SignalController/Vendor/Signal.lua"
                                 }
                             }
                         },
                         "SignalController": {
                             "$className": "ModuleScript",
                             "$properties": {
-                                "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Controllers/Vendor/SignalController/init.luau"
+                                "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Controllers/Vendor/SignalController/init.lua"
                             }
                         }
                     }
@@ -74,7 +74,7 @@
                 "Controllers": {
                     "$className": "ModuleScript",
                     "$properties": {
-                        "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Controllers/Controllers.luau"
+                        "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Controllers/Controllers.lua"
                     }
                 }
             },
@@ -83,7 +83,7 @@
                     "EasyProfile": {
                         "$className": "ModuleScript",
                         "$properties": {
-                            "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Libraries/EasyProfile/init.luau"
+                            "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Libraries/EasyProfile/init.lua"
                         }
                     },
                     "Vendor": {
@@ -99,26 +99,26 @@
             "Debugger": {
                 "$className": "ModuleScript",
                 "$properties": {
-                    "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Debugger.luau"
+                    "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Debugger.lua"
                 }
             },
             "Runtime": {
                 "$className": "ModuleScript",
                 "$properties": {
-                    "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Runtime.luau"
+                    "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Runtime.lua"
                 }
             },
             "Types": {
                 "$className": "ModuleScript",
                 "$properties": {
-                    "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Types.luau"
+                    "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Types.lua"
                 }
             }
         },
-        "CanaryEngine": {
+        "Init": {
             "$className": "ModuleScript",
             "$properties": {
-                "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/init.luau"
+                "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/init.lua"
             }
         }
     }

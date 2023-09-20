@@ -6,6 +6,16 @@ keywords: [roblox, game, framework, changelog, updates]
 
 # Changelog
 
+## 4.0.0
+
+---
+
+### Added
+
+### Improvements
+
+### Removed
+
 ## 3.3.5
 
 ---
@@ -34,7 +44,7 @@ Nothing!
 
 No information available, mainly small bug fixes.
 
-## v3.2.4
+## 3.2.4
 
 ---
 
@@ -56,7 +66,7 @@ No information available, mainly small bug fixes.
 
 Nothing!
 
-## v3.1.4
+## 3.1.4
 
 ---
 
@@ -76,7 +86,7 @@ Nothing!
 * Remove `Runtime.IsStarted`
 * Deprecated `.GetLatestPackageVersionAsync`
 
-## v3.0.1
+## 3.0.1
 
 ---
 
@@ -93,7 +103,7 @@ Nothing!
 
 * Nothing!
 
-## v3.0.0
+## 3.0.0
 
 ---
 
@@ -130,7 +140,7 @@ Nothing!
 * Remove `CanaryEngineServer.Media`
 * Remove `CanaryEngineClient.Media`
 
-## v2.2.1
+## 2.2.1
 
 ---
 
@@ -148,7 +158,7 @@ Nothing!
 
 * Nothing!
 
-## v2.2.0
+## 2.2.0
 
 ---
 
@@ -167,7 +177,7 @@ Nothing!
 
 * Nothing!
 
-## v2.1.0
+## 2.1.0
 
 ---
 
@@ -188,7 +198,7 @@ Nothing!
 
 * Nothing!
 
-## v2.0.0
+## 2.0.0
 
 ---
 
@@ -211,7 +221,7 @@ Nothing!
 * Remove `EngineClient.PreinstalledPackages`
 * Remove `EngineServer.PreinstalledPackages`
 
-## v1.2.0
+## 1.2.0
 
 ---
 
@@ -231,7 +241,7 @@ Nothing!
 
 * Removed intellisense from plugin, it's sadly impossible
 
-## v1.1.0
+## 1.1.0
 
 ---
 

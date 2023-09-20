@@ -34,28 +34,6 @@ local CanaryEngine = { }
 local CanaryEngineServer = { }
 
 --[=[
-	A reference to the Media folder on the Server, also gives access to replicated media.
-
-	@deprecated v3.1.5 -- Deprecated in favor of newer and better package systems
-
-	@prop Media {Server: Folder, Replicated: Folder}
-	@readonly
-
-	@within CanaryEngineServer
-]=]
-
---[=[
-	A reference to the Packages folder on the Server, also gives access to replicated Packages.
-
-	@deprecated v3.1.5 -- Deprecated in favor of newer and better package systems
-
-	@prop Packages {Server: Folder, Replicated: Folder}
-	@readonly
-
-	@within CanaryEngineServer
-]=]
-
---[=[
 	CanaryEngine's client-sided interface.
 	
 	@client
@@ -100,61 +78,15 @@ local CanaryEngineClient = { }
 ]=]
 
 --[=[
-	A reference to the Media folder on the client, also gives access to replicated media.
-
-	@deprecated v3.1.5 -- Deprecated in favor of newer and better package systems
-
-	@prop Media {Client: Folder, Replicated: Folder}
-	@readonly
-
-	@within CanaryEngineClient
-]=]
-
---[=[
-	A reference to the Packages folder on the client, also gives access to replicated Packages.
-
-	@deprecated v3.1.5 -- Deprecated in favor of newer and better package systems
-
-	@prop Packages {Client: Folder, Replicated: Folder}
-	@readonly
-
-	@within CanaryEngineClient
-]=]
-
---[=[
 	CanaryEngine's global-sided interface.
 	
 	@class CanaryEngineReplicated
 ]=]
 local CanaryEngineReplicated = { }
 
---[=[
-	A reference to the Packages folder that is replicated.
-
-	@deprecated v3.1.5 -- Deprecated in favor of newer and better package systems
-
-	@prop Packages Folder
-	@readonly
-
-	@within CanaryEngineReplicated
-]=]
-
---[=[
-	A reference to the Media folder that is replicated.
-
-	@deprecated v3.1.5 -- Deprecated in favor of newer and better package systems
-
-	@prop Media Folder
-	@readonly
-
-	@within CanaryEngineReplicated
-]=]
-
 -- // Variables
 
 local MarketplaceService = game:GetService("MarketplaceService")
-local ServerStorage = game:GetService("ServerStorage")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local PlayerService = game:GetService("Players")
 
 local EngineVendor = script.Parent.Vendor
@@ -199,21 +131,7 @@ CanaryEngine.Debugger = Debugger
 ]=]
 function CanaryEngine.GetEngineServer()
 	if RuntimeContext.Server then
-		local EngineServer = ServerStorage:WaitForChild("EngineServer")
-		local EngineReplicated = ReplicatedStorage:WaitForChild("EngineReplicated")
-
-		CanaryEngineServer.Packages = {
-			Server = EngineServer.Packages,
-			Replicated = EngineReplicated.Packages,
-		}
-
-		CanaryEngineServer.Media = {
-			Server = EngineServer.Media,
-			Replicated = EngineReplicated.Media,
-		}
-
 		CanaryEngineServer.Data = require(EngineVendor.Libraries.EasyProfile.EasyProfile)
-
 		return CanaryEngineServer
 	else
 		Debugger.Debug(error, "Failed to fetch 'EngineServer', context must be server")
@@ -229,20 +147,7 @@ end
 ]=]
 function CanaryEngine.GetEngineClient()
 	if RuntimeContext.Client then
-		local EngineClient = ReplicatedStorage:WaitForChild("EngineClient")
-		local EngineReplicated = ReplicatedStorage:WaitForChild("EngineReplicated")
-
 		local Player = PlayerService.LocalPlayer
-
-		CanaryEngineClient.Packages = {
-			Client = EngineClient.Packages,
-			Replicated = EngineReplicated.Packages,
-		}
-
-		CanaryEngineClient.Media = {
-			Client = EngineClient.Media,
-			Replicated = EngineReplicated.Media,
-		}
 
 		CanaryEngineClient.Player = Player :: Player
 
@@ -265,11 +170,6 @@ end
 	@return CanaryEngineReplicated?
 ]=]
 function CanaryEngine.GetEngineReplicated()
-	local EngineReplicated = ReplicatedStorage:WaitForChild("EngineReplicated")
-
-	CanaryEngineReplicated.Packages = EngineReplicated.Packages
-	CanaryEngineReplicated.Media = EngineReplicated.Media
-
 	return CanaryEngineReplicated
 end
 
@@ -349,7 +249,7 @@ function CanaryEngine.CreateSignal(signalName: string?): Types.SignalController<
 end
 
 --[=[
-	Creates a new anonymous signal, this does not have a reference outside of the variable it was created in.
+	Creates a new anonymous signal, this does not have a reference outside of the variable it was created in. This is also technically an alias for CanaryEngine.CreateSignal(nil).
 	
 	@return SignalController<any>
 ]=]

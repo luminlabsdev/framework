@@ -137,16 +137,6 @@ export interface EasyProfile {
 }
 
 interface EngineServer {
-    Packages: {
-        Server: Folder
-        Replicated: Folder
-    }
-
-    Media: {
-        Server: Folder
-        Replicated: Folder
-    }
-
     Data: EasyProfile
 	CreateNetworkController(controllerName: string): ServerNetworkController<any, any>;
 }
@@ -205,16 +195,6 @@ export interface Character {
 }
 
 interface EngineClient {
-    Packages: {
-        Client: Folder
-        Replicated: Folder
-    }
-
-    Media: {
-        Client: Folder
-        Replicated: Folder
-    }
-
     Player: Player
     Character: Character & Model
 
@@ -225,8 +205,7 @@ interface EngineClient {
 }
 
 interface EngineReplicated {
-    Packages: Folder
-    Media: Folder
+
 }
 
 export namespace CanaryEngine {
