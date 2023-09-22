@@ -12,9 +12,24 @@ keywords: [roblox, game, framework, changelog, updates]
 
 ### Added
 
+Adds `Red`, revamped the networking system once again and for the last time
+Revamped plugin for last time, easier to navigate / add features
+Adds ability to pull packages from any GitHub repo
+
 ### Improvements
 
+Renames `CanaryEngineFramework` instance to `Framework`
+Renames `CanaryEngine` module to `Init`
+Fixed TS support, back on roblox-ts!
+Documentation improvements
+Small bug fixes
+QOL fixes
+
 ### Removed
+
+`BridgeNet`
+`EngineContext.Packages`
+`EngineContext.Media`
 
 ## 3.3.5
 

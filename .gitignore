@@ -1,6 +1,6 @@
-# moonwave
+# docs
 
-build
+docs/.vitepress/cache
 
 # npm
 

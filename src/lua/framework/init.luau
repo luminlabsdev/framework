@@ -1,4 +1,4 @@
--- // CanaryEngine
+-- // Packages
 
 --[=[
 	The parent of all classes.
@@ -86,9 +86,7 @@ local CanaryEngineReplicated = { }
 
 -- // Variables
 
-local MarketplaceService = game:GetService("MarketplaceService")
 local PlayerService = game:GetService("Players")
-
 local EngineVendor = script.Parent.Vendor
 
 -- // Types
@@ -107,15 +105,12 @@ local Runtime = require(EngineVendor.Runtime) -- Runtime settings + debugger
 local RuntimeContext = Runtime.Context
 local RuntimeSettings = Runtime.Settings
 
-CanaryEngine.RuntimeCreatedSignals = { }
-CanaryEngine.RuntimeCreatedNetworkControllers = { }
-
 CanaryEngine.Runtime = table.freeze({
 	RuntimeSettings = RuntimeSettings,
 	RuntimeContext = RuntimeContext,
 	RuntimeObjects = {
-		NetworkControllers = CanaryEngine.RuntimeCreatedNetworkControllers,
-		SignalControllers = CanaryEngine.RuntimeCreatedSignals,
+		NetworkControllers = { },
+		SignalControllers = { },
 	},
 })
 
@@ -135,6 +130,7 @@ function CanaryEngine.GetEngineServer()
 		return CanaryEngineServer
 	else
 		Debugger.Debug(error, "Failed to fetch 'EngineServer', context must be server")
+		return
 	end
 end
 
@@ -155,12 +151,13 @@ function CanaryEngine.GetEngineClient()
 			CanaryEngineClient.Character = Player.Character or Player.CharacterAdded:Wait()  :: Types.Character & Model
 		end)
 
-		CanaryEngineClient.PlayerGui = Player:WaitForChild("PlayerGui") :: typeof(game.StarterGui)
-		CanaryEngineClient.PlayerBackpack = Player:WaitForChild("Backpack") :: typeof(game.StarterPack)
+		CanaryEngineClient.PlayerGui = Player:WaitForChild("PlayerGui") :: typeof(game:GetService("StarterGui"))
+		CanaryEngineClient.PlayerBackpack = Player:WaitForChild("Backpack") :: typeof(game:GetService("StarterPack"))
 
 		return CanaryEngineClient
 	else
 		Debugger.Debug(error, "Failed to fetch 'EngineClient', Context must be client.")
+		return
 	end
 end
 
@@ -193,13 +190,13 @@ end
 	@return ClientNetworkController<any>
 ]=]
 function CanaryEngineClient.CreateNetworkController(controllerName: string, controllerTimeout: number?): Types.ClientNetworkController<any, any>
-	if not CanaryEngine.RuntimeCreatedNetworkControllers[controllerName] then
+	if not CanaryEngine.Runtime.RuntimeObjects.NetworkControllers[controllerName] then
 		local NewNetworkController = Network.NewClientController(controllerName, controllerTimeout or 3)
 
-		CanaryEngine.RuntimeCreatedNetworkControllers[controllerName] = NewNetworkController
+		CanaryEngine.Runtime.RuntimeObjects.NetworkControllers[controllerName] = NewNetworkController
 	end
-
-	return CanaryEngine.RuntimeCreatedNetworkControllers[controllerName]
+	
+	return CanaryEngine.Runtime.RuntimeObjects.NetworkControllers[controllerName]
 end
 
 --[=[
@@ -219,13 +216,13 @@ end
 	@return ServerNetworkController<any>
 ]=]
 function CanaryEngineServer.CreateNetworkController(controllerName: string): Types.ServerNetworkController<any, any>
-	if not CanaryEngine.RuntimeCreatedNetworkControllers[controllerName] then
+	if not CanaryEngine.Runtime.RuntimeObjects.NetworkControllers[controllerName] then
 		local NewNetworkController = Network.NewServerController(controllerName)
 
-		CanaryEngine.RuntimeCreatedNetworkControllers[controllerName] = NewNetworkController
+		CanaryEngine.Runtime.RuntimeObjects.NetworkControllers[controllerName] = NewNetworkController
 	end
 
-	return CanaryEngine.RuntimeCreatedNetworkControllers[controllerName]
+	return CanaryEngine.Runtime.RuntimeObjects.NetworkControllers[controllerName]
 end
 
 --[=[
@@ -239,13 +236,13 @@ function CanaryEngine.CreateSignal(signalName: string?): Types.SignalController<
 		return Signal.NewController("Anonymous")
 	end
 
-	if not CanaryEngine.RuntimeCreatedSignals[signalName] then
+	if not CanaryEngine.Runtime.RuntimeObjects.SignalControllers[signalName] then
 		local NewSignal = Signal.NewController(signalName)
 
-		CanaryEngine.RuntimeCreatedSignals[signalName] = NewSignal
+		CanaryEngine.Runtime.RuntimeObjects.SignalControllers[signalName] = NewSignal
 	end
 
-	return CanaryEngine.RuntimeCreatedSignals[signalName]
+	return CanaryEngine.Runtime.RuntimeObjects.SignalControllers[signalName]
 end
 
 --[=[

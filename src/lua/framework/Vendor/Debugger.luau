@@ -204,6 +204,8 @@ end
 --[=[
 	Errors if the param does not have the same type as what is expected.
 
+	@deprecated v4.0.0 -- Use `Guard` instead
+
 	@param paramNumber number -- The number of which param errored, 1 would be the first param
 	@param funcName string -- The name of the function
 	@param expectedType ExpectedType -- The type that was expected of `param`
@@ -230,6 +232,10 @@ end
 	@param printLog boolean? -- Whether or not to pring the log using [EngineDebugger.Debug], defaults to true
 ]=]
 function EngineDebugger.LogEvent(instance: LuaSourceContainer, eventName: string, printLog: boolean?)
+	if printLog == nil then
+		printLog = true
+	end
+	
 	if not EngineDebugger.CachedLogs[instance] then
 		EngineDebugger.CachedDebugCalls[instance] = { }
 	end

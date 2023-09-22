@@ -3,7 +3,7 @@
         "Base64": {
             "$className": "ModuleScript",
             "$properties": {
-                "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/libraries/base64/init.lua"
+                "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/libraries/base64/init.luau"
             }
         }
     },
@@ -21,24 +21,24 @@
             }
         }
     },
-    "Promise": {
-        "Promise": {
-            "$className": "ModuleScript",
-            "$properties": {
-                "Source": "https://raw.githubusercontent.com/evaera/roblox-lua-promise/master/lib/init.lua"
+    "Bin": {
+        "Bin": {
+            "Spawn": {
+                "$className": "ModuleScript",
+                "$properties": {
+                    "Source": "https://raw.githubusercontent.com/red-blox/Util/main/libs/Spawn/Spawn.luau"
+                }
+            },
+            "Init": {
+                "$className": "ModuleScript",
+                "$properties": {
+                    "Source": "https://raw.githubusercontent.com/red-blox/Util/main/libs/Bin/Bin.luau"
+                }
             }
         }
     },
-    "Trove": {
-        "Trove": {
-            "$className": "ModuleScript",
-            "$properties": {
-                "Source": "https://raw.githubusercontent.com/Sleitnick/RbxUtil/main/modules/trove/init.lua"
-            }
-        }
-    },
-    "RemotePacketSizeCount": {
-        "RemotePacketSizeCount": {
+    "PacketMeasure": {
+        "PacketMeasure": {
             "$className": "ModuleScript",
             "$properties": {
                 "Source": "https://raw.githubusercontent.com/PysephWasntAvailable/RemotePacketSizeCounter/main/src/init.luau"
@@ -49,7 +49,7 @@
         "Sprite": {
             "$className": "ModuleScript",
             "$properties": {
-                "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/lua/libraries/sprite/init.lua"
+                "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/lua/libraries/sprite/init.luau"
             }
         }
     },
@@ -63,9 +63,23 @@
     },
     "Fetch": {
         "Fetch": {
-            "$className": "ModuleScript",
-            "$properties": {
-                "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/lua/libraries/fetch/init.lua"
+            "Spawn": {
+                "$className": "ModuleScript",
+                "$properties": {
+                    "Source": "https://raw.githubusercontent.com/red-blox/Util/main/libs/Spawn/Spawn.luau"
+                }
+            },
+            "Promise": {
+                "$className": "ModuleScript",
+                "$properties": {
+                    "Source": "https://raw.githubusercontent.com/red-blox/Util/main/libs/Promise/Promise.luau"
+                }
+            },
+            "Init": {
+                "$className": "ModuleScript",
+                "$properties": {
+                    "Source": "https://raw.githubusercontent.com/red-blox/Util/main/libs/Fetch/Fetch.luau"
+                }
             }
         }
     },
@@ -73,7 +87,7 @@
         "Statistics": {
             "$className": "ModuleScript",
             "$properties": {
-                "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/lua/libraries/statistics/init.lua"
+                "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/lua/libraries/statistics/init.luau"
             }
         }
     },
@@ -83,20 +97,20 @@
                 "Signal": {
                     "$className": "ModuleScript",
                     "$properties": {
-                        "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/lua/libraries/benchmark/Vendor/Signal.lua"
+                        "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/lua/libraries/benchmark/Vendor/Signal.luau"
                     }
                 },
                 "Statistics": {
                     "$className": "ModuleScript",
                     "$properties": {
-                        "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/lua/libraries/benchmark/Vendor/Statistics.lua"
+                        "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/lua/libraries/benchmark/Vendor/Statistics.luau"
                     }
                 }
             },
             "Init": {
                 "$className": "ModuleScript",
                 "$properties": {
-                    "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/lua/libraries/benchmark/init.lua"
+                    "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/lua/libraries/benchmark/init.luau"
                 }
             }
         }

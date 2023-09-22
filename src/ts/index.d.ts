@@ -27,10 +27,6 @@ export interface ClientNetworkController<T, U> {
     Name: string;
 }
 
-export interface Example {
-    Hello(possibilyNull?: number): void;
-}
-
 export interface ServerNetworkController<T, U> {
     Connect(self: ServerNetworkController<T, U>, func: (sender: Player, data: {[index: number]: T} | undefined) => (void)): ControllerConnection;
     Wait(self: ServerNetworkController<T, U>): [Player, {[index: number]: T} | undefined];
@@ -53,44 +49,12 @@ export interface Sprite {
     StopAnimation(image: ImageLabel): void;
 }
 
-export interface Base64 {
-    Encode(data: any): string;
-    Decode(data: any): string;
-}
+
 
 export interface Statistics {
     GetMedian(numberList: {number}): number;
     GetMean(numberList: {number}): number;
     GetMode(numberList: {number}): number;
-}
-
-type CallStack = {Name: string, Source: string, DefinedLine: number}
-type ExpectedType = "Axes" | "BrickColor" | "CatalogSearchParams" | "CFrame" | "Color3" | "ColorSequence" | "ColorSequenceKeypoint" | "Content" | "DateTime"
-| "DockWidgetPluginGuiInfo" | "Enum" | "EnumItem" | "Enums" | "Faces" | "FloatCurveKey" | "Font" | "Instance" | "NumberRange" | "NumberSequence"
-| "NumberSequenceKeyPoint" | "OverlapParams" | "PathWaypoint" | "PhysicalProperties" | "Random" | "Ray" | "RayastParams" | "RaycastResult" | "RBXScriptConnection"
-| "RBXScriptSignal" | "Rect" | "Region3" | "Region3int16" | "SharedTable" | "TweenInfo" | "UDim" | "UDim2" | "Vector2" | "Vector2int16" | "Vector3" | "Vector3int16"
-| "nil" | "boolean" | "number" | "string" | "function" | "userdata" | "thread" | "table"
-
-export interface Debugger {
-    Debug<T>(debugHandler: ((...T) => (void)) | ((message: T, level: number) => (void)), arguments: {[index: number]: T} | T, prefix: string | undefined, respectDebugger: boolean | undefined): void;
-    GetCallStack(instance: Instance, stackName: string | undefined): CallStack;
-    DebugInvalidData(paramNumber: number, funcName: string, expectedType: ExpectedType, param: unknown): void;
-
-    CachedStackTraces: {[key: string]: CallStack}
-}
-
-type BenchmarkData = {Total: number, Longest: number, Shortest: number, Average: number};
-
-interface BenchmarkObject {
-    SetFunction(self: BenchmarkObject, timesToRun: number, func: (timesRan: number) => (void)): BenchmarkData;
-    Start(self: BenchmarkObject): void;
-    Stop(self: BenchmarkObject): void;
-    GetCurrentTime(self: BenchmarkObject): number | undefined;
-    Destroy(self: BenchmarkObject): void;
-}
-
-export interface Benchmark {
-    CreateBenchmark(): BenchmarkObject
 }
 
 export interface Serialize {

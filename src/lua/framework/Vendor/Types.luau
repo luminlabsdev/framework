@@ -8,19 +8,13 @@
 local EngineTypes = { }
 
 --[=[
-	A controller connection, similar to an [RBXScriptConnection]
+	A controller connection, simply a function which allows you to disconnect from an event.
 
-	@field Disconnect (self: ControllerConnection) -> ()
-	@field Connected boolean
-
-	@interface ControllerConnection
+	@type ControllerConnection
 	@within EngineTypes
 	@private
 ]=]
-type ControllerConnection = {
-	Disconnect: (self: ControllerConnection) -> (),
-	Connected: boolean,
-}
+type ControllerConnection = () -> ()
 
 --[=[
 	A signal controller, similar to an [RBXScriptSignal]

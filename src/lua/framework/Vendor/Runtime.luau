@@ -8,7 +8,7 @@
 local EngineRuntime = { }
 
 local RunService = game:GetService("RunService")
-local CanaryEngineFramework = game:GetService("ReplicatedStorage").CanaryEngineFramework
+local Framework = game:GetService("ReplicatedStorage").Framework
 
 --[=[
 	Shows different runtime contexts.
@@ -70,9 +70,9 @@ local EngineRuntimeContext = {
 	@class EngineRuntimeSettings
 ]=]
 local EngineRuntimeSettings = {
-	StudioDebugEnabled = CanaryEngineFramework:GetAttribute("StudioDebugger"),
-	LiveGameDebugEnabled = CanaryEngineFramework:GetAttribute("LiveGameDebugger"),
-	Version = CanaryEngineFramework:GetAttribute("Version"),
+	StudioDebugEnabled = Framework:GetAttribute("StudioDebugger"),
+	LiveGameDebugEnabled = Framework:GetAttribute("LiveGameDebugger"),
+	Version = Framework:GetAttribute("Version"),
 }
 
 --[=[
