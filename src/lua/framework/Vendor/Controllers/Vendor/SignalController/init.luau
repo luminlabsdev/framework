@@ -35,7 +35,7 @@ local SignalControllerObject = { }
 	@within SignalControllerObject
 ]=]
 
-SignalController.__index = SignalController
+SignalController.__index = SignalControllerObject
 
 -- // Variables
 
@@ -43,7 +43,6 @@ local EngineVendor = script.Parent.Parent.Parent.Parent
 local EngineLibraries = EngineVendor.Libraries
 
 local Signal = require(EngineLibraries.RedbloxUtils.Signal)
-local Future = require(EngineLibraries.RedbloxUtils.Future)
 local Sanitize = require(script.Parent.Parent.Sanitize)
 
 -- // Functions
@@ -55,7 +54,7 @@ local Sanitize = require(script.Parent.Parent.Sanitize)
 	@return SignalControllerObject
 ]=]
 function SignalController.NewController(name: string)
-	local self = setmetatable({ }, SignalController)
+	local self = setmetatable({ }, SignalControllerObject)
 	
 	self._Signal = Signal()
 	self.Name = name
@@ -98,6 +97,16 @@ end
 	@param func (data: {any}) -> () -- The function to call when data is recieved
 	@return ControllerConnection
 ]=]
+function SignalControllerObject:Once(func: (data: {any}?) -> ())
+	local Disconnect
+
+	Disconnect = self._Signal:Connect(function(data)
+		Disconnect()
+		func(data)
+	end)
+
+	return Disconnect
+end
 
 --[=[
 	Yields the current thread until another script fires the signal controller.
@@ -105,10 +114,8 @@ end
 	@yields
 	@return {any}
 ]=]
-function SignalControllerObject:Await(): Future.Future
-	return Future.new(function()
-		return self._Signal:Wait()
-	end)
+function SignalControllerObject:Wait(): {any}?
+	return self._Signal:Wait()
 end
 
 --[=[

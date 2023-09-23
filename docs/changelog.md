@@ -8,8 +8,6 @@ keywords: [roblox, game, framework, changelog, updates]
 
 ## 4.0.0
 
-
-
 ### Added
 
 * Adds `Red`, revamped the networking system once again and for the last time
@@ -19,11 +17,13 @@ keywords: [roblox, game, framework, changelog, updates]
 
 ### Improvements
 
+* Improves EasyProfile ([#3](https://github.com/canary-development/CanaryEngine/pull/3), [koxx12](https://github.com/koxx12-dev))
 * Renames `CanaryEngineFramework` instance to `Framework`
 * Renames `CanaryEngine` module to `Init`
 * Fixed TS support, back on roblox-ts!
 * Small bug fixes
 * QOL fixes
+* Most yielding functions now make usage of Futures
 
 ### Removed
 
@@ -53,13 +53,9 @@ Nothing!
 
 ## 3.2.5
 
-
-
 No information available, mainly small bug fixes.
 
 ## 3.2.4
-
-
 
 ### Added
 
@@ -81,8 +77,6 @@ Nothing!
 
 ## 3.1.4
 
-
-
 ### Added
 
 * Native `roblox-ts` support
@@ -101,8 +95,6 @@ Nothing!
 
 ## 3.0.1
 
-
-
 ### Added
 
 * Nothing!
@@ -117,8 +109,6 @@ Nothing!
 * Nothing!
 
 ## 3.0.0
-
-
 
 ### Added
 
@@ -155,8 +145,6 @@ Nothing!
 
 ## 2.2.1
 
-
-
 ### Added
 
 * Add Once + Disconnect to `NetworkSignals`
@@ -172,8 +160,6 @@ Nothing!
 * Nothing!
 
 ## 2.2.0
-
-
 
 ### Added
 
@@ -191,8 +177,6 @@ Nothing!
 * Nothing!
 
 ## 2.1.0
-
-
 
 ### Added
 
@@ -212,8 +196,6 @@ Nothing!
 * Nothing!
 
 ## 2.0.0
-
-
 
 ### Added
 
@@ -236,8 +218,6 @@ Nothing!
 
 ## 1.2.0
 
-
-
 ### Added
 
 * Added install and uninstall to plugin
@@ -255,7 +235,5 @@ Nothing!
 * Removed intellisense from plugin, it's sadly impossible
 
 ## 1.1.0
-
-
 
 * Public release! 🥳

@@ -1,4 +1,4 @@
--- // Types
+-- // Packages
 
 --[=[
 	The parent of all classes.
@@ -181,9 +181,22 @@ export type Character = {
 	["Torso"]: Part & {
 		roblox: Decal
 	}
-}
+} & Model
 
+--[=[
+	A simple dictionary type.
+
+	@type Dictionary
+	@within EngineTypes
+]=]
 export type Dictionary<T, U> = {[T]: U}
+
+--[=[
+	A simple array type.
+
+	@type Array
+	@within EngineTypes
+]=]
 export type Array<T> = {[number]: T}
 
 return EngineTypes

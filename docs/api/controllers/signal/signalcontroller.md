@@ -67,11 +67,11 @@ The function to call when data is recieved
 
 ### Wait <Badge type="warning" text="yields" />
 
-Yields the current thread until another script fires the signal controller. Returns a promise.
+Yields the current thread until another script fires the signal controller.
 
 #### Returns
 
-* **{any}**
+* **[Array](/api/engine/types#array)\<any\>**
 
 ---
 

@@ -51,15 +51,6 @@ local CanaryEngineClient = { }
 ]=]
 
 --[=[
-	A simple reference to the [Player.Character].
-
-	@prop Character Character & Model
-	@readonly
-
-	@within CanaryEngineClient
-]=]
-
---[=[
 	A simple reference to the [Player.PlayerGui], useful for automatic typing and API simplicity.
 
 	@prop PlayerGui StarterGui
@@ -194,7 +185,13 @@ function CanaryEngineClient.CreateNetworkController(controllerName: string): Typ
 	return CanaryEngine.Runtime.RuntimeObjects.NetworkControllers[controllerName]
 end
 
-function CanaryEngineClient.GetPlayerCharacter(): Types.Character & Model
+--[=[
+	Gets the players current character model; if it doesn't exist the thread will yield until it does.
+
+	@yields
+	@return Types.Character
+]=]
+function CanaryEngineClient.GetPlayerCharacter(): Types.Character
 	return PlayerService.LocalPlayer.Character or PlayerService.LocalPlayer.CharacterAdded:Wait()
 end
 

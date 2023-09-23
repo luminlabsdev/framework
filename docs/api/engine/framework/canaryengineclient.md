@@ -8,7 +8,7 @@ CanaryEngine's client-sided interface.
 
 A simple reference to the [Players.LocalPlayer](https://create.roblox.com/docs/reference/engine/classes/Players#LocalPlayer)
 
-* [**Player**](https://create.roblox.com/docs/reference/engine/classes/Player)
+* **[Player](https://create.roblox.com/docs/reference/engine/classes/Player)**
 
 ---
 
@@ -16,7 +16,7 @@ A simple reference to the [Players.LocalPlayer](https://create.roblox.com/docs/r
 
 A simple reference to the [Player.PlayerGui](https://create.roblox.com/docs/reference/engine/classes/Player#PlayerGui)
 
-* [**PlayerGui**](https://create.roblox.com/docs/reference/engine/classes/PlayerGui)
+* **[PlayerGui](https://create.roblox.com/docs/reference/engine/classes/PlayerGui)**
 
 ---
 
@@ -24,7 +24,7 @@ A simple reference to the [Player.PlayerGui](https://create.roblox.com/docs/refe
 
 A simple reference to the [Player.Backpack](https://create.roblox.com/docs/reference/engine/classes/Player#Backpack)
 
-* [**Backpack**](https://create.roblox.com/docs/reference/engine/classes/Backpack)
+* **[Backpack](https://create.roblox.com/docs/reference/engine/classes/Backpack)**
 
 ## Functions
 
@@ -39,14 +39,14 @@ The name of the controller
 
 #### Returns
 
-* [**ClientNetworkController\<any\>**](/api/engine/types#clientnetworkcontroller)
+* **[ClientNetworkController](/api/controllers/network/client)**
 
 ---
 
-### GetPlayerCharacter
+### GetPlayerCharacter <Badge type="warning" text="yields" />
 
 Gets the players current character model; if it doesn't exist the thread will yield until it does.
 
 #### Returns
 
-* [**Character**](/api/engine/types#character)
+* **[Character](/api/engine/types#character)**

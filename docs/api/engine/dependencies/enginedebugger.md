@@ -20,7 +20,7 @@ This type contains every roblox user data and generic type.
 
 A list of cached stack traces for the current environment.
 
-* [**Dictionary\<CallStack\>**](/api/engine/types#dictionary)
+* **[Dictionary](/api/engine/types#dictionary)<[CallStack](#callstack)>**
 
 ---
 
@@ -28,7 +28,7 @@ A list of cached stack traces for the current environment.
 
 A list of cached debug calls for the current environment.
 
-* [**Array\<string | {string}\>**](/api/engine/types#array)
+* **[Array]((/api/engine/types#array))\<string | [Array](/api/engine/types#array)<string\>**
 
 ## Functions
 

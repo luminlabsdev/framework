@@ -23,4 +23,4 @@ The name of the controller
 
 #### Returns
 
-* [**ServerNetworkController\<any\>**](/api/engine/types#servernetworkcontroller)
+* **[ServerNetworkController](/api/controllers/network/server)**
