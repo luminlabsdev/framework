@@ -146,11 +146,6 @@ function CanaryEngine.GetEngineClient()
 		local Player = PlayerService.LocalPlayer
 
 		CanaryEngineClient.Player = Player :: Player
-
-		task.defer(function()
-			CanaryEngineClient.Character = Player.Character or Player.CharacterAdded:Wait()  :: Types.Character & Model
-		end)
-
 		CanaryEngineClient.PlayerGui = Player:WaitForChild("PlayerGui") :: typeof(game:GetService("StarterGui"))
 		CanaryEngineClient.PlayerBackpack = Player:WaitForChild("Backpack") :: typeof(game:GetService("StarterPack"))
 
@@ -189,14 +184,18 @@ end
 
 	@return ClientNetworkController<any>
 ]=]
-function CanaryEngineClient.CreateNetworkController(controllerName: string, controllerTimeout: number?): Types.ClientNetworkController<any, any>
+function CanaryEngineClient.CreateNetworkController(controllerName: string): Types.ClientNetworkController<any, any>
 	if not CanaryEngine.Runtime.RuntimeObjects.NetworkControllers[controllerName] then
-		local NewNetworkController = Network.NewClientController(controllerName, controllerTimeout or 3)
+		local NewNetworkController = Network.NewClientController(controllerName)
 
 		CanaryEngine.Runtime.RuntimeObjects.NetworkControllers[controllerName] = NewNetworkController
 	end
 	
 	return CanaryEngine.Runtime.RuntimeObjects.NetworkControllers[controllerName]
+end
+
+function CanaryEngineClient.GetPlayerCharacter(): Types.Character & Model
+	return PlayerService.LocalPlayer.Character or PlayerService.LocalPlayer.CharacterAdded:Wait()
 end
 
 --[=[

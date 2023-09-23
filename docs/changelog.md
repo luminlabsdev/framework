@@ -8,32 +8,30 @@ keywords: [roblox, game, framework, changelog, updates]
 
 ## 4.0.0
 
----
+
 
 ### Added
 
-Adds `Red`, revamped the networking system once again and for the last time
-Revamped plugin for last time, easier to navigate / add features
-Adds ability to pull packages from any GitHub repo
+* Adds `Red`, revamped the networking system once again and for the last time
+* Revamped plugin for last time, easier to navigate / add features
+* Adds ability to pull packages from any GitHub repo
+* Entirely new documentation provider
 
 ### Improvements
 
-Renames `CanaryEngineFramework` instance to `Framework`
-Renames `CanaryEngine` module to `Init`
-Fixed TS support, back on roblox-ts!
-Documentation improvements
-Small bug fixes
-QOL fixes
+* Renames `CanaryEngineFramework` instance to `Framework`
+* Renames `CanaryEngine` module to `Init`
+* Fixed TS support, back on roblox-ts!
+* Small bug fixes
+* QOL fixes
 
 ### Removed
 
-`BridgeNet`
-`EngineContext.Packages`
-`EngineContext.Media`
+* `BridgeNet`
+* `EngineContext.Packages`
+* `EngineContext.Media`
 
 ## 3.3.5
-
----
 
 ### Added
 
@@ -55,13 +53,13 @@ Nothing!
 
 ## 3.2.5
 
----
+
 
 No information available, mainly small bug fixes.
 
 ## 3.2.4
 
----
+
 
 ### Added
 
@@ -83,7 +81,7 @@ Nothing!
 
 ## 3.1.4
 
----
+
 
 ### Added
 
@@ -103,7 +101,7 @@ Nothing!
 
 ## 3.0.1
 
----
+
 
 ### Added
 
@@ -120,7 +118,7 @@ Nothing!
 
 ## 3.0.0
 
----
+
 
 ### Added
 
@@ -157,7 +155,7 @@ Nothing!
 
 ## 2.2.1
 
----
+
 
 ### Added
 
@@ -175,7 +173,7 @@ Nothing!
 
 ## 2.2.0
 
----
+
 
 ### Added
 
@@ -194,7 +192,7 @@ Nothing!
 
 ## 2.1.0
 
----
+
 
 ### Added
 
@@ -215,7 +213,7 @@ Nothing!
 
 ## 2.0.0
 
----
+
 
 ### Added
 
@@ -238,7 +236,7 @@ Nothing!
 
 ## 1.2.0
 
----
+
 
 ### Added
 
@@ -258,6 +256,6 @@ Nothing!
 
 ## 1.1.0
 
----
+
 
 * Public release! 🥳

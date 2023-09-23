@@ -1,15 +1,17 @@
 ---
-slug: enginerecap-july2023
 title: Engine Recap - July 2023
-authors: [james, contributor-koxx12]
-tags: [canaryengine, recap]
+---
+
+# Engine Recap - July 2023
+July 31, 2023 · 2 min read
+
+by **[James - Lead Programmer](https://github.com/lolmansReturn)**
+
 ---
 
 **Hi developers,**
 
 With engine update 3.2.4, we have released lots of changes based on feedback, and lots of long time bug fixes.
-
-<!--truncate-->
 
 ### Anonymous Signals
 

@@ -3,23 +3,25 @@
 layout: home
 
 hero:
-  name: "CanaryEngine"
-  text: "A lightweight and blazingly fast framework"
-  tagline: The next best framework
+  text: "A framework written in Luau"
+  tagline: Blazingly fast & lightweight
   actions:
     - theme: brand
       text: Documentation
-      link: /markdown-examples
+      link: /tutorials/update
     - theme: alt
       text: API Reference
-      link: /api-examples
+      link: /api/index
 
 features:
-  - title: Lightweight
-    details: No extra bloat attached, only what it needs to function.
-  - title: Secure
-    details: The framework networking system obfuscates data sent through, which makes it harder to read
-  - title: Blazingly Fast
+  - icon: 🎒
+    title: Lightweight
+    details: No extra bloat attached, only what it needs to function
+  - icon: ⚡
+    title: Blazingly Fast
     details: A framework that only does what you want it to; no extra side effects
+  - icon: 🔐
+    title: Secure
+    details: Fast and efficient networking system to block exploiters
 ---
 

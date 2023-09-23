@@ -1,15 +1,17 @@
 ---
-slug: enginerecap-june2023
 title: Engine Recap - June 2023
-authors: [james]
-tags: [canaryengine, recap]
+---
+
+# Engine Recap - June 2023
+June 28, 2023 · 2 min read
+
+by **[James - Lead Programmer](https://github.com/lolmansReturn)**
+
 ---
 
 **Hi developers,**
 
 With engine update 3.0.0, a lot of features have been revamped. Lots of stuff comes with this update, including the new and improved plugin!
-
-<!--truncate-->
 
 ### New Plugin
 

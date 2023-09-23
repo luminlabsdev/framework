@@ -1,15 +1,17 @@
 ---
-slug: enginerecap-august2023
 title: Engine Recap - August 2023
-authors: [james, contributor-koxx12]
-tags: [canaryengine, recap]
+---
+
+# Engine Recap - August 2023
+August 24, 2023 · 2 min read
+
+by **[James - Lead Programmer](https://github.com/lolmansReturn)**
+
 ---
 
 **Hi developers,**
 
 With engine update 3.3.5, we have gathered lots of feedback by our users and fixed bugs related to networking.
-
-<!--truncate-->
 
 ### More Debugger Resources
 

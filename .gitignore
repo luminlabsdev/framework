@@ -5,3 +5,7 @@ docs/.vitepress/cache
 # npm
 
 node_modules
+
+# general
+
+local
