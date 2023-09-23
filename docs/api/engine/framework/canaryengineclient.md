@@ -34,7 +34,7 @@ Creates a new network controller on the client, with the name of `controllerName
 
 #### Parameters
 
-* **controllerName: `string`**\
+* **controllerName:** `string`\
 The name of the controller
 
 #### Returns

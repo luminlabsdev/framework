@@ -8,7 +8,7 @@ The main class of CanaryEngine.
 
 The runtime property contains settings that are set during runtime, and the current context of the server/client.
 
-* [**EngineRuntime**](/api/engine/engineruntime)
+* [**EngineRuntime**](/api/engine/runtime/engineruntime)
 
 ---
 
@@ -16,7 +16,7 @@ The runtime property contains settings that are set during runtime, and the curr
 
 The internal engine debugger, has useful functions to abide by debug settings.
 
-* [**EngineDebugger**](/api/engine/enginedebugger)
+* [**EngineDebugger**](/api/engine/dependencies/enginedebugger)
 
 ## Functions
 
@@ -26,7 +26,7 @@ Gets the server-sided interface of CanaryEngine.
 
 #### Returns
 
-* [**CanaryEngineServer?**](/api/engine/canaryengineserver)
+* [**CanaryEngineServer?**](/api/engine/framework/canaryengineserver)
 
 ---
 
@@ -36,7 +36,7 @@ Gets the client-sided interface of CanaryEngine.
 
 #### Returns
 
-* [**CanaryEngineClient?**](/api/engine/canaryengineclient)
+* [**CanaryEngineClient?**](/api/engine/framework/canaryengineclient)
 
 ---
 
@@ -46,7 +46,7 @@ Gets the global-sided interface of CanaryEngine. Recommended that use this only 
 
 #### Returns
 
-* [**CanaryEngineRepliated?**](/api/engine/canaryenginereplicated)
+* [**CanaryEngineRepliated?**](/api/engine/framework/canaryenginereplicated)
 
 ---
 
@@ -56,7 +56,7 @@ Creates a new signal that is then given a reference in the signals table. Create
 
 #### Parameters
 
-* **signalName: `string?`**\
+* **signalName:** `string?`\
 The name of the signal
 
 #### Returns

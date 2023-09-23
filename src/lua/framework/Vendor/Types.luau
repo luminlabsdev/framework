@@ -183,4 +183,7 @@ export type Character = {
 	}
 }
 
+export type Dictionary<T, U> = {[T]: U}
+export type Array<T> = {[number]: T}
+
 return EngineTypes

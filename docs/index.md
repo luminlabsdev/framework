@@ -11,7 +11,7 @@ hero:
       link: /tutorials/update
     - theme: alt
       text: API Reference
-      link: /api/index
+      link: /api/engine/framework/canaryengine
 
 features:
   - icon: 🎒

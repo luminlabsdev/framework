@@ -31,7 +31,8 @@ export default defineConfig({
       {
         text: 'API',
         items: [
-          { text: 'Engine', link: '/api/engine/canaryengine' },
+          { text: 'Engine', link: '/api/engine/framework/canaryengine' },
+          { text: 'Controllers', link: '/api/controllers/signal/signalcontroller' },
           { text: 'Library', link: '/api/libraries/' }
         ]
       },
@@ -109,28 +110,50 @@ export default defineConfig({
             {
               text: 'Framework',
               items: [
-                { text: 'CanaryEngine', link: '/api/engine/canaryengine' },
-                { text: 'CanaryEngineServer', link: '/api/engine/canaryengineserver' },
-                { text: 'CanaryEngineClient', link: '/api/engine/canaryengineclient' },
-                { text: 'CanaryEngineReplicated', link: '/api/engine/canaryenginereplicated'}
+                { text: 'CanaryEngine', link: '/api/engine/framework/canaryengine' },
+                { text: 'CanaryEngineServer', link: '/api/engine/framework/canaryengineserver' },
+                { text: 'CanaryEngineClient', link: '/api/engine/framework/canaryengineclient' },
+                { text: 'CanaryEngineReplicated', link: '/api/engine/framework/canaryenginereplicated'}
               ]
             },
 
             {
               text: 'Dependencies',
               items: [
-                { text: 'EngineDebugger', link: '/blog/enginerecaps/enginerecap-september2023' },
-                { text: 'EngineLoader', link: '/blog/enginerecaps/enginerecap-august2023' },
-                { text: 'EngineTypes', link: '/blog/enginerecaps/enginerecap-july2023' }
+                { text: 'EngineDebugger', link: '/api/engine/dependencies/enginedebugger' },
+                { text: 'EngineLoader', link: '/api/engine/dependencies/engineloader' },
+                { text: 'EngineTypes', link: '/api/engine/types' }
               ]
             },
 
             {
               text: 'Runtime',
               items: [
-                { text: 'EngineRuntime', link: '/blog/enginerecaps/enginerecap-september2023' },
-                { text: 'EngineRuntimeContext', link: '/blog/enginerecaps/enginerecap-august2023' },
-                { text: 'EngineRuntimeSettings', link: '/blog/enginerecaps/enginerecap-july2023' }
+                { text: 'EngineRuntime', link: '/api/engine/runtime/engineruntime' },
+                { text: 'EngineRuntimeContext', link: '/api/engine/runtime/engineruntimecontext' },
+                { text: 'EngineRuntimeSettings', link: '/api/engine/runtime/engineruntimesettings' }
+              ]
+            }
+          ]
+        },
+      ],
+
+      '/api/controllers': [
+        {
+          text: 'Controllers',
+          items: [
+            {
+              text: 'Signal',
+              items: [
+                { text: 'SignalController', link: '/api/controllers/signal/signalcontroller' }
+              ]
+            },
+
+            {
+              text: 'Network',
+              items: [
+                { text: 'NetworkControllerServer', link: '/api/controllers/network/server' },
+                { text: 'NetworkControllerClient', link: '/api/controllers/network/client' }
               ]
             }
           ]

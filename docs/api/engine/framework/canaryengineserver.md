@@ -10,7 +10,7 @@ Creates a new network controller on the server, with the name of `controllerName
 
 #### Parameters
 
-* **controllerName: `string`**\
+* **controllerName:** `string`\
 The name of the controller
 
 #### Returns
