@@ -4,6 +4,12 @@ Types used by the engine for objects.
 
 ## Types
 
+### ControllerConnection <Badge type="tip" text="private" />
+
+What is returned after using `Connect` or `Once` on a [SignalController](/api/controllers/signal/signalcontroller)
+
+---
+
 ### SignalController <Badge type="tip" text="public" />
 
 A signal controller, similar to an [RBXScriptSignal](https://create.roblox.com/docs/reference/engine/datatypes/RBXScriptSignal)
@@ -25,6 +31,8 @@ A ServerNetworkController is basically a mixed version of a [RemoteEvent](https:
 ### ClientNetworkController <Badge type="tip" text="public" />
 
 A ClientNetworkController is basically a mixed version of a [RemoteEvent](https://create.roblox.com/docs/reference/engine/classes/RemoteEvent) and [RemoteFunction](https://create.roblox.com/docs/reference/engine/classes/RemoteFunction). It has better features and is more performant.
+
+---
 
 ### Array <Badge type="tip" text="public" />
 

@@ -1,4 +1,4 @@
-# NetworkControllerServer
+# NetworkControllerServer <Badge type="danger" text="server" />
 
 A server-sided network controller.
 
@@ -11,3 +11,139 @@ The name of the the network controller.
 * **string**
 
 ## Methods
+
+### Fire
+
+Fires an event which sends data to the client, equivalent to [RemoteEvent:FireClient](https://create.roblox.com/docs/reference/engine/classes/RemoteEvent#FireClient).
+
+:::tip
+If you need to fire the event to multiple players instead of one, you can use a table of players.
+
+```lua
+NetworkController:Fire({Player1, Player2, Player3}, {1, 2, 3})
+```
+:::
+
+#### Parameters
+
+* **recipients:** `{ Player } | Player`\
+The players who should recieve the data and/or call
+
+* **data:** `({ any } | any)?`\
+The data that should be sent to the client
+
+#### Returns
+
+* **void**
+
+---
+
+### FireAll
+
+Fires an event which sends data to every client connected to the server, equivalent [RemoteEvent:FireAllClients](https://create.roblox.com/docs/reference/engine/classes/RemoteEvent#FireAllClients).
+
+#### Parameters
+
+* **data:** `({ any } | any)?`\
+The data that should be sent to each player
+
+#### Returns
+
+* **void**
+
+---
+
+### FireExcept
+
+Fires an event which sends data to every client connected to the server, except for players defined in the `except` parameter.
+
+#### Parameters
+
+* **except:** `{ Player } | Player`\
+The players which the call should not be sent to
+
+* **data:** `({ any } | any)?`\
+The data that should be sent to each player except `except`
+
+#### Returns
+
+* **void**
+
+---
+
+### FireInRange
+
+Fires an event which sends data to every client that is within `maximumRange` studs from `comparePoint`.
+
+#### Parameters
+
+* **comparePoint:** `Vector3`\
+The point to compare from, can be a standalone `Vector3`
+
+* **maximumRange:** `number`\
+The maximum range of which the player's characters have to be within to recieve the event
+
+* **data:** `({ any } | any)?`\
+The data that should be sent to each player within `maximumRange`
+
+#### Returns
+
+* **void**
+
+---
+
+### Wait
+
+Yields the current thread until the client fires the network controller. Returns a promise.
+
+#### Returns
+
+* **[Future](https://util.redblox.dev/future.html#methods)**
+
+---
+
+### Connect
+
+Connects a function to the event that is fired when the client fires the network controller.
+
+#### Parameters
+
+* **func:** `( sender: Player, data: { any } ) -> ()`\
+The function to call when data is recieved
+
+#### Returns
+
+* **void**
+
+---
+
+### OnInvoke
+
+Recieves an invoke from the server, and runs the callback function which returns some data. Equivalent to [RemoteFunction.OnServerInvoke](https://create.roblox.com/docs/reference/engine/classes/RemoteFunction#OnServerInvoke).
+
+#### Parameters
+
+* **callback:** `( sender: Player, data: { any } ) -> (({ any } | any)?)`\
+The callback function to run on invoke, must return at least 1 value.
+
+#### Returns
+
+* **void**
+
+---
+
+### SetRateLimit
+
+Sets a rate limit that is applied when invoking or firing a network controller from the client.
+
+#### Parameters
+
+* **maxInvokesPerSecond:** `number`\
+The maximum amount of invokes allowed per second, set to -1 to disable the rate limit
+
+* **invokeOverflowCallback:** `((sender: Player) -> ())?`\
+The callback function to run when the player has exceeded the current rate limit
+
+#### Returns
+
+* **void**

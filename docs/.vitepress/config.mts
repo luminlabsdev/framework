@@ -5,8 +5,8 @@ export default defineConfig({
   head: [['link', { rel: 'icon', href: 'static/images/logo.png' }]],
   base: "/CanaryEngine/",
   title: "CanaryEngine",
-  titleTemplate: "Canary Development",
-  description: "A lightweight and blazingly fast framework",
+  titleTemplate: "Canary Docs",
+  description: "A blazingly fast & lightweight Luau framework",
   lastUpdated: true,
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
@@ -31,9 +31,9 @@ export default defineConfig({
       {
         text: 'API',
         items: [
-          { text: 'Engine', link: '/api/engine/framework/canaryengine' },
+          { text: 'Framework', link: '/api/engine/framework/canaryengine' },
           { text: 'Controllers', link: '/api/controllers/signal/signalcontroller' },
-          { text: 'Library', link: '/api/libraries/' }
+          { text: 'Library', link: '/api/libraries/data/easyprofile' }
         ]
       },
 
@@ -158,11 +158,53 @@ export default defineConfig({
             }
           ]
         },
+      ],
+
+      '/api/libraries': [
+        {
+          text: 'Libraries',
+          items: [
+            {
+              text: 'EasyProfile',
+              items: [
+                { text: 'EasyProfile', link: '/api/libraries/data/easyprofile' },
+                { text: 'ProfileStoreObject', link: '/api/libraries/data/profilestoreobject' },
+                { text: 'ProfileObject', link: '/api/libraries/data/profileobject' }
+              ]
+            },
+
+            {
+              text: 'UIShelf',
+              items: [
+                { text: 'UIShelf', link: '/api/libraries/uishelf' },
+                { text: 'TopBarIconObject', link: '/api/libraries/topbariconobject' },
+                { text: 'TopBarSpacerObject', link: '/api/libraries/topbarspacerobject' }
+              ]
+            },
+
+            {
+              text: 'Benchmark',
+              items: [
+                { text: 'Benchmark', link: '/api/libraries/benchmark' },
+                { text: 'BenchmarkObject', link: '/api/libraries/benchmarkobject' }
+              ]
+            },
+            
+            { text: 'Base64', link: '/api/libraries/base64' },
+            { text: 'MDify', link: '/api/libraries/mdify' },
+            { text: 'Sprite', link: '/api/libraries/sprite' },
+            { text: 'Statistics', link: '/api/libraries/statistics' }
+          ]
+        },
       ]
     },
 
     search: {
       provider: 'local'
+    },
+
+    editLink: {
+      pattern: 'https://github.com/canary-development/CanaryEngine/edit/main/docs/:path'
     },
 
     footer: {
@@ -172,7 +214,7 @@ export default defineConfig({
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/canary-development/CanaryEngine' },
-      { icon: 'discord', link: 'https://discord.gg/cwwcZtqJAt'}
+      { icon: 'discord', link: 'https://discord.gg/cwwcZtqJAt'},
     ]
   }
 })

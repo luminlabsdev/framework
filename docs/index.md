@@ -3,8 +3,8 @@
 layout: home
 
 hero:
-  text: "A framework written in Luau"
-  tagline: Blazingly fast & lightweight
+  text: "CanaryEngine"
+  tagline: A blazingly fast & lightweight Luau framework
   actions:
     - theme: brand
       text: Documentation
@@ -12,6 +12,9 @@ hero:
     - theme: alt
       text: API Reference
       link: /api/engine/framework/canaryengine
+    - theme: alt
+      text: Trello Board
+      link: https://trello.com/b/fTJOmMua/canaryengine
 
 features:
   - icon: 🎒

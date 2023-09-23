@@ -65,13 +65,13 @@ The function to call when data is recieved
 
 ---
 
-### Wait
+### Wait <Badge type="warning" text="yields" />
 
 Yields the current thread until another script fires the signal controller. Returns a promise.
 
 #### Returns
 
-* **Promise**
+* **{any}**
 
 ---
 

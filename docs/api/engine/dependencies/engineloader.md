@@ -21,7 +21,7 @@ Starts up the loader, this should be run as soon as the player joins in a client
 * **objectsToLoad:** `{ any }`\
 The objects to load, can be a list of asset id strings or instances
 
-* **loadingMessages:** `{ [string]: Color3 }`\
+* **loadingMessages:** `{ [string]: Color3 }?`\
 The messages to display after the loading is finished, the key is the message and the value is the color of the message
 
 * **coreGuiEnabled:** `boolean?`\
@@ -30,7 +30,7 @@ Decides whether the CoreGui is enabled during loading
 * **afterLoadWait:** `number?`\
 The amount of time to wait after the load, this is before the messages in loadingMessages are shown and the loading stats are shown
 
-* **loadingText:** `{ loadingAssetsText: string, loadedAssetsText: string }`\
+* **loadingText:** `{ loadingAssetsText: string, loadedAssetsText: string }?`\
 The text that should be shown when loading assets and after loading assets
 
 #### Returns

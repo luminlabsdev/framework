@@ -1,4 +1,4 @@
-# NetworkControllerClient
+# NetworkControllerClient <Badge type="danger" text="client" />
 
 A client-sided network controller.
 
@@ -46,7 +46,7 @@ The data to invoke the server with
 
 #### Returns
 
-* **Promise**
+* **[Future](https://util.redblox.dev/future.html#methods)**
 
 ---
 
@@ -71,4 +71,4 @@ Yields the current thread until the server fires the network controller. Returns
 
 #### Returns
 
-* **Promise**
+* **[Future](https://util.redblox.dev/future.html#methods)**
