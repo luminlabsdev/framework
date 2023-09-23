@@ -26,7 +26,7 @@ SignalController:Fire("Hello, world!")
 
 #### Parameters
 
-* **data:** `{ any } | any`\
+* **data:** `(Array<any> | any)?`\
 The data that should be sent the other script
 
 #### Returns
@@ -41,7 +41,7 @@ Connects a function to the event that is fired when another script fires the con
 
 #### Parameters
 
-* **func:** `( data: { any } ) -> ()`\
+* **func:** `(data: Array<any>?) -> ()`\
 The function to call when data is recieved
 
 #### Returns
@@ -56,7 +56,7 @@ Connects a function to the event that is fired when another script fires the con
 
 #### Parameters
 
-* **func:** `( data: { any } ) -> ()`\
+* **func:** `(data: Array<any>?) -> ()`\
 The function to call when data is recieved
 
 #### Returns

@@ -26,7 +26,7 @@ NetworkController:Fire("Hello, world!")
 
 #### Parameters
 
-* **data:** `{ any } | any`\
+* **data:** `Array<any> | any`\
 The data that should be sent to the server
 
 #### Returns
@@ -41,7 +41,7 @@ Invokes the server, equivalent to [RemoteFunction:InvokeServer](https://create.r
 
 #### Parameters
 
-* **data:** `{ any } | any`\
+* **data:** `Array<any> | any`\
 The data to invoke the server with
 
 #### Returns
@@ -56,7 +56,7 @@ Connects a function to the event that is fired when the server fires the network
 
 #### Parameters
 
-* **func:** `( data: { any } ) -> ()`\
+* **func:** `(data: Array<any>) -> ()`\
 The function to call when data is recieved
 
 #### Returns

@@ -3,7 +3,7 @@ title: Engine Recap - September 2023
 ---
 
 # Engine Recap - September 2023
-September 22, 2023 · 2 min read
+September 23, 2023 · 1 min read
 
 by **[James - Lead Programmer](https://github.com/lolmansReturn)**
 
@@ -13,26 +13,30 @@ by **[James - Lead Programmer](https://github.com/lolmansReturn)**
 
 With engine update 4.0.0, we have improved numerous aspects of the framework to make it easier to use and even more performant than before.
 
-### More Debugger Resources
+### New Docs Provider
 
-We have added 2 new functions and 1 new feature to the debug API. You can now Assert values, and clear the output / cache lists. Calling debug also adds items to the cache list.
+Our new documentation provider, VitePress, is a more customizable and stylish website generator that we've decided to adapt too!
 
-### Create Topbar Icons with UIShelf
+### Switching to Redblox
 
-The new library UIShelf, you can now create topbar icons that mimic the CoreGui 1:1. We've taken into account every single design aspect that the top bar button has and have been able to replicate it.
+Redblox is a collection of different utility modules made by **@jackdotink**. We're migrating our networking system and signal controllers over to Red because of the performance benefits and how lightweight it is.
 
-### Network Controller Improvements
+### New Plugin
 
-You can now set a client timeout for network controllers, allowing you to minimize timeout errors. This should fix most of the issues you guys have been having as of late.
+We have completely rewritten the plugin, it is now even more efficient and better than before. It also comes with support for cloning GitHub libraries right into Roblox Studio. An explorer for it is also coming soon.
 
-### Documentation Improvements
+### Instance Renames & Removal of Deprecated Items
 
-We have improved the documentation site! Coming with 4 new detailed tutorials, more API documentation, and this new blog! We will post engine recaps like this here and they will be exclusive to this website. New API sections have also been added to help organize it.
+We have renamed many of the instances that Canary injects into your game to be more clear and more short. This will be useful for shortening paths especially. We have also removed all of the deprecated items:
 
-### Plugin Improvements
+* `EngineContext.Packages`
+* `EngineContext.Media`
+* `CanaryEngine:GetLatestPackageVersionAsync`
 
-We have improved the plugin a little bit (no rebuild yet) and have stopped a few more bugs from popping up. BridgeNet has also been updated to 0.5.4. We are planning lots more for the future, and we will be adding the HintService library soon once it is revamped.
+### TS Support
+
+We're back on roblox-ts! We removed it previously due to it being too hard to maintain, but it's now back for good and it functions correctly. You can locate the new TS files inside of `src/ts`.
 
 ---
 
-If you're interested in contributing, please make a PR on our GitHub!
+If you're interested in contributing, please make a PR on our GitHub! We worked hard on this update so please give your thanks.

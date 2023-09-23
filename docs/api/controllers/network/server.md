@@ -29,7 +29,7 @@ NetworkController:Fire({Player1, Player2, Player3}, {1, 2, 3})
 * **recipients:** `{ Player } | Player`\
 The players who should recieve the data and/or call
 
-* **data:** `({ any } | any)?`\
+* **data:** `(Array<any> | any)?`\
 The data that should be sent to the client
 
 #### Returns
@@ -44,7 +44,7 @@ Fires an event which sends data to every client connected to the server, equival
 
 #### Parameters
 
-* **data:** `({ any } | any)?`\
+* **data:** `(Array<any> | any)?`\
 The data that should be sent to each player
 
 #### Returns
@@ -59,10 +59,10 @@ Fires an event which sends data to every client connected to the server, except 
 
 #### Parameters
 
-* **except:** `{ Player } | Player`\
+* **except:** `Array<Player> | Player`\
 The players which the call should not be sent to
 
-* **data:** `({ any } | any)?`\
+* **data:** `(Array<any> | any)?`\
 The data that should be sent to each player except `except`
 
 #### Returns
@@ -83,7 +83,7 @@ The point to compare from, can be a standalone `Vector3`
 * **maximumRange:** `number`\
 The maximum range of which the player's characters have to be within to recieve the event
 
-* **data:** `({ any } | any)?`\
+* **data:** `(Array<any> | any)?`\
 The data that should be sent to each player within `maximumRange`
 
 #### Returns
@@ -108,7 +108,7 @@ Connects a function to the event that is fired when the client fires the network
 
 #### Parameters
 
-* **func:** `( sender: Player, data: { any } ) -> ()`\
+* **func:** `(sender: Player, data: Array<any>?) -> ()`\
 The function to call when data is recieved
 
 #### Returns
@@ -123,7 +123,7 @@ Recieves an invoke from the server, and runs the callback function which returns
 
 #### Parameters
 
-* **callback:** `( sender: Player, data: { any } ) -> (({ any } | any)?)`\
+* **callback:** `(sender: Player, data: Array<any>?) -> (Array<any> | any)`\
 The callback function to run on invoke, must return at least 1 value.
 
 #### Returns
