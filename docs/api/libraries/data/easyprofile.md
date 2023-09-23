@@ -48,5 +48,3 @@ The pattern for the key to use if used to store player data, use '%d' as a place
 #### Returns
 
 * **[ProfileStoreObject?](/api/libraries/data/profilestoreobject)**
-
----
