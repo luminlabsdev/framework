@@ -16,7 +16,7 @@ local Sanitize = require(script.Parent.Parent.Sanitize)
 -- // Functions
 
 function SignalController.CreateController(name: string)
-	local self = setmetatable({ }, SignalControllerObject)
+	local self = setmetatable({ }, SignalController)
 	
 	self._Signal = Signal()
 	self.Name = name
