@@ -28,7 +28,7 @@ A list of cached stack traces for the current environment.
 
 A list of cached debug calls for the current environment.
 
-* **[Array]((/api/engine/types#array))\<string | [Array](/api/engine/types#array)<string\>**
+* **[Array](/api/engine/types#array)\<string | [Array](/api/engine/types#array)<string\>**
 
 ## Functions
 

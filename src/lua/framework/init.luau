@@ -55,7 +55,7 @@ end
 
 function CanaryEngine.GetEngineServer()
 	if RuntimeContext.Server then
-		CanaryEngineServer.Data = require(EngineVendor.Libraries.EasyProfile.EasyProfile)
+		CanaryEngineServer.Data = require(EngineVendor.Libraries.EasyProfile.Init)
 		return CanaryEngineServer
 	else
 		Debugger.Debug(error, "Failed to fetch 'EngineServer', context must be server.", nil, false)

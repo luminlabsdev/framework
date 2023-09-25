@@ -47,17 +47,18 @@
         "Vendor": {
             "Controllers": {
                 "Vendor": {
-                    "SanitizeData": {
+                    "Sanitize": {
                         "$className": "ModuleScript",
                         "$properties": {
                             "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Controllers/Vendor/Sanitize.luau"
                         }
                     },
                     "NetworkController": {
+                        "Events": { },
                         "Vendor": {
                             "BridgeNet2": "BridgeNet2Package"
                         },
-                        "NetworkController": {
+                        "Init": {
                             "$className": "ModuleScript",
                             "$properties": {
                                 "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Controllers/Vendor/NetworkController/init.luau"
@@ -65,15 +66,7 @@
                         }
                     },
                     "SignalController": {
-                        "Vendor": {
-                            "Signal": {
-                                "$className": "ModuleScript",
-                                "$properties": {
-                                    "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Controllers/Vendor/SignalController/Vendor/Signal.luau"
-                                }
-                            }
-                        },
-                        "SignalController": {
+                        "Init": {
                             "$className": "ModuleScript",
                             "$properties": {
                                 "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Controllers/Vendor/SignalController/init.luau"
@@ -81,16 +74,16 @@
                         }
                     }
                 },
-                "Controllers": {
+                "Init": {
                     "$className": "ModuleScript",
                     "$properties": {
-                        "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Controllers/Controllers.luau"
+                        "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Controllers/init.luau"
                     }
                 }
             },
             "Libraries": {
                 "EasyProfile": {
-                    "EasyProfile": {
+                    "Init": {
                         "$className": "ModuleScript",
                         "$properties": {
                             "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Libraries/EasyProfile/init.luau"
@@ -100,8 +93,28 @@
                         "ProfileService": {
                             "$className": "ModuleScript",
                             "$properties": {
-                                "Source": "https://raw.githubusercontent.com/MadStudioRoblox/ProfileService/master/ProfileService.lua"
+                                "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Libraries/EasyProfile/Vendor/ProfileService.luau"
                             }
+                        }
+                    }
+                },
+                "RedbloxUtils": {
+                    "Future": {
+                        "$className": "ModuleScript",
+                        "$properties": {
+                            "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Libraries/RedbloxUtils/Future.luau"
+                        }
+                    },
+                    "Signal": {
+                        "$className": "ModuleScript",
+                        "$properties": {
+                            "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Libraries/RedbloxUtils/Signal.luau"
+                        }
+                    },
+                    "Spawn": {
+                        "$className": "ModuleScript",
+                        "$properties": {
+                            "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Libraries/RedbloxUtils/Spawn.luau"
                         }
                     }
                 }
