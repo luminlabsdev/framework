@@ -64,7 +64,7 @@ The amount of notices the icon actually has.
 
 Adds notices to the parent topbar icon.
 
-#### Parameters
+**Parameters**
 
 * **notices:** `number?`\
 The amount of notices to add, leaving this nil will add a single notice
@@ -72,7 +72,7 @@ The amount of notices to add, leaving this nil will add a single notice
 * **noticeCap:** `number?`\
 When to display a + sign after a set amount of notices, defaults to 99
 
-#### Returns
+**Returns**
 
 * **void**
 
@@ -82,12 +82,12 @@ When to display a + sign after a set amount of notices, defaults to 99
 
 Removes notices that are active in the icon.
 
-#### Parameters
+**Parameters**
 
 * **notices:** `number?`\
 The amount of notices to remove, leave nil to remove all notices
 
-#### Returns
+**Returns**
 
 * **void**
 
@@ -97,12 +97,12 @@ The amount of notices to remove, leave nil to remove all notices
 
 Binds multiple key codes to activate the icons `Activated` event.
 
-#### Parameters
+**Parameters**
 
 * **keyCodes:** `{ Enum.KeyCode }?`\
 The key codes to listen to, if it is nil it will unbind all binded key codes
 
-#### Returns
+**Returns**
 
 * **void**
 
@@ -112,12 +112,12 @@ The key codes to listen to, if it is nil it will unbind all binded key codes
 
 Sets the image size of the icon, default is filled.
 
-#### Parameters
+**Parameters**
 
 * **imageSize:** `Vector2`\
 The size to set the image to
 
-#### Returns
+**Returns**
 
 * **void**
 
@@ -127,12 +127,12 @@ The size to set the image to
 
 Sets the status of the icon visibility.
 
-#### Parameters
+**Parameters**
 
 * **enabled:** `boolean`\
 Whether or not to enable the icon
 
-#### Returns
+**Returns**
 
 * **void**
 
@@ -142,12 +142,12 @@ Whether or not to enable the icon
 
 Binds a GuiObject to the icon. This will toggle the visibility to the opposite when the icon is clicked.
 
-#### Parameters
+**Parameters**
 
 * **guiObject:** `GuiObject`\
 The [GuiObject](https://create.roblox.com/docs/reference/engine/classes/GuiObject) to bind to activation, set to nil to unbind
 
-#### Returns
+**Returns**
 
 * **void**
 
@@ -157,12 +157,12 @@ The [GuiObject](https://create.roblox.com/docs/reference/engine/classes/GuiObjec
 
 Adds a tooltip to the icon when hovering.
 
-#### Parameters
+**Parameters**
 
 * **text:** `string?`\
 The text to put in the tooltip, leave this nil to remove the tooltip
 
-#### Returns
+**Returns**
 
 * **void**
 
@@ -172,12 +172,12 @@ The text to put in the tooltip, leave this nil to remove the tooltip
 
 Sets the tooltips visibility forcibly.
 
-#### Parameters
+**Parameters**
 
 * **enabled:** `boolean`\
 Whether or not the tooltip should show
 
-#### Returns
+**Returns**
 
 * **void**
 
@@ -187,7 +187,7 @@ Whether or not the tooltip should show
 
 Sets the image rect size and offset. Useful if you are using a spritesheet image.
 
-#### Parameters
+**Parameters**
 
 * **rectSize:** `Rect`\
 The [ImageLabel.ImageRectSize](https://create.roblox.com/docs/reference/engine/classes/ImageLabel#ImageRectSize)
@@ -195,7 +195,7 @@ The [ImageLabel.ImageRectSize](https://create.roblox.com/docs/reference/engine/c
 * **rectOffset:** `Rect`\
 The [ImageLabel.ImageRectOffset](https://create.roblox.com/docs/reference/engine/classes/ImageLabel#ImageRectOffset)
 
-#### Returns
+**Returns**
 
 * **void**
 
@@ -205,7 +205,7 @@ The [ImageLabel.ImageRectOffset](https://create.roblox.com/docs/reference/engine
 
 Destroys the icon itself, removing it from the topbar.
 
-#### Returns
+**Returns**
 
 * **void**
 
@@ -215,7 +215,7 @@ Destroys the icon itself, removing it from the topbar.
 
 Fires when the icon is activated, by any supported input type. Also passes in the user input type enum.
 
-#### Parameters
+**Parameters**
 
 * **inputType:** `Enum.UserInputType`\
 The user input type that activated the icon
@@ -226,7 +226,7 @@ The user input type that activated the icon
 
 Fires whenever a notice is added to the icon.
 
-#### Parameters
+**Parameters**
 
 * **noticeCount:** `number`\
 The amount of notices added to the icon
@@ -237,7 +237,7 @@ The amount of notices added to the icon
 
 Fires whenever the state of the icon changes. For example: Hovering -> Default.
 
-#### Parameters
+**Parameters**
 
 * **newState:** `string`\
 The latest state at the time of the event being fired

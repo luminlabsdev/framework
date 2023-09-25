@@ -14,6 +14,6 @@ The data that is returned after a [BenchmarkObject:SetFunction](/api/libraries/b
 
 Creates a new Benchmark object to be used.
 
-#### Returns
+**Returns**
 
 * **[BenchmarkObject](/api/libraries/benchmarkobject)**

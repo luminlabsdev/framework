@@ -1,6 +1,6 @@
 # NetworkControllerClient <Badge type="danger" text="client" />
 
-A client-sided network controller.
+A client-sided network controller, based on [this](/api/engine/types#networkcontrollerclient) type.
 
 ## Properties
 
@@ -24,12 +24,12 @@ NetworkController:Fire("Hello, world!")
 ```
 :::
 
-#### Parameters
+**Parameters**
 
 * **data:** `Array<any> | any`\
 The data that should be sent to the server
 
-#### Returns
+**Returns**
 
 * **void**
 
@@ -39,36 +39,26 @@ The data that should be sent to the server
 
 Invokes the server, equivalent to [RemoteFunction:InvokeServer](https://create.roblox.com/docs/reference/engine/classes/RemoteFunction#InvokeServer). Returns a promise.
 
-#### Parameters
+**Parameters**
 
 * **data:** `Array<any> | any`\
 The data to invoke the server with
 
-#### Returns
+**Returns**
 
 * **[Future](https://util.redblox.dev/future.html#methods)**
 
 ---
 
-### Connect
+### Listen
 
-Connects a function to the event that is fired when the server fires the network controller.
+Listens for the network controller to be fired by the server, then runs the provided function.
 
-#### Parameters
+**Parameters**
 
 * **func:** `(data: Array<any>) -> ()`\
 The function to call when data is recieved
 
-#### Returns
+**Returns**
 
 * **void**
-
----
-
-### Wait
-
-Yields the current thread until the server fires the network controller. Returns a promise.
-
-#### Returns
-
-* **[Future](https://util.redblox.dev/future.html#methods)**

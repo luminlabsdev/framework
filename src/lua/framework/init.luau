@@ -1,95 +1,24 @@
 -- // Packages
 
---[=[
-	The parent of all classes.
-
-	@class CanaryEngine
-]=]
 local CanaryEngine = { }
 
---[=[
-	The runtime property contains settings that are set during runtime, and the current context of the server/client.
-
-	@prop Runtime {RuntimeSettings: EngineRuntimeSettings, RuntimeContext: EngineRuntimeContext, RuntimeObjects: {NetworkControllers: {[string]: (ServerNetworkController<any, any> | ServerNetworkController<any, any>)}, SignalControllers: {[string]: SignalController<any>}}}
-
-	@readonly
-	@within CanaryEngine
-]=]
-
---[=[
-	The internal engine debugger, has useful functions to abide by debug settings.
-
-	@prop Debugger EngineDebugger
-
-	@readonly
-	@within CanaryEngine
-]=]
-
---[=[
-	CanaryEngine's server-sided interface.
-	
-	@server
-	@class CanaryEngineServer
-]=]
 local CanaryEngineServer = { }
-
---[=[
-	CanaryEngine's client-sided interface.
-	
-	@client
-	@class CanaryEngineClient
-]=]
 local CanaryEngineClient = { }
-
---[=[
-	A simple reference to the [Players.LocalPlayer].
-
-	@prop Player Player
-	@readonly
-
-	@within CanaryEngineClient
-]=]
-
---[=[
-	A simple reference to the [Player.PlayerGui], useful for automatic typing and API simplicity.
-
-	@prop PlayerGui StarterGui
-	@readonly
-
-	@within CanaryEngineClient
-]=]
-
---[=[
-	A simple reference to the player's [Backpack], useful for automatic typing and API simplicity.
-
-	@prop PlayerBackpack StarterPack
-	@readonly
-
-	@within CanaryEngineClient
-]=]
-
---[=[
-	CanaryEngine's global-sided interface.
-	
-	@class CanaryEngineReplicated
-]=]
 local CanaryEngineReplicated = { }
 
 -- // Variables
 
 local PlayerService = game:GetService("Players")
-local EngineVendor = script.Parent.Vendor
 
--- // Types
+local EngineVendor = script.Parent.Vendor
+local EngineLibraries = EngineVendor.Libraries
 
 local Types = require(EngineVendor.Types) -- The types used for all libraries inside of the framework
-
-----
-
-local Controllers = require(EngineVendor.Controllers.Controllers)
+local Controllers = require(EngineVendor.Controllers.Init)
 local Network = Controllers.NetworkController -- Networking logic
 local Signal = Controllers.SignalController -- Signal logic
 
+local Future = require(EngineLibraries.RedbloxUtils.Future) -- Promise logic
 local Debugger = require(EngineVendor.Debugger) -- Easy debug logic
 local Runtime = require(EngineVendor.Runtime) -- Runtime settings + debugger
 
@@ -106,32 +35,34 @@ CanaryEngine.Runtime = table.freeze({
 })
 
 CanaryEngine.Debugger = Debugger
+CanaryEngine.Future = Future
+
+local RuntimeObjects = CanaryEngine.Runtime.RuntimeObjects
 
 -- // Functions
 
---[=[
-	Gets the server-sided interface of CanaryEngine
+local function CreateNetworkController(controllerName: string): Types.ClientNetworkController<any, any> | Types.ServerNetworkController<any, any>
+	if not RuntimeObjects.NetworkControllers[controllerName] then
+		local NewNetworkController = Network.CreateController(controllerName)
+
+		RuntimeObjects.NetworkControllers[controllerName] = NewNetworkController
+	end
 	
-	@server
-	@return CanaryEngineServer?
-]=]
+	return RuntimeObjects.NetworkControllers[controllerName]
+end
+
+-- Engine Contexts
+
 function CanaryEngine.GetEngineServer()
 	if RuntimeContext.Server then
 		CanaryEngineServer.Data = require(EngineVendor.Libraries.EasyProfile.EasyProfile)
 		return CanaryEngineServer
 	else
-		Debugger.Debug(error, "Failed to fetch 'EngineServer', context must be server")
+		Debugger.Debug(error, "Failed to fetch 'EngineServer', context must be server.", nil, false)
 		return
 	end
 end
 
---[=[
-	Gets the client-sided interface of CanaryEngine
-	
-	@yields
-	@client
-	@return CanaryEngineClient?
-]=]
 function CanaryEngine.GetEngineClient()
 	if RuntimeContext.Client then
 		local Player = PlayerService.LocalPlayer
@@ -142,114 +73,45 @@ function CanaryEngine.GetEngineClient()
 
 		return CanaryEngineClient
 	else
-		Debugger.Debug(error, "Failed to fetch 'EngineClient', Context must be client.")
+		Debugger.Debug(error, "Failed to fetch 'EngineClient', context must be client.", nil, false)
 		return
 	end
 end
 
---[=[
-	Gets the global-sided interface of CanaryEngine. Recommended that use this only in replicated packages, this is a bad practice anywhere else.
-	
-	@return CanaryEngineReplicated?
-]=]
+-- Exclusive API for replicated will come soon
 function CanaryEngine.GetEngineReplicated()
 	return CanaryEngineReplicated
 end
 
---[=[
-	Creates a new network controller on the client, with the name of `controllerName`
+-- Signal Creation
 
-	:::tip
-
-	You can set the data type of a network controller after it being made like the following:
-
-	```lua
-	local NetworkController: CanaryEngine.ClientNetworkController<boolean> = EngineClient.CreateNetworkController("MyNewNetworkController") -- assuming you are sending over and recieving a boolean
-	```
-	:::
-
-	@yields
-	
-	@param controllerName string -- The name of the controller
-	@param controllerTimeout number? -- Sets the maximum timeout when waiting for network controllers on the server, defaults to 3 seconds
-
-	@return ClientNetworkController<any>
-]=]
-function CanaryEngineClient.CreateNetworkController(controllerName: string): Types.ClientNetworkController<any, any>
-	if not CanaryEngine.Runtime.RuntimeObjects.NetworkControllers[controllerName] then
-		local NewNetworkController = Network.NewClientController(controllerName)
-
-		CanaryEngine.Runtime.RuntimeObjects.NetworkControllers[controllerName] = NewNetworkController
+function CanaryEngine.CreateSignal(signalName: string?): Types.SignalController<any>
+	if not signalName then
+		return Signal.CreateController("Anonymous")
 	end
-	
-	return CanaryEngine.Runtime.RuntimeObjects.NetworkControllers[controllerName]
+
+	if not RuntimeObjects.SignalControllers[signalName] then
+		local NewSignal = Signal.CreateController(signalName)
+
+		RuntimeObjects.SignalControllers[signalName] = NewSignal
+	end
+
+	return RuntimeObjects.SignalControllers[signalName]
 end
 
---[=[
-	Gets the players current character model; if it doesn't exist the thread will yield until it does.
+function CanaryEngine.CreateAnonymousSignal(): Types.SignalController<any>
+	return CanaryEngine.CreateSignal()
+end
 
-	@yields
-	@return Types.Character
-]=]
+-- Context Specific Functions
+
 function CanaryEngineClient.GetPlayerCharacter(): Types.Character
 	return PlayerService.LocalPlayer.Character or PlayerService.LocalPlayer.CharacterAdded:Wait()
 end
 
---[=[
-	Creates a new network controller on the server, with the name of `controllerName`
-
-	:::tip
-
-	You can set the data type of a network controller after it being made like the following:
-
-	```lua
-	local NetworkController: CanaryEngine.ServerNetworkController<number> = EngineServer.CreateNetworkController("MyNewNetworkController") -- assuming you are sending over and recieving a number
-	```
-
-	:::
-	
-	@param controllerName string -- The name of the controller
-	@return ServerNetworkController<any>
-]=]
-function CanaryEngineServer.CreateNetworkController(controllerName: string): Types.ServerNetworkController<any, any>
-	if not CanaryEngine.Runtime.RuntimeObjects.NetworkControllers[controllerName] then
-		local NewNetworkController = Network.NewServerController(controllerName)
-
-		CanaryEngine.Runtime.RuntimeObjects.NetworkControllers[controllerName] = NewNetworkController
-	end
-
-	return CanaryEngine.Runtime.RuntimeObjects.NetworkControllers[controllerName]
-end
-
---[=[
-	Creates a new signal that is then given a reference in the signals table. Create a new anonymous signal by leaving the name blank.
-	
-	@param signalName string -- The name of the signal
-	@return SignalController<any>
-]=]
-function CanaryEngine.CreateSignal(signalName: string?): Types.SignalController<any>
-	if not signalName then
-		return Signal.NewController("Anonymous")
-	end
-
-	if not CanaryEngine.Runtime.RuntimeObjects.SignalControllers[signalName] then
-		local NewSignal = Signal.NewController(signalName)
-
-		CanaryEngine.Runtime.RuntimeObjects.SignalControllers[signalName] = NewSignal
-	end
-
-	return CanaryEngine.Runtime.RuntimeObjects.SignalControllers[signalName]
-end
-
---[=[
-	Creates a new anonymous signal, this does not have a reference outside of the variable it was created in. This is also technically an alias for CanaryEngine.CreateSignal(nil).
-	
-	@return SignalController<any>
-]=]
-function CanaryEngine.CreateAnonymousSignal(): Types.SignalController<any>
-	return Signal.NewController("Anonymous")
-end
+CanaryEngineClient.CreateNetworkController = CreateNetworkController :: (controllerName: string) -> (Types.ClientNetworkController<any, any>)
+CanaryEngineServer.CreateNetworkController = CreateNetworkController :: (controllerName: string) -> (Types.ServerNetworkController<any, any>)
 
 -- // Actions
 
-return CanaryEngine
+return table.freeze(CanaryEngine)

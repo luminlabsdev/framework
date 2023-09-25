@@ -34,7 +34,7 @@ A table of the currently loaded profiles in game, each key is based on a profile
 
 Gets an existing profile store or creates one if it does not exist yet.
 
-#### Parameters
+**Parameters**
 
 * **name:** `string?`\
 The name of the profile store to get, defaults to "Global"
@@ -45,6 +45,6 @@ The default data of profie when loaded, only applies if this is their first time
 * **playerKeyPattern:** `string?`\
 The pattern for the key to use if used to store player data, use '%d' as a placeholder for the player's UserId.
 
-#### Returns
+**Returns**
 
 * **[ProfileStoreObject?](/api/libraries/data/profilestoreobject)**

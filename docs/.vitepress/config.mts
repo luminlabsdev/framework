@@ -109,6 +109,7 @@ export default defineConfig({
           items: [
             {
               text: 'Framework',
+              collapsed: true,
               items: [
                 { text: 'CanaryEngine', link: '/api/engine/framework/canaryengine' },
                 { text: 'CanaryEngineServer', link: '/api/engine/framework/canaryengineserver' },
@@ -119,6 +120,7 @@ export default defineConfig({
 
             {
               text: 'Dependencies',
+              collapsed: true,
               items: [
                 { text: 'EngineDebugger', link: '/api/engine/dependencies/enginedebugger' },
                 { text: 'EngineLoader', link: '/api/engine/dependencies/engineloader' },
@@ -128,6 +130,7 @@ export default defineConfig({
 
             {
               text: 'Runtime',
+              collapsed: true,
               items: [
                 { text: 'EngineRuntime', link: '/api/engine/runtime/engineruntime' },
                 { text: 'EngineRuntimeContext', link: '/api/engine/runtime/engineruntimecontext' },
@@ -144,6 +147,7 @@ export default defineConfig({
           items: [
             {
               text: 'Signal',
+              collapsed: true,
               items: [
                 { text: 'SignalController', link: '/api/controllers/signal/signalcontroller' }
               ]
@@ -151,6 +155,7 @@ export default defineConfig({
 
             {
               text: 'Network',
+              collapsed: true,
               items: [
                 { text: 'NetworkControllerServer', link: '/api/controllers/network/server' },
                 { text: 'NetworkControllerClient', link: '/api/controllers/network/client' }
@@ -166,6 +171,7 @@ export default defineConfig({
           items: [
             {
               text: 'EasyProfile',
+              collapsed: true,
               items: [
                 { text: 'EasyProfile', link: '/api/libraries/data/easyprofile' },
                 { text: 'ProfileStoreObject', link: '/api/libraries/data/profilestoreobject' },
@@ -175,6 +181,7 @@ export default defineConfig({
 
             {
               text: 'UIShelf',
+              collapsed: true,
               items: [
                 { text: 'UIShelf', link: '/api/libraries/uishelf' },
                 { text: 'TopBarIconObject', link: '/api/libraries/topbariconobject' },
@@ -184,6 +191,7 @@ export default defineConfig({
 
             {
               text: 'Benchmark',
+              collapsed: true,
               items: [
                 { text: 'Benchmark', link: '/api/libraries/benchmark' },
                 { text: 'BenchmarkObject', link: '/api/libraries/benchmarkobject' }
@@ -198,6 +206,8 @@ export default defineConfig({
         },
       ]
     },
+
+    outline: [2, 3],
 
     search: {
       provider: 'local'

@@ -16,7 +16,7 @@ A boolean that is true if the client is loaded.
 
 Starts up the loader, this should be run as soon as the player joins in a client script inside `EngineReplicatedFirst/Scripts`.
 
-#### Parameters
+**Parameters**
 
 * **objectsToLoad:** `{ any }`\
 The objects to load, can be a list of asset id strings or instances
@@ -33,7 +33,7 @@ The amount of time to wait after the load, this is before the messages in loadin
 * **loadingText:** `{ loadingAssetsText: string, loadedAssetsText: string }?`\
 The text that should be shown when loading assets and after loading assets
 
-#### Returns
+**Returns**
 
 * **void**
 
@@ -43,11 +43,11 @@ The text that should be shown when loading assets and after loading assets
 
 Allows you to customize the interface, giving you the ability to change the relevant properties. `Container` is the main frame.
 
-#### Parameters
+**Parameters**
 
 * **interfaceProperties:** `{ [string]: { [string]: any } }`\
 The objects to load, can be a list of asset id strings or instances
 
-#### Returns
+**Returns**
 
 * **void**

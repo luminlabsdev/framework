@@ -1,17 +1,17 @@
 # Package System
 
-One of Canary's greatest strengths is the built in package system, which allows for many more oppurtunities. Coming in later updates, we will be adding a type generator for package intellisense support!
+One of Canary's greatest strengths is the built in package system, which allows for many more oppurtunities. It allows for intellisense support along with easy organization for your package needs.
 
 ### Inserting Packages
 
-To insert a new package, simply use the 'Create New Instance' function of the plugin, then from there you can insert a new package, for either the client, to be replicated, or the server. From there, you can reference the module in your script and start using it! Here's an example of how you would grab a package from the server.
+To insert a new package, simply use the 'Create New Instance' function of the plugin, then from there you can insert a new package, for either the client, to be replicated, or the server. From there, you can reference the module in your script and start using it!
 
 ### Inserting Scripts
 
 Inserting new scripts is also a very straightforward process and very similar to packages. First, create a new instance, then select either client script or server script from the dropdown menu. In order to reference a server-sided package, you must create a server script. Here's an example of how you would get your package from the script we just created:
 
 ```lua
-local Packages = CanaryEngineServer.Packages.Server
+local Packages = EngineServer.Packages
 local MyPackage = require(Packages.MyPackage)
 
 MyPackage.MyFunction()

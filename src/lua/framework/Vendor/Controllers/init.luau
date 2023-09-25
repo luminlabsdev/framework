@@ -1,9 +1,3 @@
---[=[
-	The parent of all classes.
-
-	@ignore
-	@class Controllers
-]=]
 local Controllers = { }
 local Vendor = script.Parent.Vendor
 

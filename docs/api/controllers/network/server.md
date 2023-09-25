@@ -1,6 +1,6 @@
 # NetworkControllerServer <Badge type="danger" text="server" />
 
-A server-sided network controller.
+A server-sided network controller, based on [this](/api/engine/types#networkcontrollerserver) type.
 
 ## Properties
 
@@ -24,7 +24,7 @@ NetworkController:Fire({Player1, Player2, Player3}, {1, 2, 3})
 ```
 :::
 
-#### Parameters
+**Parameters**
 
 * **recipients:** `{ Player } | Player`\
 The players who should recieve the data and/or call
@@ -32,7 +32,7 @@ The players who should recieve the data and/or call
 * **data:** `(Array<any> | any)?`\
 The data that should be sent to the client
 
-#### Returns
+**Returns**
 
 * **void**
 
@@ -42,12 +42,12 @@ The data that should be sent to the client
 
 Fires an event which sends data to every client connected to the server, equivalent [RemoteEvent:FireAllClients](https://create.roblox.com/docs/reference/engine/classes/RemoteEvent#FireAllClients).
 
-#### Parameters
+**Parameters**
 
 * **data:** `(Array<any> | any)?`\
 The data that should be sent to each player
 
-#### Returns
+**Returns**
 
 * **void**
 
@@ -57,7 +57,7 @@ The data that should be sent to each player
 
 Fires an event which sends data to every client connected to the server, except for players defined in the `except` parameter.
 
-#### Parameters
+**Parameters**
 
 * **except:** `Array<Player> | Player`\
 The players which the call should not be sent to
@@ -65,7 +65,7 @@ The players which the call should not be sent to
 * **data:** `(Array<any> | any)?`\
 The data that should be sent to each player except `except`
 
-#### Returns
+**Returns**
 
 * **void**
 
@@ -75,7 +75,7 @@ The data that should be sent to each player except `except`
 
 Fires an event which sends data to every client that is within `maximumRange` studs from `comparePoint`.
 
-#### Parameters
+**Parameters**
 
 * **comparePoint:** `Vector3`\
 The point to compare from, can be a standalone `Vector3`
@@ -86,32 +86,22 @@ The maximum range of which the player's characters have to be within to recieve 
 * **data:** `(Array<any> | any)?`\
 The data that should be sent to each player within `maximumRange`
 
-#### Returns
+**Returns**
 
 * **void**
 
 ---
 
-### Wait
+### Listen
 
-Yields the current thread until the client fires the network controller. Returns a promise.
+Listens for the network controller to be fired by the client, then runs the provided function.
 
-#### Returns
-
-* **[Future](https://util.redblox.dev/future.html#methods)**
-
----
-
-### Connect
-
-Connects a function to the event that is fired when the client fires the network controller.
-
-#### Parameters
+**Parameters**
 
 * **func:** `(sender: Player, data: Array<any>?) -> ()`\
 The function to call when data is recieved
 
-#### Returns
+**Returns**
 
 * **void**
 
@@ -119,14 +109,14 @@ The function to call when data is recieved
 
 ### OnInvoke
 
-Recieves an invoke from the server, and runs the callback function which returns some data. Equivalent to [RemoteFunction.OnServerInvoke](https://create.roblox.com/docs/reference/engine/classes/RemoteFunction#OnServerInvoke).
+Recieves an invoke from the client, and runs the callback function which returns some data. Equivalent to [RemoteFunction.OnServerInvoke](https://create.roblox.com/docs/reference/engine/classes/RemoteFunction#OnServerInvoke).
 
-#### Parameters
+**Parameters**
 
 * **callback:** `(sender: Player, data: Array<any>?) -> (Array<any> | any)`\
 The callback function to run on invoke, must return at least 1 value.
 
-#### Returns
+**Returns**
 
 * **void**
 
@@ -136,7 +126,7 @@ The callback function to run on invoke, must return at least 1 value.
 
 Sets a rate limit that is applied when invoking or firing a network controller from the client.
 
-#### Parameters
+**Parameters**
 
 * **maxInvokesPerSecond:** `number`\
 The maximum amount of invokes allowed per second, set to -1 to disable the rate limit
@@ -144,6 +134,6 @@ The maximum amount of invokes allowed per second, set to -1 to disable the rate 
 * **invokeOverflowCallback:** `((sender: Player) -> ())?`\
 The callback function to run when the player has exceeded the current rate limit
 
-#### Returns
+**Returns**
 
 * **void**

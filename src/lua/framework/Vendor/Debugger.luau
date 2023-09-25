@@ -1,42 +1,8 @@
 -- // Package
 
---[=[
-	The parent of all classes.
-
-	@class EngineDebugger
-]=]
 local EngineDebugger = { }
 
---[=[
-	A list of cached stack traces for the current environment.
-
-	@prop CachedStackTraces {[string]: CallStack}
-	@within EngineDebugger
-]=]
-
---[=[
-	A list of cached debug calls for the current environment.
-
-	@prop CachedDebugCalls {string | {string}}
-	@within EngineDebugger
-]=]
-
---[=[
-	The callstack type.
-
-	@private
-
-	@type CallStack {Name: string, Source: string, DefinedLine: number}
-	@within EngineDebugger
-]=]
 type CallStack = {Name: string, Source: string, DefinedLine: number}
-
---[=[
-	This type contains every roblox user data and generic type.
-
-	@type ExpectedType "Axes" | "BrickColor" | "CatalogSearchParams" | "CFrame" | "Color3" | "ColorSequence" | "ColorSequenceKeypoint" | "Content" | "DateTime" | "DockWidgetPluginGuiInfo" | "Enum" | "EnumItem" | "Enums" | "Faces" | "FloatCurveKey" | "Font" | "Instance" | "NumberRange" | "NumberSequence" | "NumberSequenceKeyPoint" | "OverlapParams" | "PathWaypoint" | "PhysicalProperties" | "Random" | "Ray" | "RayastParams" | "RaycastResult" | "RBXScriptConnection" | "RBXScriptSignal" | "Rect" | "Region3" | "Region3int16" | "SharedTable" | "TweenInfo" | "UDim" | "UDim2" | "Vector2" | "Vector2int16" | "Vector3" | "Vector3int16" | "nil" | "boolean" | "number" | "string" | "function" | "userdata" | "thread" | "table"
-	@within EngineDebugger
-]=]
 export type ExpectedType = "Axes" | "BrickColor" | "CatalogSearchParams" | "CFrame" | "Color3" | "ColorSequence" | "ColorSequenceKeypoint" | "Content" | "DateTime"
 | "DockWidgetPluginGuiInfo" | "Enum" | "EnumItem" | "Enums" | "Faces" | "FloatCurveKey" | "Font" | "Instance" | "NumberRange" | "NumberSequence"
 | "NumberSequenceKeyPoint" | "OverlapParams" | "PathWaypoint" | "PhysicalProperties" | "Random" | "Ray" | "RayastParams" | "RaycastResult" | "RBXScriptConnection"
@@ -105,14 +71,6 @@ local function GetAncestorsUntilParentFolder(instance: Instance): {string | {Ins
 	}
 end
 
---[=[
-	The main debug handler, adds a prefix to logs sent out and respects logging settings.
-
-	@param debugHandler (...T) -> () | (message: T, level: number) -> () -- The function to run on debug, for example `Debugger.Debug(print, "Hello, world!")`
-	@param arguments {string} | string -- The contents to be passed to the function
-	@param prefix string? -- The prefix to put in front of the debug
-	@param respectDebugger boolean? -- Whether or not to respect the debugger, should always be true for correct use
-]=]
 function EngineDebugger.Debug(debugHandler: (...any) -> (), arguments: {any} | any, prefix: string?, respectDebugger: boolean?)
 	prefix = prefix or Prefix
 
@@ -140,11 +98,6 @@ function EngineDebugger.Debug(debugHandler: (...any) -> (), arguments: {any} | a
 	end
 end
 
---[=[
-	Clears the output and cached stack traces, with the option of also clearing cached debug calls.
-
-	@param clearDebugCallCache boolean? -- Decides whether or not the debug call cache should be cleared too
-]=]
 function EngineDebugger.ClearOutput(clearDebugCallCache: boolean?)
 	if clearDebugCallCache then
 		table.clear(EngineDebugger.CachedDebugCalls)
@@ -154,16 +107,6 @@ function EngineDebugger.ClearOutput(clearDebugCallCache: boolean?)
 	LogService:ClearOutput()
 end
 
---[=[
-	Checks if a value is nil / false and runs the provided handler. This always respects the debugger.
-
-	@param assertionHandler (...any) -> () -- The handler to run if the assertion is not truthy
-	@param assertion T -- The value to assert, this is checked
-	@param message string -- The message to pass to the handler
-	@param ... string -- Any values to format from message, functions identically to `string.format`
-
-	@return T
-]=]
 function EngineDebugger.Assert<T>(assertionHandler: (...any) -> (), assertion: T, message: string, ...: string): T
 	if not assertion then
 		EngineDebugger.Debug(assertionHandler, string.format(message, ...))
@@ -171,14 +114,6 @@ function EngineDebugger.Assert<T>(assertionHandler: (...any) -> (), assertion: T
 	return assertion
 end
 
---[=[
-	Gets the call stack of any script.
-
-	@param instance LuaSourceContainer -- The script to start at
-	@param stackName string? -- The name of the stack, defaults to the stack number
-	
-	@return CallStack
-]=]
 function EngineDebugger.GetCallStack(instance: LuaSourceContainer, stackName: string?): CallStack
 	if not instance:IsA("LuaSourceContainer") then
 		EngineDebugger.DebugInvalidData(1, "GetCallStack", "LuaSourceContainer", instance)
@@ -201,16 +136,6 @@ function EngineDebugger.GetCallStack(instance: LuaSourceContainer, stackName: st
 	return StackTable
 end
 
---[=[
-	Errors if the param does not have the same type as what is expected.
-
-	@deprecated v4.0.0 -- Use `Guard` instead
-
-	@param paramNumber number -- The number of which param errored, 1 would be the first param
-	@param funcName string -- The name of the function
-	@param expectedType ExpectedType -- The type that was expected of `param`
-	@param param T -- The param which caused the error
-]=]
 function EngineDebugger.DebugInvalidData(paramNumber: number, funcName: string, expectedType: ExpectedType, param: unknown, debugHander: (...any) -> ())
 	local ParamType = typeof(param)
 
@@ -224,13 +149,6 @@ function EngineDebugger.DebugInvalidData(paramNumber: number, funcName: string, 
 	end
 end
 
---[=[
-	Logs an event in a script, which is then stored in a cache for that script. This allows you to make sure code is running while not cluttering the output in the live game.
-
-	@param instance LuaSourceContainer -- The instance to cache the debug logs at
-	@param eventName string -- The name to print and log it as
-	@param printLog boolean? -- Whether or not to pring the log using [EngineDebugger.Debug], defaults to true
-]=]
 function EngineDebugger.LogEvent(instance: LuaSourceContainer, eventName: string, printLog: boolean?)
 	if printLog == nil then
 		printLog = true
@@ -247,11 +165,6 @@ function EngineDebugger.LogEvent(instance: LuaSourceContainer, eventName: string
 	end
 end
 
---[=[
-	Generates a UUID with safe characters.
-
-	@return string
-]=]
 function EngineDebugger.GenerateUUID()
 	return string.gsub(
 		HttpService:GenerateGUID(false),

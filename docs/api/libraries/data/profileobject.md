@@ -8,7 +8,7 @@ What is returned from loading a profile, this is used player-per-player or by a 
 
 Gets the data for the profile that was loaded in.
 
-#### Returns
+**Returns**
 
 * **[Dictionary](/api/engine/types#dictionary)<string, any>?**
 
@@ -18,7 +18,7 @@ Gets the data for the profile that was loaded in.
 
 Gets the meta tags for the profile that was loaded in.
 
-#### Returns
+**Returns**
 
 * **[Dictionary](/api/engine/types#dictionary)<string, any>?**
 
@@ -34,7 +34,7 @@ Creates leaderstats for Roblox's leaderboard based on provided values from the p
 |`number`|
 |`string`|
 
-#### Parameters
+**Parameters**
 
 * **player:** `Player`\
 The player to parent the leaderstats to, required because the owner of the profile can be the player **or** a set string
@@ -45,7 +45,7 @@ Specific stats to add, leaving this nil will account for all data on the profile
 * **isAttributes:** `boolean?`\
 No description
 
-#### Returns
+**Returns**
 
 * **[Folder?](https://create.roblox.com/docs/reference/engine/classes/Folder)**
 
@@ -55,7 +55,7 @@ No description
 
 Gets all of the global keys that were recieved when the target was offline.
 
-#### Returns
+**Returns**
 
 * **[Array](/api/engine/types#array)\<[GlobalKey](/api/libraries/data/easyprofile#globalkey)\>?**
 
@@ -65,12 +65,12 @@ Gets all of the global keys that were recieved when the target was offline.
 
 Adds `UserId`'s to the target profile.
 
-#### Parameters
+**Parameters**
 
 * **userIds:** `number | { number }`\
 The `userId`s to add.
 
-#### Returns
+**Returns**
 
 * **void**
 
@@ -80,7 +80,7 @@ The `userId`s to add.
 
 Gets all the associated `userId`'s of the target profile.
 
-#### Returns
+**Returns**
 
 * **[Array](/api/engine/types#array)\<number\>?**
 
@@ -90,12 +90,12 @@ Gets all the associated `userId`'s of the target profile.
 
 Removes all the associated `userId`'s off of the target profile, leave `userIds` blank to clear all user IDs.
 
-#### Parameters
+**Parameters**
 
 * **userIds:** `number | { number }`\
 The `userId`'s to clear off the target profile
 
-#### Returns
+**Returns**
 
 * **void**
 
@@ -105,7 +105,7 @@ The `userId`'s to clear off the target profile
 
 Gets all metadata that is related to the target profile.
 
-#### Returns
+**Returns**
 
 * **[ProfileMetaData?](/api/libraries/data/easyprofile#profilemetadata)**
 
@@ -115,7 +115,7 @@ Gets all metadata that is related to the target profile.
 
 Gets the amount of data (in percent) currently being used by the profile.
 
-#### Returns
+**Returns**
 
 * **number?**
 
@@ -125,7 +125,7 @@ Gets the amount of data (in percent) currently being used by the profile.
 
 Fires when a global key has been recieved by the server.
 
-#### Parameters
+**Parameters**
 
 * **recievedKey:** `GlobalKey`\
 The global key that was recieved

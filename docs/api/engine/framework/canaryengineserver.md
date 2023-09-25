@@ -16,11 +16,11 @@ Access to the [EasyProfile](/api/libraries/data/easyprofile) library.
 
 Creates a new network controller on the server, with the name of `controllerName`
 
-#### Parameters
+**Parameters**
 
 * **controllerName:** `string`\
 The name of the controller
 
-#### Returns
+**Returns**
 
 * **[ServerNetworkController](/api/controllers/network/server)**

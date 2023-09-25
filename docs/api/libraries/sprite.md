@@ -8,7 +8,7 @@ Handles the animation of spritesheets on image labels.
 
 Animates the given sprite to play like a GIF.
 
-#### Parameters
+**Parameters**
 
 * **image:** `ImageLabel`\
 The image label that the sprite should be animated on
@@ -25,7 +25,7 @@ The amount of frames per second that the sprite should be played at. Defaults to
 * **imageId:** `string?`\
 The image id that the image label should be set to, defaults to the initial image of the image
 
-#### Returns
+**Returns**
 
 * **void**
 
@@ -35,11 +35,11 @@ The image id that the image label should be set to, defaults to the initial imag
 
 Stops the currently playing animation, if any.
 
-#### Parameters
+**Parameters**
 
 * **image:** `ImageLabel`\
 The image label that should stop being animated
 
-#### Returns
+**Returns**
 
 * **void**

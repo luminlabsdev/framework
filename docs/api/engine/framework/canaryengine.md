@@ -18,23 +18,31 @@ The internal engine debugger, has useful functions to abide by debug settings.
 
 * [**EngineDebugger**](/api/engine/dependencies/enginedebugger)
 
+---
+
+### Future <Badge type="tip" text="read only" />
+
+A reference to the Future module, which is a optimized version of a Promise.
+
+* [**Future**](https://util.redblox.dev/future.html)
+
 ## Functions
 
 ### GetEngineServer <Badge type="danger" text="server" />
 
 Gets the server-sided interface of CanaryEngine.
 
-#### Returns
+**Returns**
 
 * [**CanaryEngineServer?**](/api/engine/framework/canaryengineserver)
 
 ---
 
-### GetEngineClient <Badge type="danger" text="client" /> <Badge type="warning" text="yields" />
+### GetEngineClient <Badge type="danger" text="client" />
 
 Gets the client-sided interface of CanaryEngine.
 
-#### Returns
+**Returns**
 
 * [**CanaryEngineClient?**](/api/engine/framework/canaryengineclient)
 
@@ -44,7 +52,7 @@ Gets the client-sided interface of CanaryEngine.
 
 Gets the global-sided interface of CanaryEngine. Recommended that use this only in replicated packages, this is a bad practice anywhere else.
 
-#### Returns
+**Returns**
 
 * [**CanaryEngineRepliated?**](/api/engine/framework/canaryenginereplicated)
 
@@ -54,14 +62,14 @@ Gets the global-sided interface of CanaryEngine. Recommended that use this only 
 
 Creates a new signal that is then given a reference in the signals table. Create a new anonymous signal by leaving the name blank.
 
-#### Parameters
+**Parameters**
 
 * **signalName:** `string?`\
 The name of the signal
 
-#### Returns
+**Returns**
 
-* [**SignalController\<any\>**](/api/engine/types#signalcontroller)
+* [**SignalController**](/api/controllers/signal/signalcontroller)
 
 ---
 
@@ -69,6 +77,6 @@ The name of the signal
 
 Creates a new anonymous signal, this does not have a reference outside of the variable it was created in. This is essentially an alias for an empty [`CreateSignal`](#createsignal)
 
-#### Returns
+**Returns**
 
-* [**SignalController\<any\>**](/api/engine/types#signalcontroller)
+* [**SignalController**](/api/controllers/signal/signalcontroller)

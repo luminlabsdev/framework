@@ -8,12 +8,12 @@ Allows you to decode and encode data into Base64.
 
 Encodes data into Base64.
 
-#### Parameters
+**Parameters**
 
 * **Data:** `string`\
 The data to encode
 
-#### Returns
+**Returns**
 
 * **string**
 
@@ -23,11 +23,11 @@ The data to encode
 
 Decodes data out of Base64.
 
-#### Parameters
+**Parameters**
 
 * **Data:** `string`\
 The data to decode
 
-#### Returns
+**Returns**
 
 * **string**

@@ -32,7 +32,7 @@ A boolean to decide if the benchmark should be GC'ed.
 
 Starts the benchmark object.
 
-#### Returns
+**Returns**
 
 * **void**
 
@@ -42,7 +42,7 @@ Starts the benchmark object.
 
 Stops the benchmark from running and destroys it, returns the amount of time it took to complete the code above it.
 
-#### Returns
+**Returns**
 
 * **number**
 
@@ -52,7 +52,7 @@ Stops the benchmark from running and destroys it, returns the amount of time it 
 
 Gets the current elapsed time of the benchmark, this will error if the benchmark is inactive.
 
-#### Returns
+**Returns**
 
 * **number?**
 
@@ -67,7 +67,7 @@ Sets the function to be ran `timesToRun` amount of times.
 :::
 
 
-#### Parameters
+**Parameters**
 
 * **timesToRun:** `number`\
 The amount of times to run `func`.
@@ -75,7 +75,7 @@ The amount of times to run `func`.
 * **func:** `(timesRan: number) -> ()`\
 The function to run for each `timesToRun` index, has a `timesRan` argument which is how many times the benchmark has run so far.
 
-#### Returns
+**Returns**
 
 * **[BenchmarkData](/api/libraries/benchmark#benchmarkdata)**
 
@@ -85,7 +85,7 @@ The function to run for each `timesToRun` index, has a `timesRan` argument which
 
 Destroys the `BenchmarkObject`, this is done automatically after `SetFunction` is finished or `Stop` is called.
 
-#### Returns
+**Returns**
 
 * **void**
 

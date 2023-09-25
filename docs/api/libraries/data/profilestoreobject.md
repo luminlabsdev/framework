@@ -4,33 +4,33 @@ Handles anything related to the profile store itself.
 
 ## Methods
 
-### DeleteProfileAsync
+### DeleteProfileAsync <Badge type="warning" text="yields" />
 
 Completely wipes the data of the key userId, good for complying with `GDPR` practices.
 
-#### Parameters
+**Parameters**
 
 * **target:** `number | string`\
 The user id / key to erase the data of
 
-#### Returns
+**Returns**
 
-* **[Future](https://util.redblox.dev/future.html#methods)**
+* **void**
 
 ---
 
-### GetProfileAsync
+### GetProfileAsync <Badge type="warning" text="yields" />
 
 Fetches the data off the key `userId`, this will only read data and does not load it.
 
-#### Parameters
+**Parameters**
 
 * **target:** `number | string`\
 The user id / key to get of the data of
 
-#### Returns
+**Returns**
 
-* **[Future](https://util.redblox.dev/future.html#methods)<[Dictionary](/api/engine/types#dictionary)<string, any>>**
+* **[Dictionary](/api/engine/types#dictionary)<string, any>**
 
 ---
 
@@ -38,7 +38,7 @@ The user id / key to get of the data of
 
 Loads the data off the key `userId`. All edits to this data will be saved and be able to be used next session.
 
-#### Parameters
+**Parameters**
 
 * **owner:** `Player | string`\
 The owner of profile to load the data of
@@ -47,19 +47,19 @@ The owner of profile to load the data of
 Whether or not to reconcile the data of the profile, defaults to true
 
 * **profileClaimedHandler:** `((placeId: number, gameJobId: string) -> (ProfileLoadType))? | ProfileLoadType?`\
-The function to run when the profile is already claimed
+The function to run when the profile is already claimed **or** the type of way to load the profile
 
-#### Returns
+**Returns**
 
 * **[Future](https://util.redblox.dev/future.html#methods)<[ProfileObject?](/api/libraries/data/profileobject)>**
 
 ---
 
-### RemoveGlobalKeyAsync
+### RemoveGlobalKeyAsync <Badge type="warning" text="yields" />
 
 Removes the global key that sent by using [ProfileStoreObject:SetGlobalKeyAsync](#setglobalkeyasync) with the key ID of `keyId`. This only applies if it has not been recieved yet, which means the function should be ran around within the first minute of being sent.
 
-#### Parameters
+**Parameters**
 
 * **target:** `number | string`\
 The target to remove the global key of
@@ -67,17 +67,17 @@ The target to remove the global key of
 * **keyId:** `number`\
 The `keyId` of the key to remove
 
-#### Returns
+**Returns**
 
-* **[Future](https://util.redblox.dev/future.html#methods)**
+* **void**
 
 ---
 
-### SetGlobalKeyAsync
+### SetGlobalKeyAsync <Badge type="warning" text="yields" />
 
 Sets a global key for target profile, regardless of whether they share the same `JobId` as the sender or they are offline.
 
-#### Parameters
+**Parameters**
 
 * **target:** `number | string`\
 The target to set the global key of
@@ -88,9 +88,9 @@ The key to send to the target
 * **value:** `any`\
 The value of `key`
 
-#### Returns
+**Returns**
 
-* **[Future](https://util.redblox.dev/future.html#methods)**
+* **void**
 
 ---
 
@@ -108,7 +108,7 @@ Players.PlayerRemoving:Connect(function(player)
 end)
 ```
 
-#### Parameters
+**Parameters**
 
 * **owner:** `Player | string`\
 The owner of the profile to unclaim the session lock of
@@ -119,7 +119,7 @@ Values to save that are not already saved to the profile data, for example attri
 * **hopReadyCallback:** `(() -> ())?`\
 The function to run when a server hop is ready, leaving this blank will disable this feature
 
-#### Returns
+**Returns**
 
 * **void**
 
@@ -129,7 +129,7 @@ The function to run when a server hop is ready, leaving this blank will disable 
 
 Fires when a session lock has been claimed.
 
-#### Parameters
+**Parameters**
 
 * **player:** `Player | string`\
 The player/key whose session lock was claimed
@@ -140,7 +140,7 @@ The player/key whose session lock was claimed
 
 Fires when a session lock has been unclaimed.
 
-#### Parameters
+**Parameters**
 
 * **player:** `Player | string`\
 The player/key whose session lock was unclaimed

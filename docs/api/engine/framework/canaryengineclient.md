@@ -32,12 +32,12 @@ A simple reference to the [Player.Backpack](https://create.roblox.com/docs/refer
 
 Creates a new network controller on the client, with the name of `controllerName`
 
-#### Parameters
+**Parameters**
 
 * **controllerName:** `string`\
 The name of the controller
 
-#### Returns
+**Returns**
 
 * **[ClientNetworkController](/api/controllers/network/client)**
 
@@ -47,6 +47,6 @@ The name of the controller
 
 Gets the players current character model; if it doesn't exist the thread will yield until it does.
 
-#### Returns
+**Returns**
 
 * **[Character](/api/engine/types#character)**

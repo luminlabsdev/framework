@@ -1,6 +1,6 @@
 # SignalController
 
-A lua-based signal implementation.
+A lua-based signal implementation, based on [this](/api/engine/types#signalcontroller) type.
 
 ## Properties
 
@@ -24,12 +24,12 @@ SignalController:Fire("Hello, world!")
 ```
 :::
 
-#### Parameters
+**Parameters**
 
 * **data:** `(Array<any> | any)?`\
 The data that should be sent the other script
 
-#### Returns
+**Returns**
 
 * **void**
 
@@ -39,12 +39,12 @@ The data that should be sent the other script
 
 Connects a function to the event that is fired when another script fires the controller.
 
-#### Parameters
+**Parameters**
 
 * **func:** `(data: Array<any>?) -> ()`\
 The function to call when data is recieved
 
-#### Returns
+**Returns**
 
 * **[ControllerConnection](/api/engine/types#controllerconnection)**
 
@@ -54,12 +54,12 @@ The function to call when data is recieved
 
 Connects a function to the event that is fired when another script fires the controller. When using `:Once`, the function is only run the first time and then the connection is disconnected automatically.
 
-#### Parameters
+**Parameters**
 
 * **func:** `(data: Array<any>?) -> ()`\
 The function to call when data is recieved
 
-#### Returns
+**Returns**
 
 * **[ControllerConnection](/api/engine/types#controllerconnection)**
 
@@ -69,7 +69,7 @@ The function to call when data is recieved
 
 Yields the current thread until another script fires the signal controller.
 
-#### Returns
+**Returns**
 
 * **[Array](/api/engine/types#array)\<any\>**
 
@@ -79,6 +79,6 @@ Yields the current thread until another script fires the signal controller.
 
 Disconnects all listeners from the current signal controller.
 
-#### Returns
+**Returns**
 
 * **void**

@@ -1,135 +1,56 @@
 -- // Packages
 
---[=[
-	The parent of all classes.
-
-	@class EngineTypes
-]=]
 local EngineTypes = { }
+local Future = require(script.Parent.Libraries.RedbloxUtils.Future)
 
---[=[
-	A controller connection, simply a function which allows you to disconnect from an event.
+-- Tables
 
-	@type ControllerConnection
-	@within EngineTypes
-	@private
-]=]
+export type Dictionary<T, U> = {[T]: U}
+export type Array<T> = {[number]: T}
+
+-- Basic Controllers
+
 type ControllerConnection = () -> ()
 
---[=[
-	A signal controller, similar to an [RBXScriptSignal]
-
-	@field Connect (self: SignalController<T>, func: (data: {T}) -> ()) -> (ControllerConnection)
-	@field Wait (self: SignalController<T>) -> ({T})
-	@field Once (self: SignalController<T>, func: (data: {T}) -> ()) -> (ControllerConnection)
-	
-	@field Fire (self: SignalController<T>, data: ({T} | T)?) -> ()
-
-	@field DisconnectAll (self: SignalController<T>) -> ()
-	@field Name string
-
-	@interface SignalController
-	@within EngineTypes
-]=]
 export type SignalController<T> = {
 	DisconnectAll: (self: SignalController<T>) -> (),
-	Fire: (self: PublicSignalController<T>, data: ({T} | T)?) -> (),
+	Fire: (self: PublicSignalController<T>, data: (Array<T> | T)?) -> (),
 } & PublicSignalController<T>
 
 export type PublicSignalController<T> = {
-	Connect: (self: PublicSignalController<T>, func: (data: {T}) -> ()) -> (ControllerConnection),
-	Wait: (self: PublicSignalController<T>) -> ({T}),
-	Once: (self: PublicSignalController<T>, func: (data: {T}) -> ()) -> (ControllerConnection),
+	Connect: (self: PublicSignalController<T>, func: (data: Array<T>) -> ()) -> (ControllerConnection),
+	Wait: (self: PublicSignalController<T>) -> (Array<T>),
+	Once: (self: PublicSignalController<T>, func: (data: Array<T>) -> ()) -> (ControllerConnection),
 
 	Name: string,
 }
 
---[=[
-	A ClientNetworkController is basically a mixed version of a [RemoteEvent] and [RemoteFunction]. It has better features and is more performant.
+-- Network Controllers
 
-	@field Connect (self: ClientNetworkController<T, U>, func: (data: {T}) -> ()) -> (ControllerConnection)
-	@field Once (self: ClientNetworkController<T, U>, func: (data: {T}) -> ()) -> (ControllerConnection)
-	@field Wait (self: ClientNetworkController<T, U>) -> ({T})
-	
-	@field Fire (self: ClientNetworkController<T, U>, data: ({T} | T)?) -> ()
-	@field InvokeAsync (self: ClientNetworkController<T, U>, data: ({T} | T)?) -> ({U})
-
-	@field Destroy (self: ClientNetworkController<T, U>) -> ()
-	@field DisconnectAll (self: ClientNetworkController<T, U>) -> ()
-	@field Name string
-
-	@interface ClientNetworkController
-	@within EngineTypes
-]=]
 export type ClientNetworkController<T, U> = {
-	Connect: (self: ClientNetworkController<T, U>, func: (data: {T}) -> ()) -> (ControllerConnection),
-	Wait: (self: ClientNetworkController<T, U>) -> ({T}),
-	Once: (self: ClientNetworkController<T, U>, func: (data: {T}) -> ()) -> (ControllerConnection),
+	Listen: (self: ClientNetworkController<T, U>, func: (data: Array<T>?) -> ()) -> (),
 
-	Fire: (self: ClientNetworkController<T, U>, data: ({T} | T)?) -> (),
-	InvokeAsync: (self: ClientNetworkController<T, U>, data: ({T} | T)) -> ({U}),
+	Fire: (self: ClientNetworkController<T, U>, data: (Array<T> | T)?) -> (),
+	InvokeAsync: (self: ClientNetworkController<T, U>, data: (Array<T> | T)?) -> (Future.Future<{U}>),
 
-	Destroy: (self: ClientNetworkController<T, U>) -> (),
-	DisconnectAll: (self: ClientNetworkController<T, U>) -> (),
 	Name: string,
 }
 
---[=[
-	A ServerNetworkController is basically a mixed version of a [RemoteEvent] and [RemoteFunction]. It has better features and is more performant, though this is the server-sided API.
-
-	@field Connect (self: ServerNetworkController<T, U>, func: (sender: Player, data: {T}) -> ()) -> (ControllerConnection)
-	@field Once (self: ServerNetworkController<T, U>, func: (sender: Player, data: {T}) -> ()) -> (ControllerConnection)
-	@field Wait (self: ServerNetworkController<T, U>) -> (Player, {T})
-	
-	@field Fire (self: ServerNetworkController<T, U>, recipient: Player | {Player}, data: ({T} | T)?) -> ()
-	@field FireAll (self: ServerNetworkController<T, U>, data: ({T} | T)?) -> ()
-	@field FireExcept (self: ServerNetworkController<T, U>, except: Player | {Player}, data: ({T} | T)?) -> ()
-	@field FireInRange (self: ServerNetworkController<T, U>, comparePoint: Vector3, maximumRange: number, data: ({T} | T)?) -> ()
-	@field OnInvoke (self: ServerNetworkController<T, U>, callback: (sender: Player, data: {T}) -> ()) -> ()
-	
-	@field SetRateLimit (self: ServerNetworkController<T, U>, maxInvokesPerSecond: number, invokeOverflowCallback: (sender: Player) -> ()) -> ()
-	@field Destroy (self: ClientNetworkController<T, U>) -> ()
-	@field DisconnectAll (self: ServerNetworkController<T, U>) -> ()
-	@field Name string
-
-	@interface ServerNetworkController
-	@within EngineTypes
-]=]
 export type ServerNetworkController<T, U> = {
-	Connect: (self: ServerNetworkController<T, U>, func: (sender: Player, data: {T}) -> ()) -> (ControllerConnection),
-	Wait: (self: ServerNetworkController<T, U>) -> (Player, {T}),
-	Once: (self: ServerNetworkController<T, U>, func: (sender: Player, data: {T}) -> ()) -> (ControllerConnection),
-
-	Fire: (self: ServerNetworkController<T, U>, recipient: Player | {Player}, data: ({T} | T)?) -> (),
-	FireAll: (self: ServerNetworkController<T, U>, data: ({T} | T)?) -> (),
-	FireExcept: (self: ServerNetworkController<T, U>, except: Player | {Player}, data: ({T} | T)?) -> (),
-	FireInRange: (self: ServerNetworkController<T, U>, comparePoint: Vector3, maximumRange: number, data: ({T} | T)?) -> (),
-	OnInvoke: (self: ServerNetworkController<T, U>, callback: (sender: Player, data: {T}) -> ({U} | U)) -> (),
+	Listen: (self: ServerNetworkController<T, U>, func: (sender: Player, data: ({T} | unknown)?) -> ()) -> (),
+	OnInvoke: (self: ServerNetworkController<T, U>, callback: (sender: Player, data: ({T} | unknown)?) -> ({U} | U)) -> (),
+	
+	Fire: (self: ServerNetworkController<T, U>, recipient: Player | {Player}, data: (Array<T> | T)?) -> (),
+	FireAll: (self: ServerNetworkController<T, U>, data: (Array<T> | T)?) -> (),
+	FireExcept: (self: ServerNetworkController<T, U>, except: Player | {Player}, data: (Array<T> | T)?) -> (),
+	FireInRange: (self: ServerNetworkController<T, U>, comparePoint: Vector3, maximumRange: number, data: (Array<T> | T)?) -> (),
 
 	SetRateLimit: (self: ServerNetworkController<T, U>, maxInvokesPerSecond: number, invokeOverflowCallback: (sender: Player) -> ()) -> (),
-	Destroy: (self: ClientNetworkController<T, U>) -> (),
-	DisconnectAll: (self: ServerNetworkController<T, U>) -> (),
 	Name: string,
 }
 
---[=[
-	A basic type of an R6 character rig. Should be combined with model using the `&` syntax.
+-- Misc. Types
 
-	@field Body_Colors BodyColors
-	@field HumanoidRootPart Part
-	@field Humanoid Humanoid
-	@field Torso Part
-	@field Head Part
-	@field Animate LocalScript
-	@field Left_Arm Part
-	@field Left_Leg Part
-	@field Right_Arm Part
-	@field Right_Leg Part
-
-
-	@interface Character
-	@within EngineTypes
-]=]
 export type Character = {
 	["Body Colors"]: BodyColors,
 	HumanoidRootPart: Part,
@@ -182,21 +103,5 @@ export type Character = {
 		roblox: Decal
 	}
 } & Model
-
---[=[
-	A simple dictionary type.
-
-	@type Dictionary
-	@within EngineTypes
-]=]
-export type Dictionary<T, U> = {[T]: U}
-
---[=[
-	A simple array type.
-
-	@type Array
-	@within EngineTypes
-]=]
-export type Array<T> = {[number]: T}
 
 return EngineTypes

@@ -32,12 +32,12 @@ The area of the spacer. `1` is left and `2` is right.
 
 Sets whether or not the spacer should be enabled.
 
-#### Parameters
+**Parameters**
 
 * **enabled:** `boolean`\
 Whether or not the spacer should be enabled
 
-#### Returns
+**Returns**
 
 * **void**
 
@@ -47,12 +47,12 @@ Whether or not the spacer should be enabled
 
 Sets the size of the spacer on the `X` scale.
 
-#### Parameters
+**Parameters**
 
 * **size:** `number`\
 The size to set the spacer to
 
-#### Returns
+**Returns**
 
 * **void**
 
@@ -62,6 +62,6 @@ The size to set the spacer to
 
 Destroys the spacer itself, removing it from the topbar.
 
-#### Returns
+**Returns**
 
 * **void**

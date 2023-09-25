@@ -40,12 +40,12 @@ Whether or not voice chat is enabled in your game, this must be toggled accordin
 
 Creates a new topbar icon, with declared properties.
 
-#### Parameters
+**Parameters**
 
 * **properties:** `Array<string | number>`\
 The properties to set on the icon
 
-#### Returns
+**Returns**
 
 * **[TopBarIconObject](/api/libraries/topbariconobject)**
 
@@ -55,7 +55,7 @@ The properties to set on the icon
 
 Creates a new topbar spacer, acts a spacer to other icons.
 
-#### Parameters
+**Parameters**
 
 * **properties:** `Array<string | number>`\
 The properties to set on the spacer
@@ -63,7 +63,7 @@ The properties to set on the spacer
 * **bypass:** `boolean?`\
 Allows you to bypass the order restrictions, should only be used internally
 
-#### Returns
+**Returns**
 
 * **[TopBarSpacerObject](/api/libraries/topbarspacerobject)**
 
@@ -73,11 +73,11 @@ Allows you to bypass the order restrictions, should only be used internally
 
 Sets whether or not the top bar is enabled, only applies to UIShelf icons.
 
-#### Parameters
+**Parameters**
 
 * **enabled** `boolean`\
 Whether or not to enable the topbar
 
-#### Returns
+**Returns**
 
 * **void**

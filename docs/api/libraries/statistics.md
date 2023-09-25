@@ -15,12 +15,12 @@ print(Statistics.GetMedian(CollectedData))
 -- Output: 8
 ```
 
-#### Parameters
+**Parameters**
 
 * **numberList:** `Array<number>`\
 The dataset to perform the action on
 
-#### Returns
+**Returns**
 
 * **number**
 
@@ -37,12 +37,12 @@ print(Statistics.GetMean(CoinsForPlayers)) -- Get the average amount of coins ea
 -- Output: 1381.125
 ```
 
-#### Parameters
+**Parameters**
 
 * **numberList:** `Array<number>`\
 The dataset to perform the action on
 
-#### Returns
+**Returns**
 
 * **number**
 
@@ -52,11 +52,11 @@ The dataset to perform the action on
 
 Gets the number that occurs most in the provided dataset, nil if none or each number occurs the same amount of times. More info can be found [here](https://en.wikipedia.org/wiki/Mode_(statistics))
 
-#### Parameters
+**Parameters**
 
 * **numberList:** `Array<number>`\
 The dataset to perform the action on
 
-#### Returns
+**Returns**
 
 * **number?**
