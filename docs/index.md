@@ -15,6 +15,9 @@ hero:
     - theme: alt
       text: Trello Board
       link: https://trello.com/b/fTJOmMua/canaryengine
+    - theme: alt
+      text: Roblox Plugin
+      link: https://create.roblox.com/marketplace/asset/12591143042
 
 features:
   - icon: 🎒
