@@ -14,9 +14,9 @@ export default defineConfig({
       {
         text: 'Guides',
         items: [
-          { text: 'Get Started', link: '/getstarted/intro'},
-          { text: 'Usage', link: '/tutorials/update' },
-          { text: 'Libraries', link: '/tutorials/libraries/benchmark' }
+          { text: 'Get Started', link: '/start/intro'},
+          { text: 'Usage', link: '/tutorial/update' },
+          { text: 'Libraries', link: '/tutorial/libraries/benchmark' }
         ]
       },
 
@@ -41,46 +41,46 @@ export default defineConfig({
     ],
 
     sidebar: {
-      '/tutorials/libraries/': [
+      '/tutorial/libraries/': [
         {
           text: 'Libraries',
           items: [
-            { text: 'Benchmark', link: '/tutorials/libraries/benchmark' },
-            { text: 'Debugger', link: '/tutorials/libraries/debugger' },
-            { text: 'UIShelf', link: '/tutorials/libraries/uishelf' }
+            { text: 'Benchmark', link: '/tutorial/libraries/benchmark' },
+            { text: 'Debugger', link: '/tutorial/libraries/debugger' },
+            { text: 'UIShelf', link: '/tutorial/libraries/uishelf' }
           ]
         }
       ],
-      '/getstarted': [
+      '/start': [
         {
           text: 'Get Started',
           items: [
-            { text: 'Introduction', link: '/getstarted/intro' },
-            { text: 'Features', link: '/getstarted/features' },
-            { text: 'Comparison', link: '/getstarted/comparison' },
-            { text: 'Installation', link: '/getstarted/installation' },
-            { text: 'FAQ', link: '/getstarted/faq' }
+            { text: 'Introduction', link: '/start/intro' },
+            { text: 'Features', link: '/start/features' },
+            { text: 'Comparison', link: '/start/comparison' },
+            { text: 'Installation', link: '/start/installation' },
+            { text: 'FAQ', link: '/start/faq' }
           ]
         }
       ],
-      '/tutorials': [
+      '/tutorial': [
         {
           text: 'Management',
           items: [
-            { text: 'Update', link: '/tutorials/update' },
-            { text: 'Packages', link: '/tutorials/packages' },
-            { text: 'Structure', link: '/tutorials/structure' },
-            { text: 'Style Guide', link: '/tutorials/styleguide' },
+            { text: 'Update', link: '/tutorial/update' },
+            { text: 'Packages', link: '/tutorial/packages' },
+            { text: 'Structure', link: '/tutorial/structure' },
+            { text: 'Style Guide', link: '/tutorial/styleguide' },
           ]
         },
 
         {
           text: 'Engine',
           items: [
-            { text: 'Signals', link: 'tutorials/signals' },
-            { text: 'Networking', link: 'tutorials/networking' },
-            { text: 'Data Management', link: 'tutorials/datastoring' },
-            { text: 'Loading Screen', link: 'tutorials/customloader' }
+            { text: 'Signals', link: 'tutorial/signals' },
+            { text: 'Networking', link: 'tutorial/networking' },
+            { text: 'Data Management', link: 'tutorial/datastoring' },
+            { text: 'Loading Screen', link: 'tutorial/customloader' }
           ]
         }
       ],
