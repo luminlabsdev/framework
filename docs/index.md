@@ -8,16 +8,10 @@ hero:
   actions:
     - theme: brand
       text: Documentation
-      link: /tutorials/update
+      link: /tutorial/update
     - theme: alt
       text: API Reference
       link: /api/engine/framework/canaryengine
-    - theme: alt
-      text: Trello Board
-      link: https://trello.com/b/fTJOmMua/canaryengine
-    - theme: alt
-      text: Roblox Plugin
-      link: https://create.roblox.com/marketplace/asset/12591143042
 
 features:
   - icon: 🎒

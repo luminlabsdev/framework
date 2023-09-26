@@ -1,0 +1,1 @@
+TypeScript definition files are currently incomplete.

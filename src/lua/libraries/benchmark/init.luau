@@ -83,7 +83,7 @@ function Benchmark.CreateBenchmark()
 	local self = setmetatable({ }, {__index = BenchmarkObject})
 
 	self.IsCompleted = false
-	self.Destroying = Signal.new()
+	self.Destroying = Signal()
 	self.StartTime = 0
 	self.EndTime = 0
 
@@ -176,6 +176,8 @@ end
 ]=]
 function BenchmarkObject:Destroy()
 	self.Destroying:Fire()
+	self.Destroying:DisconnectAll()
+	
 	table.clear(self)
 	setmetatable(self, nil)
 end

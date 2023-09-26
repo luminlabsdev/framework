@@ -30,7 +30,7 @@ function NetworkController.CreateController(name: string)
 	local self = setmetatable({ }, RunService:IsClient() and Indexes[1] or Indexes[2])
 
 	self.Name = name
-	self._Bridge = BridgeNet.ReferenceBridge(name)
+	self._Event = BridgeNet.ReferenceBridge(name)
 
 	return self
 end
@@ -38,18 +38,16 @@ end
 -- Network Controller Client
 
 function NetworkControllerClient:Fire(data: ({any} | any)?)
-	self._Bridge:Fire(Sanitize(data))
+	self._Event:Fire(Sanitize(data))
 end
 
 function NetworkControllerClient:Listen(func: (data: {any}?) -> ())
-	local Connection = self._Bridge:Connect(func)
-
-	return Connection
+	self._Event:Connect(func)
 end
 
 function NetworkControllerClient:InvokeAsync(data: ({any} | any)?)
 	return Future.new(function()
-		return Sanitize(self._Bridge:InvokeServerAsync(Sanitize(data)))
+		return Sanitize(self._Event:InvokeServerAsync(Sanitize(data)))
 	end)
 end
 
@@ -57,24 +55,24 @@ end
 
 function NetworkControllerServer:Fire(recipients: Player | {Player}, data: ({any} | any)?)
 	if type(recipients) ~= "table" then
-		self._Bridge:Fire(recipients, Sanitize(data))
+		self._Event:Fire(recipients, Sanitize(data))
 		return
 	end
 	
-	self._Bridge:Fire(BridgeNet.Players(recipients), Sanitize(data))
+	self._Event:Fire(BridgeNet.Players(recipients), Sanitize(data))
 end
 
 function NetworkControllerServer:FireAll(data: ({any} | any)?)
-	self._Bridge:Fire(BridgeNet.AllPlayers(), Sanitize(data))
+	self._Event:Fire(BridgeNet.AllPlayers(), Sanitize(data))
 end
 
 function NetworkControllerServer:FireExcept(except: Player | {Player}, data: ({any} | any)?)
 	if type(except) ~= "table" then
-		self._Bridge:Fire(BridgeNet.PlayersExcept({except}), Sanitize(data))
+		self._Event:Fire(BridgeNet.PlayersExcept({except}), Sanitize(data))
 		return
 	end
 
-	self._Bridge:Fire(BridgeNet.PlayersExcept(except), Sanitize(data))
+	self._Event:Fire(BridgeNet.PlayersExcept(except), Sanitize(data))
 end
 
 function NetworkControllerServer:FireInRange(comparePoint: Vector3, maximumRange: number, data: ({any} | any)?)
@@ -90,8 +88,7 @@ function NetworkControllerServer:FireInRange(comparePoint: Vector3, maximumRange
 end
 
 function NetworkControllerServer:Listen(func: (sender: Player, data: {any}?) -> ())
-	local Connection = self._Bridge:Connect(func)
-	return Connection
+	self._Event:Connect(func)
 end
 
 function NetworkControllerServer:SetRateLimit(maxInvokesPerSecond: number, invokeOverflowCallback: ((sender: Player) -> ())?)
@@ -104,13 +101,16 @@ function NetworkControllerServer:SetRateLimit(maxInvokesPerSecond: number, invok
 		return
 	end
 
-	self._Bridge:RateLimit(maxInvokesPerSecond, invokeOverflowCallback)
+	self._Event:RateLimit(maxInvokesPerSecond, invokeOverflowCallback)
 end
 
 function NetworkControllerServer:OnInvoke(callback: (sender: Player, data: {any}?) -> (({any} | any)))
-	self._Bridge.OnServerInvoke = callback
+	self._Event.OnServerInvoke = callback
 end
 
 -- // Actions
 
-return NetworkController
+table.freeze(NetworkControllerServer)
+table.freeze(NetworkControllerClient)
+
+return table.freeze(NetworkController)

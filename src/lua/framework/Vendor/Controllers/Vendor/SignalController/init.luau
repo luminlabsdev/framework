@@ -1,9 +1,7 @@
 -- // Package
 
 local SignalController = { }
-local SignalControllerObject = { }
-
-SignalController.__index = SignalControllerObject
+SignalController.__index = SignalController
 
 -- // Variables
 
@@ -24,15 +22,15 @@ function SignalController.CreateController(name: string)
 	return self
 end
 
-function SignalControllerObject:Fire(data: ({any} | any)?)
+function SignalController:Fire(data: ({any} | any)?)
 	self._Signal:Fire(Sanitize(data))
 end
 
-function SignalControllerObject:Connect(func: (data: {any}?) -> ())
+function SignalController:Connect(func: (data: {any}?) -> ())
 	return self._Signal:Connect(func)
 end
 
-function SignalControllerObject:Once(func: (data: {any}?) -> ())
+function SignalController:Once(func: (data: {any}?) -> ())
 	local Disconnect
 
 	Disconnect = self._Signal:Connect(function(data)
@@ -43,11 +41,11 @@ function SignalControllerObject:Once(func: (data: {any}?) -> ())
 	return Disconnect
 end
 
-function SignalControllerObject:Wait(): {any}?
+function SignalController:Wait(): {any}?
 	return self._Signal:Wait()
 end
 
-function SignalControllerObject:DisconnectAll()
+function SignalController:DisconnectAll()
 	self._Signal:DisconnectAll()
 end
 
@@ -55,4 +53,4 @@ end
 
 -- // Actions
 
-return SignalController
+return table.freeze(SignalController)

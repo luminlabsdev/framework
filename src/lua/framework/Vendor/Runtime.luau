@@ -27,4 +27,4 @@ local EngineRuntimeSettings = {
 EngineRuntime.Context = EngineRuntimeContext
 EngineRuntime.Settings = EngineRuntimeSettings
 
-return EngineRuntime
+return table.freeze(EngineRuntime)

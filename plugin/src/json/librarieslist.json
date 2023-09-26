@@ -69,10 +69,10 @@
                     "Source": "https://raw.githubusercontent.com/red-blox/Util/main/libs/Spawn/Spawn.luau"
                 }
             },
-            "Promise": {
+            "Future": {
                 "$className": "ModuleScript",
                 "$properties": {
-                    "Source": "https://raw.githubusercontent.com/red-blox/Util/main/libs/Promise/Promise.luau"
+                    "Source": "https://raw.githubusercontent.com/red-blox/Util/main/libs/Future/Future.luau"
                 }
             },
             "Init": {
@@ -97,13 +97,19 @@
                 "Signal": {
                     "$className": "ModuleScript",
                     "$properties": {
-                        "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/lua/libraries/benchmark/Vendor/Signal.luau"
+                        "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/lua/libraries/signal/init.luau"
+                    }
+                },
+                "Spawn": {
+                    "$className": "ModuleScript",
+                    "$properties": {
+                        "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/lua/libraries/signal/spawn.luau"
                     }
                 },
                 "Statistics": {
                     "$className": "ModuleScript",
                     "$properties": {
-                        "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/lua/libraries/benchmark/Vendor/Statistics.luau"
+                        "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/lua/libraries/statistics/init.luau"
                     }
                 }
             },

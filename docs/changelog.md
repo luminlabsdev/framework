@@ -6,7 +6,9 @@ keywords: [roblox, game, framework, changelog, updates]
 
 # Changelog
 
-## 4.0.0
+This is the changelog which is changed every update, and we follow semver. To see what we're working on, head to our [Trello](https://trello.com/b/fTJOmMua/canaryengine) board.
+
+## 4.0.0-rc1
 
 ### Added
 

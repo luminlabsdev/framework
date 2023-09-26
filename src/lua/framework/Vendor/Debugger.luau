@@ -175,4 +175,4 @@ end
 
 -- // Actions
 
-return EngineDebugger
+return table.freeze(EngineDebugger)

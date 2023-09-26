@@ -56,7 +56,7 @@ end
 function CanaryEngine.GetEngineServer()
 	if RuntimeContext.Server then
 		CanaryEngineServer.Data = require(EngineVendor.Libraries.EasyProfile.Init)
-		return CanaryEngineServer
+		return table.freeze(CanaryEngineServer)
 	else
 		Debugger.Debug(error, "Failed to fetch 'EngineServer', context must be server.", nil, false)
 		return
@@ -71,7 +71,7 @@ function CanaryEngine.GetEngineClient()
 		CanaryEngineClient.PlayerGui = Player:WaitForChild("PlayerGui") :: typeof(game:GetService("StarterGui"))
 		CanaryEngineClient.PlayerBackpack = Player:WaitForChild("Backpack") :: typeof(game:GetService("StarterPack"))
 
-		return CanaryEngineClient
+		return table.freeze(CanaryEngineClient)
 	else
 		Debugger.Debug(error, "Failed to fetch 'EngineClient', context must be client.", nil, false)
 		return
@@ -80,7 +80,7 @@ end
 
 -- Exclusive API for replicated will come soon
 function CanaryEngine.GetEngineReplicated()
-	return CanaryEngineReplicated
+	return table.freeze(CanaryEngineReplicated)
 end
 
 -- Signal Creation
