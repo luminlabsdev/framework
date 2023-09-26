@@ -103,7 +103,7 @@
                 "Spawn": {
                     "$className": "ModuleScript",
                     "$properties": {
-                        "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/lua/libraries/signal/spawn.luau"
+                        "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/lua/libraries/signal/Spawn.luau"
                     }
                 },
                 "Statistics": {
