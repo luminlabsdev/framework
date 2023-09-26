@@ -81,7 +81,7 @@ if not AlreadyRan then
 
 				Iris.Text(`Welcome back, {PlayerName}!`)
 				Iris.Separator()
-				Iris.Text(HttpCache.ExternalSettings.CanaryStudioChangelog, true)
+				Iris.Text({HttpCache.ExternalSettings.CanaryStudioChangelog, true})
 			end Iris.End()
 
 			WindowList.InstallerWindow = Iris.Window("Canary Studio - Installer", {isOpened = false}) do

@@ -2,7 +2,7 @@
 
 local RunService = game:GetService("RunService")
 
-if not plugin or RunService:IsRunning() then
+if not plugin or RunService:IsRunMode() then
 	return
 end
 

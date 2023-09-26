@@ -22,6 +22,7 @@ local HttpCache = require(Vendor.Core.HttpCache)
 local CanaryStudioSettings = require(Vendor.Settings.Settings)
 
 local FinishedFiles = 0
+local TotalPackageFiles = 0
 local UpdateDebounce = false
 local FrameworkPackages = Vendor.FrameworkPackages
 local StructureCache = Vendor.StructureCache
@@ -49,12 +50,12 @@ VersionController.DataUpdated = Signal.new()
 
 -- // Functions
 
-function VersionController.GetDirectoryFromStructureJSON(json: {any}, parent: Instance)
+function VersionController.GetDirectoryFromStructureJSON(json: {any}, parent: Instance, isPackage: boolean?)
 	for instanceName, children in json do
 		if instanceName == "$parent" then
 			continue
 		end
-		
+
 		if type(instanceName) == "string" and type(children) == "string" then
 			local InstanceToGet = FrameworkPackages:FindFirstChild(children)
 
@@ -84,12 +85,13 @@ function VersionController.GetDirectoryFromStructureJSON(json: {any}, parent: In
 					local Source = Fetch.FetchAsync(propertyValue, false)
 
 					if not Source then
-						warn("Could not fetch source:", propertyValue)
 						continue
 					end
 
-					FinishedFiles += 1
-					VersionController.DataUpdated:Fire(FinishedFiles, HttpCache.ExternalSettings.Files, "Updating", "Updating framework to latest version")
+					if not isPackage then
+						FinishedFiles += 1
+						VersionController.DataUpdated:Fire(FinishedFiles, HttpCache.ExternalSettings.Files, "Updating ", "Updating framework to latest version")
+					end
 
 					InstanceFromClass[propertyName] = Source
 				elseif type(propertyName) == "string" then
@@ -99,7 +101,7 @@ function VersionController.GetDirectoryFromStructureJSON(json: {any}, parent: In
 		end
 
 		if type(children) == "table" and not TableKit.IsEmpty(children) then
-			VersionController.GetDirectoryFromStructureJSON(children, InstanceFromClass)
+			VersionController.GetDirectoryFromStructureJSON(children, InstanceFromClass, isPackage)
 		end
 	end
 end
@@ -111,7 +113,7 @@ function VersionController.GetCurrentInstance(ignoreNil: boolean?): {[string]: F
 		Server = ServerStorage:FindFirstChild("EngineServer"),
 		Client = ReplicatedStorage:FindFirstChild("EngineClient"),
 		Replicated = ReplicatedStorage:FindFirstChild("EngineReplicated"),
-		Framework = ReplicatedStorage:FindFirstChild("CanaryEngineFramework"),
+		Framework = ReplicatedStorage:FindFirstChild("Framework") or ReplicatedStorage:FindFirstChild("CanaryEngineFramework"),
 		ReplicatedFirst = ReplicatedFirst:FindFirstChild("EngineReplicatedFirst")
 	}
 
@@ -141,6 +143,8 @@ function VersionController.UninstallFramework()
 	for _, instancePart in CurrentInstance do
 		instancePart:Destroy()
 	end
+	
+	ReplicatedFirst:SetAttribute("EngineLoaderEnabled", nil)
 end
 
 function VersionController.UpdateFramework()
@@ -179,12 +183,24 @@ function VersionController.UpdateFramework()
 			end
 		end
 
-		local CanaryEngineStructure = StructureCache.CanaryEngineFramework
+		local CanaryEngineStructure = StructureCache.Framework
+		local EngineLoaderStructure = StructureCache.EngineReplicatedFirst.Framework
 
 		if CurrentInstance.Framework then
 			CurrentInstance.Framework:Destroy()
 			CurrentInstance.Framework = CanaryEngineStructure
+			
 			CanaryEngineStructure:SetAttribute("Version", HttpCache.ReleaseLatest.tag_name)
+			CanaryEngineStructure.Parent = ReplicatedStorage
+		end
+		
+		if CurrentInstance.ReplicatedFirst then
+			CurrentInstance.ReplicatedFirst.Framework:Destroy()
+			EngineLoaderStructure.Parent = CurrentInstance.ReplicatedFirst
+		end
+		
+		if not ReplicatedFirst:GetAttribute("EngineLoaderEnabled") then
+			ReplicatedFirst:SetAttribute("EngineLoaderEnabled", false)
 		end
 
 		WindowController.SetWindow("UpdateStatusWindow", false)
@@ -192,6 +208,8 @@ function VersionController.UpdateFramework()
 
 		task.wait(UPDATE_COOLDOWN_SECONDS)
 		UpdateDebounce = false
+		FinishedFiles = 0
+		VersionController.DataUpdated:Fire(FinishedFiles, 1, "nil", "nil")
 	end)
 end
 
@@ -224,8 +242,9 @@ function VersionController.InstallFramework()
 			end
 		end
 
-		StructureCache.CanaryEngineFramework:SetAttribute("Version", HttpCache.ReleaseLatest.tag_name)
-		StructureCache.CanaryEngineFramework.Parent = ReplicatedStorage
+		StructureCache.Framework:SetAttribute("Version", HttpCache.ReleaseLatest.tag_name)
+		StructureCache.Framework.Parent = ReplicatedStorage
+		ReplicatedFirst:SetAttribute("EngineLoaderEnabled", false)
 
 		local NewInstance = VersionController.GetCurrentInstance()
 
@@ -241,29 +260,39 @@ function VersionController.InstallFramework()
 			local RemoveIllegalCharacters = string.gsub(settingName, " ", "")
 			NewInstance.Framework:SetAttribute(RemoveIllegalCharacters, settingValue)
 		end
-		
+
 		FinishedFiles = 0
 		
+		if not TableKit.IsEmpty(HttpCache.LibrariesList) then
+			for _, value in CanaryStudioSettings.CanaryStudioInstallerPackages do
+				if value then
+					TotalPackageFiles += 1
+				end
+			end
+		end
+
 		for libraryName, libraryJSON in HttpCache.LibrariesList do
 			if not CanaryStudioSettings.CanaryStudioInstallerPackages[libraryName] or typeof(libraryJSON) == "Instance" then
 				continue
 			end
 
 			if not PackageInstallCache:FindFirstChild(libraryName) then
-				VersionController.GetDirectoryFromStructureJSON(libraryJSON, PackageInstallCache)
+				VersionController.GetDirectoryFromStructureJSON(libraryJSON, PackageInstallCache, true)
 			end
 
 			PackageInstallCache:FindFirstChild(libraryName):Clone().Parent = NewInstance[libraryJSON["$parent"] or "Replicated"].Packages
+			
 			FinishedFiles += 1
-			VersionController.DataUpdated:Fire(FinishedFiles, HttpCache.ExternalSettings.Files, "Installing...", "Installing latest version of packages")
+			VersionController.DataUpdated:Fire(FinishedFiles, TotalPackageFiles, "Installing ", "Installing latest version of packages")
 		end
-		
+
 		FinishedFiles = 0
-		
-		VersionController.DataUpdated:Fire(FinishedFiles, HttpCache.ExternalSettings.Files, "Updating", "Updating framework to latest version")
+		TotalPackageFiles = 0
+
 		WindowController.SetWindow("UpdateStatusWindow", false)
 		WindowController.SetMessageWindow("Framework installed successfully!", Color3.fromRGB(205, 255, 151))
-
+		
+		VersionController.DataUpdated:Fire(FinishedFiles, 1, "nil", "nil")
 		task.wait(UPDATE_COOLDOWN_SECONDS)
 		UpdateDebounce = false
 	end)
@@ -292,8 +321,6 @@ function VersionController.CreateNewInstanceFromName(name: string, instanceType:
 	end
 
 	if instanceType == "ModuleScript" then
-		local InstanceFolder = Instance.new("Folder")
-
 		if CanaryStudioSettings.CanaryStudio["Default Instance Templates"] then
 			NewInstance.Source = string.gsub(
 				NewInstance.Source,
@@ -303,17 +330,23 @@ function VersionController.CreateNewInstanceFromName(name: string, instanceType:
 		end
 
 		if CanaryStudioSettings.CanaryStudio["Create Package Vendor"] then
+			local InstanceFolder = Instance.new("Folder")
 			local NewVendor = Instance.new("Folder")
 
 			NewVendor.Name = "Vendor"
 			NewVendor.Parent = InstanceFolder
+			
+			NewInstance.Name = "Init"
+			NewInstance.Parent = InstanceFolder
+
+			InstanceFolder.Name = name
+			InstanceFolder.Parent = CurrentInstance[context].Packages
+			
+			return
 		end
-
-		NewInstance.Name = "Init"
-		NewInstance.Parent = InstanceFolder
-
-		InstanceFolder.Name = name
-		InstanceFolder.Parent = CurrentInstance[context].Packages
+		
+		NewInstance.Name = name
+		NewInstance.Parent = CurrentInstance[context].Packages
 	elseif instanceType == "Script" then
 		NewInstance.Name = name
 		NewInstance.RunContext = Enum.RunContext[context]
