@@ -1,7 +1,7 @@
 -- // Package
 
 local EngineLoader = { }
-local Vendor = script.Vendor
+local Vendor = script.Parent.Vendor
 
 -- // Variables
 
@@ -35,7 +35,7 @@ EngineLoader.IsClientLoaded = false
 -- // Functions
 
 function EngineLoader.StartLoad(objectsToLoad: {any}, loadingMessages: {[string]: Color3}?, coreGuiEnabled: boolean?, afterLoadWait: number?, loadingText: {loadingAssetsText: string, loadedAssetsText: string}?)
-	if not script.Parent.Parent:GetAttribute("CanaryEngineLoaderEnabled") then
+	if not ReplicatedFirst:GetAttribute("FrameworkLoaderEnabled") then
 		return
 	end
 	
