@@ -55,6 +55,10 @@ end
 
 function CanaryEngine.GetEngineServer()
 	if RuntimeContext.Server then
+		if table.isfrozen(CanaryEngineServer) then
+			return CanaryEngineServer
+		end
+
 		CanaryEngineServer.Data = require(EngineVendor.Libraries.EasyProfile.Init)
 		return table.freeze(CanaryEngineServer)
 	else
@@ -65,6 +69,10 @@ end
 
 function CanaryEngine.GetEngineClient()
 	if RuntimeContext.Client then
+		if table.isfrozen(CanaryEngineClient) then
+			return CanaryEngineClient
+		end
+
 		local Player = PlayerService.LocalPlayer
 
 		CanaryEngineClient.Player = Player :: Player
@@ -80,6 +88,10 @@ end
 
 -- Exclusive API for replicated will come soon
 function CanaryEngine.GetEngineReplicated()
+	if table.isfrozen(CanaryEngineReplicated) then
+		return CanaryEngineReplicated
+	end
+
 	return table.freeze(CanaryEngineReplicated)
 end
 
