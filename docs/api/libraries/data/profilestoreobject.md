@@ -19,7 +19,7 @@ The user id / key to erase the data of
 
 ---
 
-### GetProfileAsync <Badge type="warning" text="yields" />
+### GetProfileAsync
 
 Fetches the data off the key `userId`, this will only read data and does not load it.
 
@@ -30,7 +30,7 @@ The user id / key to get of the data of
 
 **Returns**
 
-* **[Dictionary](/api/engine/types#dictionary)<string, any>**
+* **[Future](https://util.redblox.dev/future.html#methods)<{[string]: any}, () -> ()>**
 
 ---
 

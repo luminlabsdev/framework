@@ -8,27 +8,29 @@ If you have ever used ProfileService before, you have probably heard of the `Pro
 
 ```lua
 local DataService = CanaryEngineServer.Data
-local MyNewDataStore = DataService.CreateProfileStore("MyProfileStore", {Cash = 100, Gems = 5, Items = {"Wooden Sword"}})
+local MyNewDataStore = DataService.CreateProfileStore("MyProfileStore", {Tokens = 100, Gold = 5, Items = {"Wooden Sword"}})
 ```
 
 After this, you can declare the key pattern if you want to. This is optional though, and the default is 'user_%d' for compatibility with older versions. Though, I recommend just changing to '%d', so it only contains the player's `UserId`.
 
 ```lua
 local DataService = CanaryEngineServer.Data
-local MyNewDataStore = DataService.CreateProfileStore("MyProfileStore", {Cash = 100, Gems = 5, Items = {"Wooden Sword"}}, "%d") -- Change the pattern if you want to, it's better for usage
+local MyNewDataStore = DataService.CreateProfileStore("MyProfileStore", {Tokens = 100, Gold = 5, Items = {"Wooden Sword"}}, "%d") -- Change the pattern if you want to, it's better for usage
 ```
 
-Now, we can detect when the player joins, and when they do, we can load in their data by using `ProfileStoreObject:LoadProfileAsync`. This will load in the profile and allow you to interact with the data. Here's how you would do that:
+Now, we can detect when the player joins, and when they do, we can load in their data by using `ProfileStoreObject:LoadProfileAsync`. This will load in the profile and allow you to interact with the data. Since it returns a Future, we will use the `After` method; please also note that you can use the `Await` method as well which will yield the thread and return the profile object. Here's how you would do the latter:
 
 ```lua
 local DataService = CanaryEngineServer.Data
 local PlayerService = game:GetService("Players")
-local MyNewDataStore = DataService.CreateProfileStore("MyProfileStore", {Cash = 100, Gems = 5, Items = {"Wooden Sword"}}, "%d")
+local MyNewDataStore = DataService.CreateProfileStore("MyProfileStore", {Tokens = 100, Gold = 5, Items = {"Wooden Sword"}}, "%d")
 
 -- // Functions
 
 local function PlayerAdded(player)
-    local PlayerProfile = MyNewDataStore:LoadProfileAsync(player) -- Load the profile, you can also add an optional `reconcile` argument which reconciles the data
+    MyNewDataStore:LoadProfileAsync(player):After(function(playerProfile)
+
+    end) -- Load the profile, you can also add an optional `reconcile` argument which reconciles the data
 end
 
 PlayerService.PlayerAdded:Connect(PlayerAdded)
@@ -39,12 +41,14 @@ Now sometimes, the player will join before the server script runs. To fix this, 
 ```lua
 local DataService = CanaryEngineServer.Data
 local PlayerService = game:GetService("Players")
-local MyNewDataStore = DataService.CreateProfileStore("MyProfileStore", {Cash = 100, Gems = 5, Items = {"Wooden Sword"}}, "%d")
+local MyNewDataStore = DataService.CreateProfileStore("MyProfileStore", {Tokens = 100, Gold = 5, Items = {"Wooden Sword"}}, "%d")
 
 -- // Functions
 
 local function PlayerAdded(player)
-    local PlayerProfile = MyNewDataStore:LoadProfileAsync(player)
+    MyNewDataStore:LoadProfileAsync(player):After(function(playerProfile)
+
+    end)
 end
 
 PlayerService.PlayerAdded:Connect(PlayerAdded)
@@ -70,10 +74,11 @@ What we will do first is get the data we can edit from the profile. In order to 
 
 ```lua
 local function PlayerAdded(player)
-    local PlayerProfile = MyNewDataStore:LoadProfileAsync(player)
-    local ProfileData = PlayerProfile:GetProfileData()
+    MyNewDataStore:LoadProfileAsync(player):After(function(playerProfile)
+        local ProfileData = playerProfile:GetProfileData()
 
-    print(ProfileData) -- Output: {Cash = 100, Gems = 5, Items = {"Wooden Sword"}}
+        print(ProfileData) -- Output: {Tokens = 100, Gold = 5, Items = {"Wooden Sword"}}
+    end)
 end
 ```
 
@@ -81,14 +86,13 @@ Now that we have verified that our code is indeed working, we can now edit the v
 
 ```lua
 local function PlayerAdded(player)
-    local PlayerProfile = MyNewDataStore:LoadProfileAsync(player)
-    local ProfileData = PlayerProfile:GetProfileData()
+    MyNewDataStore:LoadProfileAsync(player):After(function(playerProfile)
+        local ProfileData = playerProfile:GetProfileData()
 
-    print(ProfileData) -- Output: {Cash = 100, Gems = 5, Items = {"Wooden Sword"}}
-
-    table.insert(ProfileData.Items, "Iron Sword")
-
-    print(ProfileData) -- Output: {Cash = 100, Gems = 5, Items = {"Wooden Sword", "Iron Sword"}}
+        print(ProfileData) -- Output: {Tokens = 100, Gold = 5, Items = {"Wooden Sword"}}
+        table.insert(ProfileData.Items, "Iron Sword")
+        print(ProfileData) -- Output: {Tokens = 100, Gold = 5, Items = {"Wooden Sword", "Iron Sword"}}
+    end)
 end
 ```
 
@@ -100,10 +104,9 @@ When using EasyProfile, Roblox's player list `leaderstats` are rather easy to se
 
 ```lua
 local function PlayerAdded(player)
-    local PlayerProfile = MyNewDataStore:LoadProfileAsync(player)
-    local ProfileData = PlayerProfile:GetProfileData()
-
-    PlayerProfile:CreateProfileLeaderstats(player, {"Cash", "Gems"})
+    MyNewDataStore:LoadProfileAsync(player):After(function(playerProfile)
+        playerProfile:CreateProfileLeaderstats(player, {"Tokens", "Gold"}) -- The leaderstats folder is also returned here, in case you want to mod values
+    end)
 end
 ```
 
@@ -120,12 +123,14 @@ To start, we can create and setup our profile store just as how we did previousl
 ```lua
 local DataService = CanaryEngineServer.Data
 local PlayerService = game:GetService("Players")
-local MyNewDataStore = DataService.CreateProfileStore("MyProfileStore", {Cash = 100, Gems = 5, Items = {"Wooden Sword"}}, "%d")
+local MyNewDataStore = DataService.CreateProfileStore("MyProfileStore", {Tokens = 100, Gold = 5, Items = {"Wooden Sword"}}, "%d")
 
 -- // Functions
 
 local function PlayerAdded(player)
-    local PlayerProfile = MyNewDataStore:LoadProfileAsync(player)
+    MyNewDataStore:LoadProfileAsync(player):After(function(playerProfile)
+
+    end)
 end
 
 PlayerService.PlayerRemoving:Connect(function(player)
@@ -143,9 +148,9 @@ First, in our `PlayerAdded` function, lets send a new global key out to ourselve
 
 ```lua
 local function PlayerAdded(player)
-    local PlayerProfile = MyNewDataStore:LoadProfileAsync(player)
-
-    MyNewDataStore:SetGlobalKeyAsync(player.UserId, "GlobalKeyTest", "somerandomstringdata") -- The first argument is the player who is recieving it, and the others are the key name followed by the value
+    MyNewDataStore:LoadProfileAsync(player):After(function(playerProfile)
+        MyNewDataStore:SetGlobalKeyAsync(player.UserId, "GlobalKeyTest", "somerandomstringdata") -- The first argument is the player who is recieving it, and the others are the key name followed by the value
+    end)
 end
 ```
 
@@ -153,13 +158,13 @@ To listen when the player recieves a new key in-game, you can use the `ProfileOb
 
 ```lua
 local function PlayerAdded(player)
-    local PlayerProfile = MyNewDataStore:LoadProfileAsync(player)
+    MyNewDataStore:LoadProfileAsync(player):After(function(playerProfile)
+        playerProfile.GlobalKeyAdded:Connect(function(data)
+            print(data[1]) -- Output: {Key = "GlobalKeyTest", Value = {this = "is a test"}, KeyId = 1}
+        end)
 
-    PlayerProfile.GlobalKeyAdded:Connect(function(data)
-        print(data[1]) -- Output: {Key = "GlobalKeyTest", Value = {this = "is a test"}, KeyId = 1}
+        MyNewDataStore:SetGlobalKeyAsync(player.UserId, "GlobalKeyTest", "somerandomstringdata")
     end)
-
-    MyNewDataStore:SetGlobalKeyAsync(player.UserId, "GlobalKeyTest", "somerandomstringdata")
 end
 ```
 
@@ -167,17 +172,17 @@ Please note that when doing this, you must wait around 60 seconds for the key to
 
 ```lua
 local function PlayerAdded(player)
-    local PlayerProfile = MyNewDataStore:LoadProfileAsync(player)
+    MyNewDataStore:LoadProfileAsync(player):After(function(playerProfile)
+        for _, globalKey in playerProfile:GetGlobalKeys() do
+           print(globalKey.Key, ":", globalKey.Value) -- Output: {Key = "GlobalKeyTest", Value = "somerandomstringdata", KeyId = 1}
+        end
 
-    for _, globalKey in PlayerProfile:GetGlobalKeys() do
-        print(globalKey.Key, ":", globalKey.Value) -- Output: {Key = "GlobalKeyTest", Value = "somerandomstringdata", KeyId = 1}
-    end
+        playerProfile.GlobalKeyAdded:Connect(function(data)
+            print(data[1]) -- Output: {Key = "GlobalKeyTest", Value = "somerandomstringdata", KeyId = 2}
+        end)
 
-    PlayerProfile.GlobalKeyAdded:Connect(function(data)
-        print(data[1]) -- Output: {Key = "GlobalKeyTest", Value = "somerandomstringdata", KeyId = 2}
+        MyNewDataStore:SetGlobalKeyAsync(player.UserId, "GlobalKeyTest", "somerandomstringdata")
     end)
-
-    MyNewDataStore:SetGlobalKeyAsync(player.UserId, "GlobalKeyTest", "somerandomstringdata")
 end
 ```
 
@@ -191,4 +196,4 @@ There are a few extra functions you should know about. Here is a table of them:
 |-|-|
 |`ProfileObject:GetDataUsage`|Allows you to measure the size of the profile's data, in a percentage (%)|
 |`ProfileObject:GetMetaData`|Gets specific meta data about the profile, such as the amount of times it was loaded.|
-|`ProfileStoreObject:GetProfileAsync`|Gets the profile data for a specific `UserId`, useful for getting anyones data. You can not edit any values though.|
+|`ProfileStoreObject:GetProfileAsync`|Gets the profile data for a specific `UserId`, useful for getting anyones data and overwriting it. Any edited values will not reflect to the profile unless overwrite is called.|

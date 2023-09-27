@@ -18,7 +18,6 @@ local HttpService = game:GetService("HttpService")
 
 local ProfileService = require(Vendor.ProfileService)
 local Types = require(EngineVendor.Types)
-local Debugger = require(EngineVendor.Debugger)
 local Signal = require(EngineVendor.Controllers.Init).SignalController
 local Future = require(EngineLibraries.RedbloxUtils.Future)
 
@@ -47,6 +46,9 @@ local ValidAttributeTypes = {
 
 local ProfileStoreObject = { }
 local ProfileObject = { }
+
+ProfileStoreObject.__index = ProfileStoreObject
+ProfileObject.__index = ProfileObject
 
 EasyProfile.LoadedData = { }
 
@@ -87,112 +89,105 @@ if not RunService:IsServer() then
 	error("Cannot run on any environments except the server.")
 end
 
+local function IsKeyValid(key: Player | string)
+	
+end
+
 function EasyProfile.CreateProfileStore(name: string?, defaultProfileData: {[string]: any}, playerKeyPattern: string?): ProfileStoreObject?
 	if not defaultProfileData then
-		Debugger.Debug(warn, "Default profile data is required")
-		return nil
+		error("Default profile data is required")
 	end
 
-	local ProfileStoreObjectMetatable = setmetatable({ }, {__index = ProfileStoreObject})
+	local ProfileStoreObjectMetatable = setmetatable({ }, ProfileStoreObject)
 	local ProfileStore = ProfileService.GetProfileStore(name or "Global", defaultProfileData)
 
-	ProfileStoreObjectMetatable.SessionLockClaimed = Signal.NewController("SessionLockClaimed") :: Types.SignalController<Player | string>
-	ProfileStoreObjectMetatable.SessionLockUnclaimed = Signal.NewController("SessionLockUnclaimed") :: Types.SignalController<Player | string>
+	ProfileStoreObjectMetatable.SessionLockClaimed = Signal.CreateController("SessionLockClaimed") :: Types.SignalController<Player | string>
+	ProfileStoreObjectMetatable.SessionLockUnclaimed = Signal.CreateController("SessionLockUnclaimed") :: Types.SignalController<Player | string>
 
 	ProfileStoreObjectMetatable._ProfileStore = ProfileStore
-	ProfileStoreObjectMetatable._Pattern = playerKeyPattern or "user_%d"
+	ProfileStoreObjectMetatable._Pattern = playerKeyPattern or "%d"
 	ProfileStoreObjectMetatable._Name = name or "Global"
 
 	EasyProfile.LoadedData[ProfileStoreObjectMetatable._Name] = { }
 
-	return ProfileStoreObjectMetatable
+	return table.freeze(ProfileStoreObjectMetatable)
 end
 
 -- ProfileStoreObject
 
 function ProfileStoreObject:DeleteProfileAsync(target: number | string)
 	local CurrentLoadedProfileStore = self._ProfileStore
-	if not CurrentLoadedProfileStore then
-		warn("No profile store loaded, make sure API requests are enabled")
-		return
-	end
-
-	local str: string
+	local ProfileKey: string
 
 	if typeof(target) == "string" then
-		str = target
+		ProfileKey = target
 	elseif typeof(target) == "number" then
-		str = string.format(self._Pattern, target)
+		ProfileKey = string.format(self._Pattern, target)
 	else
-		Debugger.Debug(warn, `Cannot delete profile of type {typeof(target)}`, nil, false)
-		return
+		error(`Cannot delete profile of type {typeof(target)}`)
 	end
 
-	CurrentLoadedProfileStore:WipeProfileAsync(str)
+	CurrentLoadedProfileStore:WipeProfileAsync(ProfileKey)
 end
 
-function ProfileStoreObject:GetProfileAsync(target: number | string): {[string]: any}?
-	local CurrentLoadedProfileStore = self._ProfileStore
-	if not CurrentLoadedProfileStore then
-		warn("No profile store loaded, make sure API requests are enabled")
-		return
-	end
+function ProfileStoreObject:GetProfileAsync(target: number | string): Future.Future<{[string]: any}, () -> ()>
+	return Future.Try(function(profileStore, target)
+		local ProfileKey: string
 
-	local str: string
+		if typeof(target) == "string" then
+			ProfileKey = target
+		elseif typeof(target) == "number" then
+			ProfileKey = string.format(self._Pattern, target)
+		else
+			error(`Cannot get profile of type {typeof(target)}`)
+		end
 
-	if typeof(target) == "string" then
-		str = target
-	elseif typeof(target) == "number" then
-		str = string.format(self._Pattern, target)
-	else
-		Debugger.Debug(warn, `Cannot get profile of type {typeof(target)}`, nil, false)
-		return nil
-	end
+		local ProfileToView = profileStore:ViewProfileAsync(ProfileKey)
 
-	local RequestedData = CurrentLoadedProfileStore:ViewProfileAsync(str).Data
+		if not ProfileToView then
+			error(`Requested data for target {target} does not exist, or was not fetched properly`)
+		end
 
-	if not RequestedData then
-		warn("Requested data for target", target, "does not exist")
-		return nil
-	end
+		local Overwrite
 
-	return RequestedData
+		Overwrite = function()
+			ProfileToView:OverwriteAsync()
+			Overwrite = nil
+		end
+
+		return ProfileToView.Data, Overwrite
+	end, self._ProfileStore, target)
 end
 
-function ProfileStoreObject:LoadProfileAsync(owner: Player | string, reconcileData: boolean?, profileClaimedHandler: (((placeId: number, gameJobId: string) -> (ProfileLoadType)) | ProfileLoadType)?): Future.Future<ProfileObject?>
+function ProfileStoreObject:LoadProfileAsync(owner: Player | string, reconcileData: boolean?, profileClaimedHandler: (((placeId: number, gameJobId: string) -> (ProfileLoadType)) | ProfileLoadType)?): Future.Future<ProfileObject>
 	return Future.Try(function(profileStore, owner, reconcileData, profileClaimedHandler)
 		if not profileStore then
 			error("No profile store loaded, make sure API requests are enabled")
 		end
-	
-		local ProfileObjectMetatable = setmetatable({ }, {__index = ProfileObject})
-	
+
 		if not owner then
-			Debugger.Debug(warn, "Cannot unclaim session lock for a owner that is non-existent")
-			return nil
+			error("Cannot unclaim session lock for a owner that is non-existent")
 		end
 	
-		local str: string
+		local ProfileObjectMetatable = setmetatable({ }, ProfileObject)
+		local ProfileKey: string
 	
 		if typeof(owner) == "string" then
-			str = owner
+			ProfileKey = owner
 		elseif typeof(owner) == "Instance" and owner:IsA("Player") then
-			str = string.format(self._Pattern, owner.UserId)
+			ProfileKey = string.format(self._Pattern, owner.UserId)
 		else
-			Debugger.DebugInvalidData(1, "LoadProfileAsync", "Instance or string", owner, warn)
-			return nil
+			error(`Cannot get profile key of type {typeof(owner)}`)
 		end
 	
-		local LoadedProfile = profileStore:LoadProfileAsync(str, profileClaimedHandler) :: any
-	
-		ProfileObjectMetatable.GlobalKeyAdded = Signal.NewController("GlobalKeyAdded") :: Types.SignalController<GlobalKey>
+		local LoadedProfile = profileStore:LoadProfileAsync(ProfileKey, profileClaimedHandler)
 	
 		if not LoadedProfile then
 			if typeof(owner) == "Instance" and owner:IsA("Player") then
 				owner:Kick(`Data for profile {owner} could not be loaded, other JobId is trying to load this data already`)
 			end
-			warn(`Data for profile {owner} could not be loaded, other JobId is trying to load this data already`)
-			return nil
+
+			error(`Data for profile {owner} could not be loaded, other JobId is trying to load this data already`)
 		end
 	
 		if reconcileData then
@@ -205,7 +200,7 @@ function ProfileStoreObject:LoadProfileAsync(owner: Player | string, reconcileDa
 	
 		LoadedProfile:ListenToRelease(function()
 			EasyProfile.LoadedData[self._Name][owner] = nil
-			self.SessionLockUnclaimed:Fire({owner})
+			self.SessionLockUnclaimed:Fire(owner)
 	
 			setmetatable(ProfileObjectMetatable, nil)
 			table.clear(ProfileObjectMetatable)
@@ -227,45 +222,29 @@ function ProfileStoreObject:LoadProfileAsync(owner: Player | string, reconcileDa
 			ProfileObjectMetatable.GlobalKeyAdded:Fire({{Key = data.Key; Value = data.Value; KeyId = keyId;}})
 			LoadedProfile.GlobalUpdates:ClearLockedUpdate(keyId)
 		end)
-	
-		self.SessionLockClaimed:Fire({owner})
+
+		ProfileObjectMetatable.GlobalKeyAdded = Signal.CreateController("GlobalKeyAdded") :: Types.SignalController<GlobalKey>
 
 		ProfileObjectMetatable.Profile = LoadedProfile
 		EasyProfile.LoadedData[self._Name][owner] = ProfileObjectMetatable
+
+		self.SessionLockClaimed:Fire(owner)
 
 		return table.freeze(ProfileObjectMetatable)
 	end, self._ProfileStore, owner, reconcileData, profileClaimedHandler)
 end
 
 function ProfileStoreObject:UnclaimSessionLock(owner: Player | string, valuesToSave: {[string]: any}?, hopReadyCallback: (() -> ())?)
-	local CurrentLoadedProfileStore = self._ProfileStore
-	if not CurrentLoadedProfileStore then
-		warn("No profile store loaded, make sure API requests are enabled")
-		return
+	if not owner then
+		error("Cannot unclaim session lock for a owner that is non-existent")
 	end
 	
 	local Profile = EasyProfile.LoadedData[self._Name][owner].Profile
 
-	if not Profile then
-		warn("No profile loaded")
-		return
-	end
-
-	if not CurrentLoadedProfileStore then
-		warn("No profile store loaded, make sure API requests are enabled")
-		return
-	end
-
-	if not owner then
-		warn("Cannot unclaim session lock for a owner that is non-existent")
-		return
-	end
-
 	if valuesToSave then
 		for key, value in valuesToSave do
 			if not Profile.Data[key] then
-				Debugger.Debug(warn, `Invalid key: {key} is an instance/primitive type or does not exist.`)
-				continue
+				error(`Invalid key: {key} is an instance/primitive type or does not exist.`)
 			end
 
 			Profile.Data[key] = value
@@ -281,23 +260,18 @@ end
 
 function ProfileStoreObject:SetGlobalKeyAsync(target: number | string, key: string, value: any)
 	local CurrentLoadedProfileStore = self._ProfileStore
-	if not CurrentLoadedProfileStore then
-		warn("No profile store loaded, make sure API requests are enabled")
-		return
-	end
-
-	local str: string
+	local ProfileKey: string
 
 	if typeof(target) == "string" then
-		str = target
+		ProfileKey = target
 	elseif typeof(target) == "number" then
-		str = string.format(self._Pattern, target)
+		ProfileKey = string.format(self._Pattern, target)
 	else
-		Debugger.Debug(warn, `Cannot set global key of type {typeof(target)}`)
+		error(`Cannot set global key of type {typeof(target)}`)
 		return
 	end
 
-	CurrentLoadedProfileStore:GlobalUpdateProfileAsync(str, function(globalUpdates)
+	CurrentLoadedProfileStore:GlobalUpdateProfileAsync(ProfileKey, function(globalUpdates)
 		globalUpdates:AddActiveUpdate({
 			Key = key;
 			Value = value;
@@ -307,23 +281,17 @@ end
 
 function ProfileStoreObject:RemoveGlobalKeyAsync(target: number | string, keyId: number)
 	local CurrentLoadedProfileStore = self._ProfileStore
-	if not CurrentLoadedProfileStore then
-		warn("No profile store loaded, make sure API requests are enabled")
-		return
-	end
-
-	local str: string
+	local ProfileKey: string
 
 	if typeof(target) == "string" then
-		str = target
+		ProfileKey = target
 	elseif typeof(target) == "number" then
-		str = string.format(self._Pattern, target)
+		ProfileKey = string.format(self._Pattern, target)
 	else
-		Debugger.Debug(warn, `Cannot remove global key of type {typeof(target)}`)
-		return
+		error(`Cannot remove global key of type {typeof(target)}`)
 	end
 
-	CurrentLoadedProfileStore:GlobalUpdateProfileAsync(str, function(globalUpdates)
+	CurrentLoadedProfileStore:GlobalUpdateProfileAsync(ProfileKey, function(globalUpdates)
 		globalUpdates:ClearActiveUpdate(keyId)
 	end)
 end
@@ -336,10 +304,6 @@ end
 
 function ProfileObject:GetProfileTags(): {[string]: any}?
 	return self.Profile.MetaData.MetaTags
-end
-
-function ProfileObject:CanSaveData(): boolean
-	return self.Profile:IsActive()
 end
 
 function ProfileObject:CreateProfileLeaderstats(player: Player, statsToAdd: {string}?, isAttributes: boolean?): Folder?
@@ -376,6 +340,8 @@ function ProfileObject:CreateProfileLeaderstats(player: Player, statsToAdd: {str
 			player:SetAttribute(attribute, value)
 		end
 	end
+
+	return nil
 end
 
 function ProfileObject:GetGlobalKeys(): {GlobalKey}?
