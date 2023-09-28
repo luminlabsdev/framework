@@ -28,7 +28,7 @@ local MyNewDataStore = DataService.CreateProfileStore("MyProfileStore", {Tokens 
 -- // Functions
 
 local function PlayerAdded(player)
-    MyNewDataStore:LoadProfileAsync(player):After(function(playerProfile)
+    MyNewDataStore:LoadProfileAsync(player):After(function(success, playerProfile)
 
     end) -- Load the profile, you can also add an optional `reconcile` argument which reconciles the data
 end
@@ -46,7 +46,7 @@ local MyNewDataStore = DataService.CreateProfileStore("MyProfileStore", {Tokens 
 -- // Functions
 
 local function PlayerAdded(player)
-    MyNewDataStore:LoadProfileAsync(player):After(function(playerProfile)
+    MyNewDataStore:LoadProfileAsync(player):After(function(success, playerProfile)
 
     end)
 end
@@ -74,7 +74,11 @@ What we will do first is get the data we can edit from the profile. In order to 
 
 ```lua
 local function PlayerAdded(player)
-    MyNewDataStore:LoadProfileAsync(player):After(function(playerProfile)
+    MyNewDataStore:LoadProfileAsync(player):After(function(success, playerProfile)
+        if not success then
+            return
+        end
+
         local ProfileData = playerProfile:GetProfileData()
 
         print(ProfileData) -- Output: {Tokens = 100, Gold = 5, Items = {"Wooden Sword"}}
@@ -86,7 +90,11 @@ Now that we have verified that our code is indeed working, we can now edit the v
 
 ```lua
 local function PlayerAdded(player)
-    MyNewDataStore:LoadProfileAsync(player):After(function(playerProfile)
+    MyNewDataStore:LoadProfileAsync(player):After(function(success, playerProfile)
+        if not success then
+            return
+        end
+
         local ProfileData = playerProfile:GetProfileData()
 
         print(ProfileData) -- Output: {Tokens = 100, Gold = 5, Items = {"Wooden Sword"}}
@@ -104,7 +112,11 @@ When using EasyProfile, Roblox's player list `leaderstats` are rather easy to se
 
 ```lua
 local function PlayerAdded(player)
-    MyNewDataStore:LoadProfileAsync(player):After(function(playerProfile)
+    MyNewDataStore:LoadProfileAsync(player):After(function(success, playerProfile)
+        if not success then
+            return
+        end
+
         playerProfile:CreateProfileLeaderstats(player, {"Tokens", "Gold"}) -- The leaderstats folder is also returned here, in case you want to mod values
     end)
 end
@@ -128,8 +140,10 @@ local MyNewDataStore = DataService.CreateProfileStore("MyProfileStore", {Tokens 
 -- // Functions
 
 local function PlayerAdded(player)
-    MyNewDataStore:LoadProfileAsync(player):After(function(playerProfile)
-
+    MyNewDataStore:LoadProfileAsync(player):After(function(success, playerProfile)
+        if not success then
+            return
+        end
     end)
 end
 
@@ -148,7 +162,11 @@ First, in our `PlayerAdded` function, lets send a new global key out to ourselve
 
 ```lua
 local function PlayerAdded(player)
-    MyNewDataStore:LoadProfileAsync(player):After(function(playerProfile)
+    MyNewDataStore:LoadProfileAsync(player):After(function(success, playerProfile)
+        if not success then
+            return
+        end
+
         MyNewDataStore:SetGlobalKeyAsync(player.UserId, "GlobalKeyTest", "somerandomstringdata") -- The first argument is the player who is recieving it, and the others are the key name followed by the value
     end)
 end
@@ -158,7 +176,11 @@ To listen when the player recieves a new key in-game, you can use the `ProfileOb
 
 ```lua
 local function PlayerAdded(player)
-    MyNewDataStore:LoadProfileAsync(player):After(function(playerProfile)
+    MyNewDataStore:LoadProfileAsync(player):After(function(success, playerProfile)
+        if not success then
+            return
+        end
+
         playerProfile.GlobalKeyAdded:Connect(function(data)
             print(data[1]) -- Output: {Key = "GlobalKeyTest", Value = {this = "is a test"}, KeyId = 1}
         end)
@@ -172,7 +194,11 @@ Please note that when doing this, you must wait around 60 seconds for the key to
 
 ```lua
 local function PlayerAdded(player)
-    MyNewDataStore:LoadProfileAsync(player):After(function(playerProfile)
+    MyNewDataStore:LoadProfileAsync(player):After(function(success, playerProfile)
+        if not success then
+            return
+        end
+        
         for _, globalKey in playerProfile:GetGlobalKeys() do
            print(globalKey.Key, ":", globalKey.Value) -- Output: {Key = "GlobalKeyTest", Value = "somerandomstringdata", KeyId = 1}
         end

@@ -105,7 +105,7 @@ function ProfileStoreObject:DeleteProfileAsync(target: number | string)
 	CurrentLoadedProfileStore:WipeProfileAsync(ProfileKey)
 end
 
-function ProfileStoreObject:GetProfileAsync(target: number | string): Future.Future<boolean, {[string]: any}, () -> ()>
+function ProfileStoreObject:GetProfileAsync(target: number | string): Future.Future<boolean, {[string]: any}?, () -> ()?>
 	return Future.Try(function(profileStore, target)
 		local ProfileKey = IsProfileKeyValid(target, self._Pattern,
 		"Cannot get profile of type %s",
@@ -128,7 +128,7 @@ function ProfileStoreObject:GetProfileAsync(target: number | string): Future.Fut
 	end, self._ProfileStore, target)
 end
 
-function ProfileStoreObject:LoadProfileAsync(owner: Player | string, reconcileData: boolean?, profileClaimedHandler: (((placeId: number, gameJobId: string) -> (ProfileLoadType)) | ProfileLoadType)?): Future.Future<boolean, typeof(ProfileObject)>
+function ProfileStoreObject:LoadProfileAsync(owner: Player | string, reconcileData: boolean?, profileClaimedHandler: (((placeId: number, gameJobId: string) -> (ProfileLoadType)) | ProfileLoadType)?): Future.Future<boolean, typeof(ProfileObject)?>
 	return Future.Try(function(profileStore, owner, reconcileData, profileClaimedHandler)
 		local ProfileObjectMetatable = setmetatable({ }, ProfileObject)
 		local ProfileKey = IsProfileKeyValid(owner, self._Pattern,
