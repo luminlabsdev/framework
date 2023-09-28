@@ -90,7 +90,7 @@ function VersionController.GetDirectoryFromStructureJSON(json: {any}, parent: In
 
 					if not isPackage then
 						FinishedFiles += 1
-						VersionController.DataUpdated:Fire(FinishedFiles, HttpCache.ExternalSettings.Files, "Updating ", "Updating framework to latest version")
+						VersionController.DataUpdated:Fire(FinishedFiles, HttpCache.ExternalSettings.Files, "Updating ", "Updating framework to latest version", "files")
 					end
 
 					InstanceFromClass[propertyName] = Source
@@ -194,9 +194,17 @@ function VersionController.UpdateFramework()
 			CanaryEngineStructure.Parent = ReplicatedStorage
 		end
 		
-		if CurrentInstance.ReplicatedFirst then
-			CurrentInstance.ReplicatedFirst.Framework:Destroy()
-			EngineLoaderStructure.Parent = CurrentInstance.ReplicatedFirst
+		if CurrentInstance.ReplicatedFirst then	
+			if CurrentInstance.ReplicatedFirst.Framework or CurrentInstance.ReplicatedFirst.Internal then
+				local EngineItem = CurrentInstance.ReplicatedFirst.Framework
+				
+				if not EngineItem then
+					EngineItem = CurrentInstance.ReplicatedFirst.Internal
+				end
+				
+				EngineItem:Destroy()
+				EngineLoaderStructure.Parent = CurrentInstance.ReplicatedFirst
+			end
 		end
 		
 		if not ReplicatedFirst:GetAttribute("EngineLoaderEnabled") then
@@ -209,7 +217,7 @@ function VersionController.UpdateFramework()
 		task.wait(UPDATE_COOLDOWN_SECONDS)
 		UpdateDebounce = false
 		FinishedFiles = 0
-		VersionController.DataUpdated:Fire(FinishedFiles, 1, "nil", "nil")
+		VersionController.DataUpdated:Fire(FinishedFiles, 1, "nil", "nil", "nil")
 	end)
 end
 
@@ -263,11 +271,9 @@ function VersionController.InstallFramework()
 
 		FinishedFiles = 0
 		
-		if not TableKit.IsEmpty(HttpCache.LibrariesList) then
-			for _, value in CanaryStudioSettings.CanaryStudioInstallerPackages do
-				if value then
-					TotalPackageFiles += 1
-				end
+		for _, value in CanaryStudioSettings.CanaryStudioInstallerPackages do
+			if value then
+				TotalPackageFiles += 1
 			end
 		end
 
@@ -283,7 +289,7 @@ function VersionController.InstallFramework()
 			PackageInstallCache:FindFirstChild(libraryName):Clone().Parent = NewInstance[libraryJSON["$parent"] or "Replicated"].Packages
 			
 			FinishedFiles += 1
-			VersionController.DataUpdated:Fire(FinishedFiles, TotalPackageFiles, "Installing ", "Installing latest version of packages")
+			VersionController.DataUpdated:Fire(FinishedFiles, TotalPackageFiles, "Installing ", "Installing latest version of packages", "packages")
 		end
 
 		FinishedFiles = 0
@@ -292,7 +298,7 @@ function VersionController.InstallFramework()
 		WindowController.SetWindow("UpdateStatusWindow", false)
 		WindowController.SetMessageWindow("Framework installed successfully!", Color3.fromRGB(205, 255, 151))
 		
-		VersionController.DataUpdated:Fire(FinishedFiles, 1, "nil", "nil")
+		VersionController.DataUpdated:Fire(FinishedFiles, 1, "nil", "nil", "nil")
 		task.wait(UPDATE_COOLDOWN_SECONDS)
 		UpdateDebounce = false
 	end)

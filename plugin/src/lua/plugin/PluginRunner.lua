@@ -2,7 +2,7 @@
 
 local RunService = game:GetService("RunService")
 
-if not plugin or RunService:IsRunMode() then
+if not plugin or not RunService:IsEdit() then
 	return
 end
 
@@ -23,37 +23,44 @@ local CanaryStudioPluginButton = CanaryStudioPluginToolbar:CreateButton("Canary 
 local PluginFinishedLoading = false
 local IsTesting = false
 
+local OverrideValues = {
+	ReleaseLatest = {
+		published_at = "2007-01-14T20:34:22+00:00",
+		body = "This is a test!",
+		tag_name = "0.0.0",
+		target_commitish = "main"
+	},
+
+	LibrariesList = {
+		Roblox = '"TestPackage": {"$className": "ModuleScript"}',
+		Is = '"TestPackage": {"$className": "ModuleScript"}',
+		Cool = '"TestPackage": {"$className": "ModuleScript"}',
+		["B)"] = '"TestPackage": {"$className": "ModuleScript"}',
+	},
+
+	ExternalSettings = {
+		Files = 14,
+		CanaryStudioChangelog = "We've made some large changes since the last update to the plugin and have fixed lots of bugs!\n\nInstalling has been revamped - The process is now a lot quicker and more performant\nRedesigned Home Page - The home page now has a menu bar and shows this changelog\nInternal code rework - It's now a lot easier to fix issues and add new features"
+	},
+}
+
+local HttpCache = require(Vendor.Core.HttpCache)
 Fetch.SetHttpCacheTable(Vendor.Core.HttpCache)
 
 if IsTesting then
-	local HttpCache = require(Vendor.Core.HttpCache)
-	PluginFinishedLoading = true
-	
 	for cacheName in GitHubRequests do
-		if cacheName == "ReleaseLatest" then
-			HttpCache[cacheName] = {
-				published_at = "2007-01-14T20:34:22+00:00",
-				body = "This is a test!",
-				tag_name = "0.0.0",
-				target_commitish = "main"
-			}
-		elseif cacheName == "LibrariesList" then
-			HttpCache[cacheName] = {
-				Roblox = '"TestPackage": {"$className": "ModuleScript"}',
-				Is = '"TestPackage": {"$className": "ModuleScript"}',
-				Cool = '"TestPackage": {"$className": "ModuleScript"}',
-				["B)"] = '"TestPackage": {"$className": "ModuleScript"}',
-			}
-		elseif cacheName == "ExternalSettings" then
-			HttpCache[cacheName] = {
-				Files = 11,
-				CanaryStudioChangelog = "We've made some large changes since the last update to the plugin and have fixed lots of bugs!\n\nInstalling has been revamped - The process is now a lot quicker and more performant\nRedesigned Home Page - The home page now has a menu bar and shows this changelog\nInternal code rework - It's now a lot easier to fix issues and add new features"
-			}
-		end
+		HttpCache[cacheName] = OverrideValues[cacheName]
 	end
+
+	PluginFinishedLoading = true
 else
 	for cacheName, URL in GitHubRequests do
-		Fetch.FetchAsync(URL, true, 3, cacheName)
+		local Result = Fetch.FetchAsync(URL, true, 3, cacheName)
+
+		if not Result then
+			warn("[CanaryStudio]: Could not fetch valid URL, getting local values. It is recommended to re-enter the place as most vital features will not work offline.")
+			HttpCache[cacheName] = OverrideValues[cacheName]
+		end
 	end
 end
 
@@ -62,30 +69,27 @@ local WindowController = require(Vendor.Core.WindowController)(PluginGui)
 
 CanaryStudioPluginButton.Click:Connect(function()
 	if not PluginFinishedLoading then
-		warn("CanaryStudio has not finished loading yet.")
+		warn("[CanaryStudio]: Canary Studio has not finished loading yet.")
 		return
 	end
 
 	WindowController.SetWindow("HomeWindow")
 end)
 
-if IsTesting then
-	for scriptType, templateTable in CanaryStudioSettings.CanaryStudioInstanceTemplates do
-		for context, templateURL in templateTable do
+for scriptType, templateTable in CanaryStudioSettings.CanaryStudioInstanceTemplates do
+	for context, templateURL in templateTable do
+		if IsTesting then
 			CanaryStudioSettings.CanaryStudioInstanceTemplates[scriptType][context] = "-- this is testing!"
+			continue
 		end
-	end
-else
-	for scriptType, templateTable in CanaryStudioSettings.CanaryStudioInstanceTemplates do
-		for context, templateURL in templateTable do
-			local TemplateContents = Fetch.FetchAsync(templateURL, false)
 
-			if not TemplateContents then
-				CanaryStudioSettings.CanaryStudioInstanceTemplates[scriptType][context] = "-- could not get source"
-			end
+		local TemplateContents = Fetch.FetchAsync(templateURL, false)
 
-			CanaryStudioSettings.CanaryStudioInstanceTemplates[scriptType][context] = TemplateContents
+		if not TemplateContents then
+			CanaryStudioSettings.CanaryStudioInstanceTemplates[scriptType][context] = "-- could not get source"
 		end
+
+		CanaryStudioSettings.CanaryStudioInstanceTemplates[scriptType][context] = TemplateContents
 	end
 end
 

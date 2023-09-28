@@ -24,6 +24,7 @@ if not AlreadyRan then
 		local TotalFiles = Iris.State(1)
 		local TitleMessage = Iris.State("Updating ")
 		local BelowMessage = Iris.State("Updating framework to latest version")
+		local FileType = Iris.State("files")
 		
 		Iris.UpdateGlobalConfig(Iris.TemplateConfig.sizeClear)
 		Iris.UpdateGlobalConfig(Iris.TemplateConfig[`color{StudioSettings.Theme.Name}`])
@@ -136,7 +137,7 @@ if not AlreadyRan then
 			end Iris.End()
 
 			WindowList.ReleaseNotesWindow = Iris.Window(`Release Notes for {HttpCache.ReleaseLatest.tag_name}`, {isOpened = false}) do
-				Iris.Text(HttpCache.ReleaseLatest.body, true)
+				Iris.Text({HttpCache.ReleaseLatest.body, true})
 				Iris.Separator()
 				Iris.Text(`Commit Branch: {HttpCache.ReleaseLatest.target_commitish}`)
 				Iris.Text(`Published At: {FormattedPublishDate}`)
@@ -144,15 +145,17 @@ if not AlreadyRan then
 			
 			WindowList.UpdateStatusWindow = Iris.Window({`{TitleMessage:get()}({math.floor((FinishedFiles:get() / TotalFiles:get()) * 100)}%)`, [Iris.Args.Window.NoClose] = true, [Iris.Args.Window.NoResize] = true}, {isOpened = false, size = Vector2.new(334, 109)}) do
 				Iris.Text(BelowMessage:get())
-				Iris.Text(`{FinishedFiles:get()} of {HttpCache.ExternalSettings.Files} files`)
+				Iris.Text(`{FinishedFiles:get()} of {TotalFiles:get()} files`)
 			end Iris.End()
 			
 			WindowList.PackageManagerWindow = Iris.Window("Canary Studio - Package Manager", {isOpened = false}) do
-				
+				for libraryName in HttpCache.LibrariesList do
+					Settings.CanaryStudioInstallerPackages[libraryName] = Iris.Checkbox(libraryName).state.isChecked:get()
+				end
 			end Iris.End()
 			
 			WindowList.ConfirmWindow = Iris.Window({"Confirm", [Iris.Args.Window.NoClose] = true, [Iris.Args.Window.NoTitleBar] = true}, {isOpened = false, size = Vector2.new(432, 122)}) do
-				Iris.Text(PluginGuiContents.ConfirmWindow.MessageText, true)
+				Iris.Text({PluginGuiContents.ConfirmWindow.MessageText, true})
 				Iris.SameLine() do
 					if Iris.Button("OK").clicked() then
 						PluginGuiContents.ConfirmWindow.ConfirmFunction()
@@ -166,7 +169,7 @@ if not AlreadyRan then
 			end Iris.End()
 
 			WindowList.MessageWindow = Iris.Window({"Message", [Iris.Args.Window.NoClose] = true, [Iris.Args.Window.NoTitleBar] = true}, {isOpened = false, size = Vector2.new(432, 122)}) do
-				Iris.Text(PluginGuiContents.MessageWindow.MessageText, true, PluginGuiContents.MessageWindow.TextColor)
+				Iris.Text({PluginGuiContents.MessageWindow.MessageText, true, PluginGuiContents.MessageWindow.TextColor})
 
 				if Iris.Button("OK").clicked() then
 					WindowController.SetWindow("MessageWindow", false)
@@ -178,11 +181,12 @@ if not AlreadyRan then
 		WindowController = require(Vendor.Core.WindowController)(WindowList)
 		VersionController = require(Vendor.Core.VersionController)
 		
-		VersionController.DataUpdated:Connect(function(files, totalfiles, title, body)
+		VersionController.DataUpdated:Connect(function(files, totalfiles, title, body, filetype)
 			FinishedFiles:set(files)
 			TotalFiles:set(totalfiles)
 			TitleMessage:set(title)
 			BelowMessage:set(body)
+			FileType:set(filetype)
 		end)
 
 		return WindowList
