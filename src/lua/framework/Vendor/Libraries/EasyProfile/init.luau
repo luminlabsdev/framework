@@ -251,7 +251,18 @@ function ProfileObject:CreateProfileLeaderstats(player: Player, statsToAdd: {str
 		local LeaderstatsFolder = Instance.new("Folder")
 
 		for key, value in statsToAdd or Profile.Data do
-			local ValueType = type(value)
+			local keyVar, valueVar = key, value
+
+			if type(key) == "number" then
+				if not Profile.Data[value] then
+					error(`{value} is not a member of the profile data.`)
+				end
+
+				keyVar = value
+				valueVar = Profile.Data[value]
+			end
+
+			local ValueType = type(valueVar)
 
 			if not table.find(ValidLeaderboardTypes, ValueType) then
 				continue
@@ -260,8 +271,8 @@ function ProfileObject:CreateProfileLeaderstats(player: Player, statsToAdd: {str
 			local StatClass = `{ValueType:gsub("^%l", string.upper)}Value`
 			local NewStat = Instance.new(StatClass)
 
-			NewStat.Name = key
-			NewStat.Value = value
+			NewStat.Name = keyVar
+			NewStat.Value = valueVar
 			NewStat.Parent = LeaderstatsFolder
 		end
 
@@ -271,6 +282,17 @@ function ProfileObject:CreateProfileLeaderstats(player: Player, statsToAdd: {str
 		return LeaderstatsFolder
 	else
 		for attribute, value in statsToAdd or Profile.Data do
+			local attributeVar, valueVar = attribute, value
+
+			if type(attribute) == "number" then
+				if not Profile.Data[value] then
+					error(`{value} is not a member of the profile data.`)
+				end
+
+				attributeVar = value
+				valueVar = Profile.Data[value]
+			end
+
 			if not table.find(ValidAttributeTypes, typeof(value)) then
 				continue
 			end
