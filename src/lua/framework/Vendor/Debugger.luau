@@ -80,16 +80,7 @@ function EngineDebugger.Debug(debugHandler: (...any) -> (), arguments: {any} | a
 
 	table.insert(EngineDebugger.CachedDebugCalls, arguments)
 
-	if not respectDebugger then
-		if type(arguments) == "table" then
-			debugHandler(prefix, table.unpack(arguments))
-		else
-			debugHandler(`{prefix} {arguments}`)
-		end
-		return
-	end
-
-	if (RuntimeContext.Studio and RuntimeSettings.StudioDebugEnabled) or RuntimeSettings.LiveGameDebugEnabled then
+	if not respectDebugger or(RuntimeContext.Studio and RuntimeSettings.StudioDebugEnabled) or RuntimeSettings.LiveGameDebugEnabled then
 		if type(arguments) == "table" then
 			debugHandler(prefix, table.unpack(arguments))
 		else
@@ -137,6 +128,7 @@ function EngineDebugger.GetCallStack(instance: LuaSourceContainer, stackName: st
 end
 
 function EngineDebugger.DebugInvalidData(paramNumber: number, funcName: string, expectedType: ExpectedType, param: unknown, debugHander: (...any) -> ())
+	warn("DebugInvalidData is deprecated as of 4.0.0, please Guard instead")
 	local ParamType = typeof(param)
 
 	if ParamType ~= expectedType then
@@ -155,13 +147,13 @@ function EngineDebugger.LogEvent(instance: LuaSourceContainer, eventName: string
 	end
 	
 	if not EngineDebugger.CachedLogs[instance] then
-		EngineDebugger.CachedDebugCalls[instance] = { }
+		EngineDebugger.CachedLogs[instance] = { }
 	end
 
-	table.insert(EngineDebugger.CachedDebugCalls[instance], eventName)
+	table.insert(EngineDebugger.CachedLogs[instance], eventName)
 
 	if printLog then
-		EngineDebugger.Debug(print, eventName, "[Event Log]:")
+		EngineDebugger.Debug(print, eventName, "[Event]:")
 	end
 end
 

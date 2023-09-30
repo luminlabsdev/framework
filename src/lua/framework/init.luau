@@ -62,7 +62,7 @@ function CanaryEngine.GetEngineServer()
 		CanaryEngineServer.Data = require(EngineVendor.Libraries.EasyProfile.Init)
 		return table.freeze(CanaryEngineServer)
 	else
-		Debugger.Debug(error, "Failed to fetch 'EngineServer', context must be server.", nil, false)
+		error("Failed to fetch 'EngineServer', context must be server.")
 		return
 	end
 end
@@ -81,7 +81,7 @@ function CanaryEngine.GetEngineClient()
 
 		return table.freeze(CanaryEngineClient)
 	else
-		Debugger.Debug(error, "Failed to fetch 'EngineClient', context must be client.", nil, false)
+		error("Failed to fetch 'EngineClient', context must be client.")
 		return
 	end
 end
