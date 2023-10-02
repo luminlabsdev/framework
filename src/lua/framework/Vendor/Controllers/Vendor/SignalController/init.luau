@@ -17,6 +17,7 @@ function SignalController.CreateController(name: string)
 	local self = setmetatable({ }, SignalController)
 	
 	self._Signal = Signal()
+	self.Connections = { }
 	self.Name = name
 	
 	return self
@@ -27,18 +28,21 @@ function SignalController:Fire(data: ({any} | any)?)
 end
 
 function SignalController:Connect(func: (data: {any}?) -> ())
-	return self._Signal:Connect(func)
+	local Connection = self._Signal:Connect(func)
+	table.insert(self.Connections, Connection)
+	return Connection
 end
 
 function SignalController:Once(func: (data: {any}?) -> ())
-	local Disconnect
+	local ConnectionToDisconnect
 
-	Disconnect = self._Signal:Connect(function(data)
-		Disconnect()
+ 	ConnectionToDisconnect = self._Signal:Connect(function(data)
+		ConnectionToDisconnect()
 		func(data)
 	end)
-
-	return Disconnect
+	
+	table.insert(self.Connections, ConnectionToDisconnect)
+	return ConnectionToDisconnect
 end
 
 function SignalController:Wait(): {any}?
