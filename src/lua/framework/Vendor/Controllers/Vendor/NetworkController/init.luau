@@ -104,7 +104,7 @@ function NetworkControllerServer:SetRateLimit(maxInvokesPerSecond: number, invok
 	self._Event:RateLimit(maxInvokesPerSecond, invokeOverflowCallback)
 end
 
-function NetworkControllerServer:OnInvoke(callback: (sender: Player, data: {any}?) -> (({any} | any)))
+function NetworkControllerServer:BindToInvocation(callback: (sender: Player, data: {any}?) -> (({any} | any)))
 	self._Event.OnServerInvoke = callback
 end
 

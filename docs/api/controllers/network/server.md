@@ -107,7 +107,7 @@ The function to call when data is recieved
 
 ---
 
-### OnInvoke
+### BindToInvocation
 
 Recieves an invoke from the client, and runs the callback function which returns some data. Equivalent to [RemoteFunction.OnServerInvoke](https://create.roblox.com/docs/reference/engine/classes/RemoteFunction#OnServerInvoke).
 
