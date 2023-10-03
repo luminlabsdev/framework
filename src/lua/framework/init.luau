@@ -118,7 +118,8 @@ end
 -- Context Specific Functions
 
 function CanaryEngineClient.GetPlayerCharacter(): Types.Character
-	return PlayerService.LocalPlayer.Character or PlayerService.LocalPlayer.CharacterAdded:Wait()
+	local Player = PlayerService.LocalPlayer
+	return Player.Character or Player.CharacterAdded:Wait()
 end
 
 CanaryEngineClient.CreateNetworkController = CreateNetworkController :: (controllerName: string) -> (Types.ClientNetworkController<any, any>)
