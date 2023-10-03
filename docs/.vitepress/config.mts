@@ -199,6 +199,7 @@ export default defineConfig({
             },
             
             { text: 'Base64', link: '/api/libraries/base64' },
+            { text: 'Snacky', link: '/api/libraries/snacky' },
             { text: 'MDify', link: '/api/libraries/mdify' },
             { text: 'Sprite', link: '/api/libraries/sprite' },
             { text: 'Statistics', link: '/api/libraries/statistics' }
