@@ -23,11 +23,46 @@ local Future = require(EngineVendor.Libraries.RedbloxUtils.Future)
 local Ratelimit = require(Vendor.Ratelimit)
 local Sanitize = require(Vendor.Parent.Parent.Sanitize)
 
-local RedServerEvent = require(Vendor.Red.ServerEvent)
-local RedClientEvent = require(Vendor.Red.ClientEvent)
-
 local MainRedRemote: RemoteEvent
 local ClientFolder: ScreenGui
+
+if RunService:IsServer() then
+	if ReplicatedStorage:FindFirstChild("RedEvent") then
+		MainRedRemote = ReplicatedStorage:FindFirstChild("RedEvent")
+	else
+		MainRedRemote = Instance.new("RemoteEvent")
+		MainRedRemote.Name = "RedEvent"
+		MainRedRemote.Parent = ReplicatedStorage
+	end
+
+	require(Vendor.Red.ServerEvent).Start()
+
+	local function PlayerAdded(player: Player)
+		local ClientFolderCreate = Instance.new("ScreenGui")
+
+		ClientFolderCreate.Enabled = false
+		ClientFolderCreate.ResetOnSpawn = false
+		ClientFolderCreate.Name = "Red"
+		ClientFolderCreate.Parent = player:WaitForChild("PlayerGui")
+	end
+
+	PlayerService.PlayerAdded:Connect(PlayerAdded)
+
+	for _, player in PlayerService:GetPlayers() do
+		PlayerAdded(player)
+	end
+else
+	local Player = PlayerService.LocalPlayer
+	MainRedRemote = ReplicatedStorage:FindFirstChild("RedEvent")
+	
+	require(Vendor.Red.ClientEvent).Start()
+
+	ClientFolder = Player:WaitForChild("PlayerGui"):WaitForChild("Red")
+	ClientFolder.Parent = nil
+end
+
+local RedServerEvent = require(Vendor.Red.ServerEvent)
+local RedClientEvent = require(Vendor.Red.ClientEvent)
 
 -- // Functions
 
@@ -168,41 +203,6 @@ function NetworkControllerServer:BindToInvocation(callback: (sender: Player, dat
 end
 
 -- // Actions
-
-if RunService:IsServer() then
-	if ReplicatedStorage:FindFirstChild("RedEvent") then
-		MainRedRemote = ReplicatedStorage:FindFirstChild("RedEvent")
-	else
-		MainRedRemote = Instance.new("RemoteEvent")
-		MainRedRemote.Name = "RedEvent"
-		MainRedRemote.Parent = ReplicatedStorage
-	end
-
-	RedServerEvent.Start()
-
-	local function PlayerAdded(player: Player)
-		local ClientFolderCreate = Instance.new("ScreenGui")
-
-		ClientFolderCreate.Enabled = false
-		ClientFolderCreate.ResetOnSpawn = false
-		ClientFolderCreate.Name = "Red"
-		ClientFolderCreate.Parent = player:WaitForChild("PlayerGui")
-	end
-
-	PlayerService.PlayerAdded:Connect(PlayerAdded)
-
-	for _, player in PlayerService:GetPlayers() do
-		PlayerAdded(player)
-	end
-else
-	local Player = PlayerService.LocalPlayer
-	MainRedRemote = ReplicatedStorage:FindFirstChild("RedEvent")
-	
-	RedClientEvent.Start()
-
-	ClientFolder = Player:WaitForChild("PlayerGui"):WaitForChild("Red")
-	ClientFolder.Parent = nil
-end
 
 table.freeze(NetworkControllerServer)
 table.freeze(NetworkControllerClient)
