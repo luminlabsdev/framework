@@ -28,25 +28,37 @@ function SignalController:Fire(data: ({any} | any)?)
 end
 
 function SignalController:Connect(func: (data: {any}?) -> ())
-	local Connection = self._Signal:Connect(func)
+	local Connection = self._Signal:Connect(function(data)
+		if #data == 0 then
+			func(nil)
+		else
+			func(data)
+		end
+	end)
 	table.insert(self.Connections, Connection)
 	return Connection
 end
 
 function SignalController:Once(func: (data: {any}?) -> ())
-	local ConnectionToDisconnect
-
- 	ConnectionToDisconnect = self._Signal:Connect(function(data)
-		ConnectionToDisconnect()
-		func(data)
+	local Connection = self._Signal:Connect(function(data)
+		if #data == 0 then
+			func(nil)
+		else
+			func(data)
+		end
 	end)
-	
-	table.insert(self.Connections, ConnectionToDisconnect)
-	return ConnectionToDisconnect
+	table.insert(self.Connections, Connection)
+	return Connection
 end
 
 function SignalController:Wait(): {any}?
-	return self._Signal:Wait()
+	local Result = self._Signal:Wait()
+
+	if #Result == 0 then
+		return nil
+	else
+		return Result
+	end
 end
 
 function SignalController:DisconnectAll()

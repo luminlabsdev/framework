@@ -102,7 +102,22 @@ function NetworkControllerClient:Listen(func: (data: {any}?) -> ())
 	assert(not self.IsListening, "Controller is already subscribed to an event")
 	self.IsListening = true
 
-	RedClientEvent.Listen(self._EventName, func)
+	RedClientEvent.Listen(self._EventName, function(...)
+		local ValidData = ValidateTuple(...)
+
+		if not ValidData then
+			return
+		end
+
+		local SanitizedData = Sanitize(...)
+
+		if #SanitizedData == 0 then
+			func(nil)
+			return
+		end
+
+		func(SanitizedData)
+	end)
 end
 
 function NetworkControllerClient:InvokeAsync(data: ({any} | any)?): Future.Future<any>
@@ -175,7 +190,14 @@ function NetworkControllerServer:Listen(func: (sender: Player, data: {any}?) -> 
 			return
 		end
 
-		func(player, ...)
+		local SanitizedData = Sanitize(...)
+
+		if #SanitizedData == 0 then
+			func(player, nil)
+			return
+		end
+
+		func(player, SanitizedData)
 	end)
 end
 
