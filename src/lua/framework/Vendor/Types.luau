@@ -38,12 +38,13 @@ export type ClientNetworkController<T, U> = {
 
 export type ServerNetworkController<T, U> = {
 	Listen: (self: ServerNetworkController<T, U>, func: (sender: Player, data: (Array<T> | unknown)?) -> ()) -> (),
-	OnInvoke: (self: ServerNetworkController<T, U>, callback: (sender: Player, data: (Array<T> | unknown)?) -> (Array<U> | U)) -> (),
+	BindToInvocation: (self: ServerNetworkController<T, U>, callback: (sender: Player, data: (Array<T> | unknown)?) -> (Array<U> | U)) -> (),
 	
 	Fire: (self: ServerNetworkController<T, U>, recipient: Player | Array<Player>, data: (Array<T> | T)?) -> (),
 	FireAll: (self: ServerNetworkController<T, U>, data: (Array<T> | T)?) -> (),
 	FireExcept: (self: ServerNetworkController<T, U>, except: Player | Array<Player>, data: (Array<T> | T)?) -> (),
 	FireInRange: (self: ServerNetworkController<T, U>, comparePoint: Vector3, maximumRange: number, data: (Array<T> | T)?) -> (),
+	FireFilter: (self: ServerNetworkController<T, U>, data: (Array<T> | T)?, filter: (Player) -> (boolean)) -> (),
 
 	SetRateLimit: (self: ServerNetworkController<T, U>, maxInvokesPerSecond: number, invokeOverflowCallback: (sender: Player) -> ()) -> (),
 	Name: string,

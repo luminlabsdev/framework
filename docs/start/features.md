@@ -16,9 +16,12 @@ The API is aimed to be completely separate the server and the client, which allo
 The entire framework is documented, along with tutorials on each subject.
 
 * **Optimized** 🏃‍♀️
-Extremely optimized, with most internal functions running fast along with custom signal and network implementations.
+Extremely optimized, with most internal functions running fast along with the custom signal and network implementations.
 
 * **Secure** 🔐
 The networking system that CanaryEngine uses can actually partially prevent exploits like RemoteSpy from being easily useable.
+
+* **Ordered** 🔄
+You can import modules from a main script, which will then execute in order. Can prevent issues like race conditions which come up a lot in multi-threaded architectures.
 
 ... and much more!

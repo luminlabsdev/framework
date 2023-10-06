@@ -86,6 +86,20 @@ function CanaryEngine.GetEngineClient()
 	end
 end
 
+function CanaryEngine.ImportPackagesInOrder(importList: {ModuleScript}, importDeep: boolean?)
+	for _, package in importList do
+		require(package)
+		
+		if importDeep then
+			for _, deepPackage in package:GetDescendants() do
+				if deepPackage:IsA("ModuleScript") then
+					require(deepPackage)
+				end
+			end
+		end
+	end
+end
+
 -- Exclusive API for replicated will come soon
 function CanaryEngine.GetEngineReplicated()
 	if table.isfrozen(CanaryEngineReplicated) then

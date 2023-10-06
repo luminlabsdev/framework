@@ -18,8 +18,10 @@ keywords: [roblox, game, framework, install, tutorial, github, node]
 3. Open Roblox Studio, and drag `CanaryStudioPlugin.rbxm` from your download directory into studio.
 4. Right click the plugin, and choose `Save as Local Plugin`
 
-### NPM (rbxts)
+### Rojo
 
-1. Open the command line of your choice, set the directory to the project folder that you wish.
-2. Install Node if you haven't already, you can find that [here](https://nodejs.org/en/download)
-3. After installing Node, enter the following in your command line: `npm i @rbxts/canaryengine`
+Rojo support is being looked into!
+
+### TypeScript
+
+We're currently working on definition files; we will not be publishing a package on roblox-ts.

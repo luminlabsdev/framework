@@ -10,6 +10,22 @@ The name of the the network controller.
 
 * **string**
 
+---
+
+### IsListening <Badge type="tip" text="read only" />
+
+Whether or not the network controller is subscribed to an event.
+
+* **boolean**
+
+---
+
+### IsBinded <Badge type="tip" text="read only" />
+
+Whether or not the network controller is binded to any invocations.
+
+* **boolean**
+
 ## Methods
 
 ### Fire
@@ -92,6 +108,24 @@ The data that should be sent to each player within `maximumRange`
 
 ---
 
+### FireFilter
+
+Fires an event with a filter function, and runs the provided filter on every player in the server.
+
+**Parameters**
+
+* **filter:** `(Player) -> (boolean)`\
+The filter to run on each player, return a boolean to indicate that the player meets the threshold
+
+* **data:** `(Array<any> | any)?`\
+The data that should be sent to each player that meets the threshold for `filter`
+
+**Returns**
+
+* **void**
+
+---
+
 ### Listen
 
 Listens for the network controller to be fired by the client, then runs the provided function.
@@ -128,8 +162,11 @@ Sets a rate limit that is applied when invoking or firing a network controller f
 
 **Parameters**
 
-* **maxInvokesPerSecond:** `number`\
-The maximum amount of invokes allowed per second, set to -1 to disable the rate limit
+* **maxCalls:** `number`\
+The maximum amount of invokes allowed every `interval` seconds; set to -1 to disable the rate limit
+
+* **interval:** `number?`\
+The interval of which `maxCalls` is reset
 
 * **invokeOverflowCallback:** `((sender: Player) -> ())?`\
 The callback function to run when the player has exceeded the current rate limit

@@ -23,7 +23,7 @@ Now lets continue this code and make it so it can recieve info from the server:
 ```lua
 local SendInfoNetwork = CanaryEngineClient.CreateNetworkController("SendInfoNetwork")
 
-SendInfoNetwork:Connect(function(data)
+SendInfoNetwork:Listen(function(data)
     print(data)
 end)
 ```
@@ -71,7 +71,7 @@ The [RemoteFunction](https://create.roblox.com/docs/reference/engine/classes/Rem
 ```lua
 local ValueGetNetwork = CanaryEngineServer.CreateNetworkController("ValueGetNetwork")
 
-ValueGetNetwork:OnInvoke(function(sender, data)
+ValueGetNetwork:BindToInvocation(function(sender, data)
     print(sender.Name) -- The player who sent the invoke's name
     if data[1] then
         return "yes" -- We must return a value here, or it will error

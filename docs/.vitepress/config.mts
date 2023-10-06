@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  head: [['link', { rel: 'icon', href: 'static/images/logo.png' }]],
+  head: [['link', { rel: 'icon', href: 'static/images/logo' }]],
   base: "/CanaryEngine/",
   title: "CanaryEngine",
   titleTemplate: "Canary Docs",
@@ -15,7 +15,7 @@ export default defineConfig({
         text: 'Guides',
         items: [
           { text: 'Get Started', link: '/start/intro'},
-          { text: 'Usage', link: '/tutorial/update' },
+          { text: 'Usage', link: '/tutorial/packages' },
           { text: 'Libraries', link: '/tutorial/libraries/benchmark' }
         ]
       },
@@ -67,7 +67,6 @@ export default defineConfig({
         {
           text: 'Management',
           items: [
-            { text: 'Update', link: '/tutorial/update' },
             { text: 'Packages', link: '/tutorial/packages' },
             { text: 'Structure', link: '/tutorial/structure' },
             { text: 'Style Guide', link: '/tutorial/styleguide' },

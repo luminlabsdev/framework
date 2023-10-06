@@ -10,6 +10,14 @@ The name of the the network controller.
 
 * **string**
 
+---
+
+### IsListening <Badge type="tip" text="read only" />
+
+Whether or not the network controller is subscribed to an event.
+
+* **boolean**
+
 ## Methods
 
 ### Fire
@@ -52,7 +60,7 @@ The data to invoke the server with
 
 ### Listen
 
-Listens for the network controller to be fired by the server, then runs the provided function.
+Listens for the network controller to be fired by the server, then runs the provided function. Note that this can only be run once, it will error if run more than once.
 
 **Parameters**
 
