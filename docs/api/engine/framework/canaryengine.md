@@ -58,6 +58,24 @@ Gets the global-sided interface of CanaryEngine. Recommended that use this only 
 
 ---
 
+### ImportPackagesInOrder
+
+Imports the provided packages in chronological order, also allowing for you to import descendants aswell.
+
+**Parameters**
+
+* **importList:** `{ModuleScript}`\
+A list of packages to import\
+
+* **importDeep:** `boolean?`\
+Whether or not to import the package's descendants, defaults to `false`.
+
+**Returns**
+
+* void
+
+---
+
 ### CreateSignal
 
 Creates a new signal that is then given a reference in the signals table. Create a new anonymous signal by leaving the name blank.
