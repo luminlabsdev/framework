@@ -97,13 +97,13 @@
                 "Signal": {
                     "$className": "ModuleScript",
                     "$properties": {
-                        "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/lua/libraries/signal/init.luau"
+                        "Source": "https://raw.githubusercontent.com/red-blox/Util/406727b68d204058ed385f0055a5508dfdd71733/libs/Signal/Signal.luau"
                     }
                 },
                 "Spawn": {
                     "$className": "ModuleScript",
                     "$properties": {
-                        "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/master/src/lua/libraries/signal/Spawn.luau"
+                        "Source": "https://raw.githubusercontent.com/red-blox/Util/fd238ef1d4771a7aaa83b2f0650527f01337ce24/libs/Spawn/Spawn.luau"
                     }
                 },
                 "Statistics": {

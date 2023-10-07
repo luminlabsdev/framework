@@ -1,3 +1,8 @@
+--[[
+	  by PLAYER_USERNAME
+	  CREATE_DATE @ CREATE_TIME
+--]]
+
 -- // Script
 
 local CanaryEngine = require(game.ReplicatedStorage.Framework.Init)
