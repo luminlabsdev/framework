@@ -14,9 +14,8 @@ local EngineVendor = script.Parent.Vendor
 local EngineLibraries = EngineVendor.Libraries
 
 local Types = require(EngineVendor.Types) -- The types used for all libraries inside of the framework
-local Controllers = require(EngineVendor.Controllers.Init)
-local Network = Controllers.NetworkController -- Networking logic
-local Signal = Controllers.SignalController -- Signal logic
+local Network = require(EngineVendor.Network.Init) -- Networking logic
+local Signal = require(EngineLibraries.RedbloxUtils.Signal) -- Signal logic
 
 local Future = require(EngineLibraries.RedbloxUtils.Future) -- Promise logic
 local Debugger = require(EngineVendor.Debugger) -- Easy debug logic
@@ -42,8 +41,10 @@ local RuntimeObjects = CanaryEngine.Runtime.RuntimeObjects
 -- // Functions
 
 local function CreateNetworkController(controllerName: string): Types.ClientNetworkController<any, any> | Types.ServerNetworkController<any, any>
+	Debugger.LogEvent(script, "Create NetworkController", false, true)
+
 	if not RuntimeObjects.NetworkControllers[controllerName] then
-		local NewNetworkController = Network.CreateController(controllerName)
+		local NewNetworkController = Network(controllerName)
 
 		RuntimeObjects.NetworkControllers[controllerName] = NewNetworkController
 	end
@@ -112,12 +113,14 @@ end
 -- Signal Creation
 
 function CanaryEngine.CreateSignal(signalName: string?): Types.SignalController<any>
+	Debugger.LogEvent(script, "Create SignalController", false, true)
+
 	if not signalName then
-		return Signal.CreateController("Anonymous")
+		return Signal()
 	end
 
 	if not RuntimeObjects.SignalControllers[signalName] then
-		local NewSignal = Signal.CreateController(signalName)
+		local NewSignal = Signal()
 
 		RuntimeObjects.SignalControllers[signalName] = NewSignal
 	end
@@ -140,5 +143,7 @@ CanaryEngineClient.CreateNetworkController = CreateNetworkController :: (control
 CanaryEngineServer.CreateNetworkController = CreateNetworkController :: (controllerName: string) -> (Types.ServerNetworkController<any, any>)
 
 -- // Actions
+
+Debugger.LogEvent(script, "Framework loaded", true, true)
 
 return table.freeze(CanaryEngine)

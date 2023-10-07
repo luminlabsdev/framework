@@ -18,7 +18,7 @@ local HttpService = game:GetService("HttpService")
 
 local ProfileService = require(Vendor.ProfileService)
 local Types = require(EngineVendor.Types)
-local Signal = require(EngineVendor.Controllers.Init).SignalController
+local Signal = require(EngineLibraries.RedbloxUtils.Signal)
 local Future = require(EngineLibraries.RedbloxUtils.Future)
 
 local ValidLeaderboardTypes = {
@@ -82,8 +82,8 @@ function EasyProfile.CreateProfileStore(name: string?, defaultProfileData: {[str
 	local ProfileStoreObjectMetatable = setmetatable({ }, ProfileStoreObject)
 	local ProfileStore = ProfileService.GetProfileStore(name or "Global", defaultProfileData)
 
-	ProfileStoreObjectMetatable.SessionLockClaimed = Signal.CreateController("SessionLockClaimed") :: Types.SignalController<Player | string>
-	ProfileStoreObjectMetatable.SessionLockUnclaimed = Signal.CreateController("SessionLockUnclaimed") :: Types.SignalController<Player | string>
+	ProfileStoreObjectMetatable.SessionLockClaimed = Signal() :: Types.SignalController<Player | string>
+	ProfileStoreObjectMetatable.SessionLockUnclaimed = Signal() :: Types.SignalController<Player | string>
 
 	ProfileStoreObjectMetatable._ProfileStore = ProfileStore
 	ProfileStoreObjectMetatable._Pattern = playerKeyPattern or "%d"
@@ -175,7 +175,7 @@ function ProfileStoreObject:LoadProfileAsync(owner: Player | string, reconcileDa
 			LoadedProfile.GlobalUpdates:ClearLockedUpdate(keyId)
 		end)
 
-		ProfileObjectMetatable.GlobalKeyAdded = Signal.CreateController("GlobalKeyAdded") :: Types.SignalController<GlobalKey>
+		ProfileObjectMetatable.GlobalKeyAdded = Signal() :: Types.SignalController<GlobalKey>
 		ProfileObjectMetatable.Profile = LoadedProfile
 
 		EasyProfile.LoadedData[self._Name][owner] = ProfileObjectMetatable

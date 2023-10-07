@@ -4,14 +4,6 @@ A server-sided network controller, based on [this](/api/engine/types#networkcont
 
 ## Properties
 
-### Name <Badge type="tip" text="read only" />
-
-The name of the the network controller.
-
-* **string**
-
----
-
 ### IsListening <Badge type="tip" text="read only" />
 
 Whether or not the network controller is subscribed to an event.
@@ -36,16 +28,16 @@ Fires an event which sends data to the client, equivalent to [RemoteEvent:FireCl
 If you need to fire the event to multiple players instead of one, you can use a table of players.
 
 ```lua
-NetworkController:Fire({Player1, Player2, Player3}, {1, 2, 3})
+NetworkController:Fire({Player1, Player2, Player3}, 1, 2, 3)
 ```
 :::
 
 **Parameters**
 
-* **recipients:** `{ Player } | Player`\
+* **recipients:** `Array<Player> | Player`\
 The players who should recieve the data and/or call
 
-* **data:** `(Array<any> | any)?`\
+* **data:** `...any`\
 The data that should be sent to the client
 
 **Returns**
@@ -60,7 +52,7 @@ Fires an event which sends data to every client connected to the server, equival
 
 **Parameters**
 
-* **data:** `(Array<any> | any)?`\
+* **data:** `...any`\
 The data that should be sent to each player
 
 **Returns**
@@ -78,7 +70,7 @@ Fires an event which sends data to every client connected to the server, except 
 * **except:** `Array<Player> | Player`\
 The players which the call should not be sent to
 
-* **data:** `(Array<any> | any)?`\
+* **data:** `...any`\
 The data that should be sent to each player except `except`
 
 **Returns**
@@ -99,7 +91,7 @@ The point to compare from, can be a standalone `Vector3`
 * **maximumRange:** `number`\
 The maximum range of which the player's characters have to be within to recieve the event
 
-* **data:** `(Array<any> | any)?`\
+* **data:** `...any`\
 The data that should be sent to each player within `maximumRange`
 
 **Returns**
@@ -117,7 +109,7 @@ Fires an event with a filter function, and runs the provided filter on every pla
 * **filter:** `(Player) -> (boolean)`\
 The filter to run on each player, return a boolean to indicate that the player meets the threshold
 
-* **data:** `(Array<any> | any)?`\
+* **data:** `...any`\
 The data that should be sent to each player that meets the threshold for `filter`
 
 **Returns**
@@ -132,7 +124,7 @@ Listens for the network controller to be fired by the client, then runs the prov
 
 **Parameters**
 
-* **func:** `(sender: Player, data: Array<any>?) -> ()`\
+* **func:** `(sender: Player, data: ...: unknown) -> ()`\
 The function to call when data is recieved
 
 **Returns**
@@ -147,7 +139,7 @@ Recieves an invoke from the client, and runs the callback function which returns
 
 **Parameters**
 
-* **callback:** `(sender: Player, data: Array<any>?) -> (Array<any> | any)`\
+* **callback:** `(sender: Player, ...: unknown) -> (...any)`\
 The callback function to run on invoke, must return at least 1 value.
 
 **Returns**

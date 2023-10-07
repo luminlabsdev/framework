@@ -45,6 +45,7 @@ end
 EngineDebugger.CachedStackTraces = dictionaryLen({ })
 EngineDebugger.CachedDebugCalls = { }
 EngineDebugger.CachedLogs = { }
+EngineDebugger.InternalCachedLogs = { }
 
 local function GetAncestorsUntilParentFolder(instance: Instance): {string | {Instance}}
 	local Ancestors = { }
@@ -141,7 +142,7 @@ function EngineDebugger.DebugInvalidData(paramNumber: number, funcName: string, 
 	end
 end
 
-function EngineDebugger.LogEvent(instance: LuaSourceContainer, eventName: string, printLog: boolean?)
+function EngineDebugger.LogEvent(instance: LuaSourceContainer, eventName: string, printLog: boolean?, isInternal: boolean?)
 	if printLog == nil then
 		printLog = true
 	end
@@ -150,7 +151,11 @@ function EngineDebugger.LogEvent(instance: LuaSourceContainer, eventName: string
 		EngineDebugger.CachedLogs[instance] = { }
 	end
 
-	table.insert(EngineDebugger.CachedLogs[instance], eventName)
+	if isInternal then
+		table.insert(EngineDebugger.CachedInternalLogs[instance], eventName)
+	else
+		table.insert(EngineDebugger.CachedLogs[instance], eventName)
+	end
 
 	if printLog then
 		EngineDebugger.Debug(print, eventName, "[Event]:")

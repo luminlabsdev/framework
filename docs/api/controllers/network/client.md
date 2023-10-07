@@ -4,14 +4,6 @@ A client-sided network controller, based on [this](/api/engine/types#networkcont
 
 ## Properties
 
-### Name <Badge type="tip" text="read only" />
-
-The name of the the network controller.
-
-* **string**
-
----
-
 ### IsListening <Badge type="tip" text="read only" />
 
 Whether or not the network controller is subscribed to an event.
@@ -34,7 +26,7 @@ NetworkController:Fire("Hello, world!")
 
 **Parameters**
 
-* **data:** `Array<any> | any`\
+* **data:** `...any`\
 The data that should be sent to the server
 
 **Returns**
@@ -49,7 +41,7 @@ Invokes the server, equivalent to [RemoteFunction:InvokeServer](https://create.r
 
 **Parameters**
 
-* **data:** `Array<any> | any`\
+* **data:** `...any`\
 The data to invoke the server with
 
 **Returns**
@@ -64,7 +56,7 @@ Listens for the network controller to be fired by the server, then runs the prov
 
 **Parameters**
 
-* **func:** `(data: Array<any>) -> ()`\
+* **func:** `(...: any) -> ()`\
 The function to call when data is recieved
 
 **Returns**

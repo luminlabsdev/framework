@@ -12,42 +12,37 @@ export type Array<T> = {[number]: T}
 
 type ControllerConnection = () -> ()
 
-export type SignalController<T> = {
-	DisconnectAll: (self: SignalController<T>) -> (),
-	Fire: (self: PublicSignalController<T>, data: (Array<T> | T)?) -> (),
-} & PublicSignalController<T>
+export type SignalController<T...> = {
+	DisconnectAll: (self: SignalController<T...>) -> (),
+	Fire: (self: PublicSignalController<T...>, T...) -> (),
+} & PublicSignalController<T...>
 
-export type PublicSignalController<T> = {
-	Connect: (self: PublicSignalController<T>, func: (data: Array<T>) -> ()) -> (ControllerConnection),
-	Wait: (self: PublicSignalController<T>) -> (Array<T>),
-	Once: (self: PublicSignalController<T>, func: (data: Array<T>) -> ()) -> (ControllerConnection),
-
-	Name: string,
+export type PublicSignalController<T...> = {
+	Connect: (self: PublicSignalController<T...>, func: (T...) -> ()) -> (ControllerConnection),
+	Wait: (self: PublicSignalController<T...>) -> (T...),
+	Once: (self: PublicSignalController<T...>, func: (T...) -> ()) -> (ControllerConnection),
 }
 
 -- Network Controllers
 
-export type ClientNetworkController<T, U> = {
-	Listen: (self: ClientNetworkController<T, U>, func: (data: Array<T>?) -> ()) -> (),
+export type ClientNetworkController<T...> = {
+	Listen: (self: ClientNetworkController<T...>, func: (T...) -> ()) -> (),
 
-	Fire: (self: ClientNetworkController<T, U>, data: (Array<T> | T)?) -> (),
-	InvokeAsync: (self: ClientNetworkController<T, U>, data: (Array<T> | T)?) -> (Future.Future<{U}>),
-
-	Name: string,
+	Fire: (self: ClientNetworkController<T...>, T...) -> (),
+	InvokeAsync: (self: ClientNetworkController<T...>, T...) -> (Future.Future<...any>),
 }
 
-export type ServerNetworkController<T, U> = {
-	Listen: (self: ServerNetworkController<T, U>, func: (sender: Player, data: (Array<T> | unknown)?) -> ()) -> (),
-	BindToInvocation: (self: ServerNetworkController<T, U>, callback: (sender: Player, data: (Array<T> | unknown)?) -> (Array<U> | U)) -> (),
-	
-	Fire: (self: ServerNetworkController<T, U>, recipient: Player | Array<Player>, data: (Array<T> | T)?) -> (),
-	FireAll: (self: ServerNetworkController<T, U>, data: (Array<T> | T)?) -> (),
-	FireExcept: (self: ServerNetworkController<T, U>, except: Player | Array<Player>, data: (Array<T> | T)?) -> (),
-	FireInRange: (self: ServerNetworkController<T, U>, comparePoint: Vector3, maximumRange: number, data: (Array<T> | T)?) -> (),
-	FireFilter: (self: ServerNetworkController<T, U>, data: (Array<T> | T)?, filter: (Player) -> (boolean)) -> (),
+export type ServerNetworkController<T...> = {
+	Listen: (self: ServerNetworkController<T...>, func: (sender: Player, ...unknown) -> ()) -> (),
+	BindToInvocation: (self: ServerNetworkController<T...>, callback: (sender: Player, ...unknown) -> (...any)) -> (),
 
-	SetRateLimit: (self: ServerNetworkController<T, U>, maxInvokesPerSecond: number, invokeOverflowCallback: (sender: Player) -> ()) -> (),
-	Name: string,
+	Fire: (self: ServerNetworkController<T...>, recipient: Player | Array<Player>, T...) -> (),
+	FireAll: (self: ServerNetworkController<T...>, T...) -> (),
+	FireExcept: (self: ServerNetworkController<T...>, except: Player | Array<Player>, T...) -> (),
+	FireInRange: (self: ServerNetworkController<T...>, comparePoint: Vector3, maximumRange: number, T...) -> (),
+	FireFilter: (self: ServerNetworkController<T...>, filter: (Player) -> (boolean), T...) -> (),
+
+	SetRateLimit: (self: ServerNetworkController<T...>, maxInvokesPerSecond: number, invokeOverflowCallback: (sender: Player) -> ()) -> (),
 }
 
 -- Misc. Types

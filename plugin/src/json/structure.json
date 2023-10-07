@@ -1,22 +1,22 @@
 {
     "EngineClient": {
-        "Packages": { },
+        "Packages": {},
         "Media": {
-            "Models": { },
-            "Effects": { },
-            "Animations": { },
-            "Sounds": { },
-            "Interfaces": { }
+            "Models": {},
+            "Effects": {},
+            "Animations": {},
+            "Sounds": {},
+            "Interfaces": {}
         },
-        "Scripts": { }
+        "Scripts": {}
     },
     "EngineReplicated": {
-        "Packages": { },
+        "Packages": {},
         "Media": {
-            "Sounds": { },
-            "Models": { },
-            "Animations": { },
-            "Effects": { }
+            "Sounds": {},
+            "Models": {},
+            "Animations": {},
+            "Effects": {}
         }
     },
     "EngineReplicatedFirst": {
@@ -31,88 +31,57 @@
                 "Vendor": "EngineLoaderAssets"
             }
         },
-        "Scripts": { }
+        "Scripts": {}
     },
     "EngineServer": {
-        "Packages": { },
+        "Packages": {},
         "Media": {
-            "Models": { },
-            "Tools": { },
-            "Effects": { },
-            "Animations": { }
+            "Models": {},
+            "Tools": {},
+            "Effects": {},
+            "Animations": {}
         },
-        "Scripts": { }
+        "Scripts": {}
     },
     "Framework": {
         "Vendor": {
-            "Controllers": {
+            "Network": {
                 "Vendor": {
-                    "Sanitize": {
+                    "Guard": {
                         "$className": "ModuleScript",
                         "$properties": {
-                            "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Controllers/Vendor/Sanitize.luau"
+                            "Source": "https://raw.githubusercontent.com/red-blox/Util/1f9216713d15579bdf1744235448fbac702aa54c/libs/Guard/Guard.luau"
                         }
                     },
-                    "NetworkController": {
-                        "Events": { },
-                        "Vendor": {
-                            "Ratelimit": {
-                                "$className": "ModuleScript",
-                                "$properties": {
-                                    "Source": "https://raw.githubusercontent.com/red-blox/Util/62037a647038af2b92129435957bace986452ff1/libs/Ratelimit/Ratelimit.luau"
-                                }
-                            },
-                            "Guard": {
-                                "$className": "ModuleScript",
-                                "$properties": {
-                                    "Source": "https://raw.githubusercontent.com/red-blox/Util/1f9216713d15579bdf1744235448fbac702aa54c/libs/Guard/Guard.luau"
-                                }
-                            },
-                            "Future": {
-                                "$className": "ModuleScript",
-                                "$properties": {
-                                    "Source": "https://raw.githubusercontent.com/red-blox/Util/76281011d28f083d2d659ef4c1b567270192aeb3/libs/Future/Future.luau"
-                                }
-                            },
-                            "Spawn": {
-                                "$className": "ModuleScript",
-                                "$properties": {
-                                    "Source": "https://raw.githubusercontent.com/red-blox/Util/fd238ef1d4771a7aaa83b2f0650527f01337ce24/libs/Spawn/Spawn.luau"
-                                }
-                            },
-                            "Red": {
-                                "ClientEvent": {
-                                    "$className": "ModuleScript",
-                                    "$properties": {
-                                        "Source": "https://raw.githubusercontent.com/red-blox/Red/ffd21a7a776873751c24e7e1ed4cf517564cd5f7/lib/ClientEvent.luau"
-                                    }
-                                },
-                                "ServerEvent": {
-                                    "$className": "ModuleScript",
-                                    "$properties": {
-                                        "Source": "https://raw.githubusercontent.com/red-blox/Red/ffd21a7a776873751c24e7e1ed4cf517564cd5f7/lib/ServerEvent.luau"
-                                    }
-                                },
-                                "Identifier": {
-                                    "$className": "ModuleScript",
-                                    "$properties": {
-                                        "Source": "https://raw.githubusercontent.com/red-blox/Red/ffd21a7a776873751c24e7e1ed4cf517564cd5f7/lib/Identifier.luau"
-                                    }
-                                }
+                    "Future": {
+                        "$className": "ModuleScript",
+                        "$properties": {
+                            "Source": "https://raw.githubusercontent.com/red-blox/Util/76281011d28f083d2d659ef4c1b567270192aeb3/libs/Future/Future.luau"
+                        }
+                    },
+                    "Spawn": {
+                        "$className": "ModuleScript",
+                        "$properties": {
+                            "Source": "https://raw.githubusercontent.com/red-blox/Util/fd238ef1d4771a7aaa83b2f0650527f01337ce24/libs/Spawn/Spawn.luau"
+                        }
+                    },
+                    "Red": {
+                        "ClientEvent": {
+                            "$className": "ModuleScript",
+                            "$properties": {
+                                "Source": "https://raw.githubusercontent.com/red-blox/Red/ffd21a7a776873751c24e7e1ed4cf517564cd5f7/lib/ClientEvent.luau"
                             }
                         },
-                        "Init": {
+                        "ServerEvent": {
                             "$className": "ModuleScript",
                             "$properties": {
-                                "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Controllers/Vendor/NetworkController/init.luau"
+                                "Source": "https://raw.githubusercontent.com/red-blox/Red/ffd21a7a776873751c24e7e1ed4cf517564cd5f7/lib/ServerEvent.luau"
                             }
-                        }
-                    },
-                    "SignalController": {
-                        "Init": {
+                        },
+                        "Identifier": {
                             "$className": "ModuleScript",
                             "$properties": {
-                                "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Controllers/Vendor/SignalController/init.luau"
+                                "Source": "https://raw.githubusercontent.com/red-blox/Red/ffd21a7a776873751c24e7e1ed4cf517564cd5f7/lib/Identifier.luau"
                             }
                         }
                     }
@@ -120,7 +89,7 @@
                 "Init": {
                     "$className": "ModuleScript",
                     "$properties": {
-                        "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Controllers/init.luau"
+                        "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Network/init.luau"
                     }
                 }
             },
@@ -140,7 +109,7 @@
                             }
                         }
                     }
-                }, 
+                },
                 "RedbloxUtils": {
                     "Future": {
                         "$className": "ModuleScript",
@@ -158,6 +127,12 @@
                         "$className": "ModuleScript",
                         "$properties": {
                             "Source": "https://raw.githubusercontent.com/red-blox/Util/fd238ef1d4771a7aaa83b2f0650527f01337ce24/libs/Spawn/Spawn.luau"
+                        }
+                    },
+                    "Ratelimit": {
+                        "$className": "ModuleScript",
+                        "$properties": {
+                            "Source": "https://raw.githubusercontent.com/red-blox/Util/62037a647038af2b92129435957bace986452ff1/libs/Ratelimit/Ratelimit.luau"
                         }
                     }
                 }

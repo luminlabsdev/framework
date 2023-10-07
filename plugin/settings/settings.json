@@ -1,5 +1,5 @@
 {
-    "Files": 21,
+    "Files": 18,
     "FrameworkName": ["Framework", "CanaryEngineFramework"],
     "CanaryStudioChangelog": "Need help? You can refer to our help articles at https://canary-development.github.io/CanaryEngine.\nFrom there, you can view our documentation on libraries the plugin itself."
 }

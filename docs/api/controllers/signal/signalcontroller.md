@@ -2,14 +2,6 @@
 
 A lua-based signal implementation, based on [this](/api/engine/types#signalcontroller) type.
 
-## Properties
-
-### Name <Badge type="tip" text="read only" />
-
-The name of the the signal controller.
-
-* **string**
-
 ## Methods
 
 ### Fire
@@ -26,7 +18,7 @@ SignalController:Fire("Hello, world!")
 
 **Parameters**
 
-* **data:** `(Array<any> | any)?`\
+* **data:** `...any`\
 The data that should be sent the other script
 
 **Returns**
@@ -41,7 +33,7 @@ Connects a function to the event that is fired when another script fires the con
 
 **Parameters**
 
-* **func:** `(data: Array<any>?) -> ()`\
+* **func:** `(...: any) -> ()`\
 The function to call when data is recieved
 
 **Returns**
@@ -56,7 +48,7 @@ Connects a function to the event that is fired when another script fires the con
 
 **Parameters**
 
-* **func:** `(data: Array<any>?) -> ()`\
+* **func:** `(...: any) -> ()`\
 The function to call when data is recieved
 
 **Returns**

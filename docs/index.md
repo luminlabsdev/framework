@@ -8,7 +8,7 @@ hero:
   actions:
     - theme: brand
       text: Documentation
-      link: /tutorial/update
+      link: /tutorial/packages
     - theme: alt
       text: API Reference
       link: /api/engine/framework/canaryengine

@@ -1,6 +1,5 @@
 -- // Package
 
-local NetworkController = { }
 local NetworkControllerClient = { }
 local NetworkControllerServer = { }
 
@@ -20,8 +19,7 @@ local Indexes = {
 }
 
 local Future = require(EngineVendor.Libraries.RedbloxUtils.Future)
-local Ratelimit = require(Vendor.Ratelimit)
-local Sanitize = require(Vendor.Parent.Parent.Sanitize)
+local Ratelimit = require(EngineVendor.Libraries.RedbloxUtils.Ratelimit)
 
 local MainRedRemote: RemoteEvent
 local ClientFolder: ScreenGui
@@ -66,85 +64,44 @@ local RedClientEvent = require(Vendor.Red.ClientEvent)
 
 -- // Functions
 
-local function ValidateTuple(...: any)
-	if select("#", ...) > 1 then
-		warn("Invalid data")
-		return false
-	end
-	return true
-end
-
--- // Constructors
-
-function NetworkController.CreateController(name: string)
-	local self = setmetatable({ }, if RunService:IsClient() then Indexes[1] else Indexes[2])
-
-	self.Name = name
-	self.IsListening = false
-	self.IsBinded = nil
-	
-	self._Ratelimit = nil
-	self._InvokeOverflow = nil
-
-	self._EventName = `{name}_E`
-	self._FunctionName = `{name}_F`
-
-	return self
-end
-
 -- Network Controller Client
 
-function NetworkControllerClient:Fire(data: ({any} | any)?)
-	RedClientEvent.Fire(self._EventName, Sanitize(data))
+function NetworkControllerClient:Fire(...: any)
+	RedClientEvent.Fire(self._EventName, ...)
 end
 
-function NetworkControllerClient:Listen(func: (data: {any}?) -> ())
+function NetworkControllerClient:Listen(func: (...any) -> ())
 	assert(not self.IsListening, "Controller is already subscribed to an event")
 	self.IsListening = true
 
-	RedClientEvent.Listen(self._EventName, function(...)
-		local ValidData = ValidateTuple(...)
-
-		if not ValidData then
-			return
-		end
-
-		local SanitizedData = Sanitize(...)
-
-		if #SanitizedData == 0 then
-			func(nil)
-			return
-		end
-
-		func(SanitizedData)
-	end)
+	RedClientEvent.Listen(self._EventName, func)
 end
 
-function NetworkControllerClient:InvokeAsync(data: ({any} | any)?): Future.Future<any>
-	return RedClientEvent.Call(self._FunctionName, Sanitize(data))
+function NetworkControllerClient:InvokeAsync(...: any): Future.Future<any>
+	return RedClientEvent.Call(self._FunctionName, ...)
 end
 
 -- Network Controller Server
 
-function NetworkControllerServer:Fire(recipients: Player | {Player}, data: ({any} | any)?)
+function NetworkControllerServer:Fire(recipients: Player | {Player}, ...: any)
 	if type(recipients) == "table" then
 		for _, player in recipients do
-			RedServerEvent.Fire(player, self._EventName, Sanitize(data))
+			RedServerEvent.Fire(player, self._EventName, ...)
 		end
 
 		return
 	end
 	
-	RedServerEvent.Fire(recipients, self._EventName, Sanitize(data))
+	RedServerEvent.Fire(recipients, self._EventName, ...)
 end
 
-function NetworkControllerServer:FireAll(data: ({any} | any)?)
+function NetworkControllerServer:FireAll(...: any)
 	for _, player in PlayerService:GetPlayers() do
-		RedServerEvent.Fire(player, self._EventName, Sanitize(data))
+		RedServerEvent.Fire(player, self._EventName, ...)
 	end
 end
 
-function NetworkControllerServer:FireExcept(except: Player | {Player}, data: ({any} | any)?)
+function NetworkControllerServer:FireExcept(except: Player | {Player}, ...: any)
 	if type(except) ~= "table" then -- don't use typeof(), for optimization
 		except = {except}
 	end
@@ -154,27 +111,27 @@ function NetworkControllerServer:FireExcept(except: Player | {Player}, data: ({a
 			continue
 		end
 
-		RedServerEvent.Fire(player, self._EventName, Sanitize(data))
+		RedServerEvent.Fire(player, self._EventName, ...)
 	end
 end
 
-function NetworkControllerServer:FireFilter(data: ({any} | any)?, filter: (Player) -> (boolean))
+function NetworkControllerServer:FireFilter(filter: (Player) -> (boolean), ...: any)
 	for _, player in PlayerService:GetPlayers() do
 		if filter(player) then
-			RedServerEvent.Fire(player, self._EventName, Sanitize(data))
+			RedServerEvent.Fire(player, self._EventName, ...)
 		end
 	end
 end
 
-function NetworkControllerServer:FireInRange(comparePoint: Vector3, maximumRange: number, data: ({any} | any)?)
-	self:FireFilter(data, function(player) -- reuse FireFilter to follow D.R.Y. standards
+function NetworkControllerServer:FireInRange(comparePoint: Vector3, maximumRange: number, ...: any)
+	self:FireFilter(function(player) -- reuse FireFilter to follow D.R.Y. standards
 		if player:DistanceFromCharacter(comparePoint) <= maximumRange then
 			return true
 		end
-	end)
+	end, ...)
 end
 
-function NetworkControllerServer:Listen(func: (sender: Player, data: {any}?) -> ())
+function NetworkControllerServer:Listen(func: (sender: Player, ...unknown) -> ())
 	assert(not self.IsListening, "Controller is already subscribed to an event")
 	self.IsListening = true
 	
@@ -184,20 +141,7 @@ function NetworkControllerServer:Listen(func: (sender: Player, data: {any}?) -> 
 			return
 		end
 
-		local ValidData = ValidateTuple(...)
-
-		if not ValidData then
-			return
-		end
-
-		local SanitizedData = Sanitize(...)
-
-		if #SanitizedData == 0 then
-			func(player, nil)
-			return
-		end
-
-		func(player, SanitizedData)
+		func(player, ...)
 	end)
 end
 
@@ -215,12 +159,12 @@ function NetworkControllerServer:SetRateLimit(maxCalls: number, interval: number
 	self._InvokeOverflow = invokeOverflowCallback
 end
 
-function NetworkControllerServer:BindToInvocation(callback: (sender: Player, data: {any}?) -> (({any} | any)))
+function NetworkControllerServer:BindToInvocation(callback: (sender: Player, ...unknown) -> (...any))
 	assert(not self.IsBinded, "Controller already has function binded to invocation")
 	self.IsBinded = true
 
-	RedServerEvent.Listen(self._FunctionName, function(player, data)
-		return Sanitize(callback(player, Sanitize(data)))
+	RedServerEvent.Listen(self._FunctionName, function(player, ...)
+		return callback(player, ...)
 	end)
 end
 
@@ -229,4 +173,15 @@ end
 table.freeze(NetworkControllerServer)
 table.freeze(NetworkControllerClient)
 
-return table.freeze(NetworkController)
+return function(name: string)
+	return setmetatable({
+		IsListening = false,
+		IsBinded = nil,
+		
+		_Ratelimit = nil,
+		_InvokeOverflow = nil,
+	
+		_EventName = `{name}_E`,
+		_FunctionName = `{name}_F`,
+	}, if RunService:IsClient() then Indexes[1] else Indexes[2])
+end
