@@ -1,6 +1,5 @@
 --[[
 	  by PLAYER_USERNAME
-	  CREATE_DATE @ CREATE_TIME
 --]]
 
 -- // Engine
