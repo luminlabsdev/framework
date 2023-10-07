@@ -134,6 +134,12 @@
                         "$properties": {
                             "Source": "https://raw.githubusercontent.com/red-blox/Util/62037a647038af2b92129435957bace986452ff1/libs/Ratelimit/Ratelimit.luau"
                         }
+                    },
+                    "Guard": {
+                        "$className": "ModuleScript",
+                        "$properties": {
+                            "Source": "https://raw.githubusercontent.com/red-blox/Util/1f9216713d15579bdf1744235448fbac702aa54c/libs/Guard/Guard.luau"
+                        }
                     }
                 }
             },

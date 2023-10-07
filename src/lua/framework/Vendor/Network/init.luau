@@ -52,7 +52,7 @@ if RunService:IsServer() then
 else
 	local Player = PlayerService.LocalPlayer
 	MainRedRemote = ReplicatedStorage:FindFirstChild("RedEvent")
-	
+
 	require(Vendor.Red.ClientEvent).Start()
 
 	ClientFolder = Player:WaitForChild("PlayerGui"):WaitForChild("Red")
@@ -77,7 +77,7 @@ function NetworkControllerClient:Listen(func: (...any) -> ())
 	RedClientEvent.Listen(self._EventName, func)
 end
 
-function NetworkControllerClient:InvokeAsync(...: any): Future.Future<any>
+function NetworkControllerClient:InvokeAsync(...: any): Future.Future<...any>
 	return RedClientEvent.Call(self._FunctionName, ...)
 end
 
@@ -91,7 +91,7 @@ function NetworkControllerServer:Fire(recipients: Player | {Player}, ...: any)
 
 		return
 	end
-	
+
 	RedServerEvent.Fire(recipients, self._EventName, ...)
 end
 
@@ -102,12 +102,20 @@ function NetworkControllerServer:FireAll(...: any)
 end
 
 function NetworkControllerServer:FireExcept(except: Player | {Player}, ...: any)
-	if type(except) ~= "table" then -- don't use typeof(), for optimization
-		except = {except}
+	if type(except) == "table" then
+		for _, player in PlayerService:GetPlayers() do
+			if table.find(except, player) then
+				continue
+			end
+
+			RedServerEvent.Fire(player, self._EventName, ...)
+		end
+
+		return
 	end
 
 	for _, player in PlayerService:GetPlayers() do
-		if table.find(except, player) then
+		if player == except then
 			continue
 		end
 
@@ -134,7 +142,7 @@ end
 function NetworkControllerServer:Listen(func: (sender: Player, ...unknown) -> ())
 	assert(not self.IsListening, "Controller is already subscribed to an event")
 	self.IsListening = true
-	
+
 	RedServerEvent.Listen(self._EventName, function(player, ...)
 		if (self._Ratelimit and self._InvokeOverflow) and not self._Ratelimit(player) then
 			self._InvokeOverflow(player)
@@ -177,11 +185,11 @@ return function(name: string)
 	return setmetatable({
 		IsListening = false,
 		IsBinded = nil,
-		
+
 		_Ratelimit = nil,
 		_InvokeOverflow = nil,
-	
-		_EventName = `{name}_E`,
+
+		_EventName = `{name}_E`, -- Use small names to preserve memory
 		_FunctionName = `{name}_F`,
 	}, if RunService:IsClient() then Indexes[1] else Indexes[2])
 end

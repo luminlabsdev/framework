@@ -18,16 +18,14 @@ local Network = require(EngineVendor.Network.Init) -- Networking logic
 local Signal = require(EngineLibraries.RedbloxUtils.Signal) -- Signal logic
 
 local Future = require(EngineLibraries.RedbloxUtils.Future) -- Promise logic
+local Guard = require(EngineLibraries.RedbloxUtils.Guard) -- Runtime typechecking
 local Debugger = require(EngineVendor.Debugger) -- Easy debug logic
 local Runtime = require(EngineVendor.Runtime) -- Runtime settings + debugger
 
-local RuntimeContext = Runtime.Context
-local RuntimeSettings = Runtime.Settings
-
 CanaryEngine.Runtime = table.freeze({
-	RuntimeSettings = RuntimeSettings,
-	RuntimeContext = RuntimeContext,
-	RuntimeObjects = {
+	Settings = Runtime.Settings,
+	Context = Runtime.Context,
+	Objects = {
 		NetworkControllers = { },
 		SignalControllers = { },
 	},
@@ -35,8 +33,9 @@ CanaryEngine.Runtime = table.freeze({
 
 CanaryEngine.Debugger = Debugger
 CanaryEngine.Future = Future
+CanaryEngine.Guard = Guard
 
-local RuntimeObjects = CanaryEngine.Runtime.RuntimeObjects
+local RuntimeObjects = CanaryEngine.Runtime.Objects
 
 -- // Functions
 
@@ -54,8 +53,8 @@ end
 
 -- Engine Contexts
 
-function CanaryEngine.GetEngineServer()
-	if RuntimeContext.Server then
+function CanaryEngine.GetFrameworkServer()
+	if Runtime.Context.Server then
 		if table.isfrozen(CanaryEngineServer) then
 			return CanaryEngineServer
 		end
@@ -68,8 +67,8 @@ function CanaryEngine.GetEngineServer()
 	end
 end
 
-function CanaryEngine.GetEngineClient()
-	if RuntimeContext.Client then
+function CanaryEngine.GetFrameworkClient()
+	if Runtime.Context.Client then
 		if table.isfrozen(CanaryEngineClient) then
 			return CanaryEngineClient
 		end
@@ -87,6 +86,15 @@ function CanaryEngine.GetEngineClient()
 	end
 end
 
+-- Exclusive API for replicated will come soon
+function CanaryEngine.GetFrameworkReplicated()
+	if table.isfrozen(CanaryEngineReplicated) then
+		return CanaryEngineReplicated
+	end
+
+	return table.freeze(CanaryEngineReplicated)
+end
+
 function CanaryEngine.ImportPackagesInOrder(importList: {ModuleScript}, importDeep: boolean?)
 	for _, package in importList do
 		require(package)
@@ -99,15 +107,6 @@ function CanaryEngine.ImportPackagesInOrder(importList: {ModuleScript}, importDe
 			end
 		end
 	end
-end
-
--- Exclusive API for replicated will come soon
-function CanaryEngine.GetEngineReplicated()
-	if table.isfrozen(CanaryEngineReplicated) then
-		return CanaryEngineReplicated
-	end
-
-	return table.freeze(CanaryEngineReplicated)
 end
 
 -- Signal Creation

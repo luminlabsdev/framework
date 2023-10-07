@@ -16,14 +16,6 @@ This type contains every roblox user data and generic type.
 
 ## Properties
 
-### CachedStackTraces
-
-A list of cached stack traces for the current environment.
-
-* **[Dictionary](/api/engine/types#dictionary)<[CallStack](#callstack)>**
-
----
-
 ### CachedDebugCalls
 
 A list of cached debug calls for the current environment.

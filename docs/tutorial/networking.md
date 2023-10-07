@@ -6,30 +6,22 @@ CanaryEngine's networking system is very straightforward compared to some of the
 
 Instead of interacting with the normal [RemoteEvent](https://create.roblox.com/docs/reference/engine/classes/RemoteEvent) API, we use a custom method which is much more compatible with many game's standards. Though, to first create a new controller, use the `.CreateNetworkController` function in the context specific framework. In this tutorial, we assume the server is trying to send information to the client. Here's an example of how you would set up the network controller:
 
-```lua
+::: code-group
+```lua [Server]
 local SendInfoNetwork = CanaryEngineServer.CreateNetworkController("SendInfoNetwork")
 
 print(SendInfoNetwork.Name) -- Output: SendInfoNetwork
 ```
 
-Now lets set up the network controller to be client-sided as well:
-
-```lua
+```lua [Client]
 local SendInfoNetwork = CanaryEngineClient.CreateNetworkController("SendInfoNetwork")
 ```
+:::
 
 Now lets continue this code and make it so it can recieve info from the server:
 
-```lua
-local SendInfoNetwork = CanaryEngineClient.CreateNetworkController("SendInfoNetwork")
-
-SendInfoNetwork:Listen(function(data)
-    print(data)
-end)
-```
-Though, we have a problem. `SendInfoNetwork` is not recieving anything on the client if nothing is being fired from the server. To pass data through the network controller, you can use `NetworkController:Fire`. Here's how we would do that on the server:
-
-```lua
+::: code-group
+```lua [Server]
 local SendInfoNetwork = CanaryEngineServer.CreateNetworkController("SendInfoNetwork")
 local PlayerService = game:GetService("Players")
 
@@ -40,6 +32,15 @@ SendInfoNetwork:FireAll({ -- When sending data on the server, you must pass a pl
     "Network controller!"
 })
 ```
+
+```lua [Client]
+local SendInfoNetwork = CanaryEngineClient.CreateNetworkController("SendInfoNetwork")
+
+SendInfoNetwork:Listen(function(data)
+    print(data)
+end)
+```
+:::
 
 :::danger
 You cannot really create a replicated network controller. This is because it would be accessed both by the server/client, so you would have to explicity check if is the server or client. This is considered a bad practice anyway, you shouldn't be using server or client exclusive things with shared packages.
@@ -66,9 +67,8 @@ We also have available the `Fire`, `FireExcept` and `SetRateLimit` functions. Ea
 
 The [RemoteFunction](https://create.roblox.com/docs/reference/engine/classes/RemoteFunction) is a fairly straightforward way of sending and recieving data at the same time. For now, we only support invoking the server as invoking the client is fairly useless at this point. If you need this functionality, you can use the remote event part of the network controllers. You may already know how to set up the basic network controller, so here's just a basic example of the client asking the server for a value:
 
-#### Server:
-
-```lua
+::: code-group
+```lua [Server]
 local ValueGetNetwork = CanaryEngineServer.CreateNetworkController("ValueGetNetwork")
 
 ValueGetNetwork:BindToInvocation(function(sender, data)
@@ -81,14 +81,11 @@ ValueGetNetwork:BindToInvocation(function(sender, data)
 end)
 ```
 
-#### Client:
-
-Now on the client, we can invoke the server using `NetworkController:InvokeAsync`. We must send a boolean through to be checked on invoked.
-
-```lua
+```lua [Client]
 local ValueGetNetwork = CanaryEngineClient.CreateNetworkController("ValueGetNetwork")
 
 print(ValueGetNetwork:InvokeAsync(true)) -- When the value is recieved, this should return "yes" according to the server code.
 ```
+:::
 
 Obviously, this isn't quite a valid use case for invoking the server, but some valid use cases include asking the server for a specific value. What we are doing here is just a waste of bandwidth, but for the sake of the tutorial I will be including this.

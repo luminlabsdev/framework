@@ -22,13 +22,21 @@ The internal engine debugger, has useful functions to abide by debug settings.
 
 ### Future <Badge type="tip" text="read only" />
 
-A reference to the Future module, which is a optimized version of a Promise.
+A reference to the Future package, which is a optimized version of a Promise.
+
+* [**Future**](https://util.redblox.dev/future.html)
+
+---
+
+### Guard <Badge type="tip" text="read only" />
+
+A reference to the Guard package, which allows for type checking during runtime.
 
 * [**Future**](https://util.redblox.dev/future.html)
 
 ## Functions
 
-### GetEngineServer <Badge type="danger" text="server" />
+### GetFrameworkServer <Badge type="danger" text="server" />
 
 Gets the server-sided interface of CanaryEngine.
 
@@ -38,7 +46,7 @@ Gets the server-sided interface of CanaryEngine.
 
 ---
 
-### GetEngineClient <Badge type="danger" text="client" />
+### GetFrameworkClient <Badge type="danger" text="client" />
 
 Gets the client-sided interface of CanaryEngine.
 
@@ -48,7 +56,7 @@ Gets the client-sided interface of CanaryEngine.
 
 ---
 
-### GetEngineReplicated
+### GetFrameworkReplicated
 
 Gets the global-sided interface of CanaryEngine. Recommended that use this only in replicated packages, this is a bad practice anywhere else.
 
@@ -72,7 +80,7 @@ Whether or not to import the package's descendants, defaults to `false`.
 
 **Returns**
 
-* void
+* **void**
 
 ---
 

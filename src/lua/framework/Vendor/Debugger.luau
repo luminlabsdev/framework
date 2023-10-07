@@ -42,7 +42,6 @@ local function dictionaryLen(d: {[any]: any})
 	})
 end
 
-EngineDebugger.CachedStackTraces = dictionaryLen({ })
 EngineDebugger.CachedDebugCalls = { }
 EngineDebugger.CachedLogs = { }
 EngineDebugger.InternalCachedLogs = { }
@@ -95,7 +94,6 @@ function EngineDebugger.ClearOutput(clearDebugCallCache: boolean?)
 		table.clear(EngineDebugger.CachedDebugCalls)
 	end
 
-	table.clear(EngineDebugger.CachedStackTraces)
 	LogService:ClearOutput()
 end
 
@@ -111,7 +109,7 @@ function EngineDebugger.GetCallStack(instance: LuaSourceContainer, stackName: st
 		EngineDebugger.DebugInvalidData(1, "GetCallStack", "LuaSourceContainer", instance)
 	end
 
-	stackName = stackName or `Stack{#EngineDebugger.CachedStackTraces + 1}`
+	stackName = stackName or `NewStack`
 	
 	local Source = GetAncestorsUntilParentFolder(instance)
 	local DefinedLine = debug.traceback():split(":")
@@ -122,8 +120,6 @@ function EngineDebugger.GetCallStack(instance: LuaSourceContainer, stackName: st
 	StackTable.Source = Source[1]
 	StackTable.SourceTree = Source[2]
 	StackTable.DefinedLine = tonumber(DefinedLine[#DefinedLine]:gsub("\n", ""), nil)
-	
-	EngineDebugger.CachedStackTraces[stackName] = StackTable
 	
 	return StackTable
 end

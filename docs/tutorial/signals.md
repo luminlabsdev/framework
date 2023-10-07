@@ -9,14 +9,14 @@ Firing and connecting to signals should be as simple as possible. If you are fam
 ```lua
 local TestSignal = CanaryEngine.CreateSignal("NewSignal")
 
-TestSignal:Connect(function(data)
-    print(data) -- Output: {"Hello,", "player"}
+TestSignal:Connect(function(data1, data2)
+    print(data1, data2) -- Output: "Hello, player"
 end)
 
-TestSignal:Fire({
+TestSignal:Fire(
     "Hello,",
     "player"
-})
+)
 ```
 
 `SignalController` also share identical methods with the [RBXScriptSignal](https://create.roblox.com/docs/reference/engine/datatypes/RBXScriptSignal), such as including `SignalController:Once` and even a `SignalController:Wait` method. Though, an extra feature that comes with using **[@stravant](https://github.com/stravant)**'s signal implementation is that you have the ability to disconnect every connection associated with the signal. This allows for quick cleanups of a signal. 
@@ -29,26 +29,24 @@ local AnonymousSignal = CanaryEngine.CreateAnonymousSignal()
 local AnonymousSignal2 = CanaryEngine.CreateAnonymousSignal() -- no name conflicts!
 
 AnonymousSignal:Connect(function(data)
-    print(data) -- Output: "{"Signal 1"}"
+    print(data) -- Output: "Signal 1"
 end)
 
-AnonymousSignal:Fire({
+AnonymousSignal:Fire(
     "Signal 1"
-})
+)
 
 AnonymousSignal2:Connect(function(data)
-    print(data) -- Output: "{"Signal 2"}"
+    print(data) -- Output: "Signal 2"
 end)
 
-AnonymousSignal2:Fire({
+AnonymousSignal2:Fire(
     "Signal 2"
-})
+)
 ```
 
 Anonymous signals share identical methods with `SignalController` so there is nothing new to learn here. 
 
 ### ControllerConnections
 
-`ControllerConnection`'s are what is returned by `SignalController`'s, these allow you to check the current connection status with `ControllerConnection.Connected` and allow you to disconnect any connections you made, either by using `SignalController:Connect` or `SignalController:Once`, by using the `ControllerConnection:Disconnect` method. These are identical to the [RBXScriptConnection](https://create.roblox.com/docs/reference/engine/datatypes/RBXScriptConnection), so documentation isn't really needed with this.
-
-That's really all for `SignalController`, they are a fairly simple concept and are extremely useful in many varied ways.
+`ControllerConnection`'s are what is returned by `SignalController`'s, and it is simply a function you can call to disconnect. You can do this either by using `SignalController:Connect` or `SignalController:Once`, then calling the returned function.

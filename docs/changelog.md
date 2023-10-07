@@ -8,11 +8,32 @@ keywords: [roblox, game, framework, changelog, updates]
 
 This is the changelog which is changed every update, and we follow semver. To see what we're working on, head to our [Trello](https://trello.com/b/fTJOmMua/canaryengine) board.
 
-## 4.0.0-rc1
+## 4.0.0-rc2
 
 ### Added
 
 * Adds `Red`, revamped the networking system once again and for the last time
+* Adds `NetworkController:FireFilter`
+* Adds `CanaryEngine.ImportPackagesInOrder`
+* Finish API documentation
+
+### Improvements
+
+* Adds event logs when creating classes
+* Creating new scripts / packages will now have the date when created, and your username at top (thanks @BigBubba!)
+* Changes structure to be more efficient
+* Signals / NetworkControllers allow tuples
+* Small bug fixes
+* QOL fixes
+
+### Removed
+
+* `BridgeNet`
+
+## 4.0.0-rc1
+
+### Added
+
 * Revamped plugin for last time, easier to navigate / add features
 * Adds ability to pull packages from any GitHub repo
 * Entirely new documentation provider
@@ -29,7 +50,6 @@ This is the changelog which is changed every update, and we follow semver. To se
 
 ### Removed
 
-* `BridgeNet`
 * `EngineContext.Packages`
 * `EngineContext.Media`
 

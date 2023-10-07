@@ -181,8 +181,8 @@ local function PlayerAdded(player)
             return
         end
 
-        playerProfile.GlobalKeyAdded:Connect(function(data)
-            print(data[1]) -- Output: {Key = "GlobalKeyTest", Value = {this = "is a test"}, KeyId = 1}
+        playerProfile.GlobalKeyAdded:Connect(function(globalKey)
+            print(globalKey) -- Output: {Key = "GlobalKeyTest", Value = {this = "is a test"}, KeyId = 1}
         end)
 
         MyNewDataStore:SetGlobalKeyAsync(player.UserId, "GlobalKeyTest", "somerandomstringdata")
@@ -203,8 +203,8 @@ local function PlayerAdded(player)
            print(globalKey.Key, ":", globalKey.Value) -- Output: {Key = "GlobalKeyTest", Value = "somerandomstringdata", KeyId = 1}
         end
 
-        playerProfile.GlobalKeyAdded:Connect(function(data)
-            print(data[1]) -- Output: {Key = "GlobalKeyTest", Value = "somerandomstringdata", KeyId = 2}
+        playerProfile.GlobalKeyAdded:Connect(function(globalKey)
+            print(globalKey) -- Output: {Key = "GlobalKeyTest", Value = "somerandomstringdata", KeyId = 2}
         end)
 
         MyNewDataStore:SetGlobalKeyAsync(player.UserId, "GlobalKeyTest", "somerandomstringdata")

@@ -4,7 +4,7 @@ layout: home
 
 hero:
   text: "CanaryEngine"
-  tagline: A blazingly fast & lightweight Luau framework
+  tagline: A blazingly fast & lightweight game framework
   actions:
     - theme: brand
       text: Documentation

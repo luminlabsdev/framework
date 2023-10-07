@@ -33,7 +33,7 @@ Connects a function to the event that is fired when another script fires the con
 
 **Parameters**
 
-* **func:** `(...: any) -> ()`\
+* **func:** `(...any) -> ()`\
 The function to call when data is recieved
 
 **Returns**
@@ -48,7 +48,7 @@ Connects a function to the event that is fired when another script fires the con
 
 **Parameters**
 
-* **func:** `(...: any) -> ()`\
+* **func:** `(...any) -> ()`\
 The function to call when data is recieved
 
 **Returns**
@@ -63,7 +63,7 @@ Yields the current thread until another script fires the signal controller.
 
 **Returns**
 
-* **[Array](/api/engine/types#array)\<any\>**
+* **...any**
 
 ---
 
