@@ -2,12 +2,13 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  head: [['link', { rel: 'icon', href: 'static/images/logo.png' }]],
+  head: [['link', { rel: 'icon', href: 'static/images/logo.ico' }]],
   base: "/CanaryEngine/",
   title: "CanaryEngine",
   titleTemplate: "Canary Docs",
   description: "A blazingly fast & lightweight Luau framework",
   lastUpdated: true,
+  lang: 'en-us',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
