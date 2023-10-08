@@ -87,10 +87,14 @@ export type NetworkControllerClient<T...> = {
 
 -- // Functions
 
+local function PackArgs(...: any)
+	return {...}
+end
+
 -- Network Controller Client
 
 function NetworkControllerClient:Fire(...: any)
-	RedClientEvent.Fire(self._EventName, ...)
+	RedClientEvent.Fire(self._EventName, PackArgs(...))
 end
 
 function NetworkControllerClient:Listen(func: (...any) -> ())
@@ -101,7 +105,7 @@ function NetworkControllerClient:Listen(func: (...any) -> ())
 end
 
 function NetworkControllerClient:InvokeAsync(...: any): Future.Future<...any>
-	return RedClientEvent.Call(self._FunctionName, ...)
+	return RedClientEvent.Call(self._FunctionName, PackArgs(...))
 end
 
 -- Network Controller Server
@@ -109,18 +113,18 @@ end
 function NetworkControllerServer:Fire(recipients: Player | {Player}, ...: any)
 	if type(recipients) == "table" then
 		for _, player in recipients do
-			RedServerEvent.Fire(player, self._EventName, ...)
+			RedServerEvent.Fire(player, self._EventName, PackArgs(...))
 		end
 
 		return
 	end
 
-	RedServerEvent.Fire(recipients, self._EventName, ...)
+	RedServerEvent.Fire(recipients, self._EventName, PackArgs(...))
 end
 
 function NetworkControllerServer:FireAll(...: any)
 	for _, player in PlayerService:GetPlayers() do
-		RedServerEvent.Fire(player, self._EventName, ...)
+		RedServerEvent.Fire(player, self._EventName, PackArgs(...))
 	end
 end
 
@@ -131,7 +135,7 @@ function NetworkControllerServer:FireExcept(except: Player | {Player}, ...: any)
 				continue
 			end
 
-			RedServerEvent.Fire(player, self._EventName, ...)
+			RedServerEvent.Fire(player, self._EventName, PackArgs(...))
 		end
 
 		return
@@ -142,14 +146,14 @@ function NetworkControllerServer:FireExcept(except: Player | {Player}, ...: any)
 			continue
 		end
 
-		RedServerEvent.Fire(player, self._EventName, ...)
+		RedServerEvent.Fire(player, self._EventName, PackArgs(...))
 	end
 end
 
 function NetworkControllerServer:FireFilter(filter: (Player) -> (boolean), ...: any)
 	for _, player in PlayerService:GetPlayers() do
 		if filter(player) then
-			RedServerEvent.Fire(player, self._EventName, ...)
+			RedServerEvent.Fire(player, self._EventName, PackArgs(...))
 		end
 	end
 end
@@ -159,7 +163,7 @@ function NetworkControllerServer:FireInRange(comparePoint: Vector3, maximumRange
 		if player:DistanceFromCharacter(comparePoint) <= maximumRange then
 			return true
 		end
-	end, ...)
+	end, PackArgs(...))
 end
 
 function NetworkControllerServer:Listen(func: (sender: Player, ...unknown) -> ())
