@@ -39,7 +39,7 @@ local RuntimeObjects = CanaryEngine.Runtime.Objects
 
 -- // Functions
 
-local function CreateNetworkController(controllerName: string): Types.ClientNetworkController<any, any> | Types.ServerNetworkController<any, any>
+local function CreateNetworkController(controllerName: string): Network.NetworkControllerClient<any> | Network.NetworkControllerServer<any>
 	Debugger.LogEvent(script, "Create NetworkController", false, true)
 
 	if not RuntimeObjects.NetworkControllers[controllerName] then
@@ -138,8 +138,8 @@ function CanaryEngineClient.GetPlayerCharacter(): Types.Character
 	return Player.Character or Player.CharacterAdded:Wait()
 end
 
-CanaryEngineClient.CreateNetworkController = CreateNetworkController :: (controllerName: string) -> (Types.ClientNetworkController<any, any>)
-CanaryEngineServer.CreateNetworkController = CreateNetworkController :: (controllerName: string) -> (Types.ServerNetworkController<any, any>)
+CanaryEngineClient.CreateNetworkController = CreateNetworkController :: (controllerName: string) -> (Network.NetworkControllerClient<any>)
+CanaryEngineServer.CreateNetworkController = CreateNetworkController :: (controllerName: string) -> (Network.NetworkControllerServer<any>)
 
 -- // Actions
 

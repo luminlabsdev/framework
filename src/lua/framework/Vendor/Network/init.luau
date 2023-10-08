@@ -62,6 +62,28 @@ end
 local RedServerEvent = require(Vendor.Red.ServerEvent)
 local RedClientEvent = require(Vendor.Red.ClientEvent)
 
+-- // Types
+
+export type NetworkControllerServer<T...> = {
+	Listen: (self: NetworkControllerServer<T...>, func: (sender: Player, ...unknown) -> ()) -> (),
+	BindToInvocation: (self: NetworkControllerServer<T...>, callback: (sender: Player, ...unknown) -> (...any)) -> (),
+
+	Fire: (self: NetworkControllerServer<T...>, recipient: Player | Array<Player>, T...) -> (),
+	FireAll: (self: NetworkControllerServer<T...>, T...) -> (),
+	FireExcept: (self: NetworkControllerServer<T...>, except: Player | Array<Player>, T...) -> (),
+	FireInRange: (self: NetworkControllerServer<T...>, comparePoint: Vector3, maximumRange: number, T...) -> (),
+	FireFilter: (self: NetworkControllerServer<T...>, filter: (Player) -> (boolean), T...) -> (),
+
+	SetRateLimit: (self: NetworkControllerServer<T...>, maxInvokesPerSecond: number, invokeOverflowCallback: (sender: Player) -> ()) -> (),
+}
+
+export type NetworkControllerClient<T...> = {
+	Listen: (self: NetworkControllerClient<T...>, func: (T...) -> ()) -> (),
+
+	Fire: (self: NetworkControllerClient<T...>, T...) -> (),
+	InvokeAsync: (self: NetworkControllerClient<T...>, T...) -> (Future.Future<...any>),
+}
+
 -- // Functions
 
 -- Network Controller Client
