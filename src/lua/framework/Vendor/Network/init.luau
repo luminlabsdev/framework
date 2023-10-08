@@ -65,24 +65,24 @@ local RedClientEvent = require(Vendor.Red.ClientEvent)
 
 -- // Types
 
-export type NetworkControllerServer<T...> = {
-	Listen: (self: NetworkControllerServer<T...>, func: (sender: Player, ...unknown) -> ()) -> (),
-	BindToInvocation: (self: NetworkControllerServer<T...>, callback: (sender: Player, ...unknown) -> (...any)) -> (),
+export type Server<T...> = {
+	Listen: (self: Server<T...>, func: (sender: Player, ...unknown) -> ()) -> (),
+	BindToInvocation: (self: Server<T...>, callback: (sender: Player, ...unknown) -> (...any)) -> (),
 
-	Fire: (self: NetworkControllerServer<T...>, recipient: Player | Types.Array<Player>, T...) -> (),
-	FireAll: (self: NetworkControllerServer<T...>, T...) -> (),
-	FireExcept: (self: NetworkControllerServer<T...>, except: Player | Types.Array<Player>, T...) -> (),
-	FireInRange: (self: NetworkControllerServer<T...>, comparePoint: Vector3, maximumRange: number, T...) -> (),
-	FireFilter: (self: NetworkControllerServer<T...>, filter: (Player) -> (boolean), T...) -> (),
+	Fire: (self: Server<T...>, recipient: Player | Types.Array<Player>, T...) -> (),
+	FireAll: (self: Server<T...>, T...) -> (),
+	FireExcept: (self: Server<T...>, except: Player | Types.Array<Player>, T...) -> (),
+	FireInRange: (self: Server<T...>, comparePoint: Vector3, maximumRange: number, T...) -> (),
+	FireFilter: (self: Server<T...>, filter: (Player) -> (boolean), T...) -> (),
 
-	SetRateLimit: (self: NetworkControllerServer<T...>, maxInvokesPerSecond: number, invokeOverflowCallback: (sender: Player) -> ()) -> (),
+	SetRateLimit: (self: Server<T...>, maxInvokesPerSecond: number, invokeOverflowCallback: (sender: Player) -> ()) -> (),
 }
 
-export type NetworkControllerClient<T...> = {
-	Listen: (self: NetworkControllerClient<T...>, func: (T...) -> ()) -> (),
+export type Client<T...> = {
+	Listen: (self: Client<T...>, func: (T...) -> ()) -> (),
 
-	Fire: (self: NetworkControllerClient<T...>, T...) -> (),
-	InvokeAsync: (self: NetworkControllerClient<T...>, T...) -> (Future.Future<...any>),
+	Fire: (self: Client<T...>, T...) -> (),
+	InvokeAsync: (self: Client<T...>, T...) -> (Future.Future<...any>),
 }
 
 -- // Functions

@@ -134,7 +134,8 @@ export default defineConfig({
               items: [
                 { text: 'EngineRuntime', link: '/api/engine/runtime/engineruntime' },
                 { text: 'EngineRuntimeContext', link: '/api/engine/runtime/engineruntimecontext' },
-                { text: 'EngineRuntimeSettings', link: '/api/engine/runtime/engineruntimesettings' }
+                { text: 'EngineRuntimeSettings', link: '/api/engine/runtime/engineruntimesettings' },
+                { text: 'EngineRuntimeObjects', link: '/api/engine/runtime/engineruntimeobjects' }
               ]
             }
           ]

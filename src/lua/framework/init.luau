@@ -25,10 +25,7 @@ local Runtime = require(EngineVendor.Runtime) -- Runtime settings + debugger
 CanaryEngine.Runtime = table.freeze({
 	Settings = Runtime.Settings,
 	Context = Runtime.Context,
-	Objects = {
-		NetworkControllers = { },
-		SignalControllers = { },
-	},
+	Objects = Runtime.Objects,
 })
 
 CanaryEngine.Debugger = Debugger
@@ -39,7 +36,7 @@ local RuntimeObjects = CanaryEngine.Runtime.Objects
 
 -- // Functions
 
-local function CreateNetworkController(controllerName: string): Network.NetworkControllerClient<...any> | Network.NetworkControllerServer<...any>
+local function CreateNetworkController(controllerName: string): Network.Client<...any> | Network.Server<...any>
 	Debugger.LogEvent(script, "Create NetworkController", false, true)
 
 	if not RuntimeObjects.NetworkControllers[controllerName] then
@@ -118,13 +115,13 @@ function CanaryEngine.CreateSignal(signalName: string?): Signal.Signal<...any>
 		return Signal()
 	end
 
-	if not RuntimeObjects.SignalControllers[signalName] then
+	if not RuntimeObjects.Signals[signalName] then
 		local NewSignal = Signal()
 
-		RuntimeObjects.SignalControllers[signalName] = NewSignal
+		RuntimeObjects.Signals[signalName] = NewSignal
 	end
 
-	return RuntimeObjects.SignalControllers[signalName]
+	return RuntimeObjects.Signals[signalName]
 end
 
 function CanaryEngine.CreateAnonymousSignal(): Signal.Signal<...any>
@@ -138,8 +135,8 @@ function CanaryEngineClient.GetPlayerCharacter(): Types.Character
 	return Player.Character or Player.CharacterAdded:Wait()
 end
 
-CanaryEngineClient.CreateNetworkController = CreateNetworkController :: (controllerName: string) -> (Network.NetworkControllerClient<...any>)
-CanaryEngineServer.CreateNetworkController = CreateNetworkController :: (controllerName: string) -> (Network.NetworkControllerServer<...any>)
+CanaryEngineClient.CreateNetworkController = CreateNetworkController :: (controllerName: string) -> (Network.Client<...any>)
+CanaryEngineServer.CreateNetworkController = CreateNetworkController :: (controllerName: string) -> (Network.Server<...any>)
 
 -- // Actions
 

@@ -1,6 +1,6 @@
 # EngineRuntime
 
-No description
+Access to properties / settings that are set during runtime.
 
 ## Properties
 
@@ -12,8 +12,16 @@ Shows different runtime contexts.
 
 ---
 
-### Context
+### Settings
 
 Shows different runtime settings.
 
 * **[EngineRuntimeSettings](/api/engine/runtime/engineruntimesettings)**
+
+---
+
+### Objects
+
+Used as a cache for all objects created during runtime, this includes `Signals` and `NetworkControllers`.
+
+* **[EngineRuntimeObjects](/api/engine/runtime/engineruntimeobjects)**

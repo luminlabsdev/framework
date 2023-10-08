@@ -134,7 +134,7 @@ function ProfileStoreObject:LoadProfileAsync(owner: Player | string, reconcileDa
 	return Future.Try(function(profileStore, owner, reconcileData, profileClaimedHandler)
 		local ProfileObjectMetatable = setmetatable({ }, ProfileObject)
 		local ProfileKey = IsProfileKeyValid(owner, self._Pattern,
-		"Cannot get profile of type %s",
+			"Cannot get profile of type %s",
 	  		typeof(owner)
 		)
 	
