@@ -1,6 +1,6 @@
 # NetworkControllerClient <Badge type="danger" text="client" />
 
-A client-sided network controller, based on [this](/api/engine/types#networkcontrollerclient) type.
+A client-sided network controller.
 
 ## Properties
 

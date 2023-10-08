@@ -1,6 +1,6 @@
 # NetworkControllerServer <Badge type="danger" text="server" />
 
-A server-sided network controller, based on [this](/api/engine/types#networkcontrollerserver) type.
+A server-sided network controller.
 
 ## Properties
 

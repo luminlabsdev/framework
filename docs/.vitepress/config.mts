@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  head: [['link', { rel: 'icon', href: '/CanaryEngine/assets/images/favicon.ico' }]],
+  head: [['link', { rel: 'icon', href: 'https://raw.githubusercontent.com/canary-development/CanaryEngine/main/favicon.ico' }]],
   base: "/CanaryEngine/",
   title: "CanaryEngine",
   titleTemplate: "Canary Docs",
