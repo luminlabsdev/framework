@@ -99,8 +99,9 @@ end
 function ProfileStoreObject:DeleteProfileAsync(target: number | string)
 	local CurrentLoadedProfileStore = self._ProfileStore
 	local ProfileKey = IsProfileKeyValid(target, self._Pattern,
-	 "Cannot delete profile of type %s",
-	  typeof(target))
+		"Cannot delete profile of type %s",
+		typeof(target)
+	)
 
 	CurrentLoadedProfileStore:WipeProfileAsync(ProfileKey)
 end

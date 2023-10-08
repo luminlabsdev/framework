@@ -20,6 +20,7 @@ local Indexes = {
 
 local Future = require(EngineVendor.Libraries.RedbloxUtils.Future)
 local Ratelimit = require(EngineVendor.Libraries.RedbloxUtils.Ratelimit)
+local Types = require(EngineVendor.Types)
 
 local MainRedRemote: RemoteEvent
 local ClientFolder: ScreenGui
@@ -68,9 +69,9 @@ export type NetworkControllerServer<T...> = {
 	Listen: (self: NetworkControllerServer<T...>, func: (sender: Player, ...unknown) -> ()) -> (),
 	BindToInvocation: (self: NetworkControllerServer<T...>, callback: (sender: Player, ...unknown) -> (...any)) -> (),
 
-	Fire: (self: NetworkControllerServer<T...>, recipient: Player | Array<Player>, T...) -> (),
+	Fire: (self: NetworkControllerServer<T...>, recipient: Player | Types.Array<Player>, T...) -> (),
 	FireAll: (self: NetworkControllerServer<T...>, T...) -> (),
-	FireExcept: (self: NetworkControllerServer<T...>, except: Player | Array<Player>, T...) -> (),
+	FireExcept: (self: NetworkControllerServer<T...>, except: Player | Types.Array<Player>, T...) -> (),
 	FireInRange: (self: NetworkControllerServer<T...>, comparePoint: Vector3, maximumRange: number, T...) -> (),
 	FireFilter: (self: NetworkControllerServer<T...>, filter: (Player) -> (boolean), T...) -> (),
 
