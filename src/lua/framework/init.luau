@@ -111,7 +111,7 @@ end
 
 -- Signal Creation
 
-function CanaryEngine.CreateSignal(signalName: string?): Types.SignalController<any>
+function CanaryEngine.CreateSignal(signalName: string?): Signal.Signal<...any>
 	Debugger.LogEvent(script, "Create SignalController", false, true)
 
 	if not signalName then
@@ -127,7 +127,7 @@ function CanaryEngine.CreateSignal(signalName: string?): Types.SignalController<
 	return RuntimeObjects.SignalControllers[signalName]
 end
 
-function CanaryEngine.CreateAnonymousSignal(): Types.SignalController<any>
+function CanaryEngine.CreateAnonymousSignal(): Signal.Signal<...any>
 	return CanaryEngine.CreateSignal()
 end
 

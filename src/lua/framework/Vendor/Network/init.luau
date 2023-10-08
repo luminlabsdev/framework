@@ -7,7 +7,7 @@ local Vendor = script.Parent.Vendor
 
 -- // Variables
 
-local EngineVendor = Vendor.Parent.Parent.Parent.Parent
+local EngineVendor = Vendor.Parent.Parent
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local PlayerService = game:GetService("Players")
@@ -163,8 +163,10 @@ function NetworkControllerServer:SetRateLimit(maxCalls: number, interval: number
 		return
 	end
 
-	self._Ratelimit = Ratelimit(maxCalls, interval)
-	self._InvokeOverflow = invokeOverflowCallback
+	self._Ratelimit = Ratelimit(maxCalls, interval or 1)
+	self._InvokeOverflow = invokeOverflowCallback or function(player: Player)
+		warn(player.UserId, "exceeded call limit")
+	end
 end
 
 function NetworkControllerServer:BindToInvocation(callback: (sender: Player, ...unknown) -> (...any))

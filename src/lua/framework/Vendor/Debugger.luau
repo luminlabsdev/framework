@@ -148,7 +148,7 @@ function EngineDebugger.LogEvent(instance: LuaSourceContainer, eventName: string
 	end
 
 	if isInternal then
-		table.insert(EngineDebugger.CachedInternalLogs[instance], eventName)
+		table.insert(EngineDebugger.InternalCachedLogs[instance], eventName)
 	else
 		table.insert(EngineDebugger.CachedLogs[instance], eventName)
 	end

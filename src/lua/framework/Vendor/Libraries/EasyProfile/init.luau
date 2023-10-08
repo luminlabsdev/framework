@@ -82,8 +82,8 @@ function EasyProfile.CreateProfileStore(name: string?, defaultProfileData: {[str
 	local ProfileStoreObjectMetatable = setmetatable({ }, ProfileStoreObject)
 	local ProfileStore = ProfileService.GetProfileStore(name or "Global", defaultProfileData)
 
-	ProfileStoreObjectMetatable.SessionLockClaimed = Signal() :: Types.SignalController<Player | string>
-	ProfileStoreObjectMetatable.SessionLockUnclaimed = Signal() :: Types.SignalController<Player | string>
+	ProfileStoreObjectMetatable.SessionLockClaimed = Signal() :: Signal.Signal<Player | string>
+	ProfileStoreObjectMetatable.SessionLockUnclaimed = Signal() :: Signal.Signal<Player | string>
 
 	ProfileStoreObjectMetatable._ProfileStore = ProfileStore
 	ProfileStoreObjectMetatable._Pattern = playerKeyPattern or "%d"
@@ -108,8 +108,9 @@ end
 function ProfileStoreObject:GetProfileAsync(target: number | string): Future.Future<boolean, {[string]: any}?, () -> ()?>
 	return Future.Try(function(profileStore, target)
 		local ProfileKey = IsProfileKeyValid(target, self._Pattern,
-		"Cannot get profile of type %s",
-		 typeof(target))
+			"Cannot get profile of type %s",
+			typeof(target)
+		)
 
 		local ProfileToView = profileStore:ViewProfileAsync(ProfileKey)
 
@@ -132,8 +133,9 @@ function ProfileStoreObject:LoadProfileAsync(owner: Player | string, reconcileDa
 	return Future.Try(function(profileStore, owner, reconcileData, profileClaimedHandler)
 		local ProfileObjectMetatable = setmetatable({ }, ProfileObject)
 		local ProfileKey = IsProfileKeyValid(owner, self._Pattern,
-	 "Cannot get profile of type %s",
-	  	typeof(owner))
+		"Cannot get profile of type %s",
+	  		typeof(owner)
+		)
 	
 		local LoadedProfile = profileStore:LoadProfileAsync(ProfileKey, profileClaimedHandler)
 	
@@ -175,7 +177,7 @@ function ProfileStoreObject:LoadProfileAsync(owner: Player | string, reconcileDa
 			LoadedProfile.GlobalUpdates:ClearLockedUpdate(keyId)
 		end)
 
-		ProfileObjectMetatable.GlobalKeyAdded = Signal() :: Types.SignalController<GlobalKey>
+		ProfileObjectMetatable.GlobalKeyAdded = Signal() :: Signal.Signal<GlobalKey>
 		ProfileObjectMetatable.Profile = LoadedProfile
 
 		EasyProfile.LoadedData[self._Name][owner] = ProfileObjectMetatable
