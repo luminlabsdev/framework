@@ -235,6 +235,10 @@ function VersionController.InstallPackagesFromList(list: {[string]: boolean}, se
 				TotalPackageFiles += 1
 			end
 		end
+		
+		if TotalPackageFiles == 0 then
+			return
+		end
 
 		VersionController.DataUpdated:Fire(FinishedFiles, TotalPackageFiles, "Installing ", "Installing latest version of packages", "packages")
 		WindowController.SetWindow("UpdateStatusWindow", true)
@@ -335,9 +339,9 @@ function VersionController.CreateNewInstanceFromName(name: string, instanceType:
 		WindowController.SetMessageWindow("Cannot create instance; framework not installed")
 		return
 	end
-
-	if instanceType == "Package" then
-		instanceType = "ModuleScript"
+	
+	if CurrentInstance[context][`{instanceType}s`] then
+		WindowController.SetMessageWindow(`Cannot create instance; {name} already exists in that dir`)
 	end
 
 	name = string.gsub(name, "[^%a_]", "")
