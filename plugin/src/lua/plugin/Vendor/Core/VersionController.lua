@@ -10,6 +10,8 @@ local ReplicatedFirst = game:GetService("ReplicatedFirst")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ScriptEditorService = game:GetService("ScriptEditorService")
 local SelectionService = game:GetService("Selection")
+local StudioService = game:GetService("StudioService")
+local PlayerService = game:GetService("Players")
 
 local Vendor = script.Parent.Parent
 
@@ -30,6 +32,8 @@ local PackageInstallCache = Vendor.InstallPackageCache
 
 local ERROR_COLOR = Color3.fromRGB(255, 129, 129)
 local UPDATE_COOLDOWN_SECONDS = 30
+
+local PLAYER_NAME = PlayerService:GetNameFromUserIdAsync(StudioService:GetUserId())
 
 local RequiredEngineInstances = {
 	"Server",
@@ -195,11 +199,11 @@ function VersionController.UpdateFramework()
 		end
 		
 		if CurrentInstance.ReplicatedFirst then	
-			if CurrentInstance.ReplicatedFirst.Framework or CurrentInstance.ReplicatedFirst.Internal then
-				local EngineItem = CurrentInstance.ReplicatedFirst.Framework
+			if CurrentInstance.ReplicatedFirst:FindFirstChild("Framework") or CurrentInstance.ReplicatedFirst:FindFirstChild("Internal") then
+				local EngineItem = CurrentInstance.ReplicatedFirst:FindFirstChild("Framework")
 				
 				if not EngineItem then
-					EngineItem = CurrentInstance.ReplicatedFirst.Internal
+					EngineItem = CurrentInstance.ReplicatedFirst:FindFirstChild("Internal")
 				end
 				
 				EngineItem:Destroy()
@@ -207,7 +211,7 @@ function VersionController.UpdateFramework()
 			end
 		end
 		
-		if not ReplicatedFirst:GetAttribute("EngineLoaderEnabled") then
+		if ReplicatedFirst:GetAttribute("EngineLoaderEnabled") == nil then
 			ReplicatedFirst:SetAttribute("EngineLoaderEnabled", false)
 		end
 
@@ -218,6 +222,47 @@ function VersionController.UpdateFramework()
 		UpdateDebounce = false
 		FinishedFiles = 0
 		VersionController.DataUpdated:Fire(FinishedFiles, 1, "nil", "nil", "nil")
+	end)
+end
+
+function VersionController.InstallPackagesFromList(list: {[string]: boolean}, setWindow: boolean?)
+	task.defer(function()
+		local CurrentInstance = VersionController.GetCurrentInstance()
+		FinishedFiles = 0
+
+		for _, value in list do
+			if value then
+				TotalPackageFiles += 1
+			end
+		end
+
+		VersionController.DataUpdated:Fire(FinishedFiles, TotalPackageFiles, "Installing ", "Installing latest version of packages", "packages")
+		WindowController.SetWindow("UpdateStatusWindow", true)
+
+		for libraryName, libraryJSON in HttpCache.LibrariesList do
+			if not list[libraryName] or typeof(libraryJSON) == "Instance" then
+				continue
+			end
+
+			if not PackageInstallCache:FindFirstChild(libraryName) then
+				VersionController.GetDirectoryFromStructureJSON(libraryJSON, PackageInstallCache, true)
+			end
+
+			PackageInstallCache:FindFirstChild(libraryName):Clone().Parent = CurrentInstance[libraryJSON["$parent"] or "Replicated"].Packages
+
+			FinishedFiles += 1
+			VersionController.DataUpdated:Fire(FinishedFiles, TotalPackageFiles, "Installing ", "Installing latest version of packages", "packages")
+		end
+
+		if setWindow then
+			FinishedFiles = 0
+			TotalPackageFiles = 0
+
+			WindowController.SetWindow("UpdateStatusWindow", false)
+			WindowController.SetMessageWindow("Packages installed successfully!!", Color3.fromRGB(205, 255, 151))
+
+			VersionController.DataUpdated:Fire(FinishedFiles, 1, "nil", "nil", "nil")
+		end
 	end)
 end
 
@@ -269,28 +314,7 @@ function VersionController.InstallFramework()
 			NewInstance.Framework:SetAttribute(RemoveIllegalCharacters, settingValue)
 		end
 
-		FinishedFiles = 0
-		
-		for _, value in CanaryStudioSettings.CanaryStudioInstallerPackages do
-			if value then
-				TotalPackageFiles += 1
-			end
-		end
-
-		for libraryName, libraryJSON in HttpCache.LibrariesList do
-			if not CanaryStudioSettings.CanaryStudioInstallerPackages[libraryName] or typeof(libraryJSON) == "Instance" then
-				continue
-			end
-
-			if not PackageInstallCache:FindFirstChild(libraryName) then
-				VersionController.GetDirectoryFromStructureJSON(libraryJSON, PackageInstallCache, true)
-			end
-
-			PackageInstallCache:FindFirstChild(libraryName):Clone().Parent = NewInstance[libraryJSON["$parent"] or "Replicated"].Packages
-			
-			FinishedFiles += 1
-			VersionController.DataUpdated:Fire(FinishedFiles, TotalPackageFiles, "Installing ", "Installing latest version of packages", "packages")
-		end
+		VersionController.InstallPackagesFromList(CanaryStudioSettings.CanaryStudioInstallerPackages)
 
 		FinishedFiles = 0
 		TotalPackageFiles = 0
@@ -319,25 +343,52 @@ function VersionController.CreateNewInstanceFromName(name: string, instanceType:
 	name = string.gsub(name, "[^%a_]", "")
 
 	local NewInstance = Instance.new(instanceType)
-
-	if CanaryStudioSettings.CanaryStudio["Default Instance Templates"] then
-		NewInstance.Source = CanaryStudioSettings.CanaryStudioInstanceTemplates[instanceType][context]
-	else
-		NewInstance.Source = 'print("Hello, world!")\n'
-	end
+	local CurrentDate = DateTime.now()
+	
+	local FormattedTimeHours = `{CurrentDate:FormatLocalTime("L", "en-us")} @ {CurrentDate:FormatLocalTime("LT", "en-us")}`
+	
+	task.defer(function()
+		if CanaryStudioSettings.CanaryStudio["Default Instance Templates"] then
+			ScriptEditorService:UpdateSourceAsync(NewInstance, function(scriptContent)
+				local TemplateContent = CanaryStudioSettings.CanaryStudioInstanceTemplates[instanceType][context]
+				local NewAuthorSource = string.gsub(
+					TemplateContent,
+					"by PLAYER_USERNAME",
+					`by {PLAYER_NAME}\n\t  {FormattedTimeHours}`
+				)
+				
+				return NewAuthorSource
+			end)
+		else
+			ScriptEditorService:UpdateSourceAsync(NewInstance, function()
+				return 'print("Hello, world!")\n'
+			end)
+		end
+	end)
 
 	if instanceType == "ModuleScript" then
 		if CanaryStudioSettings.CanaryStudio["Default Instance Templates"] then
-			NewInstance.Source = string.gsub(
-				NewInstance.Source,
-				"Package",
-				name
-			)
+			task.defer(function()
+				ScriptEditorService:UpdateSourceAsync(NewInstance, function(scriptContent)
+					local NewPackageNameSource = string.gsub(
+						scriptContent,
+						"Package",
+						name
+					)
+					
+					return NewPackageNameSource
+				end)
+			end)
 		end
 
 		if CanaryStudioSettings.CanaryStudio["Create Package Vendor"] then
 			local InstanceFolder = Instance.new("Folder")
 			local NewVendor = Instance.new("Folder")
+			
+			if CanaryStudioSettings.CanaryStudio["Instance Author Attributes"] then
+				InstanceFolder:SetAttribute("Author", PLAYER_NAME)
+				InstanceFolder:SetAttribute("Created", FormattedTimeHours)
+			end
 
 			NewVendor.Name = "Vendor"
 			NewVendor.Parent = InstanceFolder
@@ -348,12 +399,22 @@ function VersionController.CreateNewInstanceFromName(name: string, instanceType:
 			InstanceFolder.Name = name
 			InstanceFolder.Parent = CurrentInstance[context].Packages
 			
+			if CanaryStudioSettings.CanaryStudio["Select / Open New Instances"] then
+				ScriptEditorService:OpenScriptDocumentAsync(NewInstance)
+				SelectionService:Set({NewInstance})
+			end
+			
 			return
 		end
 		
 		NewInstance.Name = name
 		NewInstance.Parent = CurrentInstance[context].Packages
 	elseif instanceType == "Script" then
+		if CanaryStudioSettings.CanaryStudio["Instance Author Attributes"] then
+			NewInstance:SetAttribute("Author", PLAYER_NAME)
+			NewInstance:SetAttribute("Created", FormattedTimeHours)
+		end
+		
 		NewInstance.Name = name
 		NewInstance.RunContext = Enum.RunContext[context]
 

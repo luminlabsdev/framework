@@ -39,7 +39,7 @@ local OverrideValues = {
 	},
 
 	ExternalSettings = {
-		Files = 14,
+		Files = 18,
 		CanaryStudioChangelog = "We've made some large changes since the last update to the plugin and have fixed lots of bugs!\n\nInstalling has been revamped - The process is now a lot quicker and more performant\nRedesigned Home Page - The home page now has a menu bar and shows this changelog\nInternal code rework - It's now a lot easier to fix issues and add new features"
 	},
 }
@@ -105,3 +105,8 @@ CanaryStudioSettings.CanaryStudio = TableKit.Reconcile(
 ) or CanaryStudioSettings.CanaryStudio
 
 PluginFinishedLoading = true
+
+while true do
+	task.wait(10)
+	plugin:SetSetting("CanaryStudioPluginSettings", CanaryStudioSettings.CanaryStudio)
+end

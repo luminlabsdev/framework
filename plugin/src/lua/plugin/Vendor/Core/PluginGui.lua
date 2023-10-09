@@ -9,6 +9,7 @@ local Settings = require(Vendor.Settings.Settings)
 local PluginGuiContents = require(Vendor.Settings.PluginGuiContents)
 local WindowList = require(Vendor.Core.WindowList)
 local HttpCache = require(Vendor.Core.HttpCache)
+local MDify = require(Vendor.MDify.MDify)
 local StudioSettings = settings().Studio
 local WindowController
 local VersionController
@@ -22,6 +23,7 @@ if not AlreadyRan then
 		local FormattedPublishDate = DateTime.fromIsoDate(HttpCache.ReleaseLatest.published_at):FormatLocalTime("lll", LocalizationService.SystemLocaleId)
 		local FinishedFiles = Iris.State(0)
 		local TotalFiles = Iris.State(1)
+		local InstanceType = Iris.State("Script")
 		local TitleMessage = Iris.State("Updating ")
 		local BelowMessage = Iris.State("Updating framework to latest version")
 		local FileType = Iris.State("files")
@@ -58,10 +60,12 @@ if not AlreadyRan then
 
 						if Iris.MenuItem({"Create Package", Enum.KeyCode.One, Enum.ModifierKey.Alt}).clicked() then
 							WindowController.SetWindow("InstanceCreationWindow", true)
+							InstanceType:set("Package")
 						end
 						
 						if Iris.MenuItem({"Create Script", Enum.KeyCode.Two, Enum.ModifierKey.Alt}).clicked() then
 							WindowController.SetWindow("InstanceCreationWindow", true)
+							InstanceType:set("Script")
 						end
 					end Iris.End()
 
@@ -82,7 +86,7 @@ if not AlreadyRan then
 
 				Iris.Text(`Welcome back, {PlayerName}!`)
 				Iris.Separator()
-				Iris.Text({HttpCache.ExternalSettings.CanaryStudioChangelog, true})
+				Iris.Text(HttpCache.ExternalSettings.CanaryStudioChangelog)
 			end Iris.End()
 
 			WindowList.InstallerWindow = Iris.Window("Canary Studio - Installer", {isOpened = false}) do
@@ -121,8 +125,8 @@ if not AlreadyRan then
 			end Iris.End()
 
 			WindowList.InstanceCreationWindow = Iris.Window({"Canary Studio - Instance Creator", [Iris.Args.Window.NoResize] = true}, {isOpened = false, size = Vector2.new(285, 177)}) do
-				local NameInput = Iris.InputText("Name")
-				local InstanceTypeDropdown = Iris.ComboArray("Type", {index = "Script"}, {"Script", "Package"})
+				local NameInput = Iris.InputText({"Name", "Instance name..."})
+				local InstanceTypeDropdown = Iris.ComboArray("Type", {index = InstanceType:get()}, {"Script", "Package"})
 				local InstanceContextDropdown
 				
 				if InstanceTypeDropdown.state.index:get() == "Script" then
@@ -137,7 +141,7 @@ if not AlreadyRan then
 			end Iris.End()
 
 			WindowList.ReleaseNotesWindow = Iris.Window(`Release Notes for {HttpCache.ReleaseLatest.tag_name}`, {isOpened = false}) do
-				Iris.Text({HttpCache.ReleaseLatest.body, true})
+				Iris.Text({MDify.MarkdownToRichText(HttpCache.ReleaseLatest.body), false, nil, true})
 				Iris.Separator()
 				Iris.Text(`Commit Branch: {HttpCache.ReleaseLatest.target_commitish}`)
 				Iris.Text(`Published At: {FormattedPublishDate}`)
@@ -145,19 +149,29 @@ if not AlreadyRan then
 			
 			WindowList.UpdateStatusWindow = Iris.Window({`{TitleMessage:get()}({math.floor((FinishedFiles:get() / TotalFiles:get()) * 100)}%)`, [Iris.Args.Window.NoClose] = true, [Iris.Args.Window.NoResize] = true}, {isOpened = false, size = Vector2.new(334, 109)}) do
 				Iris.Text(BelowMessage:get())
-				Iris.Text(`{FinishedFiles:get()} of {TotalFiles:get()} files`)
+				Iris.Text(`{FinishedFiles:get()} of {TotalFiles:get()} {FileType:get()}`)
 			end Iris.End()
 			
 			WindowList.PackageManagerWindow = Iris.Window("Canary Studio - Package Manager", {isOpened = false}) do
-				for libraryName in HttpCache.LibrariesList do
-					Settings.CanaryStudioInstallerPackages[libraryName] = Iris.Checkbox(libraryName).state.isChecked:get()
+				Iris.CollapsingHeader("Default Packages", {isUncollapsed = true}) do
+					for libraryName in HttpCache.LibrariesList do
+						Settings.CanaryStudioManagerPackages[libraryName] = Iris.Checkbox(libraryName).state.isChecked:get()
+					end
+				end Iris.End()
+				
+				Iris.CollapsingHeader("My Packages") do
+					Iris.Text("Not currently available")
+				end Iris.End()
+				
+				if Iris.Button("Install Selected Packages").clicked() then
+					VersionController.InstallPackagesFromList(Settings.CanaryStudioManagerPackages, true)
 				end
 			end Iris.End()
 			
 			WindowList.ConfirmWindow = Iris.Window({"Confirm", [Iris.Args.Window.NoClose] = true, [Iris.Args.Window.NoTitleBar] = true}, {isOpened = false, size = Vector2.new(432, 122)}) do
 				Iris.Text({PluginGuiContents.ConfirmWindow.MessageText, true})
 				Iris.SameLine() do
-					if Iris.Button("OK").clicked() then
+					if Iris.Button("Confirm").clicked() then
 						PluginGuiContents.ConfirmWindow.ConfirmFunction()
 						WindowController.SetWindow("ConfirmWindow", false)
 					end

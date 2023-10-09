@@ -4,6 +4,7 @@ return {
 		["Default Instance Templates"] = true,
 		["Automatically Update Canary"] = false,
 		["Create Package Vendor"] = true,
+		["Instance Author Attributes"] = false,
 	},
 
 	CanaryStudioInstaller = {
@@ -16,13 +17,13 @@ return {
 	CanaryStudioManagerPackages = { },
 	CanaryStudioInstanceTemplates = {
 		ModuleScript = {
-			Client = "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/plugin/src/lua/templates/packages/package/client-package.lua",
-			Server = "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/plugin/src/lua/templates/packages/package/server-package.lua",
-			Replicated = "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/plugin/src/lua/templates/packages/package/replicated-package.lua",
+			Client = "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/plugin/src/lua/templates/packages/package/client-package.luau",
+			Server = "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/plugin/src/lua/templates/packages/package/server-package.luau",
+			Replicated = "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/plugin/src/lua/templates/packages/package/replicated-package.luau",
 		},
 		Script = {
-			Server = "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/plugin/src/lua/templates/scripts/server-script.lua",
-			Client = "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/plugin/src/lua/templates/scripts/client-script.lua",
+			Server = "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/plugin/src/lua/templates/scripts/server-script.luau",
+			Client = "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/plugin/src/lua/templates/scripts/client-script.luau",
 		}
 	},
 }
