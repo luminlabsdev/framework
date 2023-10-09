@@ -8,7 +8,7 @@ keywords: [roblox, game, framework, install, tutorial, github, node]
 
 ### Installation + Usage
 
-Refer to the installation [article](https://canary-development.github.io/CanaryEngine/docs/getstarted/installation) hosted on our documentation site. From there, you can go to the next article in tutorials to learn more about the framework. If you need any additional help, feel free to reply to this post or shoot me a message on Discord.
+Refer to the installation [article](start/installation) hosted on our documentation site. From there, you can go to the next article in tutorials to learn more about the framework. If you need any additional help, feel free to reply to this post or shoot me a message on Discord.
 
 ### Issues
 
@@ -16,4 +16,4 @@ Came across an issue in our code? Simply create a new issue on the GitHub reposi
 
 ### Plugin Errors
 
-If your plugin errors, it's most likely because you have an older version installed. If you don't, make sure to send a report using the [guide](https://canary-development.github.io/CanaryEngine/docs/getstarted/faq#issues).
+If your plugin errors, it's most likely because you have an older version installed. If you don't, make sure to send a report using the [guide](#issues).

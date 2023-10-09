@@ -24,4 +24,7 @@ The networking system that CanaryEngine uses can actually partially prevent expl
 * **Ordered** 🔄
 You can import modules from a main script, which will then execute in order. Can prevent issues like race conditions which come up a lot in multi-threaded architectures.
 
+* **Great for Teams** 👨‍💻
+Allows you to automatically insert an author and a creation date at the top of all scripts / packages, along with attributes of these.
+
 ... and much more!

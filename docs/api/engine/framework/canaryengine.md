@@ -32,7 +32,7 @@ A reference to the Future package, which is a optimized version of a Promise.
 
 A reference to the Guard package, which allows for type checking during runtime.
 
-* [**Future**](https://util.redblox.dev/future.html)
+* [**Guard**](https://util.redblox.dev/guard.html)
 
 ## Functions
 
@@ -62,7 +62,7 @@ Gets the global-sided interface of CanaryEngine. Recommended that use this only 
 
 **Returns**
 
-* [**CanaryEngineRepliated?**](/api/engine/framework/canaryenginereplicated)
+* [**CanaryEngineReplicated?**](/api/engine/framework/canaryenginereplicated)
 
 ---
 
@@ -73,10 +73,10 @@ Imports the provided packages in chronological order, also allowing for you to i
 **Parameters**
 
 * **importList:** `{ModuleScript}`\
-A list of packages to import\
+A list of packages to import
 
 * **importDeep:** `boolean?`\
-Whether or not to import the package's descendants, defaults to `false`.
+Whether or not to import the package's descendants, defaults to `false`
 
 **Returns**
 
@@ -101,7 +101,7 @@ The name of the signal
 
 ### CreateAnonymousSignal
 
-Creates a new anonymous signal, this does not have a reference outside of the variable it was created in. This is essentially an alias for an empty [`CreateSignal`](#createsignal)
+Creates a new anonymous signal, this does not have a reference outside of the variable it was created in. This is essentially an alias for an empty [`CreateSignal`](#createsignal).
 
 **Returns**
 
