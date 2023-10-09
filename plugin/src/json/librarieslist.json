@@ -37,6 +37,20 @@
             }
         }
     },
+    "MethodTween": {
+        "Signal": {
+            "$className": "ModuleScript",
+            "$properties": {
+                "Source": "https://raw.githubusercontent.com/stravant/goodsignal/master/src/init.lua"
+            }
+        },
+        "Init": {
+            "$className": "ModuleScript",
+            "$properties": {
+                "Source": "https://raw.githubusercontent.com/Pyseph/MethodTween/main/src/init.lua"
+            }
+        }
+    },
     "PacketMeasure": {
         "PacketMeasure": {
             "$className": "ModuleScript",
