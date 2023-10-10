@@ -1,7 +1,7 @@
 {
     "EngineClient": {
         "Packages": {},
-        "Media": {
+        "Assets": {
             "Models": {},
             "Effects": {},
             "Animations": {},
@@ -12,7 +12,7 @@
     },
     "EngineReplicated": {
         "Packages": {},
-        "Media": {
+        "Assets": {
             "Sounds": {},
             "Models": {},
             "Animations": {},
@@ -35,7 +35,7 @@
     },
     "EngineServer": {
         "Packages": {},
-        "Media": {
+        "Assets": {
             "Models": {},
             "Tools": {},
             "Effects": {},

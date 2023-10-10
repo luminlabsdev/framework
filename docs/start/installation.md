@@ -18,10 +18,9 @@ keywords: [roblox, game, framework, install, tutorial, github, node]
 3. Open Roblox Studio, and drag `CanaryStudioPlugin.rbxm` from your download directory into studio.
 4. Right click the plugin, and choose `Save as Local Plugin`
 
-### Rojo
+### Plugin Permissions
 
-Rojo support is being looked into!
+If you install the plugin from the marketplace, you will be asked to give the following permissions:
 
-### TypeScript
-
-We're currently working on definition files; we will not be publishing a package on roblox-ts.
+* `raw.githubusercontent.com` - Needed to get file contents of scripts, settings, and packages
+* `api.github.com` - Needed to get the latest version of the framework
