@@ -60,7 +60,6 @@ function CanaryEngine.GetFrameworkServer()
 		return table.freeze(CanaryEngineServer)
 	else
 		error("Failed to fetch 'EngineServer', context must be server.")
-		return
 	end
 end
 
@@ -79,7 +78,6 @@ function CanaryEngine.GetFrameworkClient()
 		return table.freeze(CanaryEngineClient)
 	else
 		error("Failed to fetch 'EngineClient', context must be client.")
-		return
 	end
 end
 
@@ -130,7 +128,7 @@ end
 
 -- Context Specific Functions
 
-function CanaryEngineClient.GetPlayerCharacter(): Types.Character
+function CanaryEngineClient.GetPlayerCharacter(): Future.Future<Types.Character>
 	return Future.new(function(player)
 		return player.Character or player.CharacterAdded:Wait()
 	end, PlayerService.LocalPlayer)

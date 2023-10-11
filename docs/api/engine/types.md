@@ -6,7 +6,7 @@ Types used by the engine for objects.
 
 ### Character <Badge type="tip" text="public" />
 
-A basic type of an R6 character rig. Should be combined with model using the `&` syntax.
+A basic type of an R6 character rig.
 
 ---
 

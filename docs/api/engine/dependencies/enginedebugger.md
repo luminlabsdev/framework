@@ -20,7 +20,15 @@ This type contains every roblox user data and generic type.
 
 A list of cached debug calls for the current environment.
 
-* **[Array](/api/engine/types#array)\<string | [Array](/api/engine/types#array)<string\>**
+* **[Array](/api/engine/types#array)\<[Array](/api/engine/types#array)<string\>**
+
+---
+
+### CachedLogs
+
+A list of cached logs/events for the current environment.
+
+* **any**
 
 ## Functions
 
@@ -30,17 +38,11 @@ The main debug handler, adds a prefix to logs sent out and respects logging sett
 
 **Parameters**
 
-* **debugHandler:** `(...T) -> ()`\
-The function to run on debug, for example `Debugger.Debug(print, "Hello, world!")`
+* **debugHandler:** `(T...) -> ()`\
+The function to run on debug, for example `Debugger.Debug(Debugger.Handlers.Print, "Hello, world!")`
 
-* **arguments:** `{string} | string`\
+* **arguments:** `T...`\
 The contents to be passed to the function
-
-* **prefix:** `string?`\
-The prefix to put in front of the debug
-
-* **respectDebugger:** `boolean?`\
-Whether or not to respect the debugger, should always be true for correct use
 
 **Returns**
 

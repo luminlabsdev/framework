@@ -12,15 +12,20 @@ export type ExpectedType = "Axes" | "BrickColor" | "CatalogSearchParams" | "CFra
 -- // Variables
 
 local EngineVendor = script.Parent
+local EngineLibraries = EngineVendor.Libraries
 
 local HttpService = game:GetService("HttpService")
 local LogService = game:GetService("LogService")
 
 local Runtime = require(EngineVendor.Runtime)
+local Guard = require(EngineLibraries.RedbloxUtils.Guard)
 local RuntimeContext = Runtime.Context
 local RuntimeSettings = Runtime.Settings
 
-local Prefix = "[Debugger]:"
+local Prefix = "[Debug]"
+local ErrorPrefix = "[Debug:Critical]"
+local WarnPrefix = "[Debug:Issue]"
+
 local ValidCallstackNames = {
 	"EngineClient",
 	"EngineServer",
@@ -30,21 +35,36 @@ local ValidCallstackNames = {
 
 -- // Functions
 
-local function dictionaryLen(d: {[any]: any})
-	return setmetatable(d, {
-		__len = function(t)
-			local count = 0
-			for key, value in pairs(d) do
-				count += 1
-			end
-			return count
-		end,
-	})
+local function PackArgs(...: any)
+	return {...}
 end
 
 EngineDebugger.CachedDebugCalls = { }
 EngineDebugger.CachedLogs = { }
 EngineDebugger.InternalCachedLogs = { }
+
+EngineDebugger.Handlers = {
+	Error = function(...)
+		error(
+			`{ErrorPrefix} {
+				table.concat(PackArgs(...), " ")
+			}`,
+			0
+		) -- may cause weird stack stuff
+	end,
+
+	Log = function(...)
+		print("[Event]:", ...)
+	end,
+
+	Print = function(...)
+		print(Prefix, ...)
+	end,
+
+	Warn = function(...)
+		warn(WarnPrefix, ...)
+	end
+}
 
 local function GetAncestorsUntilParentFolder(instance: Instance): {string | {Instance}}
 	local Ancestors = { }
@@ -71,21 +91,11 @@ local function GetAncestorsUntilParentFolder(instance: Instance): {string | {Ins
 	}
 end
 
-function EngineDebugger.Debug(debugHandler: (...any) -> (), arguments: {any} | any, prefix: string?, respectDebugger: boolean?)
-	prefix = prefix or Prefix
+function EngineDebugger.Debug<T...>(debugHandler: (T...) -> (), ...: T...)
+	table.insert(EngineDebugger.CachedDebugCalls, PackArgs(...))
 
-	if respectDebugger == nil then
-		respectDebugger = true
-	end
-
-	table.insert(EngineDebugger.CachedDebugCalls, arguments)
-
-	if not respectDebugger or(RuntimeContext.Studio and RuntimeSettings.StudioDebugEnabled) or RuntimeSettings.LiveGameDebugEnabled then
-		if type(arguments) == "table" then
-			debugHandler(prefix, table.unpack(arguments))
-		else
-			debugHandler(`{prefix} {arguments}`)
-		end
+	if (RuntimeContext.Studio and RuntimeSettings.StudioDebugEnabled) or RuntimeSettings.LiveGameDebugEnabled then
+		debugHandler(...)
 	end
 end
 
@@ -105,11 +115,7 @@ function EngineDebugger.Assert<T>(assertionHandler: (...any) -> (), assertion: T
 end
 
 function EngineDebugger.GetCallStack(instance: LuaSourceContainer, stackName: string?): CallStack
-	if not instance:IsA("LuaSourceContainer") then
-		EngineDebugger.DebugInvalidData(1, "GetCallStack", "LuaSourceContainer", instance)
-	end
-
-	stackName = stackName or `NewStack`
+	instance = Guard.Instance(instance)
 	
 	local Source = GetAncestorsUntilParentFolder(instance)
 	local DefinedLine = debug.traceback():split(":")
@@ -122,20 +128,6 @@ function EngineDebugger.GetCallStack(instance: LuaSourceContainer, stackName: st
 	StackTable.DefinedLine = tonumber(DefinedLine[#DefinedLine]:gsub("\n", ""), nil)
 	
 	return StackTable
-end
-
-function EngineDebugger.DebugInvalidData(paramNumber: number, funcName: string, expectedType: ExpectedType, param: unknown, debugHander: (...any) -> ())
-	warn("DebugInvalidData is deprecated as of 4.0.0, please Guard instead")
-	local ParamType = typeof(param)
-
-	if ParamType ~= expectedType then
-		local ErrorString = `invalid argument #{paramNumber} to '{funcName}' ({expectedType} expected, got {ParamType})`
-		if debugHander then
-			debugHander(ErrorString)
-			return
-		end
-		error(ErrorString)
-	end
 end
 
 function EngineDebugger.LogEvent(instance: LuaSourceContainer, eventName: string, printLog: boolean?, isInternal: boolean?)
@@ -154,7 +146,7 @@ function EngineDebugger.LogEvent(instance: LuaSourceContainer, eventName: string
 	end
 
 	if printLog then
-		EngineDebugger.Debug(print, eventName, "[Event]:")
+		EngineDebugger.Debug(EngineDebugger.Handlers.Log, eventName)
 	end
 end
 
