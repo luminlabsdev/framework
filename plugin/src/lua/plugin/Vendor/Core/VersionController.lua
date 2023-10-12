@@ -40,13 +40,13 @@ local RequiredEngineInstances = {
 	"Client",
 	"Replicated",
 	"Framework",
-	"ReplicatedFirst",
+	"LoadPriority",
 }
 
 local FolderToService = {
 	Client = ReplicatedStorage,
 	Replicated = ReplicatedStorage,
-	ReplicatedFirst = ReplicatedFirst,
+	LoadPriority = ReplicatedFirst,
 	Server = ServerStorage,
 }
 
