@@ -164,7 +164,7 @@ if not AlreadyRan then
 				end Iris.End()
 				
 				if Iris.Button("Install Selected Packages").clicked() then
-					VersionController.InstallPackagesFromList(Settings.CanaryStudioManagerPackages, true)
+					VersionController.InstallPackagesFromList(Settings.CanaryStudioManagerPackages)
 				end
 			end Iris.End()
 			

@@ -82,10 +82,16 @@ function VersionController.GetDirectoryFromStructureJSON(json: {any}, parent: In
 			InstanceFromClass.Name = instanceName
 			InstanceFromClass.Parent = parent
 		end
+		
+		if children["$attributes"] then
+			for attributeName: string, attributeValue: any in children["$attributes"] do
+				InstanceFromClass:SetAttribute(attributeName, attributeValue)
+			end
+		end
 
 		if children["$properties"] then
 			for propertyName: string, propertyValue: string | any in children["$properties"] do
-				if propertyName == "Source" and propertyValue:find("https://") then
+				if propertyName == "Source" and type(propertyValue) == "string" and propertyValue:find("https://") then
 					local Source = Fetch.FetchAsync(propertyValue, false)
 
 					if not Source then
@@ -114,11 +120,11 @@ function VersionController.GetCurrentInstance(ignoreNil: boolean?): {[string]: F
 	ignoreNil = ignoreNil or false
 
 	local EngineTable = {
-		Server = ServerStorage:FindFirstChild("EngineServer"),
-		Client = ReplicatedStorage:FindFirstChild("EngineClient"),
-		Replicated = ReplicatedStorage:FindFirstChild("EngineReplicated"),
+		Server = ServerStorage:FindFirstChild("Server") or ServerStorage:FindFirstChild("EngineServer"),
+		Client = ReplicatedStorage:FindFirstChild("Client") or ReplicatedStorage:FindFirstChild("EngineClient"),
+		Replicated = ReplicatedStorage:FindFirstChild("Replicated") or ReplicatedStorage:FindFirstChild("EngineReplicated"),
 		Framework = ReplicatedStorage:FindFirstChild("Framework") or ReplicatedStorage:FindFirstChild("CanaryEngineFramework"),
-		ReplicatedFirst = ReplicatedFirst:FindFirstChild("EngineReplicatedFirst")
+		ReplicatedFirst = ReplicatedFirst:FindFirstChild("PriorityLoad") or ReplicatedFirst:FindFirstChild("EngineReplicatedFirst")
 	}
 
 	if not ignoreNil then
@@ -225,7 +231,7 @@ function VersionController.UpdateFramework()
 	end)
 end
 
-function VersionController.InstallPackagesFromList(list: {[string]: boolean}, setWindow: boolean?)
+function VersionController.InstallPackagesFromList(list: {[string]: boolean})
 	task.defer(function()
 		local CurrentInstance = VersionController.GetCurrentInstance()
 		FinishedFiles = 0
@@ -258,15 +264,13 @@ function VersionController.InstallPackagesFromList(list: {[string]: boolean}, se
 			VersionController.DataUpdated:Fire(FinishedFiles, TotalPackageFiles, "Installing ", "Installing latest version of packages", "packages")
 		end
 
-		if setWindow then
-			FinishedFiles = 0
-			TotalPackageFiles = 0
+		FinishedFiles = 0
+		TotalPackageFiles = 0
 
-			WindowController.SetWindow("UpdateStatusWindow", false)
-			WindowController.SetMessageWindow("Packages installed successfully!!", Color3.fromRGB(205, 255, 151))
+		WindowController.SetWindow("UpdateStatusWindow", false)
+		WindowController.SetMessageWindow("Packages installed successfully!", Color3.fromRGB(205, 255, 151))
 
-			VersionController.DataUpdated:Fire(FinishedFiles, 1, "nil", "nil", "nil")
-		end
+		VersionController.DataUpdated:Fire(FinishedFiles, 1, "nil", "nil", "nil")
 	end)
 end
 
@@ -305,10 +309,10 @@ function VersionController.InstallFramework()
 
 		local NewInstance = VersionController.GetCurrentInstance()
 
-		if not CanaryStudioSettings.CanaryStudioInstaller["Enable Media Templates"] then
+		if not CanaryStudioSettings.CanaryStudioInstaller["Enable Asset Templates"] then
 			for _, folderName in RequiredEngineInstances do
 				if folderName ~= "Framework" and folderName ~= "ReplicatedFirst" then
-					NewInstance[folderName].Media:ClearAllChildren()
+					NewInstance[folderName].Assets:ClearAllChildren()
 				end
 			end
 		end
@@ -319,14 +323,8 @@ function VersionController.InstallFramework()
 		end
 
 		VersionController.InstallPackagesFromList(CanaryStudioSettings.CanaryStudioInstallerPackages)
-
-		FinishedFiles = 0
-		TotalPackageFiles = 0
-
-		WindowController.SetWindow("UpdateStatusWindow", false)
 		WindowController.SetMessageWindow("Framework installed successfully!", Color3.fromRGB(205, 255, 151))
 		
-		VersionController.DataUpdated:Fire(FinishedFiles, 1, "nil", "nil", "nil")
 		task.wait(UPDATE_COOLDOWN_SECONDS)
 		UpdateDebounce = false
 	end)
@@ -340,8 +338,13 @@ function VersionController.CreateNewInstanceFromName(name: string, instanceType:
 		return
 	end
 	
-	if CurrentInstance[context][`{instanceType}s`] then
-		WindowController.SetMessageWindow(`Cannot create instance; {name} already exists in that dir`)
+	if CurrentInstance[context][`{instanceType}s`]:FindFirstChild(name) then
+		WindowController.SetMessageWindow(`Cannot create {string.lower(instanceType)}; {name} already exists in that dir`)
+		return
+	end
+	
+	if name == "Package" then
+		name = "ModuleScript"
 	end
 
 	name = string.gsub(name, "[^%a_]", "")

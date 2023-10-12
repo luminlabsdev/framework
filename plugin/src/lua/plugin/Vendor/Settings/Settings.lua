@@ -10,7 +10,7 @@ return {
 	CanaryStudioInstaller = {
 		["Studio Debugging"] = true,
 		["Live Game Debugging"] = false,
-		["Enable Media Templates"] = true,
+		["Enable Asset Templates"] = true,
 	},
 
 	CanaryStudioInstallerPackages = { },
