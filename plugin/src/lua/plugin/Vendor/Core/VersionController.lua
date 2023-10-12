@@ -44,15 +44,26 @@ local RequiredEngineInstances = {
 }
 
 local FolderToService = {
-	EngineClient = ReplicatedStorage,
-	EngineReplicated = ReplicatedStorage,
-	EngineReplicatedFirst = ReplicatedFirst,
-	EngineServer = ServerStorage,
+	Client = ReplicatedStorage,
+	Replicated = ReplicatedStorage,
+	ReplicatedFirst = ReplicatedFirst,
+	Server = ServerStorage,
 }
 
 VersionController.DataUpdated = Signal.new()
 
 -- // Functions
+
+function VersionController.IsOldVersionInstalled(): boolean
+	local CurrentInstance = VersionController.GetCurrentInstance()
+
+	if CurrentInstance.Framework and not (CurrentInstance.Client or CurrentInstance.Server or CurrentInstance.ReplicatedFirst or CurrentInstance.Replicated) then
+		WindowController.SetMessageWindow("An old version of the framework is installed, and older versions are no longer supported. You will have to update manually.", ERROR_COLOR)
+		return true
+	end
+
+	return false
+end
 
 function VersionController.GetDirectoryFromStructureJSON(json: {any}, parent: Instance, isPackage: boolean?)
 	for instanceName, children in json do
@@ -120,11 +131,11 @@ function VersionController.GetCurrentInstance(ignoreNil: boolean?): {[string]: F
 	ignoreNil = ignoreNil or false
 
 	local EngineTable = {
-		Server = ServerStorage:FindFirstChild("Server") or ServerStorage:FindFirstChild("EngineServer"),
-		Client = ReplicatedStorage:FindFirstChild("Client") or ReplicatedStorage:FindFirstChild("EngineClient"),
-		Replicated = ReplicatedStorage:FindFirstChild("Replicated") or ReplicatedStorage:FindFirstChild("EngineReplicated"),
+		Server = ServerStorage:FindFirstChild("Server"),
+		Client = ReplicatedStorage:FindFirstChild("Client"),
+		Replicated = ReplicatedStorage:FindFirstChild("Replicated"),
 		Framework = ReplicatedStorage:FindFirstChild("Framework") or ReplicatedStorage:FindFirstChild("CanaryEngineFramework"),
-		ReplicatedFirst = ReplicatedFirst:FindFirstChild("PriorityLoad") or ReplicatedFirst:FindFirstChild("EngineReplicatedFirst")
+		ReplicatedFirst = ReplicatedFirst:FindFirstChild("PriorityLoad")
 	}
 
 	if not ignoreNil then
@@ -165,8 +176,7 @@ function VersionController.UpdateFramework()
 		return
 	end
 
-	if CurrentInstance.Framework and not (CurrentInstance.Client or CurrentInstance.Server or CurrentInstance.ReplicatedFirst or CurrentInstance.Replicated) then
-		WindowController.SetMessageWindow("An old version of the framework is installed, and older versions are no longer supported. You will have to update manually.", ERROR_COLOR)
+	if VersionController.IsOldVersionInstalled() then
 		return
 	end
 
@@ -306,6 +316,8 @@ function VersionController.InstallFramework()
 		StructureCache.Framework:SetAttribute("Version", HttpCache.ReleaseLatest.tag_name)
 		StructureCache.Framework.Parent = ReplicatedStorage
 		ReplicatedFirst:SetAttribute("EngineLoaderEnabled", false)
+
+		task.wait(0.5)
 
 		local NewInstance = VersionController.GetCurrentInstance()
 
