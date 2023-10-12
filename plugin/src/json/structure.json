@@ -1,5 +1,5 @@
 {
-    "EngineClient": {
+    "Client": {
         "Packages": {},
         "Assets": {
             "Models": {},
@@ -10,7 +10,7 @@
         },
         "Scripts": {}
     },
-    "EngineReplicated": {
+    "Replicated": {
         "Packages": {},
         "Assets": {
             "Sounds": {},
@@ -19,21 +19,19 @@
             "Effects": {}
         }
     },
-    "EngineReplicatedFirst": {
-        "Framework": {
-            "EngineLoader": {
-                "Init": {
-                    "$className": "ModuleScript",
-                    "$properties": {
-                        "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Libraries/EngineLoader/init.luau"
-                    }
-                },
-                "Vendor": "EngineLoaderAssets"
-            }
+    "PriorityLoad": {
+        "FrameworkLoader": {
+            "Init": {
+                "$className": "ModuleScript",
+                "$properties": {
+                    "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Libraries/EngineLoader/init.luau"
+                }
+            },
+            "Vendor": "EngineLoaderAssets"
         },
         "Scripts": {}
     },
-    "EngineServer": {
+    "Server": {
         "Packages": {},
         "Assets": {
             "Models": {},

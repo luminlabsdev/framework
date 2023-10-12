@@ -8,13 +8,37 @@ keywords: [roblox, game, framework, changelog, updates]
 
 This is the changelog which is changed every update, and we follow semver. To see what we're working on, head to our [Trello](https://trello.com/b/fTJOmMua/canaryengine) board.
 
+## 4.0.0
+
+(Includes rc1-2)
+
+---
+
+### Added
+
+* Rewrote plugin features
+* Add package manager to plugin
+* Add ability to add custom packages to manager
+* Add `Snacky` to Canary Suite
+
+### Improvements
+
+* Improves internal API, should be significantly faster
+* Improves networking / signal APIs, tuples are now allowed
+* Improves default structure, changed names of all folders to fit developers' needs
+* Improve UIShelf, adds text icons + improved menus
+
+### Removed
+
+* Deprecated functions
+
 ## 4.0.0-rc2
 
 ### Added
 
 * Adds `Red`, revamped the networking system once again and for the last time
 * Adds `NetworkController:FireFilter`
-* Adds `CanaryEngine.ImportPackagesInOrder`
+* Adds `CanaryEngine.ImportPackagesInOrder`2
 * Finish API documentation
 
 ### Improvements
@@ -43,7 +67,6 @@ This is the changelog which is changed every update, and we follow semver. To se
 * Improves EasyProfile ([#3](https://github.com/canary-development/CanaryEngine/pull/3), [koxx12](https://github.com/koxx12-dev))
 * Renames `CanaryEngineFramework` instance to `Framework`
 * Renames `CanaryEngine` module to `Init`
-* Fixed TS support, back on roblox-ts!
 * Small bug fixes
 * QOL fixes
 * Most yielding functions now make usage of Futures

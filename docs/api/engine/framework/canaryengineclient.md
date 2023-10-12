@@ -49,4 +49,4 @@ Gets the players current character model; if it doesn't exist the thread will yi
 
 **Returns**
 
-* **[Future](https://util.redblox.dev/future.html#methods)<[Character](/api/engine/types#character)>**
+* **[Character](/api/engine/types#character)**
