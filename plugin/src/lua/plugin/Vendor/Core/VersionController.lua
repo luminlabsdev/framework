@@ -40,13 +40,13 @@ local RequiredEngineInstances = {
 	"Client",
 	"Replicated",
 	"Framework",
-	"LoadPriority",
+	"ReplicatedFirst",
 }
 
 local FolderToService = {
 	Client = ReplicatedStorage,
 	Replicated = ReplicatedStorage,
-	LoadPriority = ReplicatedFirst,
+	PriorityLoad = ReplicatedFirst,
 	Server = ServerStorage,
 }
 
@@ -317,8 +317,6 @@ function VersionController.InstallFramework()
 		StructureCache.Framework.Parent = ReplicatedStorage
 		ReplicatedFirst:SetAttribute("EngineLoaderEnabled", false)
 
-		task.wait(0.5)
-
 		local NewInstance = VersionController.GetCurrentInstance()
 
 		if not CanaryStudioSettings.CanaryStudioInstaller["Enable Asset Templates"] then
@@ -355,8 +353,8 @@ function VersionController.CreateNewInstanceFromName(name: string, instanceType:
 		return
 	end
 	
-	if name == "Package" then
-		name = "ModuleScript"
+	if instanceType == "Package" then
+		instanceType = "ModuleScript"
 	end
 
 	name = string.gsub(name, "[^%a_]", "")
