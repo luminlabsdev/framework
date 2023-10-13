@@ -90,6 +90,7 @@ local FolderToService = {
 }
 
 VersionController.DataUpdated = Signal.new()
+VersionController.FinishedUpdating = Signal.new()
 
 -- // Functions
 
@@ -224,7 +225,7 @@ function VersionController.UninstallFramework()
 	for _, instancePart in CurrentInstance do
 		instancePart:Destroy()
 	end
-	
+
 	ReplicatedFirst:SetAttribute("EngineLoaderEnabled", nil)
 end
 
@@ -270,24 +271,24 @@ function VersionController.UpdateFramework()
 		if CurrentInstance.Framework then
 			CurrentInstance.Framework:Destroy()
 			CurrentInstance.Framework = CanaryEngineStructure
-			
+
 			CanaryEngineStructure:SetAttribute("Version", HttpCache.ReleaseLatest.tag_name)
 			CanaryEngineStructure.Parent = ReplicatedStorage
 		end
-		
+
 		if CurrentInstance.ReplicatedFirst then	
 			if CurrentInstance.ReplicatedFirst:FindFirstChild("Framework") or CurrentInstance.ReplicatedFirst:FindFirstChild("Internal") then
 				local EngineItem = CurrentInstance.ReplicatedFirst:FindFirstChild("Framework")
-				
+
 				if not EngineItem then
 					EngineItem = CurrentInstance.ReplicatedFirst:FindFirstChild("Internal")
 				end
-				
+
 				EngineItem:Destroy()
 				EngineLoaderStructure.Parent = CurrentInstance.ReplicatedFirst
 			end
 		end
-		
+
 		if ReplicatedFirst:GetAttribute("FrameworkLoaderEnabled") == nil then
 			ReplicatedFirst:SetAttribute("FrameworkLoaderEnabled", false)
 		end
@@ -312,7 +313,7 @@ function VersionController.InstallPackagesFromList(list: {[string]: boolean})
 				TotalPackageFiles += 1
 			end
 		end
-		
+
 		if TotalPackageFiles == 0 then
 			WindowController.SetWindow("UpdateStatusWindow", false)
 			VersionController.DataUpdated:Fire(FinishedFiles, 1, "nil", "nil", "nil")
@@ -344,6 +345,7 @@ function VersionController.InstallPackagesFromList(list: {[string]: boolean})
 		WindowController.SetMessageWindow("Packages installed successfully!", Color3.fromRGB(205, 255, 151))
 
 		VersionController.DataUpdated:Fire(FinishedFiles, 1, "nil", "nil", "nil")
+		VersionController.FinishedUpdating:Fire()
 	end)
 end
 
@@ -398,6 +400,10 @@ function VersionController.InstallFramework()
 		VersionController.InstallPackagesFromList(CanaryStudioSettings.CanaryStudioInstallerPackages)
 		WindowController.SetMessageWindow("Framework installed successfully!", Color3.fromRGB(205, 255, 151))
 		
+		VersionController.FinishedUpdating:Once(function()
+			WindowController.SetWindow("UpdateStatusWindow", false)
+		end)
+
 		task.wait(UPDATE_COOLDOWN_SECONDS)
 		UpdateDebounce = false
 	end)
@@ -410,12 +416,12 @@ function VersionController.CreateNewInstanceFromName(name: string, instanceType:
 		WindowController.SetMessageWindow("Cannot create instance; framework not installed")
 		return
 	end
-	
+
 	if CurrentInstance[context][`{instanceType}s`]:FindFirstChild(name) then
 		WindowController.SetMessageWindow(`Cannot create {string.lower(instanceType)}; {name} already exists in that dir`)
 		return
 	end
-	
+
 	if instanceType == "Package" then
 		instanceType = "ModuleScript"
 	end
@@ -424,9 +430,9 @@ function VersionController.CreateNewInstanceFromName(name: string, instanceType:
 
 	local NewInstance = Instance.new(instanceType)
 	local CurrentDate = DateTime.now()
-	
+
 	local FormattedTimeHours = `{CurrentDate:FormatLocalTime("L", "en-us")} @ {CurrentDate:FormatLocalTime("LT", "en-us")}`
-	
+
 	task.defer(function()
 		if CanaryStudioSettings.CanaryStudio["Default Instance Templates"] then
 			ScriptEditorService:UpdateSourceAsync(NewInstance, function()
@@ -436,7 +442,7 @@ function VersionController.CreateNewInstanceFromName(name: string, instanceType:
 					"by PLAYER_USERNAME",
 					`by {PLAYER_NAME}\n\t  {FormattedTimeHours}`
 				)
-				
+
 				return NewAuthorSource
 			end)
 		else
@@ -455,7 +461,7 @@ function VersionController.CreateNewInstanceFromName(name: string, instanceType:
 						"Package",
 						name
 					)
-					
+
 					return NewPackageNameSource
 				end)
 			end)
@@ -464,7 +470,7 @@ function VersionController.CreateNewInstanceFromName(name: string, instanceType:
 		if CanaryStudioSettings.CanaryStudio["Create Package Vendor"] then
 			local InstanceFolder = Instance.new("Folder")
 			local NewVendor = Instance.new("Folder")
-			
+
 			if CanaryStudioSettings.CanaryStudio["Instance Author Attributes"] then
 				InstanceFolder:SetAttribute("Author", PLAYER_NAME)
 				InstanceFolder:SetAttribute("Created", FormattedTimeHours)
@@ -472,21 +478,21 @@ function VersionController.CreateNewInstanceFromName(name: string, instanceType:
 
 			NewVendor.Name = "Vendor"
 			NewVendor.Parent = InstanceFolder
-			
+
 			NewInstance.Name = "Init"
 			NewInstance.Parent = InstanceFolder
 
 			InstanceFolder.Name = name
 			InstanceFolder.Parent = CurrentInstance[context].Packages
-			
+
 			if CanaryStudioSettings.CanaryStudio["Select / Open New Instances"] then
 				ScriptEditorService:OpenScriptDocumentAsync(NewInstance)
 				SelectionService:Set({NewInstance})
 			end
-			
+
 			return
 		end
-		
+
 		NewInstance.Name = name
 		NewInstance.Parent = CurrentInstance[context].Packages
 	elseif instanceType == "Script" then
@@ -494,7 +500,7 @@ function VersionController.CreateNewInstanceFromName(name: string, instanceType:
 			NewInstance:SetAttribute("Author", PLAYER_NAME)
 			NewInstance:SetAttribute("Created", FormattedTimeHours)
 		end
-		
+
 		NewInstance.Name = name
 		NewInstance.RunContext = Enum.RunContext[context]
 
