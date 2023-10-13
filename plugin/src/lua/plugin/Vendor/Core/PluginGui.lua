@@ -130,8 +130,10 @@ if not AlreadyRan then
 
 			WindowList.InstanceCreationWindow = Iris.Window({"Canary Studio - Instance Creator", [Iris.Args.Window.NoResize] = true}, {isOpened = false, size = Vector2.new(285, 177)}) do
 				local NameInput = Iris.InputText({"Name", "Instance name..."})
-				local InstanceTypeDropdown = Iris.ComboArray("Type", {index = "Script"}, {"Script", "Package"}).state.index:set(InstanceType:get())
+				local InstanceTypeDropdown = Iris.ComboArray("Type", {index = "Script"}, {"Script", "Package"})
 				local InstanceContextDropdown
+
+				InstanceTypeDropdown.state.index:set(InstanceType:get())
 
 				if InstanceTypeDropdown.state.index:get() == "Script" then
 					InstanceContextDropdown = Iris.ComboArray("Context", {index = "Server"}, {"Server", "Client", "ReplicatedFirst"})
