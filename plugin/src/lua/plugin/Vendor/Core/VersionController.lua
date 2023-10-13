@@ -266,7 +266,7 @@ function VersionController.UpdateFramework()
 		end
 
 		local CanaryEngineStructure = StructureCache.Framework
-		local EngineLoaderStructure = StructureCache.ReplicatedFirst.Framework
+		local EngineLoaderStructure = StructureCache.ReplicatedFirst.FrameworkLoader
 
 		if CurrentInstance.Framework then
 			CurrentInstance.Framework:Destroy()
@@ -277,12 +277,10 @@ function VersionController.UpdateFramework()
 		end
 
 		if CurrentInstance.ReplicatedFirst then	
-			if CurrentInstance.ReplicatedFirst:FindFirstChild("Framework") or CurrentInstance.ReplicatedFirst:FindFirstChild("Internal") then
-				local EngineItem = CurrentInstance.ReplicatedFirst:FindFirstChild("Framework")
-
-				if not EngineItem then
-					EngineItem = CurrentInstance.ReplicatedFirst:FindFirstChild("Internal")
-				end
+			if CurrentInstance.ReplicatedFirst:FindFirstChild("Framework") or CurrentInstance.ReplicatedFirst:FindFirstChild("Internal") or CurrentInstance.ReplicatedFirst:FindFirstChild("FrameworkLoader") then
+				local EngineItem = CurrentInstance.ReplicatedFirst:FindFirstChild("FrameworkLoader")
+				or CurrentInstance.ReplicatedFirst:FindFirstChild("Internal")
+				or CurrentInstance.ReplicatedFirst:FindFirstChild("Framework")
 
 				EngineItem:Destroy()
 				EngineLoaderStructure.Parent = CurrentInstance.ReplicatedFirst
