@@ -19,66 +19,66 @@ return {
 
 	CanaryStudioInstanceTemplates = {
 		ModuleScript = [[
-	  		by PLAYER_USERNAME
+$AUTHOR$
 
-			-- // Package
+-- // Package
 
-			local Package = { }
-			local Vendor = script.Parent.Vendor
+local $PACKAGE$NAME$ = { }
+$VENDOR$
 
-			local CanaryEngine = require(game.ReplicatedStorage.Framework.Init)
-			local Framework_FRAMEWORK_TYPE_ = CanaryEngine.GetFramework_FRAMEWORK_TYPE_()
+local CanaryEngine = require(game.ReplicatedStorage.Framework.Init)
+local Framework$FRAMEWORK$TYPE$ = CanaryEngine.GetFramework$FRAMEWORK$TYPE$()
 
-			-- // Variables
+-- // Variables
 
-			-- // Functions
+-- // Functions
 
-			function Package.myFunction()
-				print("Hello, package function!")
-			end
+function $PACKAGE$NAME$.myFunction()
+	print("Hello, package function!")
+end
 
-			-- // Connections
+-- // Connections
 
-			-- // Actions
+-- // Actions
 
-			return Package
+return $PACKAGE$NAME$
 		]],
 
 		Script = [[
-			by PLAYER_USERNAME
+$AUTHOR$
 
-			-- // Script
+-- // Script
 			
-			local CanaryEngine = require(game.ReplicatedStorage.Framework.Init)
-			local Framework_FRAMEWORK_TYPE_ = CanaryEngine.GetFramework_FRAMEWORK_TYPE_()
+local CanaryEngine = require(game.ReplicatedStorage.Framework.Init)
+local Framework$FRAMEWORK$TYPE$ = CanaryEngine.GetFramework$FRAMEWORK$TYPE$()
 			
-			-- // Variables
+-- // Variables
 			
-			-- // Functions
+-- // Functions
 			
-			-- // Connections
+-- // Connections
 			
-			-- // Actions
+-- // Actions
 			
-			print("Hello, _FRAMEWORK_TYPE_!")
+print("Hello, $FRAMEWORK$TYPE$!")
 		]],
 
 		SpecialScript = [[
-			by PLAYER_USERNAME
+$AUTHOR$
 
-			-- // Engine
+-- // Engine
 			
-			local FrameworkLoader = require(script.Parent.Parent.FrameworkLoader.Init)
+local FrameworkLoader = require(script.Parent.Parent.FrameworkLoader.Init)
 			
-			-- // Variables
+-- // Variables
 			
-			-- // Functions
+-- // Functions
 			
-			-- // Connections
+-- // Connections
 			
-			-- // Actions
+-- // Actions
 			
-			print("Hello, _FRAMEWORK_TYPE_!")
+print("Hello, $FRAMEWORK$TYPE$!")
 		]],
 	},
 }
