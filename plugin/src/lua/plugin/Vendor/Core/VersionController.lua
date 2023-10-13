@@ -477,7 +477,7 @@ function VersionController.CreateNewInstanceFromName(name: string, instanceType:
 						if CanaryStudioSettings.CanaryStudio["Create Package Vendor"] then "local Vendor = script.Parent.Vendor" else ""
 					)
 
-					return NewPackageNameSource
+					return NewVendorSource
 				end)
 			end)
 		end
