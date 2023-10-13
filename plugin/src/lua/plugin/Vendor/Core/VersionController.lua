@@ -266,7 +266,7 @@ function VersionController.UpdateFramework()
 		end
 
 		local CanaryEngineStructure = StructureCache.Framework
-		local EngineLoaderStructure = StructureCache.EngineReplicatedFirst.Framework
+		local EngineLoaderStructure = StructureCache.ReplicatedFirst.Framework
 
 		if CurrentInstance.Framework then
 			CurrentInstance.Framework:Destroy()
