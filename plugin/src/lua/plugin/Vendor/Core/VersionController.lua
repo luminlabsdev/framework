@@ -407,7 +407,7 @@ function VersionController.InstallFramework()
 	end)
 end
 
-function VersionController.CreateNewInstanceFromName(name: string, instanceType: "Package" | "Script" | "ModuleScript", context: "Server" | "Client" | "Replicated")
+function VersionController.CreateNewInstanceFromName(name: string, instanceType: "Package" | "Script" | "ModuleScript", context: "Server" | "Client" | "Replicated" | "ReplicatedFirst")
 	local CurrentInstance = VersionController.GetCurrentTaggedInstance()
 
 	if not CurrentInstance then
@@ -442,13 +442,13 @@ function VersionController.CreateNewInstanceFromName(name: string, instanceType:
 
 				local NewAuthorSource = string.gsub(
 					TemplateContent,
-					"by PLAYER_USERNAME",
+					"$AUTHOR$",
 					`--[[\n\t  by {PLAYER_NAME}\n\t  {FormattedTimeHours}\n--]]`
 				)
 
 				local NewContextSource = string.gsub(
 					NewAuthorSource,
-					"_FRAMEWORK_TYPE_",
+					"$FRAMEWORK$TYPE$",
 					context
 				)
 
@@ -467,8 +467,14 @@ function VersionController.CreateNewInstanceFromName(name: string, instanceType:
 				ScriptEditorService:UpdateSourceAsync(NewInstance, function(scriptContent)
 					local NewPackageNameSource = string.gsub(
 						scriptContent,
-						"Package",
-						name
+						"$PACKAGE$NAME$",
+						if name == "" then "Package" else name
+					)
+					
+					local NewVendorSource = string.gsub(
+						NewPackageNameSource,
+						"$VENDOR$",
+						if CanaryStudioSettings.CanaryStudio["Create Package Vendor"] then "local Vendor = script.Parent.Vendor" else ""
 					)
 
 					return NewPackageNameSource
@@ -511,7 +517,12 @@ function VersionController.CreateNewInstanceFromName(name: string, instanceType:
 		end
 
 		NewInstance.Name = name
-		NewInstance.RunContext = Enum.RunContext[context]
+		
+		if context == "ReplicatedFirst" then
+			NewInstance.RunContext = Enum.RunContext.Client
+		else
+			NewInstance.RunContext = Enum.RunContext[context]
+		end
 
 		NewInstance.Parent = CurrentInstance[context].Scripts
 	end

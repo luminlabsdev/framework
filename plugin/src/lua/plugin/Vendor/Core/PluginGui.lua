@@ -134,6 +134,13 @@ if not AlreadyRan then
 				local InstanceContextDropdown
 
 				InstanceTypeDropdown.state.index:set(InstanceType:get())
+				InstanceTypeDropdown.state.index:onChange(function(newStateValue)
+					if newStateValue == InstanceType:get() then
+						return
+					end
+					
+					InstanceType:set(newStateValue)
+				end)
 
 				if InstanceTypeDropdown.state.index:get() == "Script" then
 					InstanceContextDropdown = Iris.ComboArray("Context", {index = "Server"}, {"Server", "Client", "ReplicatedFirst"})
