@@ -442,13 +442,13 @@ function VersionController.CreateNewInstanceFromName(name: string, instanceType:
 
 				local NewAuthorSource = string.gsub(
 					TemplateContent,
-					"$AUTHOR$",
+					"+AUTHOR+",
 					`--[[\n\t  by {PLAYER_NAME}\n\t  {FormattedTimeHours}\n--]]`
 				)
 
 				local NewContextSource = string.gsub(
 					NewAuthorSource,
-					"$FRAMEWORK$TYPE$",
+					"+FRAMEWORK+TYPE+",
 					context
 				)
 
@@ -467,17 +467,17 @@ function VersionController.CreateNewInstanceFromName(name: string, instanceType:
 				ScriptEditorService:UpdateSourceAsync(NewInstance, function(scriptContent)
 					local NewPackageNameSource = string.gsub(
 						scriptContent,
-						"$PACKAGE$NAME$",
+						"+PACKAGE+NAME+",
 						if name == "" then "Package" else name
 					)
 					
 					local NewVendorSource = string.gsub(
 						NewPackageNameSource,
-						"$VENDOR$",
+						"+VENDOR+",
 						if CanaryStudioSettings.CanaryStudio["Create Package Vendor"] then "local Vendor = script.Parent.Vendor" else ""
 					)
 
-					return NewPackageNameSource
+					return NewVendorSource
 				end)
 			end)
 		end

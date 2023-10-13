@@ -19,21 +19,21 @@ return {
 
 	CanaryStudioInstanceTemplates = {
 		ModuleScript = [[
-$AUTHOR$
++AUTHOR+
 
 -- // Package
 
-local $PACKAGE$NAME$ = { }
-$VENDOR$
+local +PACKAGE+NAME+ = { }
++VENDOR+
 
 local CanaryEngine = require(game.ReplicatedStorage.Framework.Init)
-local Framework$FRAMEWORK$TYPE$ = CanaryEngine.GetFramework$FRAMEWORK$TYPE$()
+local Framework+FRAMEWORK+TYPE+ = CanaryEngine.GetFramework+FRAMEWORK+TYPE+()
 
 -- // Variables
 
 -- // Functions
 
-function $PACKAGE$NAME$.myFunction()
+function +PACKAGE+NAME+.myFunction()
 	print("Hello, package function!")
 end
 
@@ -41,16 +41,16 @@ end
 
 -- // Actions
 
-return $PACKAGE$NAME$
+return +PACKAGE+NAME+
 		]],
 
 		Script = [[
-$AUTHOR$
++AUTHOR+
 
 -- // Script
 			
 local CanaryEngine = require(game.ReplicatedStorage.Framework.Init)
-local Framework$FRAMEWORK$TYPE$ = CanaryEngine.GetFramework$FRAMEWORK$TYPE$()
+local Framework+FRAMEWORK+TYPE+ = CanaryEngine.GetFramework+FRAMEWORK+TYPE+()
 			
 -- // Variables
 			
@@ -60,11 +60,11 @@ local Framework$FRAMEWORK$TYPE$ = CanaryEngine.GetFramework$FRAMEWORK$TYPE$()
 			
 -- // Actions
 			
-print("Hello, $FRAMEWORK$TYPE$!")
+print("Hello, +FRAMEWORK+TYPE+!")
 		]],
 
 		SpecialScript = [[
-$AUTHOR$
++AUTHOR+
 
 -- // Engine
 			
@@ -78,7 +78,7 @@ local FrameworkLoader = require(script.Parent.Parent.FrameworkLoader.Init)
 			
 -- // Actions
 			
-print("Hello, $FRAMEWORK$TYPE$!")
+print("Hello, +FRAMEWORK+TYPE+!")
 		]],
 	},
 }
