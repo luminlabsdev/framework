@@ -15,15 +15,70 @@ return {
 
 	CanaryStudioInstallerPackages = { },
 	CanaryStudioManagerPackages = { },
+	CanaryStudioManagerCustomPackages = { },
+
 	CanaryStudioInstanceTemplates = {
-		ModuleScript = {
-			Client = "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/plugin/src/lua/templates/packages/package/client-package.luau",
-			Server = "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/plugin/src/lua/templates/packages/package/server-package.luau",
-			Replicated = "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/plugin/src/lua/templates/packages/package/replicated-package.luau",
-		},
-		Script = {
-			Server = "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/plugin/src/lua/templates/scripts/server-script.luau",
-			Client = "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/plugin/src/lua/templates/scripts/client-script.luau",
-		}
+		ModuleScript = [[
+	  		by PLAYER_USERNAME
+
+			-- // Package
+
+			local Package = { }
+			local Vendor = script.Parent.Vendor
+
+			local CanaryEngine = require(game.ReplicatedStorage.Framework.Init)
+			local Framework_FRAMEWORK_TYPE_ = CanaryEngine.GetFramework_FRAMEWORK_TYPE_()
+
+			-- // Variables
+
+			-- // Functions
+
+			function Package.myFunction()
+				print("Hello, package function!")
+			end
+
+			-- // Connections
+
+			-- // Actions
+
+			return Package
+		]],
+
+		Script = [[
+			by PLAYER_USERNAME
+
+			-- // Script
+			
+			local CanaryEngine = require(game.ReplicatedStorage.Framework.Init)
+			local Framework_FRAMEWORK_TYPE_ = CanaryEngine.GetFramework_FRAMEWORK_TYPE_()
+			
+			-- // Variables
+			
+			-- // Functions
+			
+			-- // Connections
+			
+			-- // Actions
+			
+			print("Hello, _FRAMEWORK_TYPE_!")
+		]],
+
+		SpecialScript = [[
+			by PLAYER_USERNAME
+
+			-- // Engine
+			
+			local FrameworkLoader = require(script.Parent.Parent.FrameworkLoader.Init)
+			
+			-- // Variables
+			
+			-- // Functions
+			
+			-- // Connections
+			
+			-- // Actions
+			
+			print("Hello, _FRAMEWORK_TYPE_!")
+		]],
 	},
 }

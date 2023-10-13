@@ -279,8 +279,8 @@ function VersionController.UpdateFramework()
 		if CurrentInstance.ReplicatedFirst then	
 			if CurrentInstance.ReplicatedFirst:FindFirstChild("Framework") or CurrentInstance.ReplicatedFirst:FindFirstChild("Internal") or CurrentInstance.ReplicatedFirst:FindFirstChild("FrameworkLoader") then
 				local EngineItem = CurrentInstance.ReplicatedFirst:FindFirstChild("FrameworkLoader")
-				or CurrentInstance.ReplicatedFirst:FindFirstChild("Internal")
-				or CurrentInstance.ReplicatedFirst:FindFirstChild("Framework")
+					or CurrentInstance.ReplicatedFirst:FindFirstChild("Internal")
+					or CurrentInstance.ReplicatedFirst:FindFirstChild("Framework")
 
 				EngineItem:Destroy()
 				EngineLoaderStructure.Parent = CurrentInstance.ReplicatedFirst
@@ -397,7 +397,7 @@ function VersionController.InstallFramework()
 
 		VersionController.InstallPackagesFromList(CanaryStudioSettings.CanaryStudioInstallerPackages)
 		WindowController.SetMessageWindow("Framework installed successfully!", Color3.fromRGB(205, 255, 151))
-		
+
 		VersionController.FinishedUpdating:Once(function()
 			WindowController.SetWindow("UpdateStatusWindow", false)
 		end)
@@ -434,14 +434,25 @@ function VersionController.CreateNewInstanceFromName(name: string, instanceType:
 	task.defer(function()
 		if CanaryStudioSettings.CanaryStudio["Default Instance Templates"] then
 			ScriptEditorService:UpdateSourceAsync(NewInstance, function()
-				local TemplateContent = CanaryStudioSettings.CanaryStudioInstanceTemplates[instanceType][context]
+				local TemplateContent = CanaryStudioSettings.CanaryStudioInstanceTemplates[instanceType]
+
+				if context == "ReplicatedFirst" then
+					TemplateContent = CanaryStudioSettings.CanaryStudioInstanceTemplates.SpecialScript
+				end
+
 				local NewAuthorSource = string.gsub(
 					TemplateContent,
 					"by PLAYER_USERNAME",
-					`by {PLAYER_NAME}\n\t  {FormattedTimeHours}`
+					`--[[\n\t  by {PLAYER_NAME}\n\t  {FormattedTimeHours}\n--]]`
 				)
 
-				return NewAuthorSource
+				local NewContextSource = string.gsub(
+					NewAuthorSource,
+					"_FRAMEWORK_TYPE_",
+					context
+				)
+
+				return NewContextSource
 			end)
 		else
 			ScriptEditorService:UpdateSourceAsync(NewInstance, function()

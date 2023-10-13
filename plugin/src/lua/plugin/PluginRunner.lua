@@ -20,8 +20,23 @@ local PluginToolbarName = if IsLocalPlugin then "Canary Studio - Local File" els
 local CanaryStudioPluginToolbar = plugin:CreateToolbar(PluginToolbarName)
 local CanaryStudioPluginButton = CanaryStudioPluginToolbar:CreateButton("Canary Studio", "Open Canary Studio", "rbxassetid://14374171289")
 
-local PluginFinishedLoading = false
 local IsTesting = false
+
+local CreatePackageAction = plugin:CreatePluginAction(
+	"CanaryStudioCreatePackageAction",
+	"Create Package",
+	"Opens the instance creation window with the package index",
+	"rbxassetid://12966846573",
+	true
+)
+
+local CreateScriptAction = plugin:CreatePluginAction(
+	"CanaryStudioCreateScriptAction",
+	"Create Script",
+	"Opens the instance creation window with the scripts index",
+	"rbxassetid://11295287500",
+	true
+)
 
 local OverrideValues = {
 	ReleaseLatest = {
@@ -47,12 +62,14 @@ local OverrideValues = {
 local HttpCache = require(Vendor.Core.HttpCache)
 Fetch.SetHttpCacheTable(Vendor.Core.HttpCache)
 
+local NotLoadedConnection = CanaryStudioPluginButton.Click:Connect(function()
+	warn("[CanaryStudio]: Canary Studio has not finished loading yet.")
+end)
+
 if IsTesting then
 	for cacheName in GitHubRequests do
 		HttpCache[cacheName] = OverrideValues[cacheName]
 	end
-
-	PluginFinishedLoading = true
 else
 	for cacheName, URL in GitHubRequests do
 		local Result = Fetch.FetchAsync(URL, true, 3, cacheName)
@@ -64,49 +81,31 @@ else
 	end
 end
 
-local PluginGui = require(Vendor.Core.PluginGui)(Iris)
+local PluginGui = require(Vendor.Core.PluginGui)(Iris, {
+	CreatePackageAction,
+	CreateScriptAction
+})
+
 local WindowController = require(Vendor.Core.WindowController)(PluginGui)
 
+NotLoadedConnection:Disconnect()
 CanaryStudioPluginButton.Click:Connect(function()
-	if not PluginFinishedLoading then
-		warn("[CanaryStudio]: Canary Studio has not finished loading yet.")
-		return
-	end
-
 	WindowController.SetWindow("HomeWindow")
 end)
 
-for scriptType, templateTable in CanaryStudioSettings.CanaryStudioInstanceTemplates do
-	for context, templateURL in templateTable do
-		if IsTesting then
-			CanaryStudioSettings.CanaryStudioInstanceTemplates[scriptType][context] = "-- this is testing!"
-			continue
-		end
-
-		local TemplateContents = Fetch.FetchAsync(templateURL, false)
-
-		if not TemplateContents then
-			CanaryStudioSettings.CanaryStudioInstanceTemplates[scriptType][context] = "-- could not get source"
-		end
-
-		CanaryStudioSettings.CanaryStudioInstanceTemplates[scriptType][context] = TemplateContents
-	end
-end
-
 -- // Functions
 
+local function SaveCanaryStudioSettings()
+	plugin:SetSetting("CanaryStudioPluginSettings", CanaryStudioSettings.CanaryStudio)
+end
+
 -- // Connections
+
+plugin.Unloading:Connect(SaveCanaryStudioSettings)
 
 -- // Actions
 
 CanaryStudioSettings.CanaryStudio = TableKit.Reconcile(
 	plugin:GetSetting("CanaryStudioPluginSettings") or CanaryStudioSettings.CanaryStudio,
 	CanaryStudioSettings.CanaryStudio
-) or CanaryStudioSettings.CanaryStudio
-
-PluginFinishedLoading = true
-
-while true do
-	task.wait(10)
-	plugin:SetSetting("CanaryStudioPluginSettings", CanaryStudioSettings.CanaryStudio)
-end
+)
