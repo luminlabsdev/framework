@@ -48,6 +48,10 @@ if not AlreadyRan then
 
 						if Iris.MenuItem("Exit").clicked() then
 							for windowName in WindowList do
+								if windowName == "UpdateStatusWindow" then
+									continue
+								end
+								
 								WindowController.SetWindow(windowName, false)
 							end
 						end

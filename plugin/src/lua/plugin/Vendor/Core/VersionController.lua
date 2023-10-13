@@ -127,7 +127,7 @@ function VersionController.GetDirectoryFromStructureJSON(json: {any}, parent: In
 
 		local InstanceFromClass: Instance
 
-		if instanceName ~= "$properties" then
+		if not StructureTagOccurances[instanceName] then
 			InstanceFromClass = Instance.new(children["$className"] or "Folder")
 			InstanceFromClass.Name = instanceName
 			InstanceFromClass.Parent = parent
