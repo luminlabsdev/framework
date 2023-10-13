@@ -1,5 +1,8 @@
 {
     "Client": {
+        "$tags": [
+            "__CE_Client"
+        ],
         "Packages": {},
         "Assets": {
             "Models": {},
@@ -11,6 +14,9 @@
         "Scripts": {}
     },
     "Replicated": {
+        "$tags": [
+            "__CE_Replicated"
+        ],
         "Packages": {},
         "Assets": {
             "Sounds": {},
@@ -19,7 +25,10 @@
             "Effects": {}
         }
     },
-    "PriorityLoad": {
+    "ReplicatedFirst": {
+        "$tags": [
+            "__CE_ReplicatedFirst"
+        ],
         "FrameworkLoader": {
             "Init": {
                 "$className": "ModuleScript",
@@ -32,6 +41,9 @@
         "Scripts": {}
     },
     "Server": {
+        "$tags": [
+            "__CE_Server"
+        ],
         "Packages": {},
         "Assets": {
             "Models": {},
@@ -42,6 +54,9 @@
         "Scripts": {}
     },
     "Framework": {
+        "$tags": [
+            "__CE_Framework"
+        ],
         "Vendor": {
             "Network": {
                 "Vendor": {

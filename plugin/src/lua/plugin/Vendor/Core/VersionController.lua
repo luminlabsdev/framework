@@ -12,6 +12,7 @@ local ScriptEditorService = game:GetService("ScriptEditorService")
 local SelectionService = game:GetService("Selection")
 local StudioService = game:GetService("StudioService")
 local PlayerService = game:GetService("Players")
+local CollectionService = game:GetService("CollectionService")
 
 local Vendor = script.Parent.Parent
 
@@ -43,11 +44,49 @@ local RequiredEngineInstances = {
 	"ReplicatedFirst",
 }
 
+local StructureTagOccurances = {
+	["$properties"] = function(instanceFromClass: Instance, children, isPackage)
+		for propertyName: string, propertyValue: string | any in children["$properties"] do
+			if propertyName == "Source" and type(propertyValue) == "string" and propertyValue:find("https://") then
+				local Source = Fetch.FetchAsync(propertyValue, false)
+
+				if not Source then
+					continue
+				end
+
+				if not isPackage then
+					FinishedFiles += 1
+					VersionController.DataUpdated:Fire(FinishedFiles, HttpCache.ExternalSettings.Files, "Updating ", "Updating framework to latest version", "files")
+				end
+
+				instanceFromClass[propertyName] = Source
+			elseif type(propertyName) == "string" then
+				instanceFromClass[propertyName] = propertyValue
+			end
+		end
+	end,
+	["$attributes"] = function(instanceFromClass: Instance, children)
+		for attributeName: string, attributeValue: any in children["$attributes"] do
+			instanceFromClass:SetAttribute(attributeName, attributeValue)
+		end
+	end,
+	["$tags"] = function(instanceFromClass: Instance, children)
+		for _, tagName: string in children["$tags"] do
+			instanceFromClass:AddTag(tagName)
+		end
+	end,
+}
+
 local FolderToService = {
 	Client = ReplicatedStorage,
 	Replicated = ReplicatedStorage,
-	PriorityLoad = ReplicatedFirst,
+	ReplicatedFirst = ReplicatedFirst,
 	Server = ServerStorage,
+
+	EngineClient = ReplicatedStorage,
+	EngineReplicated = ReplicatedStorage,
+	EngineReplicatedFirst = ReplicatedFirst,
+	EngineServer = ServerStorage,
 }
 
 VersionController.DataUpdated = Signal.new()
@@ -58,7 +97,6 @@ function VersionController.IsOldVersionInstalled(): boolean
 	local CurrentInstance = VersionController.GetCurrentInstance()
 
 	if CurrentInstance.Framework and not (CurrentInstance.Client or CurrentInstance.Server or CurrentInstance.ReplicatedFirst or CurrentInstance.Replicated) then
-		WindowController.SetMessageWindow("An old version of the framework is installed, and older versions are no longer supported. You will have to update manually.", ERROR_COLOR)
 		return true
 	end
 
@@ -93,31 +131,15 @@ function VersionController.GetDirectoryFromStructureJSON(json: {any}, parent: In
 			InstanceFromClass.Name = instanceName
 			InstanceFromClass.Parent = parent
 		end
-		
-		if children["$attributes"] then
-			for attributeName: string, attributeValue: any in children["$attributes"] do
-				InstanceFromClass:SetAttribute(attributeName, attributeValue)
-			end
-		end
 
-		if children["$properties"] then
-			for propertyName: string, propertyValue: string | any in children["$properties"] do
-				if propertyName == "Source" and type(propertyValue) == "string" and propertyValue:find("https://") then
-					local Source = Fetch.FetchAsync(propertyValue, false)
-
-					if not Source then
-						continue
-					end
-
-					if not isPackage then
-						FinishedFiles += 1
-						VersionController.DataUpdated:Fire(FinishedFiles, HttpCache.ExternalSettings.Files, "Updating ", "Updating framework to latest version", "files")
-					end
-
-					InstanceFromClass[propertyName] = Source
-				elseif type(propertyName) == "string" then
-					InstanceFromClass[propertyName] = propertyValue
+		for occuranceType, callback in StructureTagOccurances do
+			if children[occuranceType] then
+				if occuranceType == "$properties" then
+					callback(InstanceFromClass, children, isPackage)
+					continue
 				end
+
+				callback(InstanceFromClass, children)
 			end
 		end
 
@@ -131,11 +153,11 @@ function VersionController.GetCurrentInstance(ignoreNil: boolean?): {[string]: F
 	ignoreNil = ignoreNil or false
 
 	local EngineTable = {
-		Server = ServerStorage:FindFirstChild("Server"),
-		Client = ReplicatedStorage:FindFirstChild("Client"),
-		Replicated = ReplicatedStorage:FindFirstChild("Replicated"),
+		Server = ServerStorage:FindFirstChild("Server") or ReplicatedStorage:FindFirstChild("EngineServer"),
+		Client = ReplicatedStorage:FindFirstChild("Client") or ReplicatedStorage:FindFirstChild("EngineClient"),
+		Replicated = ReplicatedStorage:FindFirstChild("Replicated") or ReplicatedStorage:FindFirstChild("EngineReplicated"),
 		Framework = ReplicatedStorage:FindFirstChild("Framework") or ReplicatedStorage:FindFirstChild("CanaryEngineFramework"),
-		ReplicatedFirst = ReplicatedFirst:FindFirstChild("PriorityLoad")
+		ReplicatedFirst = ReplicatedFirst:FindFirstChild("ReplicatedFirst") or ReplicatedStorage:FindFirstChild("EngineReplicatedFirst")
 	}
 
 	if not ignoreNil then
@@ -153,8 +175,46 @@ function VersionController.GetCurrentInstance(ignoreNil: boolean?): {[string]: F
 	return EngineTable
 end
 
+function VersionController.GetCurrentTaggedInstance(ignoreNil: boolean?): {[string]: Folder}?
+	ignoreNil = ignoreNil or false
+
+	local EngineTable = {
+		Server = table.unpack(CollectionService:GetTagged("__CE_Server")),
+		Client = table.unpack(CollectionService:GetTagged("__CE_Client")),
+		Replicated = table.unpack(CollectionService:GetTagged("__CE_Replicated")),
+		Framework = table.unpack(CollectionService:GetTagged("__CE_Framework")),
+		ReplicatedFirst = table.unpack(CollectionService:GetTagged("__CE_ReplicatedFirst"))
+	}
+
+	if not ignoreNil then
+		for _, value in RequiredEngineInstances do
+			if not EngineTable[value] then
+				return nil
+			end
+		end
+	end
+
+	if TableKit.IsEmpty(EngineTable) then
+		return nil
+	end
+
+	return EngineTable
+end
+
+function VersionController.TagInstances()
+	local CurrentInstance = VersionController.GetCurrentInstance()
+
+	if not CurrentInstance then
+		return
+	end
+
+	for name, folder in CurrentInstance do
+		folder:AddTag(`__CE_{name}`)
+	end
+end
+
 function VersionController.UninstallFramework()
-	local CurrentInstance = VersionController.GetCurrentInstance(true)
+	local CurrentInstance = VersionController.GetCurrentTaggedInstance(true)
 
 	if not CurrentInstance then
 		WindowController.SetMessageWindow("Framework is not installed; cannot uninstall")
@@ -169,7 +229,7 @@ function VersionController.UninstallFramework()
 end
 
 function VersionController.UpdateFramework()
-	local CurrentInstance = VersionController.GetCurrentInstance(true)
+	local CurrentInstance = VersionController.GetCurrentTaggedInstance(true)
 
 	if not CurrentInstance then
 		WindowController.SetMessageWindow("Framework is not installed; cannot update")
@@ -177,6 +237,7 @@ function VersionController.UpdateFramework()
 	end
 
 	if VersionController.IsOldVersionInstalled() then
+		WindowController.SetMessageWindow("An old version of the framework is installed, and older versions are no longer supported. You will have to update manually.", ERROR_COLOR)
 		return
 	end
 
@@ -227,8 +288,8 @@ function VersionController.UpdateFramework()
 			end
 		end
 		
-		if ReplicatedFirst:GetAttribute("EngineLoaderEnabled") == nil then
-			ReplicatedFirst:SetAttribute("EngineLoaderEnabled", false)
+		if ReplicatedFirst:GetAttribute("FrameworkLoaderEnabled") == nil then
+			ReplicatedFirst:SetAttribute("FrameworkLoaderEnabled", false)
 		end
 
 		WindowController.SetWindow("UpdateStatusWindow", false)
@@ -243,7 +304,7 @@ end
 
 function VersionController.InstallPackagesFromList(list: {[string]: boolean})
 	task.defer(function()
-		local CurrentInstance = VersionController.GetCurrentInstance()
+		local CurrentInstance = VersionController.GetCurrentTaggedInstance()
 		FinishedFiles = 0
 
 		for _, value in list do
@@ -253,6 +314,8 @@ function VersionController.InstallPackagesFromList(list: {[string]: boolean})
 		end
 		
 		if TotalPackageFiles == 0 then
+			WindowController.SetWindow("UpdateStatusWindow", false)
+			VersionController.DataUpdated:Fire(FinishedFiles, 1, "nil", "nil", "nil")
 			return
 		end
 
@@ -285,7 +348,7 @@ function VersionController.InstallPackagesFromList(list: {[string]: boolean})
 end
 
 function VersionController.InstallFramework()
-	if VersionController.GetCurrentInstance(true) then
+	if VersionController.GetCurrentTaggedInstance(true) then
 		WindowController.SetMessageWindow("Framework is already installed; cannot install")
 		return
 	end
@@ -315,9 +378,9 @@ function VersionController.InstallFramework()
 
 		StructureCache.Framework:SetAttribute("Version", HttpCache.ReleaseLatest.tag_name)
 		StructureCache.Framework.Parent = ReplicatedStorage
-		ReplicatedFirst:SetAttribute("EngineLoaderEnabled", false)
+		ReplicatedFirst:SetAttribute("FrameworkLoaderEnabled", false)
 
-		local NewInstance = VersionController.GetCurrentInstance()
+		local NewInstance = VersionController.GetCurrentTaggedInstance()
 
 		if not CanaryStudioSettings.CanaryStudioInstaller["Enable Asset Templates"] then
 			for _, folderName in RequiredEngineInstances do
@@ -341,7 +404,7 @@ function VersionController.InstallFramework()
 end
 
 function VersionController.CreateNewInstanceFromName(name: string, instanceType: "Package" | "Script" | "ModuleScript", context: "Server" | "Client" | "Replicated")
-	local CurrentInstance = VersionController.GetCurrentInstance()
+	local CurrentInstance = VersionController.GetCurrentTaggedInstance()
 
 	if not CurrentInstance then
 		WindowController.SetMessageWindow("Cannot create instance; framework not installed")
@@ -366,7 +429,7 @@ function VersionController.CreateNewInstanceFromName(name: string, instanceType:
 	
 	task.defer(function()
 		if CanaryStudioSettings.CanaryStudio["Default Instance Templates"] then
-			ScriptEditorService:UpdateSourceAsync(NewInstance, function(scriptContent)
+			ScriptEditorService:UpdateSourceAsync(NewInstance, function()
 				local TemplateContent = CanaryStudioSettings.CanaryStudioInstanceTemplates[instanceType][context]
 				local NewAuthorSource = string.gsub(
 					TemplateContent,
@@ -447,5 +510,7 @@ end
 -- // Connections
 
 -- // Actions
+
+VersionController.TagInstances()
 
 return VersionController
