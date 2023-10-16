@@ -139,6 +139,7 @@ CanaryEngineServer.CreateNetworkController = CreateNetworkController :: (control
 
 -- // Actions
 
-Debugger.LogEvent(script, `Framework loaded in {os.clock() - BeginLoadTime} seconds`, true, true)
+Debugger.LogEvent(script, `Framework loaded`, false, true)
+Debugger.Debug(print, `Framework loaded in {os.clock() - BeginLoadTime} seconds`)
 
 return table.freeze(CanaryEngine)

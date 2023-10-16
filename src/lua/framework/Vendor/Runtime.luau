@@ -20,8 +20,8 @@ local EngineRuntimeContext = {
 -- Engine Settings
 
 local EngineRuntimeSettings = {
-	StudioDebugEnabled = Framework:GetAttribute("StudioDebugger"),
-	LiveGameDebugEnabled = Framework:GetAttribute("LiveGameDebugger"),
+	StudioDebugEnabled = Framework:GetAttribute("StudioDebugging"),
+	LiveGameDebugEnabled = Framework:GetAttribute("LiveGameDebugging"),
 	Version = Framework:GetAttribute("Version"),
 }
 

@@ -135,14 +135,18 @@ function EngineDebugger.LogEvent(instance: LuaSourceContainer, eventName: string
 		printLog = true
 	end
 	
-	if not EngineDebugger.CachedLogs[instance] then
+	if not EngineDebugger.CachedLogs[instance] and not isInternal then
 		EngineDebugger.CachedLogs[instance] = { }
 	end
 
+	if not EngineDebugger.InternalCachedLogs[instance] and isInternal then
+		EngineDebugger.InternalCachedLogs[instance] = { }
+	end
+
 	if isInternal then
-		EngineDebugger.InternalCachedLogs[instance] = eventName
+		table.insert(EngineDebugger.InternalCachedLogs[instance], eventName)
 	else
-		EngineDebugger.CachedLogs[instance] = eventName
+		table.insert(EngineDebugger.CachedLogs[instance], eventName)
 	end
 
 	if printLog then
