@@ -9,6 +9,7 @@ local CanaryEngineReplicated = { }
 -- // Variables
 
 local PlayerService = game:GetService("Players")
+local BeginLoadTime = os.clock()
 
 local EngineVendor = script.Parent.Vendor
 local EngineLibraries = EngineVendor.Libraries
@@ -138,6 +139,6 @@ CanaryEngineServer.CreateNetworkController = CreateNetworkController :: (control
 
 -- // Actions
 
-Debugger.LogEvent(script, "Framework loaded", true, true)
+Debugger.LogEvent(script, `Framework loaded in {os.clock() - BeginLoadTime} seconds`, true, true)
 
 return table.freeze(CanaryEngine)
