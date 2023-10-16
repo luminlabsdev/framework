@@ -9,8 +9,6 @@ Instead of interacting with the normal [RemoteEvent](https://create.roblox.com/d
 ::: code-group
 ```lua [Server]
 local SendInfoNetwork = CanaryEngineServer.CreateNetworkController("SendInfoNetwork")
-
-print(SendInfoNetwork.Name) -- Output: SendInfoNetwork
 ```
 
 ```lua [Client]
@@ -25,19 +23,17 @@ Now lets continue this code and make it so it can recieve info from the server:
 local SendInfoNetwork = CanaryEngineServer.CreateNetworkController("SendInfoNetwork")
 local PlayerService = game:GetService("Players")
 
-print(SendInfoNetwork.Name) -- Output: SendInfoNetwork
-
-SendInfoNetwork:FireAll({ -- When sending data on the server, you must pass a player argument. In this example though, we are firing to all players.
+SendInfoNetwork:FireAll( -- When sending data on the server, you must pass a player argument. In this example though, we are firing to all players.
     "Sent through a",
     "Network controller!"
-})
+)
 ```
 
 ```lua [Client]
 local SendInfoNetwork = CanaryEngineClient.CreateNetworkController("SendInfoNetwork")
 
-SendInfoNetwork:Listen(function(data)
-    print(data)
+SendInfoNetwork:Listen(function(data1, data2)
+    print(data1, data2)
 end)
 ```
 :::
@@ -49,10 +45,7 @@ You cannot really create a replicated network controller. This is because it wou
 When we start the script, we should then see the the name in the output, and also see the following in the client output:
 
 ```lua
-{
-    "Sent through a",
-    "Network controller!"
-}
+"Sent through a Network controller!"
 ```
 
 Please keep in mind that these can be used for many other things other than just passing strings through, also that if you just have a single piece of data you can send it through the fire method without wrapping it in a table. Though, keep in mind that the data you recieve will always be a table no matter how you pass the data originally.
@@ -73,7 +66,7 @@ local ValueGetNetwork = CanaryEngineServer.CreateNetworkController("ValueGetNetw
 
 ValueGetNetwork:BindToInvocation(function(sender, data)
     print(sender.Name) -- The player who sent the invoke's name
-    if data[1] then
+    if data then
         return "yes" -- We must return a value here, or it will error
     else
         return "no"
@@ -84,7 +77,7 @@ end)
 ```lua [Client]
 local ValueGetNetwork = CanaryEngineClient.CreateNetworkController("ValueGetNetwork")
 
-print(ValueGetNetwork:InvokeAsync(true)) -- When the value is recieved, this should return "yes" according to the server code.
+print(ValueGetNetwork:InvokeAsync(true):Await()) -- When the value is recieved, this should return "yes" according to the server code.
 ```
 :::
 
