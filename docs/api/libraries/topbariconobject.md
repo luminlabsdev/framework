@@ -58,7 +58,22 @@ The amount of notices the icon actually has.
 
 * **number**
 
-## Functions
+## Methods
+
+### SetProperties
+
+Sets the properties of an icon, useful if you want to after creating it.
+
+**Parameters**
+
+* **properties:** `Dictionary<string, string | number>`\
+The properties to set on the icon
+
+**Returns**
+
+* **void**
+
+---
 
 ### AddIconNotices
 

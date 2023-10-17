@@ -34,7 +34,7 @@ export default defineConfig({
         items: [
           { text: 'Framework', link: '/api/engine/framework/canaryengine' },
           { text: 'Controllers', link: '/api/controllers/signal/signalcontroller' },
-          { text: 'Library', link: '/api/libraries/data/easyprofile' }
+          { text: 'Libraries', link: '/api/libraries/data/easyprofile' }
         ]
       },
 

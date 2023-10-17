@@ -4,7 +4,7 @@ Allows you to create top bar icons that 1:1 with CoreGui.
 
 ## Properties
 
-### Area <Badge type="info" text="Enum" />
+### HorizontalAlignment <Badge type="info" text="Enum" />
 
 Just a shortcut for the area of an icon, useful if you forget.
 
@@ -26,14 +26,6 @@ Whether or not the topbar is enabled for UIShelf.
 
 * **boolean**
 
----
-
-### VoiceChatEnabled
-
-Whether or not voice chat is enabled in your game, this must be toggled accordingly or your icons will display incorrectly.
-
-* **boolean**
-
 ## Functions
 
 ### CreateIcon
@@ -42,7 +34,7 @@ Creates a new topbar icon, with declared properties.
 
 **Parameters**
 
-* **properties:** `Array<string | number>`\
+* **properties:** `Dictionary<string, string | number>`\
 The properties to set on the icon
 
 **Returns**
@@ -57,7 +49,7 @@ Creates a new topbar spacer, acts a spacer to other icons.
 
 **Parameters**
 
-* **properties:** `Array<string | number>`\
+* **properties:** `Dictionary<string, string | number>`\
 The properties to set on the spacer
 
 * **bypass:** `boolean?`\
@@ -66,6 +58,21 @@ Allows you to bypass the order restrictions, should only be used internally
 **Returns**
 
 * **[TopBarSpacerObject](/api/libraries/topbarspacerobject)**
+
+---
+
+### CreateMenuItem
+
+Creates a new menu item for use inside of a menu.
+
+**Parameters**
+
+* **properties:** `Dictionary<string, string | number>`\
+The properties to set on the spacer
+
+**Returns**
+
+* **[MenuItemObject](/api/libraries/menuitemobject)**
 
 ---
 
