@@ -101,4 +101,4 @@ Icon:SetTooltip("Example Tooltip") -- Sets the label of the tooltip also while c
 
 Here is it what it looks like:
 
-![Tooltip example with keycode](images/uishelf-images/tooltip-example.png)
+![Tooltip example with keycode](uishelf-images/tooltip-example.png)
