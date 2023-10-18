@@ -155,7 +155,7 @@ end
 
 type IconProps = {
 	Name: string,
-	Image: string | number,
+	Image: string | number?,
 	Order: number,
 	Area: number?,
 	Text: string?,
@@ -189,10 +189,6 @@ local function UpdateTopbar()
 
 	TopbarScreenGui.TopBarFrame.Size = UDim2.fromOffset(
 		Inset.Width, TopbarScreenGui.TopBarFrame.Size.Y.Offset
-	)
-
-	TopbarScreenGui.TopBarFrame.Position = UDim2.fromOffset(
-		Inset.Min.X, TopbarScreenGui.TopBarFrame.Position.Y.Offset
 	)
 end
 
@@ -231,6 +227,7 @@ function UIShelf.CreateIcon(properties: IconProps)
 	self._NoticeConnection = nil
 	self._TooltipConnection = nil
 	self._GuiBindConnection = nil
+	self._SizeConnection = nil
 
 	for connection, state in EVENTS_FOR_CONNECTION_ICON do
 		IconBackground[connection]:Connect(function()
@@ -256,6 +253,10 @@ function UIShelf.CreateIcon(properties: IconProps)
 			self:SetTooltipEnabled(true)
 		end
 	end)
+	
+	self._SizeConnection = IconBackground:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
+		IconClone.Size = UDim2.fromOffset(IconBackground.AbsoluteSize.X, 44)
+	end)
 
 	if self.Area == 1 then
 		IconClone.Parent = LeftFrame
@@ -267,7 +268,10 @@ function UIShelf.CreateIcon(properties: IconProps)
 
 	IconClone.Name = properties.Name
 	IconClone.LayoutOrder = properties.Order
-	IconImage.Image = properties.Image
+	
+	if properties.Image then
+		IconImage.Image = properties.Image
+	end
 
 	table.insert(UIShelf.CreatedIcons, self)
 
@@ -316,6 +320,11 @@ function TopBarIconObject:SetProperties(properties: IconProps)
 		self[name] = value
 	end
 	
+	if properties.Image and not properties.Text then
+		IconBackground.Text.Inset.PaddingLeft = UDim.new(42, 12)
+		IconBackground.Size = UDim2.fromOffset(44, 44)
+	end
+	
 	if properties.Text then
 		task.defer(function()
 			local Info = Instance.new("GetTextBoundsParams")
@@ -329,7 +338,12 @@ function TopBarIconObject:SetProperties(properties: IconProps)
 			IconBackground.Text.Visible = true
 			IconBackground.Text.Text = properties.Text
 			
-			self._Element.Size = UDim2.fromOffset(DEFAULT_ICON_SIZE + ICON_TEXT_OFFSET_RIGHT + Bounds.X, 44)
+			IconBackground.Size = UDim2.fromOffset(0, 44)
+			
+			if not properties.Image then
+				IconBackground.Text.Inset.PaddingLeft = UDim.new(0, 12)
+			end
+			
 			UpdateTopbar()
 		end)
 	end
@@ -500,7 +514,7 @@ function TopBarIconObject:UpdateStateOverlay(newState: "Default" | "Hovering" | 
 end
 
 function TopBarIconObject:SetImageRect(rectSize: Rect, rectOffset: Rect)
-	local IconImage = self._Element.Icon
+	local IconImage = self._Element.Background.Icon
 
 	IconImage.ImageRectOffset = rectOffset
 	IconImage.ImageRectSize = rectSize
