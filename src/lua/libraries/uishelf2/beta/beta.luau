@@ -23,6 +23,7 @@ local UserInputService = game:GetService("UserInputService")
 local StarterGui = game:GetService("StarterGui")
 local VoiceChatService = game:GetService("VoiceChatService")
 local CollectionService = game:GetService("CollectionService")
+local TextService = game:GetService("TextService")
 
 local Player = PlayerService.LocalPlayer
 local PlayerGui = Player:WaitForChild("PlayerGui")
@@ -47,6 +48,8 @@ local DEFAULT_TRANSPARENCYIN_TWEENINFO = TweenInfo.new(0.15, Enum.EasingStyle.Qu
 local NOTICE_UI_PADDING = 14
 local NOTICE_UI_MARGIN = 24
 local NOTICE_UI_MARGIN_24X24 = 0
+local DEFAULT_ICON_SIZE = 44
+local ICON_TEXT_OFFSET_RIGHT = 12
 
 local TOPBAR_FRAMES = {
 	LeftFrame,
@@ -181,6 +184,18 @@ end
 
 -- // Functions
 
+local function UpdateTopbar()
+	local Inset = GuiService.TopbarInset
+
+	TopbarScreenGui.TopBarFrame.Size = UDim2.fromOffset(
+		Inset.Width, TopbarScreenGui.TopBarFrame.Size.Y.Offset
+	)
+
+	TopbarScreenGui.TopBarFrame.Position = UDim2.fromOffset(
+		Inset.Min.X, TopbarScreenGui.TopBarFrame.Position.Y.Offset
+	)
+end
+
 function UIShelf.CreateIcon(properties: IconProps)
 	local self = setmetatable({ }, TopBarIconObject)
 	local IconClone = TopbarIcon:Clone()
@@ -198,6 +213,7 @@ function UIShelf.CreateIcon(properties: IconProps)
 	self.Image = nil
 	self.Order = nil
 	self.Area = nil
+	self.Text = nil
 	
 	self:SetProperties(properties)
 
@@ -295,14 +311,27 @@ function TopBarIconObject:SetProperties(properties: IconProps)
 	if properties.Area == UIShelf.HorizontalAlignment.Right then
 		properties.Order = -properties.Order
 	end
-
-	if properties.Text then
-		IconBackground.Text.Visible = true
-		IconBackground.Text.Text = properties.Text
-	end
 	
 	for name, value in properties do
 		self[name] = value
+	end
+	
+	if properties.Text then
+		task.defer(function()
+			local Info = Instance.new("GetTextBoundsParams")
+
+			Info.Text = properties.Text
+			Info.Font = Font.fromEnum(Enum.Font.Gotham)
+			Info.Size = 14
+
+			local Bounds = TextService:GetTextBoundsAsync(Info)
+
+			IconBackground.Text.Visible = true
+			IconBackground.Text.Text = properties.Text
+			
+			self._Element.Size = UDim2.fromOffset(DEFAULT_ICON_SIZE + ICON_TEXT_OFFSET_RIGHT + Bounds.X, 44)
+			UpdateTopbar()
+		end)
 	end
 end
 
@@ -345,11 +374,11 @@ function TopBarIconObject:SetTooltip(text: string?)
 	TooltipHeader.Text = text
 
 	local TOOLTIP_POSITION = TopBarIcon.AbsolutePosition.X + (TopBarIcon.AbsoluteSize.X / 2)
-	local SHADOW_SIZE = self._Tooltip.Box.AbsoluteSize.X + 8
+	local SHADOW_SIZE = UDim2.fromOffset(self._Tooltip.Box.AbsoluteSize.X + 8, self._Tooltip.Box.AbsoluteSize.Y + 8)
 
 	IconTooltip.Position = UDim2.fromOffset(TOOLTIP_POSITION, 60)
 	IconTooltip.Size = UDim2.fromOffset(SHADOW_SIZE, 53)
-	IconTooltip.DropShadow.Size = UDim2.fromOffset(SHADOW_SIZE, 48)
+	IconTooltip.DropShadow.Size = SHADOW_SIZE
 
 	if not self._TooltipConnection then
 		local ConnectionDebounce = false
@@ -580,6 +609,9 @@ function TopBarIconObject:BindKeyCode(keyCode: Enum.KeyCode?)
 		
 		HotKeyFrame.Visible = true
 		FirstHotKey.LabelContent.Text = keyCode.Name
+
+		local SHADOW_SIZE = UDim2.fromOffset(self._Tooltip.Box.AbsoluteSize.X + 8, self._Tooltip.Box.AbsoluteSize.Y + 8)
+		self._Tooltip.DropShadow.Size = SHADOW_SIZE
 	end
 
 	self._KeyCodeConnection = UserInputService.InputBegan:Connect(function(input: InputObject, gameProcessedEvent: boolean) 
@@ -701,26 +733,7 @@ end)
 
 -- // Actions
 
-local function UpdateTopbar()
-	local Inset = GuiService.TopbarInset
-
-	TopbarScreenGui.TopBarFrame.Size = UDim2.fromOffset(
-		Inset.Width, TopbarScreenGui.TopBarFrame.Size.Y.Offset
-	)
-
-	TopbarScreenGui.TopBarFrame.Position = UDim2.fromOffset(
-		Inset.Min.X, TopbarScreenGui.TopBarFrame.Position.Y.Offset
-	)
-end
-
 GuiService:GetPropertyChangedSignal("TopbarInset"):Connect(UpdateTopbar)
-
-if UserInputService.TouchEnabled and UserInputService.GyroscopeEnabled then
-	TopbarScreenGui.TopBarFrame.Position = UDim2.fromOffset(
-		0, 4
-	)
-end
-
 UpdateTopbar()
 
 return UIShelf
