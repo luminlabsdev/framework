@@ -75,7 +75,7 @@ export type Server<T...> = {
 	FireInRange: (self: Server<T...>, comparePoint: Vector3, maximumRange: number, T...) -> (),
 	FireFilter: (self: Server<T...>, filter: (Player) -> (boolean), T...) -> (),
 
-	SetRateLimit: (self: Server<T...>, maxInvokesPerSecond: number, invokeOverflowCallback: (sender: Player) -> ()) -> (),
+	SetRateLimit: (self: Server<T...>, maxCalls: number, interval: number?, invokeOverflowCallback: ((sender: Player) -> ())?) -> (),
 }
 
 export type Client<T...> = {
@@ -94,18 +94,20 @@ end
 -- Network Controller Client
 
 function NetworkControllerClient:Fire(...: any)
-	RedClientEvent.Fire(self._Event, PackArgs(...))
+	RedClientEvent.Fire(self._Names._Event, PackArgs(...))
 end
 
 function NetworkControllerClient:Listen(func: (...any) -> ())
 	assert(not self.IsListening, "Controller is already subscribed to an event")
+	assert(func, "Must provide a listener")
+
 	self.IsListening = true
 
-	RedClientEvent.Listen(self._Event, func)
+	RedClientEvent.Listen(self._Names._Event, func)
 end
 
 function NetworkControllerClient:InvokeAsync(...: any): Future.Future<...any>
-	return RedClientEvent.Call(self._Function, PackArgs(...))
+	return RedClientEvent.Call(self._Names._Function, PackArgs(...))
 end
 
 -- Network Controller Server
@@ -113,18 +115,18 @@ end
 function NetworkControllerServer:Fire(recipients: Player | {Player}, ...: any)
 	if type(recipients) == "table" then
 		for _, player in recipients do
-			RedServerEvent.Fire(player, self._Event, PackArgs(...))
+			RedServerEvent.Fire(player, self._Names._Event, PackArgs(...))
 		end
 
 		return
 	end
 
-	RedServerEvent.Fire(recipients, self._Event, PackArgs(...))
+	RedServerEvent.Fire(recipients, self._Names._Event, PackArgs(...))
 end
 
 function NetworkControllerServer:FireAll(...: any)
 	for _, player in PlayerService:GetPlayers() do
-		RedServerEvent.Fire(player, self._Event, PackArgs(...))
+		RedServerEvent.Fire(player, self._Names._Event, PackArgs(...))
 	end
 end
 
@@ -135,7 +137,7 @@ function NetworkControllerServer:FireExcept(except: Player | {Player}, ...: any)
 				continue
 			end
 
-			RedServerEvent.Fire(player, self._Event, PackArgs(...))
+			RedServerEvent.Fire(player, self._Names._Event, PackArgs(...))
 		end
 
 		return
@@ -146,14 +148,14 @@ function NetworkControllerServer:FireExcept(except: Player | {Player}, ...: any)
 			continue
 		end
 
-		RedServerEvent.Fire(player, self._Event, PackArgs(...))
+		RedServerEvent.Fire(player, self._Names._Event, PackArgs(...))
 	end
 end
 
 function NetworkControllerServer:FireFilter(filter: (Player) -> (boolean), ...: any)
 	for _, player in PlayerService:GetPlayers() do
 		if filter(player) then
-			RedServerEvent.Fire(player, self._Event, PackArgs(...))
+			RedServerEvent.Fire(player, self._Names._Event, PackArgs(...))
 		end
 	end
 end
@@ -168,9 +170,11 @@ end
 
 function NetworkControllerServer:Listen(func: (sender: Player, ...unknown) -> ())
 	assert(not self.IsListening, "Controller is already subscribed to an event")
+	assert(func, "Must provide a listener")
+	
 	self.IsListening = true
 
-	RedServerEvent.Listen(self._Event, function(player, ...)
+	RedServerEvent.Listen(self._Names._Event, function(player, ...)
 		if (self._Ratelimit and self._InvokeOverflow) and not self._Ratelimit(player) then
 			self._InvokeOverflow(player)
 			return
@@ -200,7 +204,7 @@ function NetworkControllerServer:BindToInvocation(callback: (sender: Player, ...
 	assert(not self.IsBinded, "Controller already has function binded to invocation")
 	self.IsBinded = true
 
-	RedServerEvent.Listen(self._Function, function(player, ...)
+	RedServerEvent.Listen(self._Names._Function, function(player, ...)
 		return callback(player, ...)
 	end)
 end
