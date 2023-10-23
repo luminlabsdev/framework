@@ -107,33 +107,6 @@ The name of the stack, defaults to the stack number
 
 ---
 
-### DebugInvalidData <Badge type="warning" text="deprecated" />
-
-Errors if the param does not have the same type as what is expected.
-
-**Parameters**
-
-* **paramNumber:** `number`\
-The number of which param errored, 1 would be the first param
-
-* **funcName:** `string`\
-The name of the function
-
-* **expectedType:** `ExpectedType`\
-The type that was expected of `param`
-
-* **param:** `T`\
-The param which caused the error
-
-* **debugHandler:** `(...any) -> ()`\
-No description
-
-**Returns**
-
-* **void**
-
----
-
 ### LogEvent
 
 Logs an event in a script, which is then stored in a cache for that script. This allows you to make sure code is running while not cluttering the output in the live game.
@@ -145,9 +118,6 @@ The instance to cache the debug logs at
 
 * **eventName:** `string`\
 The name to print and log it as
-
-* **printLog:** `boolean?`\
-Whether or not to pring the log using [EngineDebugger.Debug](#debug), defaults to true
 
 **Returns**
 
