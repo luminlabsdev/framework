@@ -239,12 +239,8 @@ end
 
 -- ProfileObjects
 
-function ProfileObject:GetProfileData(): {[string]: any}?
-	return self.Profile.Data
-end
-
-function ProfileObject:GetProfileTags(): {[string]: any}?
-	return self.Profile.MetaData.MetaTags
+function ProfileObject:GetProfileData(): ({[string]: any}?, {[string]: any}?)
+	return self.Profile.Data, self.Profile.MetaData.MetaTags
 end
 
 function ProfileObject:CreateProfileLeaderstats(player: Player, statsToAdd: {string}?, isAttributes: boolean?): Folder?

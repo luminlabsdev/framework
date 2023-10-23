@@ -54,7 +54,7 @@ EngineDebugger.Handlers = {
 	end,
 
 	Log = function(...)
-		print("[Event]:", ...)
+		print("[Event]", ...)
 	end,
 
 	Print = function(...)
@@ -130,28 +130,13 @@ function EngineDebugger.GetCallStack(instance: LuaSourceContainer, stackName: st
 	return StackTable
 end
 
-function EngineDebugger.LogEvent(instance: LuaSourceContainer, eventName: string, printLog: boolean?, isInternal: boolean?)
-	if printLog == nil then
-		printLog = true
-	end
-	
-	if not EngineDebugger.CachedLogs[instance] and not isInternal then
+function EngineDebugger.LogEvent(instance: LuaSourceContainer, eventName: string)
+	if not EngineDebugger.CachedLogs[instance] then
 		EngineDebugger.CachedLogs[instance] = { }
 	end
 
-	if not EngineDebugger.InternalCachedLogs[instance] and isInternal then
-		EngineDebugger.InternalCachedLogs[instance] = { }
-	end
-
-	if isInternal then
-		table.insert(EngineDebugger.InternalCachedLogs[instance], eventName)
-	else
-		table.insert(EngineDebugger.CachedLogs[instance], eventName)
-	end
-
-	if printLog then
-		EngineDebugger.Debug(EngineDebugger.Handlers.Log, eventName)
-	end
+	table.insert(EngineDebugger.CachedLogs[instance], eventName)
+	EngineDebugger.Debug(EngineDebugger.Handlers.Log, eventName)
 end
 
 function EngineDebugger.GenerateUUID()
