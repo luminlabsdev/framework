@@ -32,7 +32,7 @@ if RunService:IsServer() then
 		MainRedRemote.Parent = ReplicatedStorage
 	end
 
-	require(script.Red.ServerEvent).Start()
+	require(script.Red.Events.ServerEvent).Start()
 
 	local function PlayerAdded(player: Player)
 		local ClientFolderCreate = Instance.new("ScreenGui")
@@ -52,14 +52,14 @@ else
 	local Player = PlayerService.LocalPlayer
 	MainRedRemote = ReplicatedStorage:FindFirstChild("RedEvent")
 
-	require(script.Red.ClientEvent).Start()
+	require(script.Red.Events.ClientEvent).Start()
 
 	ClientFolder = Player:WaitForChild("PlayerGui"):WaitForChild("Red")
 	ClientFolder.Parent = nil
 end
 
-local RedServerEvent = require(script.Red.ServerEvent)
-local RedClientEvent = require(script.Red.ClientEvent)
+local RedServerEvent = require(script.Red.Events.ServerEvent)
+local RedClientEvent = require(script.Red.Events.ClientEvent)
 
 -- // Types
 

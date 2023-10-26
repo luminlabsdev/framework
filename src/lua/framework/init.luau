@@ -57,7 +57,7 @@ function CanaryEngine.GetFrameworkServer()
 			return CanaryEngineServer
 		end
 
-		CanaryEngineServer.Data = require(EngineVendor.Libraries.EasyProfile.Init)
+		CanaryEngineServer.Data = require(EngineVendor.Libraries.EasyProfile)
 		return table.freeze(CanaryEngineServer)
 	else
 		error("Failed to fetch 'EngineServer', context must be server.")
