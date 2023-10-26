@@ -33,7 +33,7 @@
             "Init": {
                 "$className": "ModuleScript",
                 "$properties": {
-                    "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Vendor/Libraries/FrameworkLoader.luau"
+                    "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Libraries/FrameworkLoader.luau"
                 }
             },
             "Vendor": "EngineLoaderAssets"
