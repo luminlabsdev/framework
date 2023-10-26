@@ -156,7 +156,7 @@ function VersionController.GetCurrentInstance(ignoreNil: boolean?): {[string]: F
 	local EngineTable = {
 		Server = ServerStorage:FindFirstChild("Server") or ReplicatedStorage:FindFirstChild("EngineServer"),
 		Client = ReplicatedStorage:FindFirstChild("Client") or ReplicatedStorage:FindFirstChild("EngineClient"),
-		Replicated = ReplicatedStorage:FindFirstChild("Replicated") or ReplicatedStorage:FindFirstChild("EngineReplicated"),
+		Replicated = ReplicatedStorage:FindFirstChild("Replicated") or ReplicatedStorage:FindFirstChild("EngineReplicated") or ReplicatedStorage:FindFirstChild("Shared"),
 		Framework = ReplicatedStorage:FindFirstChild("Framework") or ReplicatedStorage:FindFirstChild("CanaryEngineFramework"),
 		ReplicatedFirst = ReplicatedFirst:FindFirstChild("ReplicatedFirst") or ReplicatedStorage:FindFirstChild("EngineReplicatedFirst")
 	}
