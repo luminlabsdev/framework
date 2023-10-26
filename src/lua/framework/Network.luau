@@ -3,11 +3,9 @@
 local NetworkControllerClient = { }
 local NetworkControllerServer = { }
 
-local Vendor = script.Parent.Vendor
+local Libraries = script.Parent.Libraries
 
 -- // Variables
-
-local EngineVendor = Vendor.Parent.Parent
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local PlayerService = game:GetService("Players")
@@ -18,9 +16,9 @@ local Indexes = {
 	{__index = NetworkControllerServer},
 }
 
-local Future = require(EngineVendor.Libraries.RedbloxUtils.Future)
-local Ratelimit = require(EngineVendor.Libraries.RedbloxUtils.Ratelimit)
-local Types = require(EngineVendor.Types)
+local Future = require(Libraries.RedbloxUtils.Future)
+local Ratelimit = require(Libraries.RedbloxUtils.Ratelimit)
+local Types = require(script.Parent.Types)
 
 local MainRedRemote: RemoteEvent
 local ClientFolder: ScreenGui
@@ -34,7 +32,7 @@ if RunService:IsServer() then
 		MainRedRemote.Parent = ReplicatedStorage
 	end
 
-	require(Vendor.Red.ServerEvent).Start()
+	require(script.Red.ServerEvent).Start()
 
 	local function PlayerAdded(player: Player)
 		local ClientFolderCreate = Instance.new("ScreenGui")
@@ -54,14 +52,14 @@ else
 	local Player = PlayerService.LocalPlayer
 	MainRedRemote = ReplicatedStorage:FindFirstChild("RedEvent")
 
-	require(Vendor.Red.ClientEvent).Start()
+	require(script.Red.ClientEvent).Start()
 
 	ClientFolder = Player:WaitForChild("PlayerGui"):WaitForChild("Red")
 	ClientFolder.Parent = nil
 end
 
-local RedServerEvent = require(Vendor.Red.ServerEvent)
-local RedClientEvent = require(Vendor.Red.ClientEvent)
+local RedServerEvent = require(script.Red.ServerEvent)
+local RedClientEvent = require(script.Red.ClientEvent)
 
 -- // Types
 

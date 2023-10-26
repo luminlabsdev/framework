@@ -28,8 +28,8 @@ local TextService = game:GetService("TextService")
 local Player = PlayerService.LocalPlayer
 local PlayerGui = Player:WaitForChild("PlayerGui")
 
-local TopbarScreenGui = Vendor.TopBarApp:Clone()
-local TooltipScreenGui = Vendor.TooltipLayer:Clone()
+local TopbarScreenGui = PlayerGui:WaitForChild("TopBarApp", 0.75) or Vendor.TopBarApp:Clone()
+local TooltipScreenGui = PlayerGui:WaitForChild("TooltipLayer", 0.75) or Vendor.TooltipLayer:Clone()
 local LeftFrame = TopbarScreenGui.TopBarFrame.LeftFrame
 local RightFrame = TopbarScreenGui.TopBarFrame.RightFrame
 
@@ -128,28 +128,23 @@ local EVENTS_FOR_CONNECTION_UNIBAR = {
 	MouseLeave = "Default",
 }
 
-local VoiceSpacer
+local DEFAULT_ICON_SIZE_UDIM = UDim2.fromOffset(DEFAULT_ICON_SIZE, DEFAULT_ICON_SIZE)
+
+local DEFAULT_PADDING_SIZE_LEFT_UDIM,
+DEFAULT_PADDING_SIZE_RIGHT_UDIM = UDim.new(0, 42), UDim.new(0, 12)
+
+local NOIMAGE_PADDING_SIZE_LEFT_UDIM,
+NOIMAGE_PADDING_SIZE_RIGHT_UDIM = UDim.new(0, 12), UDim.new(0, 12)
+
+local NOIMAGE_ICON_SIZE_UDIM = UDim2.fromOffset(0, DEFAULT_ICON_SIZE)
 
 UIShelf.HorizontalAlignment = {
 	Left = 1,
 	Right = 2,
 }
 
-if PlayerGui:FindFirstChild("TopBarApp") then
-	TopbarScreenGui:Destroy()
-	TopbarScreenGui = PlayerGui:FindFirstChild("TopBarApp")
-else
-	TopbarScreenGui.Parent = PlayerGui
-	TopbarScreenGui.Archivable = false
-end
-
-if PlayerGui:FindFirstChild("TooltipLayer") then
-	TooltipScreenGui:Destroy()
-	TooltipScreenGui = PlayerGui:FindFirstChild("TooltipLayer")
-else
-	TooltipScreenGui.Parent = PlayerGui
-	TooltipScreenGui.Archivable = false
-end
+TopbarScreenGui.Parent = PlayerGui
+TooltipScreenGui.Parent = PlayerGui
 
 -- // Types
 
@@ -211,8 +206,9 @@ function UIShelf.CreateIcon(properties: IconProps)
 	self.Area = nil
 	self.Text = nil
 	
-	self:SetProperties(properties)
-
+	self.TextEnabled = if properties.Text then true else false
+	self.ImageEnabled = if properties.Image then true else false
+	
 	self.StateChanged = Signal() :: Signal<string>
 	self.Activated = Signal() :: Signal<Enum.UserInputType>
 	self.NoticeAdded = Signal() :: Signal<number>
@@ -228,6 +224,25 @@ function UIShelf.CreateIcon(properties: IconProps)
 	self._TooltipConnection = nil
 	self._GuiBindConnection = nil
 	self._SizeConnection = nil
+	
+	if type(properties.Image) == "number" then
+		properties.Image = `rbxassetid://{properties.Image}`
+	end
+
+	if properties.Order <= 0 then
+		error("Order cannot be less than 0")
+	end
+
+	if properties.Area == UIShelf.HorizontalAlignment.Right then
+		properties.Order = -properties.Order
+	end
+
+	for name, value in properties do
+		self[name] = value
+	end
+	
+	self:SetText(properties.Text)
+	self:SetImage(properties.Image)
 
 	for connection, state in EVENTS_FOR_CONNECTION_ICON do
 		IconBackground[connection]:Connect(function()
@@ -300,53 +315,74 @@ function TopBarIconObject:BindGuiObject(guiObject: GuiObject?)
 	end
 end
 
-function TopBarIconObject:SetProperties(properties: IconProps)
+function TopBarIconObject:SetText(text: string?)
 	local IconBackground = self._Element.Background
 	local IconText = IconBackground.Text
 	
-	if type(properties.Image) == "number" then
-		properties.Image = `rbxassetid://{properties.Image}`
-	end
-
-	if properties.Order <= 0 then
-		error("Order cannot be less than 0")
-	end
-
-	if properties.Area == UIShelf.HorizontalAlignment.Right then
-		properties.Order = -properties.Order
+	if not text then
+		assert(self.ImageEnabled, "Must have at least image or text on icon")
+		self.ImageEnabled = true
+		IconText.Visible = false
+			
+		UpdateTopbar()
+		self.TextEnabled = false
+		return
 	end
 	
-	for name, value in properties do
-		self[name] = value
+	self.TextEnabled = true
+	
+	task.defer(function()
+		local Info = Instance.new("GetTextBoundsParams")
+
+		Info.Text = text
+		Info.Font = Font.fromEnum(Enum.Font.Gotham)
+		Info.Size = 14
+
+		local Bounds = TextService:GetTextBoundsAsync(Info)
+
+		IconBackground.Text.Visible = true
+		IconBackground.Text.Text = text
+
+		if not self.ImageEnabled then
+			self.ImageEnabled = false
+			IconBackground.Text.Inset.PaddingLeft = NOIMAGE_PADDING_SIZE_LEFT_UDIM
+			IconBackground.Text.Inset.PaddingRight = NOIMAGE_PADDING_SIZE_RIGHT_UDIM
+			IconBackground.Size = NOIMAGE_ICON_SIZE_UDIM
+		end
+
+		UpdateTopbar()
+	end)
+end
+
+function TopBarIconObject:SetImage(image: string | number?)
+	local IconBackground = self._Element.Background
+	local IconText = IconBackground.Text
+	local IconImage = IconBackground.Icon
+	
+	if not image then
+		assert(self.TextEnabled, "Must have at least image or text on icon")
+		IconImage.Image = ""
+		self.TextEnabled = true
+		IconText.Inset.PaddingLeft = NOIMAGE_PADDING_SIZE_LEFT_UDIM
+		IconText.Inset.PaddingRight = NOIMAGE_PADDING_SIZE_RIGHT_UDIM
+			
+		IconBackground.Size = NOIMAGE_ICON_SIZE_UDIM
+		UpdateTopbar()
+		self.ImageEnabled = false
+		return
 	end
 	
-	if properties.Image and not properties.Text then
-		IconBackground.Text.Inset.PaddingLeft = UDim.new(42, 12)
-		IconBackground.Size = UDim2.fromOffset(44, 44)
+	self.ImageEnabled = true
+	IconText.Inset.PaddingLeft = DEFAULT_PADDING_SIZE_LEFT_UDIM
+	
+	if type(image) == "number" then
+		image = `rbxassetid://{image}`
 	end
 	
-	if properties.Text then
-		task.defer(function()
-			local Info = Instance.new("GetTextBoundsParams")
-
-			Info.Text = properties.Text
-			Info.Font = Font.fromEnum(Enum.Font.Gotham)
-			Info.Size = 14
-
-			local Bounds = TextService:GetTextBoundsAsync(Info)
-
-			IconBackground.Text.Visible = true
-			IconBackground.Text.Text = properties.Text
-			
-			IconBackground.Size = UDim2.fromOffset(0, 44)
-			
-			if not properties.Image then
-				IconBackground.Text.Inset.PaddingLeft = UDim.new(0, 12)
-			end
-			
-			UpdateTopbar()
-		end)
-	end
+	IconImage.Image = image
+	IconBackground.Size = DEFAULT_ICON_SIZE_UDIM
+	
+	UpdateTopbar()
 end
 
 function TopBarIconObject:SetTooltip(text: string?)

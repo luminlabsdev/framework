@@ -1,14 +1,17 @@
 -- // Package
 
 local EngineRuntime = { }
+local Libraries = script.Parent.Libraries
+
+-- // Variables
 
 local RunService = game:GetService("RunService")
 local Framework = game:GetService("ReplicatedStorage").Framework
 
-local Network = require(script.Parent.Network.Init)
-local Signal = require(script.Parent.Libraries.RedbloxUtils.Signal)
+local Network = require(script.Parent.Network)
+local Signal = require(Libraries.RedbloxUtils.Signal)
 
--- Engine Context
+-- // Engine Context
 
 local EngineRuntimeContext = {
 	Studio = RunService:IsStudio(),
@@ -17,7 +20,7 @@ local EngineRuntimeContext = {
 	StudioPlay = RunService:IsStudio() and RunService:IsRunning()
 }
 
--- Engine Settings
+-- // Engine Settings
 
 local EngineRuntimeSettings = {
 	StudioDebugEnabled = Framework:GetAttribute("StudioDebugging"),
@@ -30,7 +33,7 @@ local EngineRuntimeObjects = {
 	Signals = { } :: Signal.Signal<...any>,
 }
 
--- Table Assignment
+-- // Table Assignment
 
 EngineRuntime.Context = EngineRuntimeContext
 EngineRuntime.Settings = EngineRuntimeSettings

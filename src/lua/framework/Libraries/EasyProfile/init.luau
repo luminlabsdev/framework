@@ -1,7 +1,7 @@
 -- // Package
 
 local EasyProfile = { }
-local Vendor = script.Parent.Vendor
+local Libraries = script.Parent
 
 -- // Variables
 
@@ -10,16 +10,12 @@ export type GlobalKey = {Key: string, Value: any, KeyId: number}
 type ProfileMetaData = {ProfileCreated: number; ProfileLoadCount: number; ProfileActiveSession: {placeId: number; jobId: string;}}
 type ProfileLoadType = "Repeat" | "Cancel" | "ForceLoad" | "Steal"
 
-local EngineVendor = script.Parent.Parent.Parent
-local EngineLibraries = EngineVendor.Libraries
-
 local RunService = game:GetService("RunService")
 local HttpService = game:GetService("HttpService")
 
-local ProfileService = require(Vendor.ProfileService)
-local Types = require(EngineVendor.Types)
-local Signal = require(EngineLibraries.RedbloxUtils.Signal)
-local Future = require(EngineLibraries.RedbloxUtils.Future)
+local ProfileService = require(script.ProfileService)
+local Signal = require(Libraries.RedbloxUtils.Signal)
+local Future = require(Libraries.RedbloxUtils.Future)
 
 local ValidLeaderboardTypes = {
 	"boolean",

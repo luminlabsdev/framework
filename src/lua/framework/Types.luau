@@ -2,12 +2,12 @@
 
 local EngineTypes = { }
 
--- Tables
+-- // Tables
 
 export type Dictionary<T, U> = {[T]: U}
 export type Array<T> = {[number]: T}
 
--- Misc. Types
+-- // Misc. Types
 
 export type Character = {
 	["Body Colors"]: BodyColors,
