@@ -10,7 +10,25 @@ This is the changelog which is changed every update, and we follow semver. To se
 
 ## 4.0.0
 
-(Includes rc1-2)
+(Includes rc1-3)
+
+---
+
+### Added
+
+* Improved API
+
+### Improvements
+
+* Improves structure and others
+* Improves internal code to be a lot faster
+* CanaryEngine is now a standalone modulescript which can be used from anywhere
+
+### Removed
+
+* Nothing
+
+## 4.0.0-rc3
 
 ---
 
