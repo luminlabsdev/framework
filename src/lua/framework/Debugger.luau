@@ -23,7 +23,7 @@ local Prefix = "[Debug]"
 local ValidCallstackNames = {
 	"Client",
 	"Server",
-	"Replicated",
+	"Shared",
 	"ReplicatedFirst",
 }
 
@@ -110,13 +110,16 @@ function Debugger.GetCallStack(instance: LuaSourceContainer, stackName: string?)
 	return StackTable
 end
 
-function Debugger.LogEvent(instance: LuaSourceContainer, eventName: string)
+function Debugger.LogEvent(instance: LuaSourceContainer, eventName: string, silent: boolean?)
 	if not Debugger.CachedLogs[instance] then
 		Debugger.CachedLogs[instance] = { }
 	end
 
 	table.insert(Debugger.CachedLogs[instance], eventName)
-	Debugger.DebugPrefix(print, "[Log]", eventName)
+	
+	if not silent then
+		Debugger.DebugPrefix(print, "[Log]", eventName)
+	end
 end
 
 function Debugger.GenerateUUID()

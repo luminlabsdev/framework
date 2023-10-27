@@ -1,4 +1,4 @@
-# EngineDebugger
+# Debugger
 
 Contains functions useful for debugging code which abide by user settings.
 
@@ -38,8 +38,29 @@ The main debug handler, adds a prefix to logs sent out and respects logging sett
 
 **Parameters**
 
-* **debugHandler:** `(T...) -> ()`\
-The function to run on debug, for example `Debugger.Debug(Debugger.Handlers.Print, "Hello, world!")`
+* **debugHandler:** `(prefix: string, T...) -> ()`\
+The function to run on debug, for example `Debugger.Debug(print, "Hello, world!")`
+
+* **arguments:** `T...`\
+The contents to be passed to the function
+
+**Returns**
+
+* **void**
+
+---
+
+### DebugPrefix
+
+Sames as [`Debug`](#debug), but allows a custom prefix.
+
+**Parameters**
+
+* **debugHandler:** `(prefix: string, T...) -> ()`\
+The function to run on debug, for example `Debugger.Debug(print, "Hello, world!")`
+
+* **prefix:** `string`\
+The prefix to be put in front of the message
 
 * **arguments:** `T...`\
 The contents to be passed to the function
@@ -118,6 +139,9 @@ The instance to cache the debug logs at
 
 * **eventName:** `string`\
 The name to print and log it as
+
+* **silent:** `boolean?`\
+Decides whether or not to print the log, defaults to `false`.
 
 **Returns**
 

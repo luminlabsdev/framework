@@ -1,4 +1,4 @@
-# EngineLoader
+# FrameworkLoader
 
 Responsible for distibuting the framework's loading screen to players, along with customization.
 
@@ -14,7 +14,7 @@ A boolean that is true if the client is loaded.
 
 ### StartLoad
 
-Starts up the loader, this should be run as soon as the player joins in a client script inside `EngineReplicatedFirst/Scripts`.
+Starts up the loader, this should be run as soon as the player joins in a client script inside `ReplicatedFirst/Scripts`.
 
 **Parameters**
 

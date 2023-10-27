@@ -56,13 +56,23 @@ Gets the client-sided interface of CanaryEngine.
 
 ---
 
-### GetFrameworkReplicated
+### GetFrameworkShared
 
-Gets the global-sided interface of CanaryEngine. Recommended that use this only in replicated packages, this is a bad practice anywhere else.
+Gets the shared interface of CanaryEngine. Currently has no unique function, but will in the future.
 
 **Returns**
 
-* [**CanaryEngineReplicated?**](/api/engine/framework/canaryenginereplicated)
+* [**CanaryEngineShared?**](/api/engine/framework/canaryengineshared)
+
+---
+
+### GetFrameworkReplicated <Badge type="warning" text="deprecated" />
+
+A deprecated alias of [`GetFrameworkShared`](/api/engine/framework/canaryengine#GetFrameworkShared)
+
+**Returns**
+
+* [**CanaryEngineShared?**](/api/engine/framework/canaryengineshared)
 
 ---
 

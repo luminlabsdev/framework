@@ -4,24 +4,24 @@ local CanaryEngine = { }
 
 local CanaryEngineServer = { }
 local CanaryEngineClient = { }
-local CanaryEngineReplicated = { }
+local CanaryEngineShared = { }
+
+local Libraries = script.Libraries
 
 -- // Variables
 
 local PlayerService = game:GetService("Players")
 local BeginLoadTime = os.clock()
 
-local EngineVendor = script.Parent.Vendor
-local EngineLibraries = EngineVendor.Libraries
+local Types = require(script.Types) -- The types used for all libraries inside of the framework
 
-local Types = require(EngineVendor.Types) -- The types used for all libraries inside of the framework
-local Network = require(EngineVendor.Network.Init) -- Networking logic
-local Signal = require(EngineLibraries.RedbloxUtils.Signal) -- Signal logic
+local Network = require(script.Network) -- Networking logic
+local Signal = require(Libraries.RedbloxUtils.Signal) -- Signal logic
 
-local Future = require(EngineLibraries.RedbloxUtils.Future) -- Promise logic
-local Guard = require(EngineLibraries.RedbloxUtils.Guard) -- Runtime typechecking
-local Debugger = require(EngineVendor.Debugger) -- Easy debug logic
-local Runtime = require(EngineVendor.Runtime) -- Runtime settings + debugger
+local Future = require(Libraries.RedbloxUtils.Future) -- Promise logic
+local Guard = require(Libraries.RedbloxUtils.Guard) -- Runtime typechecking
+local Debugger = require(script.Debugger) -- Easy debug logic
+local Runtime = require(script.Runtime) -- Runtime settings + debugger
 
 CanaryEngine.Runtime = table.freeze({
 	Settings = Runtime.Settings,
@@ -38,7 +38,7 @@ local RuntimeObjects = CanaryEngine.Runtime.Objects
 -- // Functions
 
 local function CreateNetworkController(controllerName: string): Network.Client<...any> | Network.Server<...any>
-	Debugger.LogEvent(script, "Create NetworkController", false, true)
+	Debugger.LogEvent(script, "Create NetworkController", true)
 
 	if not RuntimeObjects.NetworkControllers[controllerName] then
 		local NewNetworkController = Network(controllerName)
@@ -57,7 +57,7 @@ function CanaryEngine.GetFrameworkServer()
 			return CanaryEngineServer
 		end
 
-		CanaryEngineServer.Data = require(EngineVendor.Libraries.EasyProfile)
+		CanaryEngineServer.Data = require(Libraries.EasyProfile)
 		return table.freeze(CanaryEngineServer)
 	else
 		error("Failed to fetch 'EngineServer', context must be server.")
@@ -82,13 +82,13 @@ function CanaryEngine.GetFrameworkClient()
 	end
 end
 
--- Exclusive API for replicated will come soon
-function CanaryEngine.GetFrameworkReplicated()
-	if table.isfrozen(CanaryEngineReplicated) then
-		return CanaryEngineReplicated
+-- Exclusive API for shared will come soon
+function CanaryEngine.GetFrameworkShared()
+	if table.isfrozen(CanaryEngineShared) then
+		return CanaryEngineShared
 	end
 
-	return table.freeze(CanaryEngineReplicated)
+	return table.freeze(CanaryEngineShared)
 end
 
 function CanaryEngine.ImportPackagesInOrder(importList: {ModuleScript}, importDeep: boolean?)
@@ -108,7 +108,7 @@ end
 -- Signal Creation
 
 function CanaryEngine.CreateSignal(signalName: string?): Signal.Signal<...any>
-	Debugger.LogEvent(script, "Create SignalController", false, true)
+	Debugger.LogEvent(script, "Create SignalController", true)
 
 	if not signalName then
 		return Signal()
@@ -136,10 +136,10 @@ end
 
 CanaryEngineClient.CreateNetworkController = CreateNetworkController :: (controllerName: string) -> (Network.Client<...any>)
 CanaryEngineServer.CreateNetworkController = CreateNetworkController :: (controllerName: string) -> (Network.Server<...any>)
+CanaryEngine.GetFrameworkReplicated = CanaryEngine.GetFrameworkShared
 
 -- // Actions
 
-Debugger.LogEvent(script, `Framework loaded`, false, true)
-Debugger.Debug(Debugger.Handlers.Print, `Framework loaded in {os.clock() - BeginLoadTime} seconds`)
+Debugger.LogEvent(script, `Framework loaded; {(os.clock() - BeginLoadTime) * 1000}ms`)
 
 return table.freeze(CanaryEngine)
