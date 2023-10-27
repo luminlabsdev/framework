@@ -4,7 +4,6 @@
 
 local VersionController = { }
 
-local HttpService = game:GetService("HttpService")
 local ServerStorage = game:GetService("ServerStorage")
 local ReplicatedFirst = game:GetService("ReplicatedFirst")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -39,7 +38,7 @@ local PLAYER_NAME = PlayerService:GetNameFromUserIdAsync(StudioService:GetUserId
 local RequiredEngineInstances = {
 	"Server",
 	"Client",
-	"Replicated",
+	"Shared",
 	"Framework",
 	"ReplicatedFirst",
 }
@@ -80,6 +79,7 @@ local StructureTagOccurances = {
 local FolderToService = {
 	Client = ReplicatedStorage,
 	Replicated = ReplicatedStorage,
+	Shared = ReplicatedStorage,
 	ReplicatedFirst = ReplicatedFirst,
 	Server = ServerStorage,
 
@@ -97,7 +97,7 @@ VersionController.FinishedUpdating = Signal.new()
 function VersionController.IsOldVersionInstalled(): boolean
 	local CurrentInstance = VersionController.GetCurrentInstance()
 
-	if CurrentInstance.Framework and not (CurrentInstance.Client or CurrentInstance.Server or CurrentInstance.ReplicatedFirst or CurrentInstance.Replicated) then
+	if CurrentInstance and CurrentInstance.Framework and not (CurrentInstance.Client or CurrentInstance.Server or CurrentInstance.ReplicatedFirst or CurrentInstance.Shared) then
 		return true
 	end
 
@@ -156,7 +156,7 @@ function VersionController.GetCurrentInstance(ignoreNil: boolean?): {[string]: F
 	local EngineTable = {
 		Server = ServerStorage:FindFirstChild("Server") or ReplicatedStorage:FindFirstChild("EngineServer"),
 		Client = ReplicatedStorage:FindFirstChild("Client") or ReplicatedStorage:FindFirstChild("EngineClient"),
-		Replicated = ReplicatedStorage:FindFirstChild("Replicated") or ReplicatedStorage:FindFirstChild("EngineReplicated") or ReplicatedStorage:FindFirstChild("Shared"),
+		Shared = ReplicatedStorage:FindFirstChild("Replicated") or ReplicatedStorage:FindFirstChild("EngineReplicated") or ReplicatedStorage:FindFirstChild("Shared"),
 		Framework = ReplicatedStorage:FindFirstChild("Framework") or ReplicatedStorage:FindFirstChild("CanaryEngineFramework"),
 		ReplicatedFirst = ReplicatedFirst:FindFirstChild("ReplicatedFirst") or ReplicatedStorage:FindFirstChild("EngineReplicatedFirst")
 	}
@@ -182,7 +182,7 @@ function VersionController.GetCurrentTaggedInstance(ignoreNil: boolean?): {[stri
 	local EngineTable = {
 		Server = table.unpack(CollectionService:GetTagged("__CE_Server")),
 		Client = table.unpack(CollectionService:GetTagged("__CE_Client")),
-		Replicated = table.unpack(CollectionService:GetTagged("__CE_Replicated")),
+		Shared = table.unpack(CollectionService:GetTagged("__CE_Replicated")),
 		Framework = table.unpack(CollectionService:GetTagged("__CE_Framework")),
 		ReplicatedFirst = table.unpack(CollectionService:GetTagged("__CE_ReplicatedFirst"))
 	}
@@ -330,7 +330,7 @@ function VersionController.InstallPackagesFromList(list: {[string]: boolean})
 				VersionController.GetDirectoryFromStructureJSON(libraryJSON, PackageInstallCache, true)
 			end
 
-			PackageInstallCache:FindFirstChild(libraryName):Clone().Parent = CurrentInstance[libraryJSON["$parent"] or "Replicated"].Packages
+			PackageInstallCache:FindFirstChild(libraryName):Clone().Parent = CurrentInstance[libraryJSON["$parent"] or "Shared"].Packages
 
 			FinishedFiles += 1
 			VersionController.DataUpdated:Fire(FinishedFiles, TotalPackageFiles, "Installing ", "Installing latest version of packages", "packages")
@@ -470,7 +470,7 @@ function VersionController.CreateNewInstanceFromName(name: string, instanceType:
 						"~PACKAGE~NAME~",
 						if name == "" then "Package" else name
 					)
-					
+
 					local NewVendorSource = string.gsub(
 						NewPackageNameSource,
 						"~VENDOR~",
@@ -517,7 +517,7 @@ function VersionController.CreateNewInstanceFromName(name: string, instanceType:
 		end
 
 		NewInstance.Name = name
-		
+
 		if context == "ReplicatedFirst" then
 			NewInstance.RunContext = Enum.RunContext.Client
 		else

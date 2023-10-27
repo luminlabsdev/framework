@@ -145,7 +145,7 @@ if not AlreadyRan then
 				if InstanceTypeDropdown.state.index:get() == "Script" then
 					InstanceContextDropdown = Iris.ComboArray("Context", {index = "Server"}, {"Server", "Client", "ReplicatedFirst"})
 				else
-					InstanceContextDropdown = Iris.ComboArray("Context", {index = "Server"}, {"Server", "Client", "Replicated"})
+					InstanceContextDropdown = Iris.ComboArray("Context", {index = "Server"}, {"Server", "Client", "Shared"})
 				end
 
 				if Iris.Button(`Create {InstanceTypeDropdown.state.index:get()} {NameInput.state.text:get():gsub("[^%a_]", "")}`).clicked() then

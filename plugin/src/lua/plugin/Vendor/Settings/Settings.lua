@@ -11,6 +11,7 @@ return {
 		["Studio Debugging"] = true,
 		["Live Game Debugging"] = false,
 		["Enable Asset Templates"] = true,
+		["Install Recommended Libs"] = true, -- an option to install libraries like EasyProfile
 	},
 
 	CanaryStudioInstallerPackages = { },
@@ -26,7 +27,7 @@ return {
 local ~PACKAGE~NAME~ = { }
 ~VENDOR~
 
-local CanaryEngine = require(game.ReplicatedStorage.Framework.Init)
+local CanaryEngine = require(game.ReplicatedStorage.Framework)
 local Framework~FRAMEWORK~TYPE~ = CanaryEngine.GetFramework~FRAMEWORK~TYPE~()
 
 -- // Variables
@@ -42,43 +43,43 @@ end
 -- // Actions
 
 return ~PACKAGE~NAME~
-		]],
+]],
 
 		Script = [[
 ~AUTHOR~
 
 -- // Script
-			
-local CanaryEngine = require(game.ReplicatedStorage.Framework.Init)
+
+local CanaryEngine = require(game.ReplicatedStorage.Framework)
 local Framework~FRAMEWORK~TYPE~ = CanaryEngine.GetFramework~FRAMEWORK~TYPE~()
-			
+
 -- // Variables
-			
+
 -- // Functions
-			
+
 -- // Connections
-			
+
 -- // Actions
-			
+
 print("Hello, ~FRAMEWORK~TYPE~!")
-		]],
+]],
 
 		SpecialScript = [[
 ~AUTHOR~
 
 -- // Engine
-			
+
 local FrameworkLoader = require(script.Parent.Parent.FrameworkLoader.Init)
-			
+
 -- // Variables
-			
+
 -- // Functions
-			
+
 -- // Connections
-			
+
 -- // Actions
-			
+
 print("Hello, ~FRAMEWORK~TYPE~!")
-		]],
+]],
 	},
 }
