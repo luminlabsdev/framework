@@ -15,7 +15,7 @@
     },
     "Shared": {
         "$tags": [
-            "__CE_Replicated"
+            "__CE_Shared"
         ],
         "Packages": {},
         "Assets": {
@@ -83,6 +83,20 @@
             "$className": "ModuleScript",
             "$properties": {
                 "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Network.luau"
+            }
+        },
+        "Libraries": {
+            "EasyProfile": {
+                "$className": "ModuleScript",
+                "$properties": {
+                    "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Libraries/EasyProfile.luau"
+                },
+                "ProfileService": {
+                    "$className": "ModuleScript",
+                    "$properties": {
+                        "Source": "https://raw.githubusercontent.com/MadStudioRoblox/ProfileService/84b1d2dc77188c25403b1781a4ce29a169ebfbba/ProfileService.lua"
+                    }
+                }
             },
             "Red": {
                 "Events": {
@@ -122,28 +136,6 @@
                     "$properties": {
                         "Source": "https://raw.githubusercontent.com/red-blox/Util/fd238ef1d4771a7aaa83b2f0650527f01337ce24/libs/Spawn/Spawn.luau"
                     }
-                }
-            }
-        },
-        "Libraries": {
-            "EasyProfile": {
-                "$className": "ModuleScript",
-                "$properties": {
-                    "Source": "https://raw.githubusercontent.com/canary-development/CanaryEngine/main/src/lua/framework/Libraries/EasyProfile.luau"
-                },
-                "ProfileService": {
-                    "$className": "ModuleScript",
-                    "$properties": {
-                        "Source": "https://raw.githubusercontent.com/MadStudioRoblox/ProfileService/84b1d2dc77188c25403b1781a4ce29a169ebfbba/ProfileService.lua"
-                    }
-                }
-            },
-            "RedbloxUtils": {
-                "Future": {
-                    "$className": "ModuleScript",
-                    "$properties": {
-                        "Source": "https://raw.githubusercontent.com/red-blox/Util/76281011d28f083d2d659ef4c1b567270192aeb3/libs/Future/Future.luau"
-                    }
                 },
                 "Signal": {
                     "$className": "ModuleScript",
@@ -151,22 +143,10 @@
                         "Source": "https://raw.githubusercontent.com/red-blox/Util/406727b68d204058ed385f0055a5508dfdd71733/libs/Signal/Signal.luau"
                     }
                 },
-                "Spawn": {
-                    "$className": "ModuleScript",
-                    "$properties": {
-                        "Source": "https://raw.githubusercontent.com/red-blox/Util/fd238ef1d4771a7aaa83b2f0650527f01337ce24/libs/Spawn/Spawn.luau"
-                    }
-                },
                 "Ratelimit": {
                     "$className": "ModuleScript",
                     "$properties": {
                         "Source": "https://raw.githubusercontent.com/red-blox/Util/62037a647038af2b92129435957bace986452ff1/libs/Ratelimit/Ratelimit.luau"
-                    }
-                },
-                "Guard": {
-                    "$className": "ModuleScript",
-                    "$properties": {
-                        "Source": "https://raw.githubusercontent.com/red-blox/Util/1f9216713d15579bdf1744235448fbac702aa54c/libs/Guard/Guard.luau"
                     }
                 }
             }

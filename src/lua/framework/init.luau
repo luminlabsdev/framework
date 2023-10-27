@@ -16,10 +16,10 @@ local BeginLoadTime = os.clock()
 local Types = require(script.Types) -- The types used for all libraries inside of the framework
 
 local Network = require(script.Network) -- Networking logic
-local Signal = require(Libraries.RedbloxUtils.Signal) -- Signal logic
+local Signal = require(Libraries.Red.Signal) -- Signal logic
 
-local Future = require(Libraries.RedbloxUtils.Future) -- Promise logic
-local Guard = require(Libraries.RedbloxUtils.Guard) -- Runtime typechecking
+local Future = require(Libraries.Red.Future) -- Promise logic
+local Guard = require(Libraries.Red.Guard) -- Runtime typechecking
 local Debugger = require(script.Debugger) -- Easy debug logic
 local Runtime = require(script.Runtime) -- Runtime settings + debugger
 

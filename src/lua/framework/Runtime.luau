@@ -9,7 +9,7 @@ local RunService = game:GetService("RunService")
 local Framework = game:GetService("ReplicatedStorage").Framework
 
 local Network = require(script.Parent.Network)
-local Signal = require(Libraries.RedbloxUtils.Signal)
+local Signal = require(Libraries.Red.Signal)
 
 -- // Engine Context
 

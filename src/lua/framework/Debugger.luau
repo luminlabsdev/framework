@@ -12,7 +12,7 @@ type CallStack = {Name: string, Source: string, DefinedLine: number}
 local HttpService = game:GetService("HttpService")
 local LogService = game:GetService("LogService")
 
-local Guard = require(Libraries.RedbloxUtils.Guard)
+local Guard = require(Libraries.Red.Guard)
 local Runtime = require(script.Parent.Runtime)
 
 local RuntimeContext = Runtime.Context

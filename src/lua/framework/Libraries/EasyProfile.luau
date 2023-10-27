@@ -38,6 +38,7 @@ local ValidAttributeTypes = {
 	"ColorSequence",
 	"NumberRange",
 	"Rect",
+	"Font",
 }
 
 local ProfileStoreObject = { }
@@ -50,18 +51,14 @@ EasyProfile.LoadedData = { }
 
 -- // Functions
 
-if not RunService:IsServer() then
-	error("Cannot run on any environments except the server.")
-end
+assert(RunService:IsServer(), "Data can only be handled on the server")
 
 local function IsProfileKeyValid(target: (Player | string | number)?, pattern: string, err: string, ...: string): string
-	if not target then
-		error("Target does not exist; did you forget to pass it?")
-	end
+	assert(target, "Target does not exist; did you forget to pass it?")
 
-	if typeof(target) == "string" then
+	if type(target) == "string" then
 		return target
-	elseif typeof(target) == "number" then
+	elseif type(target) == "number" then
 		return string.format(pattern, target)
 	elseif typeof(target) == "Instance" and target:IsA("Player") then
 		return string.format(pattern, target.UserId)
@@ -239,64 +236,36 @@ function ProfileObject:GetProfileData(): ({[string]: any}?, {[string]: any}?)
 	return self.Profile.Data, self.Profile.MetaData.MetaTags
 end
 
-function ProfileObject:CreateProfileLeaderstats(player: Player, statsToAdd: {string}?, isAttributes: boolean?): Folder?
+function ProfileObject:CreateProfileLeaderstats(player: Player, statsToAdd: {string}?): Folder?
 	local Profile = self.Profile
+	local LeaderstatsFolder = Instance.new("Folder")
 
-	if not isAttributes then
-		local LeaderstatsFolder = Instance.new("Folder")
+	for key, value in statsToAdd or Profile.Data do
+		local ProfileDataKey = if type(key) == "number" then value else key
+		local KeyValue = if type(key) == "number" then Profile.Data[value] else value
 
-		for key, value in statsToAdd or Profile.Data do
-			local keyVar, valueVar = key, value
-
-			if type(key) == "number" then
-				if not Profile.Data[value] then
-					error(`{value} is not a member of the profile data.`)
-				end
-
-				keyVar = value
-				valueVar = Profile.Data[value]
-			end
-
-			local ValueType = type(valueVar)
-
-			if not table.find(ValidLeaderboardTypes, ValueType) then
-				continue
-			end
-
-			local StatClass = `{ValueType:gsub("^%l", string.upper)}Value`
-			local NewStat = Instance.new(StatClass)
-
-			NewStat.Name = keyVar
-			NewStat.Value = valueVar
-			NewStat.Parent = LeaderstatsFolder
+		if not Profile.Data[ProfileDataKey] then
+			error(`{value} is not a member of the profile data.`)
 		end
 
-		LeaderstatsFolder.Name = "leaderstats"
-		LeaderstatsFolder.Parent = player
+		local ValueType = type(KeyValue)
 
-		return LeaderstatsFolder
-	else
-		for attribute, value in statsToAdd or Profile.Data do
-			local attributeVar, valueVar = attribute, value
-
-			if type(attribute) == "number" then
-				if not Profile.Data[value] then
-					error(`{value} is not a member of the profile data.`)
-				end
-
-				attributeVar = value
-				valueVar = Profile.Data[value]
-			end
-
-			if not table.find(ValidAttributeTypes, typeof(value)) then
-				continue
-			end
-			
-			player:SetAttribute(attribute, value)
+		if not table.find(ValidLeaderboardTypes, ValueType) then
+			continue
 		end
+
+		local StatClass = `{ValueType:gsub("^%l", string.upper)}Value`
+		local NewStat = Instance.new(StatClass)
+
+		NewStat.Name = ProfileDataKey
+		NewStat.Value = KeyValue
+		NewStat.Parent = LeaderstatsFolder
 	end
 
-	return nil
+	LeaderstatsFolder.Name = "leaderstats"
+	LeaderstatsFolder.Parent = player
+
+	return LeaderstatsFolder
 end
 
 function ProfileObject:GetGlobalKeys(): {GlobalKey}?
