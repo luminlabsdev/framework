@@ -182,7 +182,7 @@ function VersionController.GetCurrentTaggedInstance(ignoreNil: boolean?): {[stri
 	local EngineTable = {
 		Server = table.unpack(CollectionService:GetTagged("__CE_Server")),
 		Client = table.unpack(CollectionService:GetTagged("__CE_Client")),
-		Shared = table.unpack(CollectionService:GetTagged("__CE_Replicated")),
+		Shared = table.unpack(CollectionService:GetTagged("__CE_Shared")),
 		Framework = table.unpack(CollectionService:GetTagged("__CE_Framework")),
 		ReplicatedFirst = table.unpack(CollectionService:GetTagged("__CE_ReplicatedFirst"))
 	}
