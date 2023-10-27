@@ -24,7 +24,7 @@ export default defineConfig({
       {
         text: 'Articles',
         items: [
-          { text: 'Blogs', link: '/blog/enginerecaps/enginerecap-september2023' },
+          { text: 'Blogs', link: '/blog/enginerecaps/enginerecap-october2023' },
           { text: 'Featured', link: '/featured' }
         ]
       },
