@@ -68,7 +68,7 @@ export default defineConfig({
         {
           text: 'Management',
           items: [
-            { text: 'Packages', link: '/tutorial/packages' },
+            { text: 'Plugin Usage', link: '/tutorial/plugin-usage' },
             { text: 'Structure', link: '/tutorial/structure' },
             { text: 'Style Guide', link: '/tutorial/styleguide' },
           ]
