@@ -14,8 +14,8 @@ local RunService = game:GetService("RunService")
 local HttpService = game:GetService("HttpService")
 
 local ProfileService = require(script.ProfileService)
-local Signal = require(Libraries.RedbloxUtils.Signal)
-local Future = require(Libraries.RedbloxUtils.Future)
+local Signal = require(Libraries.Red.Signal)
+local Future = require(Libraries.Red.Future)
 
 local ValidLeaderboardTypes = {
 	"boolean",
