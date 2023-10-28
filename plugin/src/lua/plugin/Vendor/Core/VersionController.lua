@@ -519,6 +519,5 @@ end
 -- // Actions
 
 VersionController.TagInstances()
-VersionController.TagInstanceDirectories()
 
 return VersionController
