@@ -212,10 +212,11 @@ end
 table.freeze(NetworkControllerServer)
 table.freeze(NetworkControllerClient)
 
-return function(name: string)
+return function(name: string, compressStrings: boolean?)
 	return setmetatable({
 		IsListening = false,
 		IsBinded = nil,
+		IsStringCompressingEnabled = compressStrings,
 
 		_Ratelimit = nil,
 		_InvokeOverflow = nil,

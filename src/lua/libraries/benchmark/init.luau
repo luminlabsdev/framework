@@ -21,10 +21,8 @@ local ToString = {
 	end
 }
 
-local Vendor = script.Parent.Vendor
-
-local Signal = require(Vendor.Signal)
-local Statistics = require(Vendor.Statistics)
+local Signal = require(script.Signal)
+local Statistics = require(script.Statistics)
 
 -- // Functions
 

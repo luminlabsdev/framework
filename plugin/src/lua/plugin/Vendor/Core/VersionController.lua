@@ -94,16 +94,6 @@ VersionController.FinishedUpdating = Signal.new()
 
 -- // Functions
 
-function VersionController.IsOldVersionInstalled(): boolean
-	local CurrentInstance = VersionController.GetCurrentInstance()
-
-	if CurrentInstance and CurrentInstance.Framework and not (CurrentInstance.Client or CurrentInstance.Server or CurrentInstance.ReplicatedFirst or CurrentInstance.Shared) then
-		return true
-	end
-
-	return false
-end
-
 function VersionController.GetDirectoryFromStructureJSON(json: {any}, parent: Instance, isPackage: boolean?)
 	for instanceName, children in json do
 		if instanceName == "$parent" then
@@ -150,7 +140,7 @@ function VersionController.GetDirectoryFromStructureJSON(json: {any}, parent: In
 	end
 end
 
-function VersionController.GetCurrentInstance(ignoreNil: boolean?): {[string]: Folder}?
+function VersionController.GetCurrentInstance(ignoreNil: boolean?): {[string]: Folder}? -- deprecated, only use when tagging instances
 	ignoreNil = ignoreNil or false
 
 	local EngineTable = {
@@ -210,7 +200,10 @@ function VersionController.TagInstances()
 	end
 
 	for name, folder in CurrentInstance do
-		folder:AddTag(`__CE_{name}`)
+		local Tag = `__CE_{name}`
+		if not folder:HasTag(Tag) then
+			folder:AddTag(Tag)
+		end
 	end
 end
 
@@ -234,11 +227,6 @@ function VersionController.UpdateFramework()
 
 	if not CurrentInstance then
 		WindowController.SetMessageWindow("Framework is not installed; cannot update")
-		return
-	end
-
-	if VersionController.IsOldVersionInstalled() then
-		WindowController.SetMessageWindow("An old version of the framework is installed, and older versions are no longer supported. You will have to update manually.", ERROR_COLOR)
 		return
 	end
 
@@ -301,7 +289,7 @@ function VersionController.UpdateFramework()
 	end)
 end
 
-function VersionController.InstallPackagesFromList(list: {[string]: boolean})
+function VersionController.InstallPackagesFromList(list: {[string]: boolean}, compareList: {[string]: string}?)
 	task.defer(function()
 		local CurrentInstance = VersionController.GetCurrentTaggedInstance()
 		FinishedFiles = 0
@@ -407,7 +395,20 @@ function VersionController.InstallFramework()
 	end)
 end
 
-function VersionController.CreateNewInstanceFromName(name: string, instanceType: "Package" | "Script" | "ModuleScript", context: "Server" | "Client" | "Replicated" | "ReplicatedFirst")
+function VersionController.SetParentDirectory(parentType: "Client" | "Server" | "Shared" | "ReplicatedFirst", directory: Folder?)
+	local TagName = `__CE_{parentType}`
+	if not directory then
+		local ParentDirectoryDefault = FolderToService[parentType]:FindFirstChild(parentType)
+		if ParentDirectoryDefault then
+			ParentDirectoryDefault:AddTag(TagName)
+		else
+			FolderToService[parentType]:AddTag(TagName)
+		end
+	end
+	directory:AddTag(TagName)
+end
+
+function VersionController.CreateNewInstanceFromName(name: string, instanceType: "Package" | "Script" | "ModuleScript", context: "Server" | "Client" | "Shared" | "ReplicatedFirst")
 	local CurrentInstance = VersionController.GetCurrentTaggedInstance()
 
 	if not CurrentInstance then
@@ -418,6 +419,18 @@ function VersionController.CreateNewInstanceFromName(name: string, instanceType:
 	if CurrentInstance[context][`{instanceType}s`]:FindFirstChild(name) then
 		WindowController.SetMessageWindow(`Cannot create {string.lower(instanceType)}; {name} already exists in that dir`)
 		return
+	end
+
+	if context == "Server" or context == "Client" or context == "Shared" then
+		if not CurrentInstance[context].Packages then
+			WindowController.SetMessageWindow("Cannot create instance; parent directory does not include 'Packages' or 'Scripts' folder", ERROR_COLOR)
+			return
+		end
+	elseif context == "Server" or context == "Client" or context == "ReplicatedFirst" then
+		if not CurrentInstance[context].Scripts then
+			WindowController.SetMessageWindow("Cannot create instance; parent directory does not include 'Packages' or 'Scripts' folder", ERROR_COLOR)
+			return
+		end
 	end
 
 	if instanceType == "Package" then
@@ -471,41 +484,9 @@ function VersionController.CreateNewInstanceFromName(name: string, instanceType:
 						if name == "" then "Package" else name
 					)
 
-					local NewVendorSource = string.gsub(
-						NewPackageNameSource,
-						"~VENDOR~",
-						if CanaryStudioSettings.CanaryStudio["Create Package Vendor"] then "local Vendor = script.Parent.Vendor" else ""
-					)
-
-					return NewVendorSource
+					return NewPackageNameSource
 				end)
 			end)
-		end
-
-		if CanaryStudioSettings.CanaryStudio["Create Package Vendor"] then
-			local InstanceFolder = Instance.new("Folder")
-			local NewVendor = Instance.new("Folder")
-
-			if CanaryStudioSettings.CanaryStudio["Instance Author Attributes"] then
-				InstanceFolder:SetAttribute("Author", PLAYER_NAME)
-				InstanceFolder:SetAttribute("Created", FormattedTimeHours)
-			end
-
-			NewVendor.Name = "Vendor"
-			NewVendor.Parent = InstanceFolder
-
-			NewInstance.Name = "Init"
-			NewInstance.Parent = InstanceFolder
-
-			InstanceFolder.Name = name
-			InstanceFolder.Parent = CurrentInstance[context].Packages
-
-			if CanaryStudioSettings.CanaryStudio["Select / Open New Instances"] then
-				ScriptEditorService:OpenScriptDocumentAsync(NewInstance)
-				SelectionService:Set({NewInstance})
-			end
-
-			return
 		end
 
 		NewInstance.Name = name
@@ -538,5 +519,6 @@ end
 -- // Actions
 
 VersionController.TagInstances()
+VersionController.TagInstanceDirectories()
 
 return VersionController

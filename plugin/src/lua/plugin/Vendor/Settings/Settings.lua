@@ -3,7 +3,6 @@ return {
 		["Select / Open New Instances"] = true,
 		["Default Instance Templates"] = true,
 		["Automatically Update Canary"] = false,
-		["Create Package Vendor"] = true,
 		["Instance Author Attributes"] = false,
 	},
 
@@ -25,7 +24,6 @@ return {
 -- // Package
 
 local ~PACKAGE~NAME~ = { }
-~VENDOR~
 
 local CanaryEngine = require(game.ReplicatedStorage.Framework)
 local Framework~FRAMEWORK~TYPE~ = CanaryEngine.GetFramework~FRAMEWORK~TYPE~()

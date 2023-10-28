@@ -3,6 +3,7 @@
 local StudioService = game:GetService("StudioService")
 local LocalizationService = game:GetService("LocalizationService")
 local PlayerService = game:GetService("Players")
+local Selection = game:GetService("Selection")
 
 local Vendor = script.Parent.Parent
 local Settings = require(Vendor.Settings.Settings)
@@ -84,6 +85,10 @@ if not AlreadyRan then
 
 						if Iris.MenuItem("Package Manager").clicked() then
 							WindowController.SetWindow("PackageManagerWindow")
+						end
+
+						if Iris.MenuItem("Structure Manager").clicked() then
+							WindowController.SetWindow("StructureManagerWindow")
 						end
 					end Iris.End()
 				end Iris.End()
@@ -181,6 +186,27 @@ if not AlreadyRan then
 				if Iris.Button("Install Packages").clicked() then
 					VersionController.InstallPackagesFromList(Settings.CanaryStudioManagerPackages)
 				end
+			end Iris.End()
+
+			WindowList.StructureManagerWindow = Iris.Window("Canary Studio - Structure Manager", {isOpened = false}) do
+				local DirectorySelection = Iris.ComboArray("Parent Directory Selection", {index = "Server"}, {
+					"Server",
+					"Client",
+					"Shared",
+					"ReplicatedFirst"
+				})
+
+				if Iris.Button(`Use Selection as Directory for {DirectorySelection:get()}`).clicked() then
+					local Selection = Selection:Get()
+
+					if #Selection > 1 then
+						WindowController.SetMessageWindow("Cannot set parent directory; selecting more than 1 object")
+					else
+						VersionController.SetParentDirectory(DirectorySelection:get(), Selection[1])
+					end
+				end
+
+				Iris.Text("To set the default directory, press the button with nothing currently selected")
 			end Iris.End()
 
 			WindowList.ConfirmWindow = Iris.Window({"Confirm", [Iris.Args.Window.NoClose] = true, [Iris.Args.Window.NoTitleBar] = true}, {isOpened = false, size = Vector2.new(432, 122)}) do
