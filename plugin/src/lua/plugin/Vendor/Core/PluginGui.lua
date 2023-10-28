@@ -196,13 +196,13 @@ if not AlreadyRan then
 					"ReplicatedFirst"
 				})
 
-				if Iris.Button(`Use Selection as Directory for {DirectorySelection:get()}`).clicked() then
+				if Iris.Button(`Use Selection as Directory for {DirectorySelection.state.index:get()}`).clicked() then
 					local Selection = Selection:Get()
 
 					if #Selection > 1 then
 						WindowController.SetMessageWindow("Cannot set parent directory; selecting more than 1 object")
 					else
-						VersionController.SetParentDirectory(DirectorySelection:get(), Selection[1])
+						VersionController.SetParentDirectory(DirectorySelection.state.index:get(), Selection[1])
 					end
 				end
 
