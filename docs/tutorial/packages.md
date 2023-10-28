@@ -1,6 +1,6 @@
 # Package System
 
-One of Canary's greatest strengths is the built in package system, which allows for many more oppurtunities. It allows for intellisense support along with easy organization for your package needs.
+The package system is rather simple but powerful, and allows you to structure your game in such a way that is easier to navigate and debug. You can also import packages via a GitHub file using Canary's JSONInstance format.
 
 ### Inserting Packages
 

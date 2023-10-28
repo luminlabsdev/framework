@@ -1,10 +1,5 @@
 -- // Package
 
---[=[
-	The parent of all classes.
-
-	@class MDify
-]=]
 local MDify = { }
 
 -- // Variables
@@ -45,14 +40,6 @@ local LuaEmoji = require(script.Parent.Vendor["lua-emoji"])
 
 -- // Functions
 
---[=[
-	Converts the provided markdown text to Roblox RichText.
-
-	@param text string -- The markdown text to convert to RichText
-	@param emojiColor ("d" | "md" | "m" | "ml" | "l")? -- The skin color of any emojis, such as face or hands.
-
-	@return string
-]=]
 function MDify.MarkdownToRichText(text: string, emojiColor: ("d" | "md" | "m" | "ml" | "l")?): string
 	for patternIndex, markdownPattern in MarkdownPatterns do
 		if patternIndex == 8 then
