@@ -3,11 +3,7 @@
         "$tags": [
             "__CE_Client"
         ],
-        "Packages": {
-            "$tags": [
-                "__CE_Client_Packages"
-            ]
-        },
+        "Packages": {},
         "Assets": {
             "Models": {},
             "Effects": {},
@@ -15,21 +11,13 @@
             "Sounds": {},
             "Interfaces": {}
         },
-        "Scripts": {
-            "$tags": [
-                "__CE_Client_Scripts"
-            ]
-        }
+        "Scripts": {}
     },
     "Shared": {
         "$tags": [
             "__CE_Shared"
         ],
-        "Packages": {
-            "$tags": [
-                "__CE_Shared_Packages"
-            ]
-        },
+        "Packages": {},
         "Assets": {
             "Sounds": {},
             "Models": {},
@@ -50,32 +38,20 @@
             },
             "Vendor": "EngineLoaderAssets"
         },
-        "Scripts": {
-            "$tags": [
-                "__CE_ReplicatedFirst_Scripts"
-            ]
-        }
+        "Scripts": {}
     },
     "Server": {
         "$tags": [
             "__CE_Server"
         ],
-        "Packages": {
-            "$tags": [
-                "__CE_Server_Packages"
-            ]
-        },
+        "Packages": {},
         "Assets": {
             "Models": {},
             "Tools": {},
             "Effects": {},
             "Animations": {}
         },
-        "Scripts": {
-            "$tags": [
-                "__CE_Server_Scripts"
-            ]
-        }
+        "Scripts": {}
     },
     "Framework": {
         "$tags": [
