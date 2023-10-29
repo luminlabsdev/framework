@@ -23,24 +23,6 @@ local ValidLeaderboardTypes = {
 	"string",
 }
 
-local ValidAttributeTypes = {
-	"string",
-	"boolean",
-	"number",
-	"UDim",
-	"UDim2",
-	"BrickColor",
-	"Color3",
-	"Vector2",
-	"Vector3",
-	"EnumItem",
-	"NumberSequence",
-	"ColorSequence",
-	"NumberRange",
-	"Rect",
-	"Font",
-}
-
 local ProfileStoreObject = { }
 local ProfileObject = { }
 
@@ -87,7 +69,7 @@ function EasyProfile.CreateProfileStore(name: string?, defaultProfileData: {[str
 	return table.freeze(ProfileStoreObjectMetatable)
 end
 
--- ProfileStoreObject
+-- // ProfileStoreObject
 
 function ProfileStoreObject:DeleteProfileAsync(target: number | string)
 	local CurrentLoadedProfileStore = self._ProfileStore
@@ -230,7 +212,7 @@ function ProfileStoreObject:RemoveGlobalKeyAsync(target: number | string, keyId:
 	end)
 end
 
--- ProfileObjects
+-- // ProfileObjects
 
 function ProfileObject:GetProfileData(): ({[string]: any}?, {[string]: any}?)
 	return self.Profile.Data, self.Profile.MetaData.MetaTags
@@ -325,5 +307,9 @@ function ProfileObject:GetDataUsage(): number?
 
 	return (UsageLength / 4194304) * 100
 end
+
+-- // Connections
+
+-- // Actions
 
 return table.freeze(EasyProfile)
