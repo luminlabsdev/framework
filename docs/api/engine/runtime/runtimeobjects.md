@@ -16,4 +16,4 @@ A table that stores all of the `NetworkControllers` created on the current `RunC
 
 A table that stores `Signals` created on the current `RunContext`.
 
-* **{ [string]: [Signal](/api/controllers/signal/signalcontroller) }**
+* **{ [string]: [Signal](/api/controllers/signal/signal) }**
