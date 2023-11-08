@@ -8,6 +8,28 @@ keywords: [roblox, game, framework, changelog, updates]
 
 This is the changelog which is changed every update, and we follow semver. To see what we're working on, head to our [Trello](https://trello.com/b/fTJOmMua/canaryengine) board.
 
+## 5.0.0
+
+---
+
+### Added
+
+* Wally support / Rojo
+* Improved documentation
+* Adds `ShowLoggedEvents` setting
+
+### Improvements
+
+* Mainly lots of internal improvements and/or optimizations
+* Optimized `Debugger.LogEvent` in most cases
+* Improves debugger user API
+* Framework debugs server and client start time in MS
+* Removes need for plugin, can drag/drop anywhere
+
+### Removed
+
+* A lot of useless/deprecated functions or properties
+
 ## 4.0.0
 
 (Includes rc1-3)

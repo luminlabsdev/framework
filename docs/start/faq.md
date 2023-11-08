@@ -13,7 +13,3 @@ Refer to the installation [article](/start/installation) hosted on our documenta
 ### Issues
 
 Came across an issue in our code? Simply create a new issue on the GitHub repository ***or*** create a new bug report in our discord server linked above.
-
-### Plugin Errors
-
-If your plugin errors, it's most likely because you have an older version installed. If you don't, make sure to send a report using the [guide](#issues).

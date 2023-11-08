@@ -6,25 +6,17 @@ keywords: [roblox, game, framework, install, tutorial, github, node]
 
 # Installation
 
-### Roblox Marketplace
-
-1. Navigate to the install page of the Canary Studio plugin, you can find that [here](https://create.roblox.com/marketplace/asset/12591143042/Canary-Studio)
-2. Open Roblox Studio and install the plugin from within your plugin inventory.
-
 ### GitHub
 
 1. Navigate to the latest release of CanaryEngine on Github, you can find that [here](https://github.com/canary-development/CanaryEngine/releases/)
-2. Choose `CanaryStudioPlugin.rbxm` to download.
-3. Open Roblox Studio, and drag `CanaryStudioPlugin.rbxm` from your download directory into studio.
-4. Right click the plugin, and choose `Save as Local Plugin`
+2. Choose `CanaryEngine.rbxm` to download.
+3. Open Roblox Studio, and drag `CanaryEngine.rbxm` from your download directory into studio.
+4. Make sure the model is inside `ReplicatedStorage` and you're all set!
 
-### Rojo
+### Wally
 
-1.
-
-### Plugin Permissions
-
-If you install the plugin from the marketplace, you will be asked to give the following permissions:
-
-* `raw.githubusercontent.com` - Needed to get file contents of scripts, settings, and packages
-* `api.github.com` - Needed to get the latest version of the framework
+1. Open up the code editor of your choice
+2. Create a new project or open one
+3. Install Aftman w/ Wally
+4. Run `wally init` and then add `canary-development/canaryengine@5.0.0` to your `wally.toml` file
+5. Finally, run `wally install` and CanaryEngine should be inside of your `repo/Packages` dir (don't forget to add `Packages` to your `.gitignore`!)

@@ -2,14 +2,6 @@
 
 CanaryEngine's server-sided interface.
 
-## Properties
-
-### Data <Badge type="tip" text="read only" />
-
-Access to the [EasyProfile](/api/libraries/data/easyprofile) library.
-
-* **[EasyProfile](/api/libraries/data/easyprofile)**
-
 ## Functions
 
 ### CreateNetworkController

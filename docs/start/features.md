@@ -7,7 +7,7 @@ keywords: [roblox, game, framework, features, type safe, optimized, secure, docu
 # Features
 
 * **Type Safe** 🦺
-Strictly typed, along with native support for `roblox-ts`.
+Strictly typed internally and externally.
 
 * **Context-specific API** 🖥️
 The API is aimed to be completely separate the server and the client, which allows for a better type checking experience.
@@ -23,8 +23,5 @@ The networking system that CanaryEngine uses can actually partially prevent expl
 
 * **Ordered** 🔄
 You can import modules from a main script, which will then execute in order. Can prevent issues like race conditions which come up a lot in multi-threaded architectures.
-
-* **Great for Teams** 👨‍💻
-Allows you to automatically insert an author and a creation date at the top of all scripts / packages, along with attributes of these.
 
 ... and much more!

@@ -1,11 +1,8 @@
-# docs
-
 docs/.vitepress/cache
-
-# npm
-
+docs/doc_api.md
 node_modules
-
-# general
-
 local
+Packages
+sourcemap.json
+wally.lock
+_templib

@@ -1,0 +1,41 @@
+{
+    "emitLegacyScripts": false,
+    "name": "canaryengine-dev",
+    "tree": {
+        "$className": "DataModel",
+        "ReplicatedStorage": {
+            "Packages": {
+                "$path": "Packages",
+                "Framework": {
+                    "$properties": {
+                        "Attributes": {
+                            "Attributes": {
+                                "Version": {
+                                  "String": "5.0.0"
+                                },
+                                "LiveGameDebugging": {
+                                  "Bool": false
+                                },
+                                "StudioDebugging": {
+                                  "Bool": true
+                                },
+                                "ShowLoggedEvents": {
+                                  "Bool": true
+                                }
+                              }
+                        }
+                    },
+                    "$path": "src"
+                }
+            },
+            "Tests": {
+                "$path": "tests/client"
+            }
+        },
+        "ServerStorage": {
+            "Tests": {
+                "$path": "tests/server"
+            }
+        }
+    }
+}

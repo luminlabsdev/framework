@@ -49,4 +49,4 @@ Gets the players current character model; if it doesn't exist the thread will yi
 
 **Returns**
 
-* **[Character](/api/engine/types#character)**
+* **[Character](/api/engine/framework/canaryengine#character)**

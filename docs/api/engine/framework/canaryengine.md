@@ -2,13 +2,19 @@
 
 The main class of CanaryEngine.
 
+## Types
+
+### Character <Badge type="tip" text="public" />
+
+A simple R6 character type used when using [`CanaryEngineClient:GetPlayerCharacter`](/api/engine/framework/canaryengineclient#GetPlayerCharacter)
+
 ## Properties
 
 ### Runtime <Badge type="tip" text="read only" />
 
 The runtime property contains settings that are set during runtime, and the current context of the server/client.
 
-* [**EngineRuntime**](/api/engine/runtime/engineruntime)
+* [**Runtime**](/api/engine/runtime/runtime)
 
 ---
 
@@ -16,7 +22,7 @@ The runtime property contains settings that are set during runtime, and the curr
 
 The internal engine debugger, has useful functions to abide by debug settings.
 
-* [**EngineDebugger**](/api/engine/dependencies/enginedebugger)
+* [**Debugger**](/api/engine/framework/debugger)
 
 ---
 
@@ -26,14 +32,6 @@ A reference to the Future package, which is a optimized version of a Promise.
 
 * [**Future**](https://util.redblox.dev/future.html)
 
----
-
-### Guard <Badge type="tip" text="read only" />
-
-A reference to the Guard package, which allows for type checking during runtime.
-
-* [**Guard**](https://util.redblox.dev/guard.html)
-
 ## Functions
 
 ### GetFrameworkServer <Badge type="danger" text="server" />
@@ -42,7 +40,7 @@ Gets the server-sided interface of CanaryEngine.
 
 **Returns**
 
-* [**CanaryEngineServer?**](/api/engine/framework/canaryengineserver)
+* [**CanaryEngineServer**](/api/engine/framework/canaryengineserver)
 
 ---
 
@@ -52,7 +50,7 @@ Gets the client-sided interface of CanaryEngine.
 
 **Returns**
 
-* [**CanaryEngineClient?**](/api/engine/framework/canaryengineclient)
+* [**CanaryEngineClient**](/api/engine/framework/canaryengineclient)
 
 ---
 
@@ -62,17 +60,7 @@ Gets the shared interface of CanaryEngine. Currently has no unique function, but
 
 **Returns**
 
-* [**CanaryEngineShared?**](/api/engine/framework/canaryengineshared)
-
----
-
-### GetFrameworkReplicated <Badge type="warning" text="deprecated" />
-
-A deprecated alias of [`GetFrameworkShared`](/api/engine/framework/canaryengine#GetFrameworkShared)
-
-**Returns**
-
-* [**CanaryEngineShared?**](/api/engine/framework/canaryengineshared)
+* [**CanaryEngineShared**](/api/engine/framework/canaryengineshared)
 
 ---
 
@@ -105,7 +93,7 @@ The name of the signal
 
 **Returns**
 
-* [**SignalController**](/api/controllers/signal/signalcontroller)
+* [**SignalController**](/api/controllers/signal/signal)
 
 ---
 
@@ -115,4 +103,4 @@ Creates a new anonymous signal, this does not have a reference outside of the va
 
 **Returns**
 
-* [**SignalController**](/api/controllers/signal/signalcontroller)
+* [**SignalController**](/api/controllers/signal/signal)

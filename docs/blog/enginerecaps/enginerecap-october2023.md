@@ -11,7 +11,7 @@ by **[James - Lead Programmer](https://github.com/lolmansReturn)**
 
 **Hi developers,**
 
-With engine update 4.0.0 and 4.1.0, the entire framework has been revamped! We've been looking closely at how Canary is integrated in your projects and took after that.
+With engine update 4.0.0 and 5.0.0, the entire framework has been revamped! We've been looking closely at how Canary is integrated in your projects and took after that.
 
 ### New Internals
 

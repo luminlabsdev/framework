@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  head: [['link', { rel: 'icon', href: 'https://raw.githubusercontent.com/canary-development/CanaryEngine/main/favicon.ico' }]],
+  head: [['link', { rel: 'icon', href: '/favicon.ico' }]],
   base: "/CanaryEngine/",
   title: "CanaryEngine",
   titleTemplate: "Canary Docs",
@@ -16,8 +16,7 @@ export default defineConfig({
         text: 'Guides',
         items: [
           { text: 'Get Started', link: '/start/intro'},
-          { text: 'Usage', link: '/tutorial/packages' },
-          { text: 'Libraries', link: '/tutorial/libraries/benchmark' }
+          { text: 'Usage', link: '/tutorial/styleguide' },
         ]
       },
 
@@ -29,29 +28,11 @@ export default defineConfig({
         ]
       },
 
-      {
-        text: 'API',
-        items: [
-          { text: 'Framework', link: '/api/engine/framework/canaryengine' },
-          { text: 'Controllers', link: '/api/controllers/signal/signalcontroller' },
-          { text: 'Libraries', link: '/api/libraries/data/easyprofile' }
-        ]
-      },
-
+      { text: 'API', link: '/api/engine/framework/canaryengine'},
       { text: 'Changelog', link: '/changelog'}
     ],
 
     sidebar: {
-      '/tutorial/libraries/': [
-        {
-          text: 'Libraries',
-          items: [
-            { text: 'Benchmark', link: '/tutorial/libraries/benchmark' },
-            { text: 'Debugger', link: '/tutorial/libraries/debugger' },
-            { text: 'UIShelf', link: '/tutorial/libraries/uishelf' }
-          ]
-        }
-      ],
       '/start': [
         {
           text: 'Get Started',
@@ -66,21 +47,12 @@ export default defineConfig({
       ],
       '/tutorial': [
         {
-          text: 'Management',
+          text: 'Concepts',
           items: [
-            { text: 'Plugin Usage', link: '/tutorial/plugin-usage' },
-            { text: 'Structure', link: '/tutorial/structure' },
             { text: 'Style Guide', link: '/tutorial/styleguide' },
-          ]
-        },
-
-        {
-          text: 'Engine',
-          items: [
-            { text: 'Signals', link: 'tutorial/signals' },
-            { text: 'Networking', link: 'tutorial/networking' },
-            { text: 'Data Management', link: 'tutorial/datastoring' },
-            { text: 'Loading Screen', link: 'tutorial/customloader' }
+            { text: 'Signals', link: '/tutorial/signals' },
+            { text: 'Networking', link: '/tutorial/networking' },
+            { text: 'Data Management', link: '/tutorial/datastoring' },
           ]
         }
       ],
@@ -104,7 +76,7 @@ export default defineConfig({
         }
       ],
 
-      '/api/engine': [
+      '/api': [
         {
           text: 'Canary',
           items: [
@@ -115,17 +87,7 @@ export default defineConfig({
                 { text: 'CanaryEngine', link: '/api/engine/framework/canaryengine' },
                 { text: 'CanaryEngineServer', link: '/api/engine/framework/canaryengineserver' },
                 { text: 'CanaryEngineClient', link: '/api/engine/framework/canaryengineclient' },
-                { text: 'CanaryEngineReplicated', link: '/api/engine/framework/canaryenginereplicated'}
-              ]
-            },
-
-            {
-              text: 'Dependencies',
-              collapsed: true,
-              items: [
-                { text: 'EngineDebugger', link: '/api/engine/dependencies/enginedebugger' },
-                { text: 'EngineLoader', link: '/api/engine/dependencies/engineloader' },
-                { text: 'EngineTypes', link: '/api/engine/types' }
+                { text: 'Debugger', link: '/api/engine/framework/debugger' },
               ]
             },
 
@@ -133,81 +95,32 @@ export default defineConfig({
               text: 'Runtime',
               collapsed: true,
               items: [
-                { text: 'EngineRuntime', link: '/api/engine/runtime/engineruntime' },
-                { text: 'EngineRuntimeContext', link: '/api/engine/runtime/engineruntimecontext' },
-                { text: 'EngineRuntimeSettings', link: '/api/engine/runtime/engineruntimesettings' },
-                { text: 'EngineRuntimeObjects', link: '/api/engine/runtime/engineruntimeobjects' }
+                { text: 'Runtime', link: '/api/engine/runtime/runtime' },
+                { text: 'RuntimeContext', link: '/api/engine/runtime/runtimecontext' },
+                { text: 'RuntimeSettings', link: '/api/engine/runtime/runtimesettings' },
+                { text: 'RuntimeObjects', link: '/api/engine/runtime/runtimeobjects' }
+              ]
+            },
+
+            {
+              text: 'Signals',
+              collapsed: true,
+              items: [
+                { text: 'Signal', link: '/api/controllers/signal/signal' }
+              ]
+            },
+
+            {
+              text: 'Networking',
+              collapsed: true,
+              items: [
+                { text: 'Server', link: '/api/controllers/network/server' },
+                { text: 'Client', link: '/api/controllers/network/client' }
               ]
             }
           ]
         },
       ],
-
-      '/api/controllers': [
-        {
-          text: 'Controllers',
-          items: [
-            {
-              text: 'Signal',
-              collapsed: true,
-              items: [
-                { text: 'SignalController', link: '/api/controllers/signal/signalcontroller' }
-              ]
-            },
-
-            {
-              text: 'Network',
-              collapsed: true,
-              items: [
-                { text: 'NetworkControllerServer', link: '/api/controllers/network/server' },
-                { text: 'NetworkControllerClient', link: '/api/controllers/network/client' }
-              ]
-            }
-          ]
-        },
-      ],
-
-      '/api/libraries': [
-        {
-          text: 'Libraries',
-          items: [
-            {
-              text: 'EasyProfile',
-              collapsed: true,
-              items: [
-                { text: 'EasyProfile', link: '/api/libraries/data/easyprofile' },
-                { text: 'ProfileStoreObject', link: '/api/libraries/data/profilestoreobject' },
-                { text: 'ProfileObject', link: '/api/libraries/data/profileobject' }
-              ]
-            },
-
-            {
-              text: 'UIShelf',
-              collapsed: true,
-              items: [
-                { text: 'UIShelf', link: '/api/libraries/uishelf' },
-                { text: 'TopBarIconObject', link: '/api/libraries/topbariconobject' },
-                { text: 'TopBarSpacerObject', link: '/api/libraries/topbarspacerobject' }
-              ]
-            },
-
-            {
-              text: 'Benchmark',
-              collapsed: true,
-              items: [
-                { text: 'Benchmark', link: '/api/libraries/benchmark' },
-                { text: 'BenchmarkObject', link: '/api/libraries/benchmarkobject' }
-              ]
-            },
-            
-            { text: 'Base64', link: '/api/libraries/base64' },
-            { text: 'Snacky', link: '/api/libraries/snacky' },
-            { text: 'MDify', link: '/api/libraries/mdify' },
-            { text: 'Sprite', link: '/api/libraries/sprite' },
-            { text: 'Statistics', link: '/api/libraries/statistics' }
-          ]
-        },
-      ]
     },
 
     outline: [2, 3],

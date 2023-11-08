@@ -1,0 +1,22 @@
+{
+  "name": "Framework",
+  "tree": {
+    "$path": "src",
+    "$properties": {
+      "Attributes": {
+        "Version": {
+          "String": "5.0.0"
+        },
+        "LiveGameDebugging": {
+          "Bool": false
+        },
+        "StudioDebugging": {
+          "Bool": true
+        },
+        "ShowLoggedEvents": {
+          "Bool": true
+        }
+      }
+    }
+  }
+}
