@@ -1,6 +1,6 @@
 [package]
 name = "canary-development/canaryengine"
-version = "5.0.1"
+version = "5.1.0"
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 
