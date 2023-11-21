@@ -4,6 +4,16 @@ version = "5.1.0"
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 
+exclude = ["**"]
+include = [
+	"default.project.json",
+	"src",
+	"src/**",
+	"LICENSE",
+	"wally.toml",
+	"README.md",
+]
+
 [dependencies]
 future = "red-blox/future@1.0.1"
 signal = "red-blox/signal@2.0.1"
