@@ -11,7 +11,7 @@
                         "Attributes": {
                             "Attributes": {
                                 "Version": {
-                                  "String": "5.0.0"
+                                  "String": "5.0.1"
                                 },
                                 "LiveGameDebugging": {
                                   "Bool": false
@@ -30,6 +30,9 @@
             },
             "Tests": {
                 "$path": "tests/client"
+            },
+            "Plugin": {
+                "$path": "plugin"
             }
         },
         "ServerStorage": {

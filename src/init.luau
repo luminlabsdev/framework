@@ -42,7 +42,6 @@ local Network = require(script.Network) -- Networking logic
 local Signal = require(Packages.signal) -- Signal logic
 
 local Future = require(Packages.future) -- Promise logic
-local Guard = require(Packages.guard) -- Runtime typechecking
 local Debugger = require(script.Debugger) -- Easy debug logic
 local Runtime = require(script.Runtime) -- Runtime settings + debugger
 
@@ -54,7 +53,6 @@ CanaryEngine.Runtime = table.freeze({
 
 CanaryEngine.Debugger = Debugger
 CanaryEngine.Future = Future
-CanaryEngine.Guard = Guard
 
 local RuntimeObjects = CanaryEngine.Runtime.Objects
 local RunContext = if RunService:IsServer() then "server" else "client"
