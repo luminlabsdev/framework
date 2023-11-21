@@ -8,6 +8,20 @@ keywords: [roblox, game, framework, changelog, updates]
 
 This is the changelog which is changed every update, and we follow semver.
 
+## 5.1.0
+
+### Added
+
+* Revamped plugin, now only creates scripts
+
+### Improvements
+
+Refined installation process, makes models available only per release.
+
+### Removed
+
+* Nothing
+
 ## 5.0.0
 
 ---

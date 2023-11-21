@@ -60,6 +60,7 @@ export default defineConfig({
         {
           text: 'Engine Recaps',
           items: [
+            { text: 'November 2023', link: '/blog/enginerecaps/enginerecap-november2023' },
             { text: 'October 2023', link: '/blog/enginerecaps/enginerecap-october2023' },
             { text: 'September 2023', link: '/blog/enginerecaps/enginerecap-september2023' },
             { text: 'August 2023', link: '/blog/enginerecaps/enginerecap-august2023' },
