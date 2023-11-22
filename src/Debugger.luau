@@ -74,14 +74,13 @@ function Debugger.LogEvent(instance: LuaSourceContainer, eventName: string)
 		return
 	end
 
-	assert(instance:IsA("LuaSourceContainer"), "Instance must be a lua source container")
-
 	if not Debugger.CachedLogs[instance] then
+		assert(instance:IsA("LuaSourceContainer"), "Instance must be a lua source container")
 		Debugger.CachedLogs[instance] = { }
 	end
 
 	table.insert(Debugger.CachedLogs[instance], eventName)
-	Debugger.DebugPrefix(print, "[Log]", eventName)
+	print("[Log]", eventName)
 end
 
 function Debugger.GenerateUUID()

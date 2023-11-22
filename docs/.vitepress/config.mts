@@ -79,7 +79,7 @@ export default defineConfig({
 
       '/api': [
         {
-          text: 'Canary',
+          text: 'CanaryEngine',
           items: [
             {
               text: 'Framework',
@@ -136,7 +136,7 @@ export default defineConfig({
 
     footer: {
       message: 'Built with VitePress',
-      copyright: 'Copyright © 2021 - 2023 Canary Development'
+      copyright: 'Copyright © 2021 - 2023 Canary Softworks'
     },
 
     socialLinks: [

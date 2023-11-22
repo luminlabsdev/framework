@@ -5,4 +5,5 @@ local Controller = Client.CreateNetworkController("Test")
 
 RunService.Heartbeat:Connect(function()
     Controller:Fire(Vector3.zero)
+    Canary.Debugger.LogEvent(script, "Example!")
 end)

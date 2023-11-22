@@ -60,7 +60,7 @@ local RunContext = if RunService:IsServer() then "server" else "client"
 -- // Functions
 
 local function CreateNetworkController(controllerName: string): Network.Client<...any> | Network.Server<...any>
-	Debugger.LogEvent(script, "Create NetworkController")
+	Debugger.LogEvent(script, `Create NetworkController {controllerName}`)
 
 	if not RuntimeObjects.NetworkControllers[controllerName] then
 		local NewNetworkController = Network(controllerName)
@@ -129,7 +129,7 @@ end
 -- Signal Creation
 
 function CanaryEngine.CreateSignal(signalName: string?): Signal.Signal<...any>
-	Debugger.LogEvent(script, "Create SignalController")
+	Debugger.LogEvent(script, `Create Signal {signalName}`)
 
 	if not signalName then
 		return Signal()
