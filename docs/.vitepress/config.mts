@@ -52,7 +52,6 @@ export default defineConfig({
             { text: 'Style Guide', link: '/tutorial/styleguide' },
             { text: 'Signals', link: '/tutorial/signals' },
             { text: 'Networking', link: '/tutorial/networking' },
-            { text: 'Data Management', link: '/tutorial/datastoring' },
           ]
         }
       ],
