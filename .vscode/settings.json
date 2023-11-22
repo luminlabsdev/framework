@@ -1,9 +1,0 @@
-{
-    "search.exclude": {
-        "node_modules": true,
-        "package-lock.json": true,
-    },
-    "robloxLsp.diagnostics.disable": [
-        "undefined-type"
-    ]
-}
