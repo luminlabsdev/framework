@@ -78,7 +78,7 @@ export default defineConfig({
 
       '/api': [
         {
-          text: 'CanaryEngine',
+          text: 'API Reference',
           items: [
             {
               text: 'Framework',
