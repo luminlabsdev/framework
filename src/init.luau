@@ -157,7 +157,11 @@ end
 
 CanaryEngineClient.CreateNetworkController = CreateNetworkController :: (controllerName: string) -> (Network.Client<...any>)
 CanaryEngineServer.CreateNetworkController = CreateNetworkController :: (controllerName: string) -> (Network.Server<...any>)
+
+-- Aliases
 CanaryEngine.GetFrameworkReplicated = CanaryEngine.GetFrameworkShared
+CanaryEngineClient.NetworkController = CanaryEngineClient.CreateNetworkController
+CanaryEngineServer.NetworkController = CanaryEngineServer.CreateNetworkController
 
 -- // Actions
 

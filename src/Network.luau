@@ -28,7 +28,7 @@ local RedClientEvent = Red.Client
 
 export type Server<T...> = {
 	Listen: (self: Server<T...>, func: (sender: Player, ...unknown) -> ()) -> (),
-	BindToInvocation: (self: Server<T...>, callback: (sender: Player, ...unknown) -> (...any)) -> (),
+	BindToInvocation: (self: Server<T...>, callback: (sender: Player, ...unknown) -> (any, ...any)) -> (),
 
 	Fire: (self: Server<T...>, recipient: Player | {Player}, T...) -> (),
 	FireAll: (self: Server<T...>, T...) -> (),
@@ -166,12 +166,14 @@ function NetworkControllerServer:SetRateLimit(maxCalls: number, interval: number
 	self._InvokeOverflow = invokeOverflowCallback :: any
 end
 
-function NetworkControllerServer:BindToInvocation(callback: (sender: Player, ...unknown) -> (...any))
-	assert(not self.IsBinded, "Controller already has function binded to invocation")
-	self.IsBinded = true
+function NetworkControllerServer:BindToInvocation(callback: (sender: Player, ...unknown) -> (unknown, ...any))
+	assert(not self.IsFunctionBound, "Controller already has function bound to invocation")
+	self.IsFunctionBound = true
 
 	RedServerEvent.Listen(self._Names._Function, function(player, ...)
-		return callback(player, ...)
+		local result = callback(player, ...)
+		assert(result ~= nil, "Function bound to invocation must return at least 1 value")
+		return result
 	end)
 end
 
@@ -183,7 +185,7 @@ table.freeze(NetworkControllerClient)
 return function(name: string): Server<...any> & Client<...any>
 	return setmetatable({
 		IsListening = false,
-		IsBinded = nil,
+		IsFunctionBound = nil,
 
 		_Ratelimit = nil,
 		_InvokeOverflow = nil,
