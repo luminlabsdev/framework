@@ -14,7 +14,7 @@ A simple R6 character type used when using [`CanaryEngineClient:GetPlayerCharact
 
 The runtime property contains settings that are set during runtime, and the current context of the server/client.
 
-* [**Runtime**](/api/runtime)
+* [**Runtime**](/api/runtime/)
 
 ---
 

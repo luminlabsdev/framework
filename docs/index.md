@@ -8,10 +8,10 @@ hero:
   actions:
     - theme: brand
       text: Documentation
-      link: /tutorial/styleguide
+      link: /guide/
     - theme: alt
       text: API Reference
-      link: /api/index
+      link: /api/
 
 features:
   - icon: 🎒
