@@ -19,3 +19,9 @@ future = "red-blox/future@1.0.1"
 signal = "red-blox/signal@2.0.1"
 ratelimit = "red-blox/ratelimit@1.0.1"
 red = "lolmansreturn/red-backend@1.1.2"
+
+[dev-dependencies]
+benchmark = "canary-development/benchmark@1.0.0"
+
+[place]
+shared-packages = "game.ReplicatedStorage.Packages"

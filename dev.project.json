@@ -4,6 +4,9 @@
     "tree": {
         "$className": "DataModel",
         "ReplicatedStorage": {
+            "DevPackages": {
+                "$path": "DevPackages"
+            },
             "Packages": {
                 "$path": "Packages",
                 "Framework": {
@@ -11,7 +14,7 @@
                         "Attributes": {
                             "Attributes": {
                                 "Version": {
-                                  "String": "5.0.1"
+                                  "String": "6.0.0"
                                 },
                                 "LiveGameDebugging": {
                                   "Bool": false

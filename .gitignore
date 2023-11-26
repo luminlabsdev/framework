@@ -2,5 +2,6 @@ docs/.vitepress/cache
 docs/doc_api.md
 node_modules
 Packages
+DevPackages
 sourcemap.json
 wally.lock
