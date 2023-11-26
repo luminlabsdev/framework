@@ -1,11 +1,7 @@
---!strict
-
 -- // Package
 
-local NetworkControllerClient = { }
-local NetworkControllerServer = { }
-
-local Packages = script.Parent.Parent
+local Client = { }
+local Server = { }
 
 -- // Variables
 
@@ -13,13 +9,13 @@ local PlayerService = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
 local Indexes = {
-	{__index = NetworkControllerClient},
-	{__index = NetworkControllerServer},
+	{__index = Client},
+	{__index = Server},
 }
 
-local Future = require(Packages.future)
-local Ratelimit = require(Packages.ratelimit)
-local Red = require(Packages.red)
+local Future = require(script.Parent.Parent.future)
+local Ratelimit = require(script.Parent.Parent.ratelimit)
+local Red = require(script.Parent.Parent.red)
 
 local RedServerEvent = Red.Server
 local RedClientEvent = Red.Client
@@ -58,13 +54,13 @@ local function PackArgs(...: any)
 	return {...}
 end
 
--- // Network Controller Client
+-- // Client
 
-function NetworkControllerClient:Fire(...: any)
+function Client:Fire(...: any)
 	RedClientEvent.Fire(self._Names._Event, PackArgs(...))
 end
 
-function NetworkControllerClient:Listen(func: (...any) -> ())
+function Client:Listen(func: (...any) -> ())
 	assert(not self.IsListening, "Controller is already subscribed to an event")
 	assert(func, "Must provide a listener")
 
@@ -73,13 +69,13 @@ function NetworkControllerClient:Listen(func: (...any) -> ())
 	RedClientEvent.Listen(self._Names._Event, func)
 end
 
-function NetworkControllerClient:InvokeAsync(...: any): Future.Future<...any>
+function Client:InvokeAsync(...: any): Future.Future<...any>
 	return RedClientEvent.Call(self._Names._Function, PackArgs(...))
 end
 
--- // Network Controller Server
+-- // Server
 
-function NetworkControllerServer:Fire(recipients: Player | {Player}, ...: any)
+function Server:Fire(recipients: Player | {Player}, ...: any)
 	if type(recipients) == "table" then
 		for _, player in recipients do
 			RedServerEvent.Fire(player, self._Names._Event, PackArgs(...))
@@ -91,13 +87,13 @@ function NetworkControllerServer:Fire(recipients: Player | {Player}, ...: any)
 	RedServerEvent.Fire(recipients, self._Names._Event, PackArgs(...))
 end
 
-function NetworkControllerServer:FireAll(...: any)
+function Server:FireAll(...: any)
 	for _, player in PlayerService:GetPlayers() do
 		RedServerEvent.Fire(player, self._Names._Event, PackArgs(...))
 	end
 end
 
-function NetworkControllerServer:FireExcept(except: Player | {Player}, ...: any)
+function Server:FireExcept(except: Player | {Player}, ...: any)
 	if type(except) == "table" then
 		for _, player in PlayerService:GetPlayers() do
 			if table.find(except, player) then
@@ -119,7 +115,7 @@ function NetworkControllerServer:FireExcept(except: Player | {Player}, ...: any)
 	end
 end
 
-function NetworkControllerServer:FireFilter(filter: (Player) -> (boolean), ...: any)
+function Server:FireFilter(filter: (Player) -> (boolean), ...: any)
 	for _, player in PlayerService:GetPlayers() do
 		if filter(player) then
 			RedServerEvent.Fire(player, self._Names._Event, PackArgs(...))
@@ -127,7 +123,7 @@ function NetworkControllerServer:FireFilter(filter: (Player) -> (boolean), ...: 
 	end
 end
 
-function NetworkControllerServer:FireInRange(comparePoint: Vector3, maximumRange: number, ...: any)
+function Server:FireInRange(comparePoint: Vector3, maximumRange: number, ...: any)
 	self:FireFilter(function(player) -- reuse FireFilter to follow D.R.Y. standards
 		if player:DistanceFromCharacter(comparePoint) <= maximumRange then
 			return true
@@ -136,7 +132,7 @@ function NetworkControllerServer:FireInRange(comparePoint: Vector3, maximumRange
 	end, ...)
 end
 
-function NetworkControllerServer:Listen(func: (sender: Player, ...unknown) -> ())
+function Server:Listen(func: (sender: Player, ...unknown) -> ())
 	assert(not self.IsListening, "Controller is already subscribed to an event")
 	assert(func, "Must provide a listener")
 	
@@ -152,7 +148,7 @@ function NetworkControllerServer:Listen(func: (sender: Player, ...unknown) -> ()
 	end)
 end
 
-function NetworkControllerServer:SetRateLimit(maxCalls: number, interval: number?, invokeOverflowCallback: (sender: Player) -> ()?)
+function Server:SetRateLimit(maxCalls: number, interval: number?, invokeOverflowCallback: (sender: Player) -> ()?)
 	if maxCalls <= -1 then
 		self._Ratelimit = nil
 		self._InvokeOverflow = nil
@@ -162,11 +158,11 @@ function NetworkControllerServer:SetRateLimit(maxCalls: number, interval: number
 		return
 	end
 
-	self._Ratelimit = Ratelimit(maxCalls, interval or 1)
+	self._Ratelimit = Ratelimit(maxCalls, interval or 1) :: any
 	self._InvokeOverflow = invokeOverflowCallback :: any
 end
 
-function NetworkControllerServer:BindToInvocation(callback: (sender: Player, ...unknown) -> (unknown, ...any))
+function Server:BindToInvocation(callback: (sender: Player, ...unknown) -> (unknown, ...any))
 	assert(not self.IsFunctionBound, "Controller already has function bound to invocation")
 	self.IsFunctionBound = true
 
@@ -179,8 +175,8 @@ end
 
 -- // Actions
 
-table.freeze(NetworkControllerServer)
-table.freeze(NetworkControllerClient)
+table.freeze(Server)
+table.freeze(Client)
 
 return function(name: string): Server<...any> & Client<...any>
 	return setmetatable({

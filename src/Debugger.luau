@@ -1,5 +1,3 @@
---!strict
-
 -- // Package
 
 local Debugger = { }
@@ -21,7 +19,7 @@ local Prefix = "[Debug]"
 
 -- // Functions
 
-Debugger.CachedLogs = { }
+Debugger.SessionLogs = { } :: {string}
 
 local function ReverseTable<T>(t: {[number]: T}): {[number]: T}
 	local NewTable = { }
@@ -70,7 +68,7 @@ function Debugger.GetCallStack(instance: LuaSourceContainer): CallStack
 end
 
 function Debugger.LogEvent(eventName: string)
-	table.insert(Debugger.CachedLogs, eventName)
+	table.insert(Debugger.SessionLogs, eventName)
 	
 	if not (RuntimeContext.Studio and RuntimeSettings.ShowLoggedEvents) then
 		return

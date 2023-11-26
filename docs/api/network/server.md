@@ -12,9 +12,9 @@ Whether or not the network controller is subscribed to an event.
 
 ---
 
-### IsBinded <Badge type="tip" text="read only" />
+### IsFunctionBound <Badge type="tip" text="read only" />
 
-Whether or not the network controller is binded to any invocations.
+Whether or not the network controller has a function bound to any invocations.
 
 * **boolean**
 
@@ -139,7 +139,7 @@ Recieves an invoke from the client, and runs the callback function which returns
 
 **Parameters**
 
-* **callback:** `(sender: Player, ...: unknown) -> (...any)`\
+* **callback:** `(sender: Player, ...: unknown) -> (any, ...any)`\
 The callback function to run on invoke, must return at least 1 value.
 
 **Returns**
@@ -160,7 +160,7 @@ The maximum amount of invokes allowed every `interval` seconds; set to -1 to dis
 * **interval:** `number?`\
 The interval of which `maxCalls` is reset
 
-* **invokeOverflowCallback:** `((sender: Player) -> ())?`\
+* **invokeOverflowCallback:** `(sender: Player) -> ()?`\
 The callback function to run when the player has exceeded the current rate limit
 
 **Returns**

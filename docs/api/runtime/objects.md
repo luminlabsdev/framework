@@ -8,7 +8,7 @@ Used as a cache for all objects created during runtime, this includes `Signals` 
 
 A table that stores all of the `NetworkControllers` created on the current `RunContext`.
 
-* **{ [string]: [NetworkControllerServer](/api/controllers/network/server) | [NetworkControllerClient](/api/controllers/network/client) }**
+* **{ [string]: [NetworkControllerServer](/api/network/server) | [NetworkControllerClient](/api/network/client) }**
 
 ---
 
@@ -16,4 +16,4 @@ A table that stores all of the `NetworkControllers` created on the current `RunC
 
 A table that stores `Signals` created on the current `RunContext`.
 
-* **{ [string]: [Signal](/api/controllers/signal/signal) }**
+* **{ [string]: [Signal](/api/signal) }**

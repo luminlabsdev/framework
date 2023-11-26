@@ -8,7 +8,7 @@ Access to properties / settings that are set during runtime.
 
 Shows different runtime contexts.
 
-* **[RuntimeContext](/api/engine/runtime/runtimecontext)**
+* **[RuntimeContext](/api/runtime/context)**
 
 ---
 
@@ -16,7 +16,7 @@ Shows different runtime contexts.
 
 Shows different runtime settings.
 
-* **[RuntimeSettings](/api/engine/runtime/runtimesettings)**
+* **[RuntimeSettings](/api/runtime/settings)**
 
 ---
 
@@ -24,4 +24,4 @@ Shows different runtime settings.
 
 Used as a cache for all objects created during runtime, this includes `Signals` and `NetworkControllers`.
 
-* **[RuntimeObjects](/api/engine/runtime/runtimeobjects)**
+* **[RuntimeObjects](/api/runtime/objects)**

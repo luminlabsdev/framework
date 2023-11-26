@@ -1,16 +1,13 @@
---!strict
-
 -- // Package
 
 local Runtime = { }
-local Packages = script.Parent.Parent
 
 -- // Variables
 
 local RunService = game:GetService("RunService")
 
 local Network = require(script.Parent.Network)
-local Signal = require(Packages.signal)
+local Signal = require(script.Parent.Parent.signal)
 
 local Framework = script.Parent
 
@@ -37,7 +34,7 @@ local RuntimeSettings = {
 }
 
 local RuntimeObjects = {
-	NetworkControllers = { } :: {[string]: Network.Server<...any> | Network.Client<...any>},
+	NetworkControllers = { } :: {[string]: Network.Server<...any> | Network.Client<...any>}, -- Table is different for each client and the server
 	Signals = { } :: {[string]: Signal.Signal<...any>},
 }
 

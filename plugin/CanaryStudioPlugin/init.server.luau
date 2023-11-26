@@ -1,5 +1,3 @@
---!strict
-
 -- // Variables
 
 local RunService = game:GetService("RunService")

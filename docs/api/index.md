@@ -6,7 +6,7 @@ The main class of CanaryEngine.
 
 ### Character <Badge type="tip" text="public" />
 
-A simple R6 character type used when using [`CanaryEngineClient:GetPlayerCharacter`](/api/engine/framework/canaryengineclient#GetPlayerCharacter)
+A simple R6 character type used when using [`CanaryEngineClient:GetPlayerCharacter`](/api/client#GetPlayerCharacter)
 
 ## Properties
 
@@ -14,7 +14,7 @@ A simple R6 character type used when using [`CanaryEngineClient:GetPlayerCharact
 
 The runtime property contains settings that are set during runtime, and the current context of the server/client.
 
-* [**Runtime**](/api/engine/runtime/runtime)
+* [**Runtime**](/api/runtime)
 
 ---
 
@@ -22,7 +22,7 @@ The runtime property contains settings that are set during runtime, and the curr
 
 The internal engine debugger, has useful functions to abide by debug settings.
 
-* [**Debugger**](/api/engine/framework/debugger)
+* [**Debugger**](/api/debugger)
 
 ---
 
@@ -40,7 +40,7 @@ Gets the server-sided interface of CanaryEngine.
 
 **Returns**
 
-* [**CanaryEngineServer**](/api/engine/framework/canaryengineserver)
+* [**FrameworkServer**](/api/server)
 
 ---
 
@@ -50,7 +50,7 @@ Gets the client-sided interface of CanaryEngine.
 
 **Returns**
 
-* [**CanaryEngineClient**](/api/engine/framework/canaryengineclient)
+* [**FrameworkClient**](/api/client)
 
 ---
 
@@ -60,7 +60,7 @@ Gets the shared interface of CanaryEngine. Currently has no unique function, but
 
 **Returns**
 
-* [**CanaryEngineShared**](/api/engine/framework/canaryengineshared)
+* [**FrameworkShared**](/api/shared)
 
 ---
 
@@ -84,7 +84,7 @@ Whether or not to import the package's descendants, defaults to `false`
 
 ### Signal
 
-Creates a new signal that is then given a reference in the signals table. Create a new anonymous signal by leaving the name blank.
+Creates/reference a signal of the given name, create a new anonymous signal by leaving the name blank.
 
 **Parameters**
 
@@ -93,14 +93,14 @@ The name of the signal
 
 **Returns**
 
-* [**Signal**](/api/controllers/signal/signal)
+* [**Signal**](/api/signal)
 
 ---
 
 ### CreateAnonymousSignal
 
-Creates a new anonymous signal, this does not have a reference outside of the variable it was created in. This is essentially an alias for an empty [`CreateSignal`](#createsignal).
+Creates a new anonymous signal, this does not have a reference outside of the variable it was created in. This is essentially an alias for an empty [`CreateSignal`](#signal).
 
 **Returns**
 
-* [**Signal**](/api/controllers/signal/signal)
+* [**Signal**](/api/signal)

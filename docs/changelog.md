@@ -1,9 +1,3 @@
----
-title: Changelog
-description: The changelog for CanaryEngine
-keywords: [roblox, game, framework, changelog, updates]
----
-
 # Changelog
 
 This is the changelog which is changed every update, and we follow semver.

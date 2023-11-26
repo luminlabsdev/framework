@@ -10,11 +10,11 @@ A generic sum of callstack data.
 
 ## Properties
 
-### CachedLogs
+### SessionLogs
 
 A list of cached logs/events for the current environment.
 
-* **{ [Instance]: { string } }**
+* **{ string }**
 
 ## Functions
 
@@ -74,12 +74,9 @@ The script to start the hierarchy at
 
 ### LogEvent
 
-Logs an event in a script, which is then stored in a cache for that script. This allows you to make sure code is running while not cluttering the output in the live game. Keep in mind that this is automatically prints; to disable this turn off `Framework.ShowLoggedEvents`.
+Logs an event in a script, which is then stored in a global cache. This allows you to make sure code is running while not cluttering the output in the live game. Keep in mind that this is automatically prints; to disable this turn off `Framework.ShowLoggedEvents` (attribute).
 
 **Parameters**
-
-* **instance:** `LuaSourceContainer`\
-The instance to cache the debug logs at
 
 * **eventName:** `string`\
 The name to print and log it as

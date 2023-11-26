@@ -1,4 +1,4 @@
-# CanaryEngineClient <Badge type="danger" text="client" />
+# FrameworkClient <Badge type="danger" text="client" />
 
 CanaryEngine's client-sided interface.
 
@@ -30,7 +30,7 @@ A simple reference to the [Player.Backpack](https://create.roblox.com/docs/refer
 
 ### NetworkController
 
-Creates a new network controller on the client, with the name of `controllerName`
+Creates/references a network controller on the client, with the name of `controllerName`
 
 **Parameters**
 
@@ -39,7 +39,7 @@ The name of the controller
 
 **Returns**
 
-* **[ClientNetworkController](/api/controllers/network/client)**
+* **[ClientNetworkController](/api/network/client)**
 
 ---
 
@@ -49,4 +49,4 @@ Gets the players current character model; if it doesn't exist the thread will yi
 
 **Returns**
 
-* **[Character](/api/engine/framework/canaryengine#character)**
+* **[Character](/api/#character)**

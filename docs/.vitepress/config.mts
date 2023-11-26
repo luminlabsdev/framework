@@ -13,65 +13,39 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       {
-        text: 'Guides',
-        items: [
-          { text: 'Get Started', link: '/start/intro'},
-          { text: 'Usage', link: '/tutorial/styleguide' },
-        ]
-      },
-
-      {
         text: 'Articles',
         items: [
-          { text: 'Blogs', link: '/blog/enginerecaps/enginerecap-october2023' },
-          { text: 'Featured', link: '/featured' }
+          { text: 'Guides', link: '/guides/' },
+          { text: 'Recaps', link: '/recaps/' },
+          { text: 'Installation', link: '/installation' },
         ]
       },
 
-      { text: 'API', link: '/api/engine/framework/canaryengine'},
-      { text: 'Changelog', link: '/changelog'}
+      { text: 'API', link: '/api/' },
+      { text: 'Changelog', link: '/changelog' },
     ],
 
     sidebar: {
-      '/start': [
+      '/guides': [
         {
-          text: 'Get Started',
+          text: 'Guides',
           items: [
-            { text: 'Introduction', link: '/start/intro' },
-            { text: 'Features', link: '/start/features' },
-            { text: 'Comparison', link: '/start/comparison' },
-            { text: 'Installation', link: '/start/installation' },
-            { text: 'FAQ', link: '/start/faq' }
+            { text: 'Style Guide', link: '/guides/' },
+            { text: 'Signals', link: '/guides/signals' },
+            { text: 'Networking', link: '/guides/networking' },
           ]
         }
       ],
-      '/tutorial': [
-        {
-          text: 'Concepts',
-          items: [
-            { text: 'Style Guide', link: '/tutorial/styleguide' },
-            { text: 'Signals', link: '/tutorial/signals' },
-            { text: 'Networking', link: '/tutorial/networking' },
-          ]
-        }
-      ],
-      '/blog': [
+      '/recaps': [
         {
           text: 'Engine Recaps',
           items: [
-            { text: 'November 2023', link: '/blog/enginerecaps/enginerecap-november2023' },
-            { text: 'October 2023', link: '/blog/enginerecaps/enginerecap-october2023' },
-            { text: 'September 2023', link: '/blog/enginerecaps/enginerecap-september2023' },
-            { text: 'August 2023', link: '/blog/enginerecaps/enginerecap-august2023' },
-            { text: 'July 2023', link: '/blog/enginerecaps/enginerecap-july2023' },
-            { text: 'June 2023', link: '/blog/enginerecaps/enginerecap-june2023'}
-          ]
-        },
-
-        {
-          text: 'Announcements',
-          items: [
-
+            { text: 'November 2023', link: '/recaps/' },
+            { text: 'October 2023', link: '/recaps/october2023' },
+            { text: 'September 2023', link: '/recaps/september2023' },
+            { text: 'August 2023', link: '/recaps/august2023' },
+            { text: 'July 2023', link: '/recaps/july2023' },
+            { text: 'June 2023', link: '/recaps/june2023' }
           ]
         }
       ],
@@ -80,42 +54,31 @@ export default defineConfig({
         {
           text: 'API Reference',
           items: [
+            { text: 'CanaryEngine', link: '/api/' },
+            { text: 'FrameworkServer', link: '/api/server' },
+            { text: 'FrameworkClient', link: '/api/client' },
+            { text: 'FrameworkShared', link: '/api/shared' },
+
             {
-              text: 'Framework',
+              text: 'Network',
               collapsed: true,
               items: [
-                { text: 'CanaryEngine', link: '/api/engine/framework/canaryengine' },
-                { text: 'CanaryEngineServer', link: '/api/engine/framework/canaryengineserver' },
-                { text: 'CanaryEngineClient', link: '/api/engine/framework/canaryengineclient' },
-                { text: 'Debugger', link: '/api/engine/framework/debugger' },
+                { text: 'Server', link: '/api/network/server' },
+                { text: 'Client', link: '/api/network/client' }
               ]
             },
+
+            { text: 'Debugger', link: '/api/debugger' },
+            { text: 'Signal', link: '/api/signal' },
 
             {
               text: 'Runtime',
               collapsed: true,
               items: [
-                { text: 'Runtime', link: '/api/engine/runtime/runtime' },
-                { text: 'RuntimeContext', link: '/api/engine/runtime/runtimecontext' },
-                { text: 'RuntimeSettings', link: '/api/engine/runtime/runtimesettings' },
-                { text: 'RuntimeObjects', link: '/api/engine/runtime/runtimeobjects' }
-              ]
-            },
-
-            {
-              text: 'Signals',
-              collapsed: true,
-              items: [
-                { text: 'Signal', link: '/api/controllers/signal/signal' }
-              ]
-            },
-
-            {
-              text: 'Networking',
-              collapsed: true,
-              items: [
-                { text: 'Server', link: '/api/controllers/network/server' },
-                { text: 'Client', link: '/api/controllers/network/client' }
+                { text: 'Runtime', link: '/api/runtime' },
+                { text: 'RuntimeContext', link: '/api/runtime/context' },
+                { text: 'RuntimeSettings', link: '/api/runtime/settings' },
+                { text: 'RuntimeObjects', link: '/api/runtime/objects' }
               ]
             }
           ]
@@ -140,7 +103,7 @@ export default defineConfig({
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/canary-development/CanaryEngine' },
-      { icon: 'discord', link: 'https://discord.gg/cwwcZtqJAt'},
+      { icon: 'discord', link: 'https://discord.gg/cwwcZtqJAt' },
     ]
   }
 })
