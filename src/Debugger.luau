@@ -69,17 +69,13 @@ function Debugger.GetCallStack(instance: LuaSourceContainer): CallStack
 	}
 end
 
-function Debugger.LogEvent(instance: LuaSourceContainer, eventName: string)
+function Debugger.LogEvent(eventName: string)
+	table.insert(Debugger.CachedLogs, eventName)
+	
 	if not (RuntimeContext.Studio and RuntimeSettings.ShowLoggedEvents) then
 		return
 	end
-
-	if not Debugger.CachedLogs[instance] then
-		assert(instance:IsA("LuaSourceContainer"), "Instance must be a lua source container")
-		Debugger.CachedLogs[instance] = { }
-	end
-
-	table.insert(Debugger.CachedLogs[instance], eventName)
+	
 	print("[Log]", eventName)
 end
 

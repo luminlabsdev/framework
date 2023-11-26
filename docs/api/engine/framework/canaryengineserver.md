@@ -4,7 +4,7 @@ CanaryEngine's server-sided interface.
 
 ## Functions
 
-### CreateNetworkController
+### NetworkController
 
 Creates a new network controller on the server, with the name of `controllerName`
 

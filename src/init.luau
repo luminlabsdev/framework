@@ -4,9 +4,9 @@
 
 local CanaryEngine = { }
 
-local CanaryEngineServer = { }
-local CanaryEngineClient = { }
-local CanaryEngineShared = { }
+local FrameworkServer = { }
+local FrameworkClient = { }
+local FrameworkShared = { }
 
 local Packages = script.Parent
 
@@ -59,11 +59,10 @@ local RunContext = if RunService:IsServer() then "server" else "client"
 
 -- // Functions
 
-local function CreateNetworkController(controllerName: string): Network.Client<...any> | Network.Server<...any>
-	Debugger.LogEvent(script, `Create NetworkController {controllerName}`)
-
+local function NetworkController(controllerName: string): Network.Client<...any> | Network.Server<...any>
 	if not RuntimeObjects.NetworkControllers[controllerName] then
 		local NewNetworkController = Network(controllerName)
+		Debugger.LogEvent(`Create NetworkController {controllerName}`)
 
 		RuntimeObjects.NetworkControllers[controllerName] = NewNetworkController
 	end
@@ -75,11 +74,11 @@ end
 
 function CanaryEngine.GetFrameworkServer()
 	if Runtime.Context.Server then
-		if table.isfrozen(CanaryEngineServer) then
-			return CanaryEngineServer
+		if table.isfrozen(FrameworkServer) then
+			return FrameworkServer
 		end
 
-		return table.freeze(CanaryEngineServer)
+		return table.freeze(FrameworkServer)
 	else
 		error("Failed to fetch 'EngineServer', context must be server.")
 	end
@@ -87,17 +86,17 @@ end
 
 function CanaryEngine.GetFrameworkClient()
 	if Runtime.Context.Client then
-		if table.isfrozen(CanaryEngineClient) then
-			return CanaryEngineClient
+		if table.isfrozen(FrameworkClient) then
+			return FrameworkClient
 		end
 
 		local Player = PlayerService.LocalPlayer
 
-		CanaryEngineClient.Player = Player :: Player
-		CanaryEngineClient.PlayerGui = Player:WaitForChild("PlayerGui") :: typeof(game:GetService("StarterGui"))
-		CanaryEngineClient.PlayerBackpack = Player:WaitForChild("Backpack") :: typeof(game:GetService("StarterPack"))
+		FrameworkClient.Player = Player :: Player
+		FrameworkClient.PlayerGui = Player:WaitForChild("PlayerGui") :: typeof(game:GetService("StarterGui"))
+		FrameworkClient.PlayerBackpack = Player:WaitForChild("Backpack") :: typeof(game:GetService("StarterPack"))
 
-		return table.freeze(CanaryEngineClient)
+		return table.freeze(FrameworkClient)
 	else
 		error("Failed to fetch 'EngineClient', context must be client.")
 	end
@@ -105,11 +104,11 @@ end
 
 -- Exclusive API for shared will come soon
 function CanaryEngine.GetFrameworkShared()
-	if table.isfrozen(CanaryEngineShared) then
-		return CanaryEngineShared
+	if table.isfrozen(FrameworkShared) then
+		return FrameworkShared
 	end
 
-	return table.freeze(CanaryEngineShared)
+	return table.freeze(FrameworkShared)
 end
 
 function CanaryEngine.ImportPackagesInOrder(importList: {ModuleScript}, importDeep: boolean?)
@@ -128,15 +127,15 @@ end
 
 -- Signal Creation
 
-function CanaryEngine.CreateSignal(signalName: string?): Signal.Signal<...any>
-	Debugger.LogEvent(script, `Create Signal {signalName}`)
-
+function CanaryEngine.Signal(signalName: string?): Signal.Signal<...any>
 	if not signalName then
+		Debugger.LogEvent(`Create Signal {signalName}`)
 		return Signal()
 	end
 
 	if not RuntimeObjects.Signals[signalName] then
 		local NewSignal = Signal()
+		Debugger.LogEvent(`Create Signal {signalName}`)
 
 		RuntimeObjects.Signals[signalName] = NewSignal
 	end
@@ -145,26 +144,24 @@ function CanaryEngine.CreateSignal(signalName: string?): Signal.Signal<...any>
 end
 
 function CanaryEngine.CreateAnonymousSignal(): Signal.Signal<...any>
-	return CanaryEngine.CreateSignal()
+	return CanaryEngine.Signal()
 end
 
 -- Context Specific Functions
 
-function CanaryEngineClient.GetPlayerCharacter(): Character
+function FrameworkClient.GetPlayerCharacter(): Character
 	local Player = PlayerService.LocalPlayer
 	return Player.Character or Player.CharacterAdded:Wait()
 end
 
-CanaryEngineClient.CreateNetworkController = CreateNetworkController :: (controllerName: string) -> (Network.Client<...any>)
-CanaryEngineServer.CreateNetworkController = CreateNetworkController :: (controllerName: string) -> (Network.Server<...any>)
+FrameworkClient.NetworkController = NetworkController :: (controllerName: string) -> (Network.Client<...any>)
+FrameworkServer.NetworkController = NetworkController :: (controllerName: string) -> (Network.Server<...any>)
 
 -- Aliases
 CanaryEngine.GetFrameworkReplicated = CanaryEngine.GetFrameworkShared
-CanaryEngineClient.NetworkController = CanaryEngineClient.CreateNetworkController
-CanaryEngineServer.NetworkController = CanaryEngineServer.CreateNetworkController
 
 -- // Actions
 
-Debugger.LogEvent(script, `Framework {RunContext} loaded; {math.ceil((os.clock() - BeginLoadTime) * 1000)}ms`)
+Debugger.LogEvent(`Framework {RunContext} loaded; {math.ceil((os.clock() - BeginLoadTime) * 1000)}ms`)
 
 return table.freeze(CanaryEngine)

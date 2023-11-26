@@ -82,7 +82,7 @@ Whether or not to import the package's descendants, defaults to `false`
 
 ---
 
-### CreateSignal
+### Signal
 
 Creates a new signal that is then given a reference in the signals table. Create a new anonymous signal by leaving the name blank.
 
@@ -93,7 +93,7 @@ The name of the signal
 
 **Returns**
 
-* [**SignalController**](/api/controllers/signal/signal)
+* [**Signal**](/api/controllers/signal/signal)
 
 ---
 
@@ -103,4 +103,4 @@ Creates a new anonymous signal, this does not have a reference outside of the va
 
 **Returns**
 
-* [**SignalController**](/api/controllers/signal/signal)
+* [**Signal**](/api/controllers/signal/signal)

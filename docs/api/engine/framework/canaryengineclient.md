@@ -28,7 +28,7 @@ A simple reference to the [Player.Backpack](https://create.roblox.com/docs/refer
 
 ## Functions
 
-### CreateNetworkController
+### NetworkController
 
 Creates a new network controller on the client, with the name of `controllerName`
 
