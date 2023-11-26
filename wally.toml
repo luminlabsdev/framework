@@ -21,7 +21,7 @@ ratelimit = "red-blox/ratelimit@1.0.1"
 red = "lolmansreturn/red-backend@1.1.2"
 
 [dev-dependencies]
-benchmark = "canary-development/benchmark@1.0.0"
+benchmark = "canary-development/benchmark@1.0.1"
 
 [place]
 shared-packages = "game.ReplicatedStorage.Packages"

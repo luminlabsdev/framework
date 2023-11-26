@@ -8,7 +8,7 @@ Controller:Fire(Vector3.zero)
 
 print(Controller2:InvokeAsync("yoooooo"):Await())
 
-local result = Benchmark.CreateBenchmark():SetFunction(100, function()
+local result = Benchmark.CreateBenchmark():SetFunction(1000, function()
     Canary.Debugger.LogEvent("Hello Test!!!")
 end)
 
