@@ -2,6 +2,28 @@
 
 This is the changelog which is changed every update, and we follow semver.
 
+## 6.0.0-rc1
+
+### Added
+
+* Revamped documentation layouts
+* Use `.luaurc` file instead of `--!strict`
+* Correctly logs when an object is created
+
+### Improvements
+
+* General code improvements and bug fixes
+* Improved API naming to be more clear
+* Improves `LogEvent` performance
+* Update internal naming scheme to reflect frontend
+* `:BindToInvocation` will now give a type warning if at least 1 value is returned
+* Improve `:BindToInvocation` to disallow returning nil/nothing
+* Add Framework and Server/Client tags to internal logs
+
+### Removed
+
+* Remove deprecated alias `CanaryEngine.GetFrameworkReplicated`
+
 ## 5.1.0
 
 ### Added
@@ -10,7 +32,7 @@ This is the changelog which is changed every update, and we follow semver.
 
 ### Improvements
 
-Refined installation process, makes models available only per release.
+* Refined installation process, makes models available only per release.
 
 ### Removed
 
