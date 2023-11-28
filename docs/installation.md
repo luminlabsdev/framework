@@ -3,7 +3,7 @@
 ### GitHub
 
 1. Navigate to the latest release of CanaryEngine on Github, you can find that [here](https://github.com/canary-development/CanaryEngine/releases/)
-2. Choose `Framework.rbxm` and download.
+2. Choose `CanaryEngine.rbxm` and download.
 3. Drag the file from your downloads folder into `ReplicatedStorage`.
 
 ### Wally
