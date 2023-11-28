@@ -15,7 +15,8 @@ local Runtime = require(script.Parent.Runtime)
 local RuntimeContext = Runtime.Context
 local RuntimeSettings = Runtime.Settings
 
-local Prefix = "[Debug]"
+local DebugPrefix = "[Debug]"
+local LogPrefix = "[Log]"
 
 -- // Functions
 
@@ -45,7 +46,7 @@ end
 -- You're not meant to debug errors as they stop the thread, which could lead to major codebase issues
 function Debugger.Debug<T...>(debugHandler: (prefix: string, T...) -> (), ...: T...)
 	if (RuntimeContext.Studio and RuntimeSettings.StudioDebugging) or RuntimeSettings.LiveGameDebugging then
-		debugHandler(Prefix, ...)
+		debugHandler(DebugPrefix, ...)
 	end
 end
 
@@ -74,7 +75,7 @@ function Debugger.LogEvent(eventName: string)
 		return
 	end
 	
-	print("[Log]", eventName)
+	print(LogPrefix, eventName)
 end
 
 function Debugger.GenerateUUID()

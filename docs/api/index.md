@@ -32,6 +32,14 @@ A reference to the Future package, which is a optimized version of a Promise.
 
 * [**Future**](https://util.redblox.dev/future.html)
 
+---
+
+### StartupTime <Badge type="tip" text="read only" />
+
+The number in seconds of which the framework took to start up; is rounded by the nearest hundreth.
+
+* **number**
+
 ## Functions
 
 ### GetFrameworkServer <Badge type="danger" text="server" />

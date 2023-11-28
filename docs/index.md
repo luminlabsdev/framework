@@ -8,7 +8,7 @@ hero:
   actions:
     - theme: brand
       text: Documentation
-      link: /guide/
+      link: /guides/
     - theme: alt
       text: API Reference
       link: /api/

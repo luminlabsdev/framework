@@ -55,6 +55,12 @@ local RunContext = if RunService:IsServer() then "Server" else "Client"
 
 -- // Functions
 
+local function PrecisionRound(num: number, pos: number)
+	local precision = 10^(-pos)
+	num += precision / 2
+	return math.floor(num / precision) * precision
+end
+
 local function NetworkController(controllerName: string): Network.Client<...any> | Network.Server<...any>
 	if not RuntimeObjects.NetworkControllers[controllerName] then
 		local NewNetworkController = Network(controllerName)
@@ -151,6 +157,7 @@ FrameworkServer.NetworkController = NetworkController :: (controllerName: string
 
 -- // Actions
 
-Debugger.LogEvent(`[Framework] {RunContext} loaded; {math.ceil((os.clock() - BeginLoadTime) * 1000)}ms`)
+CanaryEngine.LoadTime = PrecisionRound(os.clock() - BeginLoadTime, 2)
+Debugger.LogEvent(`[Framework] {RunContext} loaded; {CanaryEngine.LoadTime}s ({CanaryEngine.LoadTime * 1000}ms)`)
 
 return table.freeze(CanaryEngine)
