@@ -1,15 +1,12 @@
 local Canary = require(game.ReplicatedStorage.Packages.Framework)
-local Benchmark = require(game.ReplicatedStorage.DevPackages.benchmark)
 local Client = Canary.GetFrameworkClient()
-local Controller = Client.NetworkController("Test")
-local Controller2 = Client.NetworkController("Other")
 
-Controller:Fire(Vector3.zero)
+local AnnounceNetwork = Client.NetworkController("Announcer")
+local Gui: ScreenGui = Client.PlayerGui:WaitForChild("Announce")
+local Label = Gui:WaitForChild("AnnounceLabel") :: TextLabel
 
-print(Controller2:InvokeAsync("yoooooo"):Await())
-
-local result = Benchmark.CreateBenchmark():SetFunction(1000, function()
-    Canary.Debugger.LogEvent("Hello Test!!!")
+AnnounceNetwork:Listen(function(message)
+    Label.Text = message
+    task.wait(5)
+    Label.Text = ""
 end)
-
-print(result)
