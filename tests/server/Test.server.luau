@@ -80,3 +80,7 @@ GameFinishSignal:Connect(function()
         part.CanCollide = true
     end
 end)
+
+AnnounceNetwork:BindToInvocation(function(player, args)
+    return `{args}, {player.Name}`
+end)

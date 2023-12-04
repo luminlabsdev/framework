@@ -2,6 +2,37 @@
 
 This is the changelog which is changed every update, and we follow semver.
 
+## 6.1.0
+
+### Added
+
+* Support for reliable/unreliable network controllers
+
+### Improvements
+
+* Creating an anonymous signal will no longer log the name as 'nil'
+* Network controller names now use identifiers
+* Network controller creation now displays reliability type in log
+* Adds ability to set a listener on a network controller after being initially set
+
+### Removed
+
+* Nothing
+
+## 6.0.0
+
+### Added
+
+* Better calculation of startup
+
+### Improvements
+
+* Improved internally logged events to be more clear
+
+### Removed
+
+* `source` param from LogEvent to make code more neat
+
 ## 6.0.0-rc1
 
 ### Added

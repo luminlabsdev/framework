@@ -14,7 +14,7 @@
                         "Attributes": {
                             "Attributes": {
                                 "Version": {
-                                  "String": "6.0.0"
+                                  "String": "6.1.0"
                                 },
                                 "LiveGameDebugging": {
                                   "Bool": false

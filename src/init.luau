@@ -55,10 +55,10 @@ local RunContext = if RunService:IsServer() then "Server" else "Client"
 
 -- // Functions
 
-local function NetworkController(controllerName: string): Network.Client<...any> | Network.Server<...any>
+local function NetworkController(controllerName: string, isUnreliable: boolean?): Network.Client<...any> | Network.Server<...any>
 	if not RuntimeObjects.NetworkControllers[controllerName] then
-		local NewNetworkController = Network(controllerName)
-		Debugger.LogEvent(`[{RunContext}] Create NetworkController {controllerName}`)
+		local NewNetworkController = Network(controllerName, isUnreliable)
+		Debugger.LogEvent(`[{RunContext}] Create NetworkController {controllerName}; {if isUnreliable then "Unreliable" else "Reliable"}`)
 
 		RuntimeObjects.NetworkControllers[controllerName] = NewNetworkController
 	end
@@ -121,7 +121,7 @@ end
 
 function CanaryEngine.Signal(signalName: string?): Signal.Signal<...any>
 	if not signalName then
-		Debugger.LogEvent(`[Framework] Create Signal {signalName}`)
+		Debugger.LogEvent("[Framework] Create Signal Anonymous")
 		return Signal()
 	end
 
@@ -146,8 +146,8 @@ function FrameworkClient.GetPlayerCharacter(): Character
 	return Player.Character or Player.CharacterAdded:Wait()
 end
 
-FrameworkClient.NetworkController = NetworkController :: (controllerName: string) -> (Network.Client<...any>)
-FrameworkServer.NetworkController = NetworkController :: (controllerName: string) -> (Network.Server<...any>)
+FrameworkClient.NetworkController = NetworkController :: (controllerName: string, isUnreliable: boolean?) -> (Network.Client<...any>)
+FrameworkServer.NetworkController = NetworkController :: (controllerName: string, isUnreliable: boolean?) -> (Network.Server<...any>)
 
 -- // Actions
 

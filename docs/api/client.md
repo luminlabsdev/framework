@@ -37,6 +37,9 @@ Creates/references a network controller on the client, with the name of `control
 * **controllerName:** `string`\
 The name of the controller
 
+* **isUnreliable:** `boolean?`\
+Whether or not the network controller is unreliable, defaults to false
+
 **Returns**
 
 * **[ClientNetworkController](/api/network/client)**

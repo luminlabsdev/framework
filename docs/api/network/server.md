@@ -12,6 +12,14 @@ Whether or not the network controller is subscribed to an event.
 
 ---
 
+### IsReliable <Badge type="tip" text="read only" />
+
+Whether or not the network controller uses a reliable remote event or not.
+
+* **boolean**
+
+---
+
 ### IsFunctionBound <Badge type="tip" text="read only" />
 
 Whether or not the network controller has a function bound to any invocations.
