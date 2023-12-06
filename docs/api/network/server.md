@@ -14,7 +14,7 @@ Whether or not the network controller is subscribed to an event.
 
 ### IsReliable <Badge type="tip" text="read only" />
 
-Whether or not the network controller uses a reliable remote event or not.
+Whether or not the network controller uses a reliable remote event.
 
 * **boolean**
 
@@ -165,7 +165,7 @@ Sets a rate limit that is applied when invoking or firing a network controller f
 * **maxCalls:** `number`\
 The maximum amount of invokes allowed every `interval` seconds; set to -1 to disable the rate limit
 
-* **interval:** `number?`\
+* **resetInterval:** `number?`\
 The interval of which `maxCalls` is reset
 
 * **invokeOverflowCallback:** `(sender: Player) -> ()?`\

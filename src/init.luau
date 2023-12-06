@@ -31,7 +31,6 @@ export type Character = {
 -- // Variables
 
 local PlayerService = game:GetService("Players")
-local RunService = game:GetService("RunService")
 local BeginLoadTime = os.clock()
 
 local Network = require(script.Network) -- Networking logic
@@ -51,14 +50,14 @@ CanaryEngine.Debugger = Debugger
 CanaryEngine.Future = Future
 
 local RuntimeObjects = CanaryEngine.Runtime.Objects
-local RunContext = if RunService:IsServer() then "Server" else "Client"
+local RunContext = if CanaryEngine.Runtime.Context.Server then "Server" else "Client"
 
 -- // Functions
 
 local function NetworkController(controllerName: string, isUnreliable: boolean?): Network.Client<...any> | Network.Server<...any>
 	if not RuntimeObjects.NetworkControllers[controllerName] then
 		local NewNetworkController = Network(controllerName, isUnreliable)
-		Debugger.LogEvent(`[{RunContext}] Create NetworkController {controllerName}; {if isUnreliable then "Unreliable" else "Reliable"}`)
+		Debugger.LogEvent(`[{RunContext}] Create {if isUnreliable then "Unreliable" else "Reliable"} NetworkController {controllerName}`)
 
 		RuntimeObjects.NetworkControllers[controllerName] = NewNetworkController
 	end
@@ -151,7 +150,7 @@ FrameworkServer.NetworkController = NetworkController :: (controllerName: string
 
 -- // Actions
 
-CanaryEngine.LoadTime = tonumber(string.format("%.3f", os.clock() - BeginLoadTime)) :: number
-Debugger.LogEvent(`[Framework] {RunContext} loaded; {CanaryEngine.LoadTime}s`)
+CanaryEngine.LoadTime = tonumber(string.format("%.2f", (os.clock() - BeginLoadTime) * 1000)) :: number
+Debugger.LogEvent(`[Framework] {RunContext} loaded; {CanaryEngine.LoadTime}ms`)
 
 return table.freeze(CanaryEngine)

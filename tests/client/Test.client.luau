@@ -10,5 +10,3 @@ AnnounceNetwork:Listen(function(message)
     task.wait(5)
     Label.Text = ""
 end)
-task.wait(10)
-print(AnnounceNetwork:InvokeAsync("..dss"):Await())

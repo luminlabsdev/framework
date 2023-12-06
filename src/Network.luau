@@ -34,7 +34,7 @@ export type Server<T...> = {
 	FireInRange: (self: Server<T...>, comparePoint: Vector3, maximumRange: number, T...) -> (),
 	FireFilter: (self: Server<T...>, filter: (Player) -> (boolean), T...) -> (),
 
-	SetRateLimit: (self: Server<T...>, maxCalls: number, interval: number?, invokeOverflowCallback: (sender: Player) -> ()?) -> (),
+	SetRateLimit: (self: Server<T...>, maxCalls: number, resetInterval: number?, invokeOverflowCallback: (sender: Player) -> ()?) -> (),
 
 	IsListening: boolean,
 	IsFunctionBound: boolean?,
@@ -48,7 +48,6 @@ export type Client<T...> = {
 	InvokeAsync: (self: Client<T...>, T...) -> (Future.Future<...any>),
 
 	IsListening: boolean,
-	IsFunctionBound: boolean?,
 	IsReliable: boolean,
 }
 
@@ -181,33 +180,38 @@ function Server:Listen(func: (sender: Player, ...unknown) -> ())
 	end)
 end
 
-function Server:SetRateLimit(maxCalls: number, interval: number?, invokeOverflowCallback: (sender: Player) -> ()?)
+function Server:SetRateLimit(maxCalls: number, resetInterval: number?, invokeOverflowCallback: (sender: Player) -> ()?)
 	if maxCalls <= -1 then
 		self._Ratelimit = nil
 		self._InvokeOverflow = nil
 	end
 
-	if not (interval and invokeOverflowCallback) then
+	if not (resetInterval and invokeOverflowCallback) then
 		return
 	end
 
-	self._Ratelimit = Ratelimit(maxCalls, interval or 1) :: any
+	self._Ratelimit = Ratelimit(maxCalls, resetInterval or 1) :: any
 	self._InvokeOverflow = invokeOverflowCallback :: any
 end
 
 function Server:BindToInvocation(callback: (sender: Player, ...unknown) -> (unknown, ...any))
 	self.IsFunctionBound = true
 
-	RedServerEvent.SetListener(self._Names._Function, function(Player, Args)
-		local CallId = table.remove(Args, 1)
-
-		if type(CallId) ~= "string" then
+	RedServerEvent.SetListener(self._Names._Function, function(player, args)
+		if (self._Ratelimit and self._InvokeOverflow) and not self._Ratelimit(player) then
+			self._InvokeOverflow(player)
 			return
 		end
 
-		Spawn(function(Player: Player, CallId: string, ...: any)
-			RedServerEvent.SendCallReturn(Player, CallId, table.pack(...))
-		end, Player, CallId, table.unpack(Args))
+		local callId = table.remove(args, 1)
+
+		if type(callId) ~= "string" then
+			return
+		end
+
+		Spawn(function(player: Player, callId: string, ...: any)
+			RedServerEvent.SendCallReturn(player, callId, table.pack(callback(player, ...)))
+		end, player, callId, table.unpack(args))
 	end)
 end
 
@@ -217,8 +221,7 @@ table.freeze(Server)
 table.freeze(Client)
 
 return function(name: string, isUnreliable: boolean?): Server<...any> & Client<...any>
-	assert(not RedIdentifier.Exists(`{name}_E`), "Cannot use same event name multiple times")
-	assert(not RedIdentifier.Exists(`{name}_F`), "Cannot use same function name multiple times")
+	assert(not RedIdentifier.Exists(`{name}_E`) or not RedIdentifier.Exists(`{name}_F`), "Cannot use same controller name multiple times")
 	return setmetatable({
 		IsListening = false,
 		IsFunctionBound = nil,
