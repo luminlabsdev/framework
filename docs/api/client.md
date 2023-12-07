@@ -42,7 +42,7 @@ Whether or not the network controller is unreliable, defaults to false
 
 **Returns**
 
-* **[ClientNetworkController](/api/network/client)**
+* **[NetworkControllerClient](/api/network/client)**
 
 ---
 

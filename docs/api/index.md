@@ -6,7 +6,7 @@ The main class of CanaryEngine.
 
 ### Character <Badge type="tip" text="public" />
 
-A simple R6 character type used when using [`CanaryEngineClient:GetPlayerCharacter`](/api/client#GetPlayerCharacter)
+A simple R6 character type used when using [`CanaryEngineClient:GetPlayerCharacter`](/api/client#getplayercharacter)
 
 ## Properties
 

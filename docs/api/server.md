@@ -18,4 +18,4 @@ Whether or not the network controller is unreliable, defaults to false
 
 **Returns**
 
-* **[ServerNetworkController](/api/network/server)**
+* **[NetworkControllerServer](/api/network/server)**

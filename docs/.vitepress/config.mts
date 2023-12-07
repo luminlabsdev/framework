@@ -30,9 +30,10 @@ export default defineConfig({
         {
           text: 'Guides',
           items: [
-            { text: 'Style Guide', link: '/guides/' },
+            { text: 'Setup', link: '/guides/' },
             { text: 'Signals', link: '/guides/signals' },
             { text: 'Networking', link: '/guides/networking' },
+            { text: 'Debugging', link: '/guides/debugging' }
           ]
         }
       ],
@@ -54,10 +55,17 @@ export default defineConfig({
         {
           text: 'API Reference',
           items: [
-            { text: 'CanaryEngine', link: '/api/' },
-            { text: 'FrameworkServer', link: '/api/server' },
-            { text: 'FrameworkClient', link: '/api/client' },
-            { text: 'FrameworkShared', link: '/api/shared' },
+            { text: 'Framework', link: '/api/' },
+
+            {
+              text: 'Interfaces',
+              collapsed: false,
+              items: [
+                { text: 'FrameworkServer', link: '/api/server' },
+                { text: 'FrameworkClient', link: '/api/client' },
+                { text: 'FrameworkShared', link: '/api/shared' }
+              ]
+            },
 
             {
               text: 'Network',
@@ -68,9 +76,6 @@ export default defineConfig({
               ]
             },
 
-            { text: 'Debugger', link: '/api/debugger' },
-            { text: 'Signal', link: '/api/signal' },
-
             {
               text: 'Runtime',
               collapsed: true,
@@ -80,7 +85,10 @@ export default defineConfig({
                 { text: 'RuntimeSettings', link: '/api/runtime/settings' },
                 { text: 'RuntimeObjects', link: '/api/runtime/objects' }
               ]
-            }
+            },
+
+            { text: 'Debugger', link: '/api/debugger' },
+            { text: 'Signal', link: '/api/signal' }
           ]
         },
       ],

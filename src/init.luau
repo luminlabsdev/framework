@@ -40,12 +40,7 @@ local Future = require(script.Parent.future) -- Promise logic
 local Debugger = require(script.Debugger) -- Easy debug logic
 local Runtime = require(script.Runtime) -- Runtime settings
 
-CanaryEngine.Runtime = table.freeze({
-	Settings = Runtime.Settings,
-	Context = Runtime.Context,
-	Objects = Runtime.Objects,
-})
-
+CanaryEngine.Runtime = Runtime
 CanaryEngine.Debugger = Debugger
 CanaryEngine.Future = Future
 
