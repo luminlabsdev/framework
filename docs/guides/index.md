@@ -12,6 +12,6 @@ Initializing the framework is as simple as requiring the main module and you are
 
 ![Setup example image](images/setupexample.png)
 
-You will see the above for both the client and the server. This is the amount of time it took for the framework to start up, in milliseconds. If you want to benchmark further, this API is available [here](/docs/api/index.md#loadtime).
+You will see the above for both the client and the server. This is the amount of time it took for the framework to start up, in milliseconds. If you want to benchmark further, this API is available on the main module, `LoadTime`.
 
 And that's about it! Moving on to the next guides should be easy from here. 
