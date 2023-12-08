@@ -5,7 +5,7 @@
     "$properties": {
       "Attributes": {
         "Version": {
-          "String": "6.1.0"
+          "String": "6.1.1"
         },
         "LiveGameDebugging": {
           "Bool": false
