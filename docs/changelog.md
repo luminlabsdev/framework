@@ -2,6 +2,23 @@
 
 This is the changelog which is changed every update, and we follow semver.
 
+## 6.1.1
+
+### Added
+
+* Nothing
+
+### Improvements
+
+* Improves load time to use milliseconds
+* Mainly improves docs
+* Cleans up code in a few areas
+* Changes how network controller logs are formatted
+
+### Removed
+
+* Nothing
+
 ## 6.1.0
 
 ### Added
