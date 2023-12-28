@@ -75,17 +75,21 @@ end
 function CanaryEngine.GetFrameworkClient()
 	assert(Runtime.Context.Client, "Cannot get client interfaces on server")
 
-	if table.isfrozen(FrameworkClient) then
-		return FrameworkClient
-	end
-
 	local Player = PlayerService.LocalPlayer
 
-	FrameworkClient.Player = Player :: Player
-	FrameworkClient.PlayerGui = Player:WaitForChild("PlayerGui") :: typeof(game:GetService("StarterGui"))
-	FrameworkClient.PlayerBackpack = Player:WaitForChild("Backpack") :: typeof(game:GetService("StarterPack"))
+	Player.CharacterAdded:Connect(function() -- when the player respawns the old player gui/backpack are removed
+		FrameworkClient.PlayerGui = Player:WaitForChild("PlayerGui") :: typeof(game:GetService("StarterGui"))
+		FrameworkClient.PlayerBackpack = Player:WaitForChild("Backpack") :: typeof(game:GetService("StarterPack"))
+	end)
 
-	return table.freeze(FrameworkClient)
+	FrameworkClient.Player = Player :: Player
+	
+	Player.CharacterAdded:Wait()
+
+	FrameworkClient.PlayerGui = Player:WaitForChild("PlayerGui") 
+	FrameworkClient.PlayerBackpack = Player:WaitForChild("Backpack") 
+
+	return FrameworkClient
 end
 
 -- Exclusive API for shared will come soon

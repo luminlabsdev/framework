@@ -24,10 +24,16 @@ local RuntimeContext = {
 
 -- Signal and NetworkController debugging do not respect studio/live game settings!
 local RuntimeSettings = {
+	--- @deprecated always false
+	StudioDebugging = false :: boolean,
+	--- @deprecated always false
+	LiveGameDebugging = false :: boolean,
+
 	-- Debugging
-	StudioDebugging = Framework:GetAttribute("StudioDebugging") :: boolean,
-	LiveGameDebugging = Framework:GetAttribute("LiveGameDebugging") :: boolean,
-	ShowLoggedEvents = Framework:GetAttribute("ShowLoggedEvents") :: boolean,
+	ShowLoggedEvents = Framework:GetAttribute("FFlagStudioShowLoggedEvents") :: boolean,
+
+	-- Network
+	IgnoreInvalidNetworkArgs = Framework:GetAttribute("FFlagStudioIgnoreInvalidNetworkArgs") :: boolean,
 
 	-- Version
 	Version = Framework:GetAttribute("Version") :: string,

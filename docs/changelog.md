@@ -2,7 +2,27 @@
 
 This is the changelog which is changed every update, and we follow semver.
 
+## 6.2.1
+
+---
+
+### Added
+
+* Networking type validation
+
+### Improvements
+
+* Fixes player gui/backpack properties not updating when player respawns
+* Deprecate `Debugger.Debug` and `Debugger.DebugPrefix` functions in favor `Debugger.LogEvent`
+* Change prefixes of settings to `FFlag`
+
+### Removed
+
+* Nothing
+
 ## 6.1.1
+
+---
 
 ### Added
 
@@ -21,6 +41,8 @@ This is the changelog which is changed every update, and we follow semver.
 
 ## 6.1.0
 
+---
+
 ### Added
 
 * Support for reliable/unreliable network controllers
@@ -38,6 +60,8 @@ This is the changelog which is changed every update, and we follow semver.
 
 ## 6.0.0
 
+---
+
 ### Added
 
 * Better calculation of startup
@@ -51,6 +75,8 @@ This is the changelog which is changed every update, and we follow semver.
 * `source` param from LogEvent to make code more neat
 
 ## 6.0.0-rc1
+
+---
 
 ### Added
 
@@ -73,6 +99,8 @@ This is the changelog which is changed every update, and we follow semver.
 * Remove deprecated alias `CanaryEngine.GetFrameworkReplicated`
 
 ## 5.1.0
+
+---
 
 ### Added
 

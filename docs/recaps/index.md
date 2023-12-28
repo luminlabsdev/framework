@@ -1,9 +1,5 @@
----
-title: Engine Recap - November 2023
----
-
-# Engine Recap - November 2023
-November 21st, 2023 · 1 min read
+# Engine Recap - December 2023
+December 27, 2023 · 1 min read
 
 by **[James - Lead Programmer](https://github.com/lolmansReturn)**
 
@@ -11,23 +7,23 @@ by **[James - Lead Programmer](https://github.com/lolmansReturn)**
 
 **Hi developers,**
 
-With engine update 5.1.0, we have been mainly working on fixing plugin bugs and internal optimizations.
+With framework update 6.1.0 and 6.2.1, we have been working type validation features and larger bug fixes.
 
-### Improved Plugin
+### Type Validation
 
-We've improved the roblox plugin and believe it is now our final revision. It was designed to no longer experience weird bugs and be even faster for your workflow than before.
+We are excited to introduce the all new type validation features! These make it even easier to protect the server from unwanted client attacks and mistakes in your own code. This comes with an all new FFlag attached to the init script of the framework. It also allows you to stop adding janky type checking code into your server network controller listeners.
 
-### Optimized Framework
+### Unreliable Networking
 
-We've optimized the internal code of the framework to give you the fastest experience possible, while still maintaining our verbose APIs. We have also optimized `LogEvent` so now it doesn't take from your code even less.
+Unreliable networking is one of the most important features of networking, as it allows packets to be sent through without being checked. This dramatically reduces bandwidth and ping, so it's good for movement systems and other frame-reliant network creations.
 
-### Rebrand
+### Large Unnoticed Issues
 
-Canary has just been moved through a rebrand which we hope is permanent. The new logo design is appealing while still encapturing the organization itself, and has been also renamed to Canary Softworks as a primary alias. We did this to reach into more professional spaces and eyes.
+There were a lot of issues internally that weren't ever noticed. The main issue here was that `PlayerGui` or `Backpack` properties were not updating upon a new character spawning. This has caused a lot of issues and we are glad the pin point has finally been found.
 
-### Separating Repos
+### Deprecate Older Technology
 
-We have been working hard recently to separate all of our projects into different repos. This makes it easier to maintain and allows us to properly take advantage of professional tooling. This makes testing easier on your end and also on ours.
+We have deprecated older `Debugger` functions which were mainly used before `LogEvent`. `LogEvent` is the all-in-one solution to debugging your scripts and not cluttering public outputs.
 
 ---
 

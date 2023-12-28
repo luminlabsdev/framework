@@ -26,7 +26,7 @@ local RedClientEvent = Red.Client
 -- // Types
 
 export type Server<T...> = {
-	Listen: (self: Server<T...>, func: (sender: Player, ...unknown) -> ()) -> (),
+	Listen: (self: Server<T...>, func: (sender: Player, ...unknown) -> (), typeValidationArgs: {string}?) -> (),
 	BindToInvocation: (self: Server<T...>, callback: (sender: Player, ...unknown) -> (any, ...any)) -> (),
 
 	Fire: (self: Server<T...>, recipient: Player | {Player}, T...) -> (),
@@ -166,15 +166,24 @@ function Server:FireInRange(comparePoint: Vector3, maximumRange: number, ...: an
 	end, ...)
 end
 
-function Server:Listen(func: (sender: Player, ...unknown) -> ())
+function Server:Listen(func: (sender: Player, ...unknown) -> (), typeValidationArgs: {string}?)
 	assert(func, "Must provide a listener")
 	
 	self.IsListening = true
-
+	
 	RedServerEvent.SetListener(self._Names._Event, function(player, args)
 		if (self._Ratelimit and self._InvokeOverflow) and not self._Ratelimit(player) then
 			self._InvokeOverflow(player)
 			return
+		end
+		
+		if typeValidationArgs and not script.Parent:GetAttribute("FFlagStudioIgnoreInvalidNetworkArgs") then
+			for index, value in args do
+				if typeof(value) ~= typeValidationArgs[index] then
+					warn(`[Network] Argument #{index} does not have the type '{typeValidationArgs[index]}'`)
+					return
+				end
+			end
 		end
 
 		func(player, table.unpack(args))

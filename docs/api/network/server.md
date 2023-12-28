@@ -135,6 +135,9 @@ Listens for the network controller to be fired by the client, then runs the prov
 * **func:** `(sender: Player, data: ...: unknown) -> ()`\
 The function to call when data is recieved
 
+* **typeValidationArgs:** `{ string }?`\
+A table of the valid types that should be recieved by the client. This is optional.
+
 **Returns**
 
 * **void**

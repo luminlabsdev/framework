@@ -5,15 +5,12 @@
     "$properties": {
       "Attributes": {
         "Version": {
-          "String": "6.1.1"
+          "String": "6.2.1"
         },
-        "LiveGameDebugging": {
+        "FFlagStudioIgnoreInvalidNetworkArgs": {
           "Bool": false
         },
-        "StudioDebugging": {
-          "Bool": true
-        },
-        "ShowLoggedEvents": {
+        "FFlagStudioShowLoggedEvents": {
           "Bool": true
         }
       }

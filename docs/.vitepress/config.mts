@@ -41,7 +41,8 @@ export default defineConfig({
         {
           text: 'Engine Recaps',
           items: [
-            { text: 'November 2023', link: '/recaps/' },
+            { text: 'December 2023', link: '/recaps/' },
+            { text: 'November 2023', link: '/recaps/november2023' },
             { text: 'October 2023', link: '/recaps/october2023' },
             { text: 'September 2023', link: '/recaps/september2023' },
             { text: 'August 2023', link: '/recaps/august2023' },

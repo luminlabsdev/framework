@@ -52,7 +52,7 @@ Gets the server-sided interface of CanaryEngine.
 
 ---
 
-### GetFrameworkClient <Badge type="danger" text="client" />
+### GetFrameworkClient <Badge type="danger" text="client" /> <Badge type="warning" text="yields" />
 
 Gets the client-sided interface of CanaryEngine.
 

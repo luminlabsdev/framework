@@ -43,13 +43,13 @@ local function GetAncestorsUntilParentFolder(instance: Instance): {Instance}
 	return ReverseTable(Ancestors)
 end
 
--- You're not meant to debug errors as they stop the thread, which could lead to major codebase issues
+--- @deprecated replaced by LogEvent
 function Debugger.Debug<T...>(debugHandler: (prefix: string, T...) -> (), ...: T...)
 	if (RuntimeContext.Studio and RuntimeSettings.StudioDebugging) or RuntimeSettings.LiveGameDebugging then
 		debugHandler(DebugPrefix, ...)
 	end
 end
-
+--- @deprecated replaced by LogEvent
 function Debugger.DebugPrefix<T...>(debugHandler: (prefix: string, T...) -> (), prefix: string, ...: T...)
 	if (RuntimeContext.Studio and RuntimeSettings.StudioDebugging) or RuntimeSettings.LiveGameDebugging then
 		debugHandler(prefix, ...)

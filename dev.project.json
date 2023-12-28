@@ -14,18 +14,15 @@
                         "Attributes": {
                             "Attributes": {
                                 "Version": {
-                                  "String": "6.1.1"
+                                    "String": "6.2.1"
                                 },
-                                "LiveGameDebugging": {
-                                  "Bool": false
+                                "FFlagStudioIgnoreInvalidNetworkArgs": {
+                                    "Bool": false
                                 },
-                                "StudioDebugging": {
-                                  "Bool": true
-                                },
-                                "ShowLoggedEvents": {
-                                  "Bool": true
+                                "FFlagStudioShowLoggedEvents": {
+                                    "Bool": true
                                 }
-                              }
+                            }
                         }
                     },
                     "$path": "src"

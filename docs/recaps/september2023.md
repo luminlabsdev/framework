@@ -1,7 +1,3 @@
----
-title: Engine Recap - September 2023
----
-
 # Engine Recap - September 2023
 September 23, 2023 · 1 min read
 

@@ -18,7 +18,7 @@ A list of cached logs/events for the current environment.
 
 ## Functions
 
-### Debug
+### Debug <Badge type="warning" text="deprecated" />
 
 The main debug handler, adds a prefix to logs sent out and respects logging settings.
 
@@ -36,7 +36,7 @@ The contents to be passed to the function
 
 ---
 
-### DebugPrefix
+### DebugPrefix <Badge type="warning" text="deprecated" />
 
 Sames as [`Debug`](#debug), but allows a custom prefix.
 
