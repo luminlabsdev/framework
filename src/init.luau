@@ -1,14 +1,39 @@
 -- // Package
 
-local CanaryEngine = { }
+local Root = { }
 
 local FrameworkServer = { }
 local FrameworkClient = { }
-local FrameworkShared = { }
 
 -- // Types
 
-export type Character = {
+export type Character15Joint = {
+	["Body Colors"]: BodyColors,
+	HumanoidRootPart: Part,
+	Humanoid: Humanoid & {
+		HumanoidDescription: HumanoidDescription,
+		Animator: Animator,
+	},
+	Head: MeshPart & {
+		face: Decal,
+	},
+	LeftFoot: MeshPart,
+	LeftHand: MeshPart,
+	LeftLowerArm: MeshPart,
+	LeftLowerLeg: MeshPart,
+	LeftUpperArm: MeshPart,
+	LeftUpperLeg: MeshPart,
+	LowerTorso: MeshPart,
+	UpperTorso: MeshPart,
+	RightFoot: MeshPart,
+	RightHand: MeshPart,
+	RightLowerArm: MeshPart,
+	RightLowerLeg: MeshPart,
+	RightUpperArm: MeshPart,
+	RightUpperLeg: MeshPart,
+} & Model
+
+export type Character6Joint = {
 	["Body Colors"]: BodyColors,
 	HumanoidRootPart: Part,
 	Humanoid: Humanoid & {
@@ -30,8 +55,10 @@ export type Character = {
 
 -- // Variables
 
-local PlayerService = game:GetService("Players")
 local BeginLoadTime = os.clock()
+
+local PlayerService = game:GetService("Players")
+local RunService = game:GetService("RunService")
 
 local Network = require(script.Network) -- Networking logic
 local Signal = require(script.Parent.signal) -- Signal logic
@@ -40,12 +67,12 @@ local Future = require(script.Parent.future) -- Promise logic
 local Debugger = require(script.Debugger) -- Easy debug logic
 local Runtime = require(script.Runtime) -- Runtime settings
 
-CanaryEngine.Runtime = Runtime
-CanaryEngine.Debugger = Debugger
-CanaryEngine.Future = Future
+Root.Runtime = Runtime
+Root.Debugger = Debugger
+Root.Future = Future
 
-local RuntimeObjects = CanaryEngine.Runtime.Objects
-local RunContext = if CanaryEngine.Runtime.Context.Server then "Server" else "Client"
+local RuntimeObjects = Root.Runtime.Objects
+local RunContext = if RunService:IsServer() then "Server" else "Client"
 
 -- // Functions
 
@@ -62,8 +89,8 @@ end
 
 -- Engine Contexts
 
-function CanaryEngine.GetFrameworkServer()
-	assert(Runtime.Context.Server, "Cannot get server interfaces on client")
+function Root.GetFrameworkServer()
+	assert(RunService:IsServer(), "Cannot get server interfaces on client")
 	
 	if table.isfrozen(FrameworkServer) then
 		return FrameworkServer
@@ -72,8 +99,8 @@ function CanaryEngine.GetFrameworkServer()
 	return table.freeze(FrameworkServer)
 end
 
-function CanaryEngine.GetFrameworkClient()
-	assert(Runtime.Context.Client, "Cannot get client interfaces on server")
+function Root.GetFrameworkClient()
+	assert(RunService:IsClient(), "Cannot get client interfaces on server")
 
 	local Player = PlayerService.LocalPlayer
 
@@ -83,25 +110,13 @@ function CanaryEngine.GetFrameworkClient()
 	end)
 
 	FrameworkClient.Player = Player :: Player
-	
-	Player.CharacterAdded:Wait()
-
 	FrameworkClient.PlayerGui = Player:WaitForChild("PlayerGui") 
 	FrameworkClient.PlayerBackpack = Player:WaitForChild("Backpack") 
 
 	return FrameworkClient
 end
 
--- Exclusive API for shared will come soon
-function CanaryEngine.GetFrameworkShared()
-	if table.isfrozen(FrameworkShared) then
-		return FrameworkShared
-	end
-
-	return table.freeze(FrameworkShared)
-end
-
-function CanaryEngine.ImportPackagesInOrder(importList: {ModuleScript}, importDeep: boolean?)
+function Root.ImportPackagesOrdered(importList: {ModuleScript}, importDeep: boolean?)
 	for _, package in importList do
 		(require)(package)
 		
@@ -117,7 +132,7 @@ end
 
 -- Signal Creation
 
-function CanaryEngine.Signal(signalName: string?): Signal.Signal<...any>
+function Root.Signal(signalName: string?): Signal.Signal<...any>
 	if not signalName then
 		Debugger.LogEvent("[Framework] Create Signal Anonymous")
 		return Signal()
@@ -133,13 +148,13 @@ function CanaryEngine.Signal(signalName: string?): Signal.Signal<...any>
 	return RuntimeObjects.Signals[signalName]
 end
 
-function CanaryEngine.CreateAnonymousSignal(): Signal.Signal<...any>
-	return CanaryEngine.Signal()
+function Root.CreateAnonymousSignal(): Signal.Signal<...any>
+	return Root.Signal()
 end
 
 -- Context Specific Functions
 
-function FrameworkClient.GetPlayerCharacter(): Character
+function FrameworkClient.GetPlayerCharacter(): Character6Joint
 	local Player = PlayerService.LocalPlayer
 	return Player.Character or Player.CharacterAdded:Wait()
 end
@@ -149,7 +164,7 @@ FrameworkServer.NetworkController = NetworkController :: (controllerName: string
 
 -- // Actions
 
-CanaryEngine.LoadTime = tonumber(string.format("%.2f", (os.clock() - BeginLoadTime) * 1000)) :: number
-Debugger.LogEvent(`[Framework] {RunContext} loaded; {CanaryEngine.LoadTime}ms`)
+Root.LoadTime = tonumber(string.format("%.2f", (os.clock() - BeginLoadTime) * 1000)) :: number
+Debugger.LogEvent(`[Framework] {RunContext} loaded; {Root.LoadTime}ms`)
 
-return table.freeze(CanaryEngine)
+return table.freeze(Root)

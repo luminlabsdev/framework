@@ -15,7 +15,6 @@ local Runtime = require(script.Parent.Runtime)
 local RuntimeContext = Runtime.Context
 local RuntimeSettings = Runtime.Settings
 
-local DebugPrefix = "[Debug]"
 local LogPrefix = "[Log]"
 
 -- // Functions
@@ -41,19 +40,6 @@ local function GetAncestorsUntilParentFolder(instance: Instance): {Instance}
 	until instance.Parent == game
 	
 	return ReverseTable(Ancestors)
-end
-
---- @deprecated replaced by LogEvent
-function Debugger.Debug<T...>(debugHandler: (prefix: string, T...) -> (), ...: T...)
-	if (RuntimeContext.Studio and RuntimeSettings.StudioDebugging) or RuntimeSettings.LiveGameDebugging then
-		debugHandler(DebugPrefix, ...)
-	end
-end
---- @deprecated replaced by LogEvent
-function Debugger.DebugPrefix<T...>(debugHandler: (prefix: string, T...) -> (), prefix: string, ...: T...)
-	if (RuntimeContext.Studio and RuntimeSettings.StudioDebugging) or RuntimeSettings.LiveGameDebugging then
-		debugHandler(prefix, ...)
-	end
 end
 
 function Debugger.GetCallStack(instance: LuaSourceContainer): CallStack

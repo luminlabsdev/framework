@@ -4,36 +4,20 @@ local Runtime = { }
 
 -- // Variables
 
-local RunService = game:GetService("RunService")
-
 local Network = require(script.Parent.Network)
 local Signal = require(script.Parent.Parent.signal)
 
 local Framework = script.Parent
 
--- // Context
-
-local RuntimeContext = {
-	Studio = RunService:IsStudio(),
-	Server = RunService:IsServer(),
-	Client = RunService:IsClient(),
-	StudioPlay = RunService:IsStudio() and RunService:IsRunning()
-}
-
 -- // Settings
 
 -- Signal and NetworkController debugging do not respect studio/live game settings!
 local RuntimeSettings = {
-	--- @deprecated always false
-	StudioDebugging = false :: boolean,
-	--- @deprecated always false
-	LiveGameDebugging = false :: boolean,
-
 	-- Debugging
-	ShowLoggedEvents = Framework:GetAttribute("FFlagStudioShowLoggedEvents") :: boolean,
+	ShowLoggedEvents = Framework:GetAttribute("StudioShowLoggedEvents") :: boolean,
 
 	-- Network
-	IgnoreInvalidNetworkArgs = Framework:GetAttribute("FFlagStudioIgnoreInvalidNetworkArgs") :: boolean,
+	IgnoreInvalidNetworkArgs = Framework:GetAttribute("IgnoreInvalidNetworkArgs") :: boolean, -- Only recommended to be disabled during tests!
 
 	-- Version
 	Version = Framework:GetAttribute("Version") :: string,
@@ -44,9 +28,8 @@ local RuntimeObjects = {
 	Signals = { } :: {[string]: Signal.Signal<...any>},
 }
 
--- // Table Assignment
+-- // Assignment
 
-Runtime.Context = table.freeze(RuntimeContext)
 Runtime.Settings = table.freeze(RuntimeSettings)
 Runtime.Objects = table.freeze(RuntimeObjects)
 

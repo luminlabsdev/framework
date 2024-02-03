@@ -107,7 +107,7 @@ export default defineConfig({
 
     footer: {
       message: 'Built with VitePress',
-      copyright: 'Copyright © 2021 - 2023 Canary Softworks'
+      copyright: 'Copyright © 2021 - 2024 Canary Softworks'
     },
 
     socialLinks: [

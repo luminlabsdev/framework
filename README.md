@@ -1,3 +1,3 @@
 # CanaryEngine
 
-A blazingly fast & lightweight game framework.
+A lightning fast & lightweight game framework.

@@ -19,7 +19,6 @@ local Spawn = require(script.Parent.Parent.spawn)
 local Red = require(script.Parent.Parent.red)
 
 local RedIdentifier = Red.Identifier
-
 local RedServerEvent = Red.Server
 local RedClientEvent = Red.Client
 
@@ -27,7 +26,7 @@ local RedClientEvent = Red.Client
 
 export type Server<T...> = {
 	Listen: (self: Server<T...>, func: (sender: Player, ...unknown) -> (), typeValidationArgs: {string}?) -> (),
-	BindToInvocation: (self: Server<T...>, callback: (sender: Player, ...unknown) -> (any, ...any)) -> (),
+	BindToInvocation: (self: Server<T...>, callback: (sender: Player, ...unknown) -> (any, ...any), typeValidationArgs: {string}?) -> (),
 
 	Fire: (self: Server<T...>, recipient: Player | {Player}, T...) -> (),
 	FireAll: (self: Server<T...>, T...) -> (),
@@ -58,9 +57,9 @@ export type Client<T...> = {
 
 function Client:Fire(...: any)
 	if self.IsReliable then
-		RedClientEvent.SendReliableEvent(self._Names._Event, table.pack(...))
+		RedClientEvent.SendReliableEvent(self._Names.Event, table.pack(...))
 	else
-		RedClientEvent.SendUnreliableEvent(self._Names._Event, table.pack(...))
+		RedClientEvent.SendUnreliableEvent(self._Names.Event, table.pack(...))
 	end
 end
 
@@ -69,14 +68,14 @@ function Client:Listen(func: (...any) -> ())
 
 	self.IsListening = true
 
-	RedClientEvent.SetListener(self._Names._Event, function(args)
+	RedClientEvent.SetListener(self._Names.Event, function(args)
 		func(table.unpack(args))
 	end)
 end
 
 function Client:InvokeAsync(...: any): Future.Future<...any>
 	return Future.new(function(...: any)
-		return table.unpack(RedClientEvent.CallAsync(self._Names._Function, table.pack(RedIdentifier.Unique(), ...)))
+		return table.unpack(RedClientEvent.CallAsync(self._Names.Function, table.pack(RedIdentifier.Unique(), ...)))
 	end, ...)
 end
 
@@ -86,31 +85,31 @@ function Server:Fire(recipients: Player | {Player}, ...: any)
 	if type(recipients) == "table" then
 		if self.IsReliable then
 			for _, player in recipients do
-				RedServerEvent.SendReliableEvent(player, self._Names._Event, table.pack(...))
+				RedServerEvent.SendReliableEvent(player, self._Names.Event, table.pack(...))
 			end
 		else
 			for _, player in recipients do
-				RedServerEvent.SendUnreliableEvent(player, self._Names._Event, table.pack(...))
+				RedServerEvent.SendUnreliableEvent(player, self._Names.Event, table.pack(...))
 			end
 		end
 		return
 	end
 
 	if self.IsReliable then
-		RedServerEvent.SendReliableEvent(recipients, self._Names._Event, table.pack(...))
+		RedServerEvent.SendReliableEvent(recipients, self._Names.Event, table.pack(...))
 	else
-		RedServerEvent.SendUnreliableEvent(recipients, self._Names._Event, table.pack(...))
+		RedServerEvent.SendUnreliableEvent(recipients, self._Names.Event, table.pack(...))
 	end
 end
 
 function Server:FireAll(...: any)
 	if self.IsReliable then
 		for _, player in PlayerService:GetPlayers() do
-			RedServerEvent.SendReliableEvent(player, self._Names._Event, table.pack(...))
+			RedServerEvent.SendReliableEvent(player, self._Names.Event, table.pack(...))
 		end
 	else
 		for _, player in PlayerService:GetPlayers() do
-			RedServerEvent.SendUnreliableEvent(player, self._Names._Event, table.pack(...))
+			RedServerEvent.SendUnreliableEvent(player, self._Names.Event, table.pack(...))
 		end
 	end
 end
@@ -123,9 +122,9 @@ function Server:FireExcept(except: Player | {Player}, ...: any)
 			end
 
 			if self.IsReliable then
-				RedServerEvent.SendReliableEvent(player, self._Names._Event, table.pack(...))
+				RedServerEvent.SendReliableEvent(player, self._Names.Event, table.pack(...))
 			else
-				RedServerEvent.SendUnreliableEvent(player, self._Names._Event, table.pack(...))
+				RedServerEvent.SendUnreliableEvent(player, self._Names.Event, table.pack(...))
 			end
 		end
 
@@ -138,9 +137,9 @@ function Server:FireExcept(except: Player | {Player}, ...: any)
 		end
 
 		if self.IsReliable then
-			RedServerEvent.SendReliableEvent(player, self._Names._Event, table.pack(...))
+			RedServerEvent.SendReliableEvent(player, self._Names.Event, table.pack(...))
 		else
-			RedServerEvent.SendUnreliableEvent(player, self._Names._Event, table.pack(...))
+			RedServerEvent.SendUnreliableEvent(player, self._Names.Event, table.pack(...))
 		end
 	end
 end
@@ -149,9 +148,9 @@ function Server:FireFilter(filter: (Player) -> (boolean), ...: any)
 	for _, player in PlayerService:GetPlayers() do
 		if filter(player) then
 			if self.IsReliable then
-				RedServerEvent.SendReliableEvent(player, self._Names._Event, table.pack(...))
+				RedServerEvent.SendReliableEvent(player, self._Names.Event, table.pack(...))
 			else
-				RedServerEvent.SendUnreliableEvent(player, self._Names._Event, table.pack(...))
+				RedServerEvent.SendUnreliableEvent(player, self._Names.Event, table.pack(...))
 			end
 		end
 	end
@@ -171,7 +170,7 @@ function Server:Listen(func: (sender: Player, ...unknown) -> (), typeValidationA
 	
 	self.IsListening = true
 	
-	RedServerEvent.SetListener(self._Names._Event, function(player, args)
+	RedServerEvent.SetListener(self._Names.Event, function(player, args)
 		if (self._Ratelimit and self._InvokeOverflow) and not self._Ratelimit(player) then
 			self._InvokeOverflow(player)
 			return
@@ -204,10 +203,10 @@ function Server:SetRateLimit(maxCalls: number, resetInterval: number?, invokeOve
 	self._InvokeOverflow = invokeOverflowCallback :: any
 end
 
-function Server:BindToInvocation(callback: (sender: Player, ...unknown) -> (unknown, ...any))
+function Server:BindToInvocation(callback: (sender: Player, ...unknown) -> (unknown, ...any), typeValidationArgs: {string}?)
 	self.IsFunctionBound = true
 
-	RedServerEvent.SetListener(self._Names._Function, function(player, args)
+	RedServerEvent.SetListener(self._Names.Function, function(player, args)
 		if (self._Ratelimit and self._InvokeOverflow) and not self._Ratelimit(player) then
 			self._InvokeOverflow(player)
 			return
@@ -217,6 +216,15 @@ function Server:BindToInvocation(callback: (sender: Player, ...unknown) -> (unkn
 
 		if type(callId) ~= "string" then
 			return
+		end
+
+		if typeValidationArgs and not script.Parent:GetAttribute("IgnoreInvalidNetworkArgs") then
+			for index, value in args do
+				if typeof(value) ~= typeValidationArgs[index] then
+					warn(`[Network] Argument #{index} does not have the type '{typeValidationArgs[index]}'`)
+					return
+				end
+			end
 		end
 
 		Spawn(function(player: Player, callId: string, ...: any)
@@ -242,8 +250,8 @@ return function(name: string, isUnreliable: boolean?): Server<...any> & Client<.
 		_InvokeOverflow = nil,
 
 		_Names = table.freeze({ -- Lock its own table to make sure there's no conflicts
-			_Event = RedIdentifier.Shared(`{name}_E`):Await(),
-			_Function = RedIdentifier.Shared(`{name}_F`):Await(),
+			Event = RedIdentifier.Shared(`{name}_E`):Await(),
+			Function = RedIdentifier.Shared(`{name}_F`):Await(),
 		})
 	}, if RunService:IsClient() then Indexes[1] else Indexes[2]) :: any
 end

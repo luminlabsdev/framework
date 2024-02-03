@@ -79,4 +79,5 @@ GameFinishSignal:Connect(function()
         part.Transparency = 0
         part.CanCollide = true
     end
+    BrokenBricks = 0
 end)

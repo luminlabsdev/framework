@@ -1,0 +1,7 @@
+name: CanaryEngine Release
+jobs:
+    release:
+        name: Create new release
+        runs-on: ubuntu-latest
+        steps:
+            - name: 
