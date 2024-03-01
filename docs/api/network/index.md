@@ -18,7 +18,7 @@ Whether or not the object created is reliable. Defaults to true
 
 **Returns**
 
-* **[**EventClient | EventServer**](/api/network/server)**
+* **[**EventClient | EventServer**](/api/network/server/event)**
 
 ---
 
@@ -36,4 +36,4 @@ Whether or not the object created is reliable. Defaults to true
 
 **Returns**
 
-* **[**FunctionClient | FunctionServer**](/api/network/server)**
+* **[**FunctionClient | FunctionServer**](/api/network/client/event)**
