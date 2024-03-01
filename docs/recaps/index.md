@@ -1,5 +1,5 @@
-# Engine Recap - December 2023
-December 27, 2023 · 1 min read
+# Engine Recap - February 2024
+March 1, 2024 · 1 min read
 
 by **[James - Lead Programmer](https://github.com/lolmansReturn)**
 
@@ -7,23 +7,23 @@ by **[James - Lead Programmer](https://github.com/lolmansReturn)**
 
 **Hi developers,**
 
-With framework update 6.1.0 and 6.2.1, we have been working type validation features and larger bug fixes.
+With framework update 7.0.0, we have been working on a upgraded networking system and a better API naming scheme.
 
-### Type Validation
+### New Networking System
 
-We are excited to introduce the all new type validation features! These make it even easier to protect the server from unwanted client attacks and mistakes in your own code. This comes with an all new FFlag attached to the init script of the framework. It also allows you to stop adding janky type checking code into your server network controller listeners.
+Here we bring you another new networking system once again, completely rethought from the ground up. What it is doing is this time it is separating events and functions, no longer making specific controllers. This makes more sense for newer users and also has some performance gains.
 
-### Unreliable Networking
+### Rename Older API
 
-Unreliable networking is one of the most important features of networking, as it allows packets to be sent through without being checked. This dramatically reduces bandwidth and ping, so it's good for movement systems and other frame-reliant network creations.
+We renamed a fair bit of the older API to make more sense with the latest standards. This includes renaming `Signal` to `Event` to have parity with our networking system.
 
-### Large Unnoticed Issues
+### Docs Overhaul
 
-There were a lot of issues internally that weren't ever noticed. The main issue here was that `PlayerGui` or `Backpack` properties were not updating upon a new character spawning. This has caused a lot of issues and we are glad the pin point has finally been found.
+We completely overhauled the docs fixing any issues with grammar or using older API examples. We also fixed up the changelog by updating links and fixing wrong information.
 
-### Deprecate Older Technology
+### New Automation Features
 
-We have deprecated older `Debugger` functions which were mainly used before `LogEvent`. `LogEvent` is the all-in-one solution to debugging your scripts and not cluttering public outputs.
+New automation scripts have been added to the Git repository, featuring automatically created releases and automatically published wally packages. This is now standard with the rest of our packages as well!
 
 ---
 

@@ -18,45 +18,6 @@ A list of cached logs/events for the current environment.
 
 ## Functions
 
-### Debug <Badge type="warning" text="deprecated" />
-
-The main debug handler, adds a prefix to logs sent out and respects logging settings.
-
-**Parameters**
-
-* **debugHandler:** `(prefix: string, T...) -> ()`\
-The function to run on debug, for example `Debugger.Debug(print, "Hello, world!")`
-
-* **arguments:** `T...`\
-The contents to be passed to the function
-
-**Returns**
-
-* **void**
-
----
-
-### DebugPrefix <Badge type="warning" text="deprecated" />
-
-Sames as [`Debug`](#debug), but allows a custom prefix.
-
-**Parameters**
-
-* **debugHandler:** `(prefix: string, T...) -> ()`\
-The function to run on debug, for example `Debugger.Debug(print, "Hello, world!")`
-
-* **prefix:** `string`\
-The prefix to be put in front of the message
-
-* **arguments:** `T...`\
-The contents to be passed to the function
-
-**Returns**
-
-* **void**
-
----
-
 ### GetCallStack
 
 Gets the call stack of any script within CanaryEngine.

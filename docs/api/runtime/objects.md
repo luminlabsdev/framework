@@ -1,19 +1,19 @@
 # RuntimeObjects
 
-Used as a cache for all objects created during runtime, this includes `Signals` and `NetworkControllers`.
+Used as a cache for all objects created during runtime, this includes `Events` and `NetworkObjects`.
 
 ## Properties
 
-### NetworkControllers
+### Network
 
-A table that stores all of the `NetworkControllers` created on the current `RunContext`.
+A table that stores all of the network related `Events`/`Functions` created on the current `RunContext`.
 
-* **{ [string]: [NetworkControllerServer](/api/network/server) | [NetworkControllerClient](/api/network/client) }**
+* **{ Event: { [string]: any }, Functions: { [string]: any } }**
 
 ---
 
-### Signals
+### Event
 
-A table that stores `Signals` created on the current `RunContext`.
+A table that stores `Events` created on the current `RunContext`.
 
-* **{ [string]: [Signal](/api/signal) }**
+* **{ [string]: [Event](/api/event) }**

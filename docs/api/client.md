@@ -8,7 +8,7 @@ CanaryEngine's client-sided interface.
 
 A simple reference to the [Players.LocalPlayer](https://create.roblox.com/docs/reference/engine/classes/Players#LocalPlayer)
 
-* **[Player](https://create.roblox.com/docs/reference/engine/classes/Player)**
+* [**Player**](https://create.roblox.com/docs/reference/engine/classes/Player)
 
 ---
 
@@ -16,7 +16,7 @@ A simple reference to the [Players.LocalPlayer](https://create.roblox.com/docs/r
 
 A simple reference to the [Player.PlayerGui](https://create.roblox.com/docs/reference/engine/classes/Player#PlayerGui)
 
-* **[PlayerGui](https://create.roblox.com/docs/reference/engine/classes/PlayerGui)**
+* [**PlayerGui**](https://create.roblox.com/docs/reference/engine/classes/PlayerGui)
 
 ---
 
@@ -24,27 +24,17 @@ A simple reference to the [Player.PlayerGui](https://create.roblox.com/docs/refe
 
 A simple reference to the [Player.Backpack](https://create.roblox.com/docs/reference/engine/classes/Player#Backpack)
 
-* **[Backpack](https://create.roblox.com/docs/reference/engine/classes/Backpack)**
-
-## Functions
-
-### NetworkController
-
-Creates/references a network controller on the client, with the name of `controllerName`
-
-**Parameters**
-
-* **controllerName:** `string`\
-The name of the controller
-
-* **isUnreliable:** `boolean?`\
-Whether or not the network controller is unreliable, defaults to false
-
-**Returns**
-
-* **[NetworkControllerClient](/api/network/client)**
+* [**Backpack**](https://create.roblox.com/docs/reference/engine/classes/Backpack)
 
 ---
+
+### Network <Badge type="tip" text="read only" />
+
+A simple reference to the network contstructor.
+
+* [**Network**](/api/network/)
+
+## Functions
 
 ### GetPlayerCharacter <Badge type="warning" text="yields" />
 
@@ -52,4 +42,4 @@ Gets the players current character model; if it doesn't exist the thread will yi
 
 **Returns**
 
-* **[Character](/api/#character)**
+* [**Character**](/api/#character)

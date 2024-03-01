@@ -1,28 +1,12 @@
-# NetworkControllerServer <Badge type="danger" text="server" />
+# ServerEvent <Badge type="danger" text="server" />
 
-A server-sided network controller.
+A server-sided network event.
 
 ## Properties
 
-### IsListening <Badge type="tip" text="read only" />
-
-Whether or not the network controller is subscribed to an event.
-
-* **boolean**
-
----
-
 ### IsReliable <Badge type="tip" text="read only" />
 
-Whether or not the network controller uses a reliable remote event.
-
-* **boolean**
-
----
-
-### IsFunctionBound <Badge type="tip" text="read only" />
-
-Whether or not the network controller has a function bound to any invocations.
+Whether or not the network event uses a reliable remote event.
 
 * **boolean**
 
@@ -42,7 +26,7 @@ NetworkController:Fire({Player1, Player2, Player3}, 1, 2, 3)
 
 **Parameters**
 
-* **recipients:** `Array<Player> | Player`\
+* **recipients:** `{ Player } | Player`\
 The players who should recieve the data and/or call
 
 * **data:** `...any`\
@@ -75,32 +59,11 @@ Fires an event which sends data to every client connected to the server, except 
 
 **Parameters**
 
-* **except:** `Array<Player> | Player`\
+* **except:** `{ Player } | Player`\
 The players which the call should not be sent to
 
 * **data:** `...any`\
 The data that should be sent to each player except `except`
-
-**Returns**
-
-* **void**
-
----
-
-### FireInRange
-
-Fires an event which sends data to every client that is within `maximumRange` studs from `comparePoint`.
-
-**Parameters**
-
-* **comparePoint:** `Vector3`\
-The point to compare from, can be a standalone `Vector3`
-
-* **maximumRange:** `number`\
-The maximum range of which the player's characters have to be within to recieve the event
-
-* **data:** `...any`\
-The data that should be sent to each player within `maximumRange`
 
 **Returns**
 
@@ -137,21 +100,6 @@ The function to call when data is recieved
 
 * **typeValidationArgs:** `{ string }?`\
 A table of the valid types that should be recieved by the client. This is optional.
-
-**Returns**
-
-* **void**
-
----
-
-### BindToInvocation
-
-Recieves an invoke from the client, and runs the callback function which returns some data. Equivalent to [RemoteFunction.OnServerInvoke](https://create.roblox.com/docs/reference/engine/classes/RemoteFunction#OnServerInvoke).
-
-**Parameters**
-
-* **callback:** `(sender: Player, ...: unknown) -> (any, ...any)`\
-The callback function to run on invoke, must return at least 1 value.
 
 **Returns**
 

@@ -2,12 +2,6 @@
 
 The main class of CanaryEngine.
 
-## Types
-
-### Character <Badge type="tip" text="public" />
-
-A simple R6 character type used when using [`CanaryEngineClient:GetPlayerCharacter`](/api/client#getplayercharacter)
-
 ## Properties
 
 ### Runtime <Badge type="tip" text="read only" />
@@ -23,14 +17,6 @@ The runtime property contains settings that are set during runtime, and the curr
 The internal engine debugger, has useful functions to abide by debug settings.
 
 * [**Debugger**](/api/debugger)
-
----
-
-### Future <Badge type="tip" text="read only" />
-
-A reference to the Future package, which is a optimized version of a Promise.
-
-* [**Future**](https://util.redblox.dev/future.html)
 
 ---
 
@@ -62,17 +48,7 @@ Gets the client-sided interface of CanaryEngine.
 
 ---
 
-### GetFrameworkShared
-
-Gets the shared interface of CanaryEngine. Currently has no unique function, but will in the future.
-
-**Returns**
-
-* [**FrameworkShared**](/api/shared)
-
----
-
-### ImportPackagesInOrder
+### ImportPackagesOrdered
 
 Imports the provided packages in chronological order, also allowing for you to import descendants aswell.
 
@@ -90,25 +66,15 @@ Whether or not to import the package's descendants, defaults to `false`
 
 ---
 
-### Signal
+### Event
 
-Creates/reference a signal of the given name, create a new anonymous signal by leaving the name blank.
+Creates/reference a event of the given name, create a new anonymous event by leaving the name blank.
 
 **Parameters**
 
-* **signalName:** `string?`\
-The name of the signal
+* **name:** `string?`\
+The name of the event
 
 **Returns**
 
-* [**Signal**](/api/signal)
-
----
-
-### CreateAnonymousSignal
-
-Creates a new anonymous signal, this does not have a reference outside of the variable it was created in. This is essentially an alias for an empty [`CreateSignal`](#signal).
-
-**Returns**
-
-* [**Signal**](/api/signal)
+* [**Event**](/api/event)

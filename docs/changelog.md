@@ -2,6 +2,28 @@
 
 This is the changelog which is changed every update, and we follow semver.
 
+## 7.0.0
+
+---
+
+### Added
+
+* Newly upgraded networking library, with `ContextInterface.Network` API
+* Renames older API to fit with new standards
+
+### Improvements
+
+* Improves how the network library works with unreliables
+* Improves general code
+* Fixes bugs within `Canary.GetFrameworkClient` **(@DrasticBlink)**
+
+### Removed
+
+* `CanaryEngine.CreateAnonymousSignal`
+* `ContextInterface.NetworkController`
+* `CanaryEngine.GetFrameworkShared`
+* `CanaryEngine.Future`
+
 ## 6.2.1
 
 ---

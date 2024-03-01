@@ -2,20 +2,10 @@
 
 CanaryEngine's server-sided interface.
 
-## Functions
+## Properties
 
-### NetworkController
+### Network <Badge type="tip" text="read only" />
 
-Creates/references a network controller on the server, with the name of `controllerName`
+A simple reference to the network contstructor.
 
-**Parameters**
-
-* **controllerName:** `string`\
-The name of the controller
-
-* **isUnreliable:** `boolean?`\
-Whether or not the network controller is unreliable, defaults to false
-
-**Returns**
-
-* **[NetworkControllerServer](/api/network/server)**
+* [**Network**](/api/network/)

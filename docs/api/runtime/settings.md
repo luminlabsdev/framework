@@ -4,25 +4,17 @@ Runtime settings.
 
 ## Properties
 
-### StudioDebugging
+### IgnoreInvalidNetworkArgs
 
-Whether or not if `StudioDebugger` is enabled. Defaults to true.
-
-* **boolean**
-
----
-
-### LiveGameDebugging
-
-Whether or not if `LiveGameDebugger` is enabled. Defaults to false.
+Whether or not to ignore arguments passed through the network which are invalid. Defaults to false.
 
 * **boolean**
 
 ---
 
-### ShowLoggedEvents
+### StudioShowLoggedEvents
 
-Whether or not to show logged events in the console. Defaults to true.
+Whether or not to show logged events in the console while in studio. Defaults to true.
 
 * **boolean**
 

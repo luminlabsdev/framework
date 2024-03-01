@@ -4,14 +4,6 @@ Access to properties / settings that are set during runtime.
 
 ## Properties
 
-### Context
-
-Shows different runtime contexts.
-
-* **[RuntimeContext](/api/runtime/context)**
-
----
-
 ### Settings
 
 Shows different runtime settings.
@@ -22,6 +14,6 @@ Shows different runtime settings.
 
 ### Objects
 
-Used as a cache for all objects created during runtime, this includes `Signals` and `NetworkControllers`.
+Used as a cache for all objects created during runtime, this includes `Events` and `NetworkObjects`.
 
 * **[RuntimeObjects](/api/runtime/objects)**

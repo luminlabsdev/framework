@@ -2,17 +2,6 @@
 
 Debugging is a great feature of CanaryEngine. We have provided a debugger packasge which allows you to debug your games with almost no effort required. This does not clutter the output and allows you to easily keep track of logs and other things.
 
-### Debug Functions
-
-The debug functions allow you to run a print/warn (or any custom callback) statement and allow you to abide by your settings. Runtime as 2 settings related to this;
-
-1. `LiveGameDebugging`
-2. `StudioDebugging`
-
-These determine how the debug function will work when called. If `LiveGameDebugging` is enabled, the function will work in a live game and print statements. If `StudioDebugging` is enabled, then these logs will print in studio as well. These settings can be used interchangeably so there is no compatibility issues with having both enabled at the same time.
-
-This are mainly useful in scenarios where you just want to debug your game without changing any code.
-
 ### Logging Events
 
 Logging events is similar to calling the debug function, but a bit different. `LogEvent` does two things differently:

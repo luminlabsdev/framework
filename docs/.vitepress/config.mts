@@ -41,7 +41,8 @@ export default defineConfig({
         {
           text: 'Engine Recaps',
           items: [
-            { text: 'December 2023', link: '/recaps/' },
+            { text: 'February 2024', link: '/recaps/' },
+            { text: 'December 2023', link: '/recaps/december2023' },
             { text: 'November 2023', link: '/recaps/november2023' },
             { text: 'October 2023', link: '/recaps/october2023' },
             { text: 'September 2023', link: '/recaps/september2023' },
@@ -63,8 +64,7 @@ export default defineConfig({
               collapsed: false,
               items: [
                 { text: 'FrameworkServer', link: '/api/server' },
-                { text: 'FrameworkClient', link: '/api/client' },
-                { text: 'FrameworkShared', link: '/api/shared' }
+                { text: 'FrameworkClient', link: '/api/client' }
               ]
             },
 
@@ -72,8 +72,11 @@ export default defineConfig({
               text: 'Network',
               collapsed: true,
               items: [
-                { text: 'Server', link: '/api/network/server' },
-                { text: 'Client', link: '/api/network/client' }
+                { text: 'Network', link: '/api/network'},
+                { text: 'ClientEvent', link: '/api/network/client/event' },
+                { text: 'ServerEvent', link: '/api/network/server/event' },
+                { text: 'ClientFunction', link: '/api/network/client/function' },
+                { text: 'ServerFunction', link: '/api/network/server/function' }
               ]
             },
 
@@ -82,14 +85,13 @@ export default defineConfig({
               collapsed: true,
               items: [
                 { text: 'Runtime', link: '/api/runtime' },
-                { text: 'RuntimeContext', link: '/api/runtime/context' },
                 { text: 'RuntimeSettings', link: '/api/runtime/settings' },
                 { text: 'RuntimeObjects', link: '/api/runtime/objects' }
               ]
             },
 
             { text: 'Debugger', link: '/api/debugger' },
-            { text: 'Signal', link: '/api/signal' }
+            { text: 'Event', link: '/api/event' }
           ]
         },
       ],
