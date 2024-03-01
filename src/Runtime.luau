@@ -1,31 +1,27 @@
 -- // Package
 
-local Runtime = { }
+local Runtime = {}
 
 -- // Variables
 
-local Network = require(script.Parent.Network)
-local Signal = require(script.Parent.Parent.signal)
-
+local Event = require(script.Parent.Parent.event)
 local Framework = script.Parent
 
 -- // Settings
 
 -- Signal and NetworkController debugging do not respect studio/live game settings!
 local RuntimeSettings = {
-	-- Debugging
 	ShowLoggedEvents = Framework:GetAttribute("StudioShowLoggedEvents") :: boolean,
-
-	-- Network
 	IgnoreInvalidNetworkArgs = Framework:GetAttribute("IgnoreInvalidNetworkArgs") :: boolean, -- Only recommended to be disabled during tests!
-
-	-- Version
 	Version = Framework:GetAttribute("Version") :: string,
 }
 
 local RuntimeObjects = {
-	NetworkControllers = { } :: {[string]: Network.Server<...any> | Network.Client<...any>}, -- Table is different for each client and the server
-	Signals = { } :: {[string]: Signal.Signal<...any>},
+	Network = {Event = {}, Function = {}} :: {
+		Event: {[string]: any},
+		Function: {[string]: any},
+	}, -- Tables inside are different for each client and the server
+	Signals = {} :: {[string]: Event.Signal<...any>},
 }
 
 -- // Assignment

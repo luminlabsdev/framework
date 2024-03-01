@@ -1,8 +1,8 @@
 local Canary = require(game.ReplicatedStorage.Packages.Framework)
 local Server = Canary.GetFrameworkServer()
 
-local GameFinishSignal = Canary.CreateAnonymousSignal()
-local AnnounceNetwork = Server.NetworkController("Announcer")
+local GameFinishSignal = Canary.Event()
+local AnnounceNetwork = Server.Network.Event("Announcer")
 
 local CollectionService = game:GetService("CollectionService")
 local PlayerService = game:GetService("Players")

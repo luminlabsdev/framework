@@ -1,57 +1,8 @@
 -- // Package
 
-local Root = { }
-
-local FrameworkServer = { }
-local FrameworkClient = { }
-
--- // Types
-
-export type Character15Joint = {
-	["Body Colors"]: BodyColors,
-	HumanoidRootPart: Part,
-	Humanoid: Humanoid & {
-		HumanoidDescription: HumanoidDescription,
-		Animator: Animator,
-	},
-	Head: MeshPart & {
-		face: Decal,
-	},
-	LeftFoot: MeshPart,
-	LeftHand: MeshPart,
-	LeftLowerArm: MeshPart,
-	LeftLowerLeg: MeshPart,
-	LeftUpperArm: MeshPart,
-	LeftUpperLeg: MeshPart,
-	LowerTorso: MeshPart,
-	UpperTorso: MeshPart,
-	RightFoot: MeshPart,
-	RightHand: MeshPart,
-	RightLowerArm: MeshPart,
-	RightLowerLeg: MeshPart,
-	RightUpperArm: MeshPart,
-	RightUpperLeg: MeshPart,
-} & Model
-
-export type Character6Joint = {
-	["Body Colors"]: BodyColors,
-	HumanoidRootPart: Part,
-	Humanoid: Humanoid & {
-		HumanoidDescription: HumanoidDescription,
-		Animator: Animator,
-	},
-	Head: Part & {
-		face: Decal,
-		Mesh: SpecialMesh,
-	},
-	["Left Arm"]: Part,
-	["Left Leg"]: Part,
-	["Right Arm"]: Part,
-	["Right Leg"]: Part,
-	["Torso"]: Part & {
-		roblox: Decal
-	}
-} & Model
+local Root = {}
+local FrameworkServer = {}
+local FrameworkClient = {}
 
 -- // Variables
 
@@ -61,31 +12,28 @@ local PlayerService = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
 local Network = require(script.Network) -- Networking logic
-local Signal = require(script.Parent.signal) -- Signal logic
+local Event = require(script.Parent.event) -- Event logic
 
-local Future = require(script.Parent.future) -- Promise logic
 local Debugger = require(script.Debugger) -- Easy debug logic
 local Runtime = require(script.Runtime) -- Runtime settings
+local Types = require(script.Types)
 
 Root.Runtime = Runtime
 Root.Debugger = Debugger
-Root.Future = Future
 
 local RuntimeObjects = Root.Runtime.Objects
 local RunContext = if RunService:IsServer() then "Server" else "Client"
 
--- // Functions
-
-local function NetworkController(controllerName: string, isUnreliable: boolean?): Network.Client<...any> | Network.Server<...any>
-	if not RuntimeObjects.NetworkControllers[controllerName] then
-		local NewNetworkController = Network(controllerName, isUnreliable)
-		Debugger.LogEvent(`[{RunContext}] Create {if isUnreliable then "Unreliable" else "Reliable"} NetworkController {controllerName}`)
-
-		RuntimeObjects.NetworkControllers[controllerName] = NewNetworkController
+local NetworkRoot = {
+	Event = function(name: string, reliable: boolean?)
+		return Network("Event", name, reliable)
+	end,
+	Function = function(name: string, reliable: boolean?)
+		return Network("Function", name, reliable)
 	end
-	
-	return RuntimeObjects.NetworkControllers[controllerName]
-end
+}
+
+-- // Functions
 
 -- Engine Contexts
 
@@ -105,14 +53,14 @@ function Root.GetFrameworkClient()
 	local Player = PlayerService.LocalPlayer
 
 	Player.CharacterAdded:Connect(function() -- when the player respawns the old player gui/backpack are removed
-		FrameworkClient.PlayerGui = Player:WaitForChild("PlayerGui") :: typeof(game:GetService("StarterGui"))
-		FrameworkClient.PlayerBackpack = Player:WaitForChild("Backpack") :: typeof(game:GetService("StarterPack"))
+		FrameworkClient.PlayerGui = Player:WaitForChild("PlayerGui")
+		FrameworkClient.PlayerBackpack = Player:WaitForChild("Backpack") 
 	end)
 
 	FrameworkClient.Player = Player :: Player
-	FrameworkClient.PlayerGui = Player:WaitForChild("PlayerGui") 
-	FrameworkClient.PlayerBackpack = Player:WaitForChild("Backpack") 
-
+	FrameworkClient.PlayerGui = Player:WaitForChild("PlayerGui") :: typeof(game:GetService("StarterGui"))
+	FrameworkClient.PlayerBackpack = Player:WaitForChild("Backpack") :: typeof(game:GetService("StarterPack"))
+	
 	return FrameworkClient
 end
 
@@ -130,37 +78,37 @@ function Root.ImportPackagesOrdered(importList: {ModuleScript}, importDeep: bool
 	end
 end
 
--- Signal Creation
+-- Event Creation
 
-function Root.Signal(signalName: string?): Signal.Signal<...any>
-	if not signalName then
-		Debugger.LogEvent("[Framework] Create Signal Anonymous")
-		return Signal()
+function Root.Event(eventName: string?): Event.Signal<...any>
+	if not eventName then
+		Debugger.LogEvent("[Framework] Create Event Anonymous")
+		return Event()
 	end
 
-	if not RuntimeObjects.Signals[signalName] then
-		local NewSignal = Signal()
-		Debugger.LogEvent(`[Framework] Create Signal {signalName}`)
+	if not RuntimeObjects.Signals[eventName] then
+		local NewSignal = Event()
+		Debugger.LogEvent(`[Framework] Create Event {eventName}`)
 
-		RuntimeObjects.Signals[signalName] = NewSignal
+		RuntimeObjects.Signals[eventName] = NewSignal
 	end
-	
-	return RuntimeObjects.Signals[signalName]
+
+	return RuntimeObjects.Signals[eventName]
 end
 
-function Root.CreateAnonymousSignal(): Signal.Signal<...any>
-	return Root.Signal()
+function Root.Signal(signalName: string?): Event.Signal<...any>
+	return Root.Event(signalName)
 end
 
 -- Context Specific Functions
 
-function FrameworkClient.GetPlayerCharacter(): Character6Joint
+function FrameworkClient.GetPlayerCharacter(): Types.Character6Joint
 	local Player = PlayerService.LocalPlayer
 	return Player.Character or Player.CharacterAdded:Wait()
 end
 
-FrameworkClient.NetworkController = NetworkController :: (controllerName: string, isUnreliable: boolean?) -> (Network.Client<...any>)
-FrameworkServer.NetworkController = NetworkController :: (controllerName: string, isUnreliable: boolean?) -> (Network.Server<...any>)
+FrameworkClient.Network = NetworkRoot :: {Event: (name: string, reliable: boolean?) -> (Network.ClientEvent), Function: (name: string, reliable: boolean?) -> (Network.ClientFunction)}
+FrameworkServer.Network = NetworkRoot :: {Event: (name: string, reliable: boolean?) -> (Network.ServerEvent), Function: (name: string, reliable: boolean?) -> (Network.ServerFunction)}
 
 -- // Actions
 

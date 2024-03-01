@@ -5,13 +5,13 @@
     "$properties": {
       "Attributes": {
         "Version": {
-          "String": "6.2.1"
+          "String": "7.0.0"
         },
-        "FFlagStudioIgnoreInvalidNetworkArgs": {
-          "Bool": false
-        },
-        "FFlagStudioShowLoggedEvents": {
+        "StudioShowLoggedEvents": {
           "Bool": true
+        },
+        "IgnoreInvalidNetworkArgs": {
+            "Bool": false
         }
       }
     }

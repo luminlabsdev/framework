@@ -1,6 +1,6 @@
 -- // Package
 
-local Debugger = { }
+local Debugger = {}
 
 -- // Types
 
@@ -9,20 +9,19 @@ type CallStack = {Source: string, SourceTree: {Instance}, DefinedLine: number}
 -- // Variables
 
 local HttpService = game:GetService("HttpService")
+local RunService = game:GetService("RunService")
 
 local Runtime = require(script.Parent.Runtime)
-
-local RuntimeContext = Runtime.Context
 local RuntimeSettings = Runtime.Settings
 
 local LogPrefix = "[Log]"
 
 -- // Functions
 
-Debugger.SessionLogs = { } :: {string}
+Debugger.SessionLogs = {} :: {string}
 
 local function ReverseTable<T>(t: {[number]: T}): {[number]: T}
-	local NewTable = { }
+	local NewTable = {}
 
 	for index, value in t do
 		table.insert(NewTable, #t - index + 1, value)
@@ -32,7 +31,7 @@ local function ReverseTable<T>(t: {[number]: T}): {[number]: T}
 end
 
 local function GetAncestorsUntilParentFolder(instance: Instance): {Instance}
-	local Ancestors = { }
+	local Ancestors = {}
 
 	repeat
 		instance = instance.Parent :: Instance
@@ -57,7 +56,7 @@ end
 function Debugger.LogEvent(eventName: string)
 	table.insert(Debugger.SessionLogs, eventName)
 	
-	if not (RuntimeContext.Studio and RuntimeSettings.ShowLoggedEvents) then
+	if not (RunService:IsStudio() and RuntimeSettings.ShowLoggedEvents) then
 		return
 	end
 	

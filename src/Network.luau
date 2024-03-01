@@ -1,53 +1,72 @@
 -- // Package
 
-local Client = { }
-local Server = { }
+local ClientEvent = {}
+local ServerEvent = {}
+local ClientFunction = {}
+local ServerFunction = {}
 
 -- // Variables
 
 local PlayerService = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
+local RunContext = if RunService:IsClient() then "Client" else "Server"
 local Indexes = {
-	{__index = Client},
-	{__index = Server},
+	Event = {
+		{__index = ClientEvent},
+		{__index = ServerEvent},
+	},
+	Function = {
+		{__index = ClientFunction},
+		{__index = ServerFunction},
+	}
 }
 
 local Future = require(script.Parent.Parent.future)
 local Ratelimit = require(script.Parent.Parent.ratelimit)
 local Spawn = require(script.Parent.Parent.spawn)
 local Red = require(script.Parent.Parent.red)
+local Runtime = require(script.Parent.Runtime)
+local Debugger = require(script.Parent.Debugger)
 
 local RedIdentifier = Red.Identifier
 local RedServerEvent = Red.Server
 local RedClientEvent = Red.Client
 
+local RedEvents = {
+	Server = RedServerEvent,
+	Client = RedClientEvent,
+}
+
 -- // Types
 
-export type Server<T...> = {
-	Listen: (self: Server<T...>, func: (sender: Player, ...unknown) -> (), typeValidationArgs: {string}?) -> (),
-	BindToInvocation: (self: Server<T...>, callback: (sender: Player, ...unknown) -> (any, ...any), typeValidationArgs: {string}?) -> (),
-
-	Fire: (self: Server<T...>, recipient: Player | {Player}, T...) -> (),
-	FireAll: (self: Server<T...>, T...) -> (),
-	FireExcept: (self: Server<T...>, except: Player | {Player}, T...) -> (),
-	FireInRange: (self: Server<T...>, comparePoint: Vector3, maximumRange: number, T...) -> (),
-	FireFilter: (self: Server<T...>, filter: (Player) -> (boolean), T...) -> (),
-
-	SetRateLimit: (self: Server<T...>, maxCalls: number, resetInterval: number?, invokeOverflowCallback: (sender: Player) -> ()?) -> (),
-
-	IsListening: boolean,
-	IsFunctionBound: boolean?,
+export type ServerFunction = {
+	OnInvoke: (self: ServerFunction, callback: (sender: Player, ...unknown) -> (any, ...any), typeValidationArgs: {string}?) -> (),
 	IsReliable: boolean,
 }
 
-export type Client<T...> = {
-	Listen: (self: Client<T...>, func: (T...) -> ()) -> (),
+export type ServerEvent = {
+	Listen: (self: ServerEvent, func: (sender: Player, ...unknown) -> (), typeValidationArgs: {string}?) -> (),
 
-	Fire: (self: Client<T...>, T...) -> (),
-	InvokeAsync: (self: Client<T...>, T...) -> (Future.Future<...any>),
+	Fire: (self: ServerEvent, recipient: Player | {Player}, ...any) -> (),
+	FireAll: (self: ServerEvent, ...any) -> (),
+	FireExcept: (self: ServerEvent, except: Player | {Player}, ...any) -> (),
+	FireFilter: (self: ServerEvent, filter: (Player) -> (boolean), ...any) -> (),
 
-	IsListening: boolean,
+	SetRateLimit: (self: ServerEvent, maxCalls: number, resetInterval: number?, invokeOverflowCallback: (sender: Player) -> ()?) -> (),
+
+	IsReliable: boolean,
+}
+
+export type ClientFunction = {
+	InvokeAsync: (self: ClientFunction, ...any) -> (Future.Future<...any>),
+	IsReliable: boolean,
+}
+
+export type ClientEvent = {
+	Listen: (self: ClientEvent, func: (...any) -> ()) -> (),
+	Fire: (self: ClientEvent, ...any) -> (),
+
 	IsReliable: boolean,
 }
 
@@ -55,79 +74,49 @@ export type Client<T...> = {
 
 -- // Client
 
-function Client:Fire(...: any)
-	if self.IsReliable then
-		RedClientEvent.SendReliableEvent(self._Names.Event, table.pack(...))
-	else
-		RedClientEvent.SendUnreliableEvent(self._Names.Event, table.pack(...))
-	end
+function ClientEvent:Fire(...: any)
+	self._Fire(self._Identifier, table.pack(...))
 end
 
-function Client:Listen(func: (...any) -> ())
+function ClientEvent:Listen(func: (...any) -> ())
 	assert(func, "Must provide a listener")
-
-	self.IsListening = true
-
-	RedClientEvent.SetListener(self._Names.Event, function(args)
+	RedClientEvent.SetListener(self._Identifier, function(args)
 		func(table.unpack(args))
 	end)
 end
 
-function Client:InvokeAsync(...: any): Future.Future<...any>
+function ClientFunction:InvokeAsync(...: any): Future.Future<...any>
 	return Future.new(function(...: any)
-		return table.unpack(RedClientEvent.CallAsync(self._Names.Function, table.pack(RedIdentifier.Unique(), ...)))
+		return table.unpack(RedClientEvent.CallAsync(self._Identifier, table.pack(RedIdentifier.Unique(), ...)))
 	end, ...)
 end
 
 -- // Server
 
-function Server:Fire(recipients: Player | {Player}, ...: any)
+function ServerEvent:Fire(recipients: Player | {Player}, ...: any)
 	if type(recipients) == "table" then
-		if self.IsReliable then
-			for _, player in recipients do
-				RedServerEvent.SendReliableEvent(player, self._Names.Event, table.pack(...))
-			end
-		else
-			for _, player in recipients do
-				RedServerEvent.SendUnreliableEvent(player, self._Names.Event, table.pack(...))
-			end
+		for _, player in recipients do
+			self._Fire(player, self._Identifier, table.pack(...))
 		end
 		return
 	end
+	self._Fire(recipients, self._Identifier, table.pack(...))
+end
 
-	if self.IsReliable then
-		RedServerEvent.SendReliableEvent(recipients, self._Names.Event, table.pack(...))
-	else
-		RedServerEvent.SendUnreliableEvent(recipients, self._Names.Event, table.pack(...))
+function ServerEvent:FireAll(...: any)
+	for _, player in PlayerService:GetPlayers() do
+		self._Fire(player, self._Identifier, table.pack(...))
 	end
 end
 
-function Server:FireAll(...: any)
-	if self.IsReliable then
-		for _, player in PlayerService:GetPlayers() do
-			RedServerEvent.SendReliableEvent(player, self._Names.Event, table.pack(...))
-		end
-	else
-		for _, player in PlayerService:GetPlayers() do
-			RedServerEvent.SendUnreliableEvent(player, self._Names.Event, table.pack(...))
-		end
-	end
-end
-
-function Server:FireExcept(except: Player | {Player}, ...: any)
+function ServerEvent:FireExcept(except: Player | {Player}, ...: any)
 	if type(except) == "table" then
 		for _, player in PlayerService:GetPlayers() do
 			if table.find(except, player) then
 				continue
 			end
-
-			if self.IsReliable then
-				RedServerEvent.SendReliableEvent(player, self._Names.Event, table.pack(...))
-			else
-				RedServerEvent.SendUnreliableEvent(player, self._Names.Event, table.pack(...))
-			end
+			self._Fire(player, self._Identifier, table.pack(...))
 		end
-
 		return
 	end
 
@@ -135,48 +124,27 @@ function Server:FireExcept(except: Player | {Player}, ...: any)
 		if player == except then
 			continue
 		end
-
-		if self.IsReliable then
-			RedServerEvent.SendReliableEvent(player, self._Names.Event, table.pack(...))
-		else
-			RedServerEvent.SendUnreliableEvent(player, self._Names.Event, table.pack(...))
-		end
+		self._Fire(player, self._Identifier, table.pack(...))
 	end
 end
 
-function Server:FireFilter(filter: (Player) -> (boolean), ...: any)
+function ServerEvent:FireFilter(filter: (Player) -> (boolean), ...: any)
 	for _, player in PlayerService:GetPlayers() do
 		if filter(player) then
-			if self.IsReliable then
-				RedServerEvent.SendReliableEvent(player, self._Names.Event, table.pack(...))
-			else
-				RedServerEvent.SendUnreliableEvent(player, self._Names.Event, table.pack(...))
-			end
+			self._Fire(player, self._Identifier, table.pack(...))
 		end
 	end
 end
 
-function Server:FireInRange(comparePoint: Vector3, maximumRange: number, ...: any)
-	self:FireFilter(function(player) -- reuse FireFilter to follow D.R.Y. standards
-		if player:DistanceFromCharacter(comparePoint) <= maximumRange then
-			return true
-		end
-		return false
-	end, ...)
-end
-
-function Server:Listen(func: (sender: Player, ...unknown) -> (), typeValidationArgs: {string}?)
+function ServerEvent:Listen(func: (sender: Player, ...unknown) -> (), typeValidationArgs: {string}?)
 	assert(func, "Must provide a listener")
-	
-	self.IsListening = true
-	
-	RedServerEvent.SetListener(self._Names.Event, function(player, args)
+	RedServerEvent.SetListener(self._Identifier, function(player, args)
 		if (self._Ratelimit and self._InvokeOverflow) and not self._Ratelimit(player) then
 			self._InvokeOverflow(player)
 			return
 		end
 		
-		if typeValidationArgs and not script.Parent:GetAttribute("FFlagStudioIgnoreInvalidNetworkArgs") then
+		if typeValidationArgs and not script.Parent:GetAttribute("IgnoreInvalidNetworkArgs") then
 			for index, value in args do
 				if typeof(value) ~= typeValidationArgs[index] then
 					warn(`[Network] Argument #{index} does not have the type '{typeValidationArgs[index]}'`)
@@ -189,7 +157,7 @@ function Server:Listen(func: (sender: Player, ...unknown) -> (), typeValidationA
 	end)
 end
 
-function Server:SetRateLimit(maxCalls: number, resetInterval: number?, invokeOverflowCallback: (sender: Player) -> ()?)
+function ServerEvent:SetRateLimit(maxCalls: number, resetInterval: number?, invokeOverflowCallback: (sender: Player) -> ()?)
 	if maxCalls <= -1 then
 		self._Ratelimit = nil
 		self._InvokeOverflow = nil
@@ -203,10 +171,9 @@ function Server:SetRateLimit(maxCalls: number, resetInterval: number?, invokeOve
 	self._InvokeOverflow = invokeOverflowCallback :: any
 end
 
-function Server:BindToInvocation(callback: (sender: Player, ...unknown) -> (unknown, ...any), typeValidationArgs: {string}?)
-	self.IsFunctionBound = true
-
-	RedServerEvent.SetListener(self._Names.Function, function(player, args)
+function ServerFunction:OnInvoke(callback: (sender: Player, ...unknown) -> (unknown, ...any), typeValidationArgs: {string}?)
+	assert(callback, "Must provide a callback")
+	RedServerEvent.SetListener(self._Identifier, function(player, args)
 		if (self._Ratelimit and self._InvokeOverflow) and not self._Ratelimit(player) then
 			self._InvokeOverflow(player)
 			return
@@ -235,23 +202,32 @@ end
 
 -- // Actions
 
-table.freeze(Server)
-table.freeze(Client)
+table.freeze(ClientEvent)
+table.freeze(ServerEvent)
+table.freeze(ClientFunction)
+table.freeze(ServerFunction)
 
-return function(name: string, isUnreliable: boolean?): Server<...any> & Client<...any>
-	assert(not RedIdentifier.Exists(`{name}_E`) or not RedIdentifier.Exists(`{name}_F`), "Cannot use same controller name multiple times")
-	return setmetatable({
-		IsListening = false,
-		IsFunctionBound = nil,
+return function(type: "Event" | "Function", name: string, reliable: boolean?): any
+	assert(not RedIdentifier.Exists(`{name}_{type}`), "Cannot use same event/function name multiple times")
+	reliable = if reliable == nil then true else reliable
 
-		IsReliable = if isUnreliable ~= nil then not isUnreliable else true,
+	local self = setmetatable({}, if RunService:IsClient() then Indexes[type][1] else Indexes[type][2])
 
-		_Ratelimit = nil,
-		_InvokeOverflow = nil,
+	self.IsReliable = reliable
 
-		_Names = table.freeze({ -- Lock its own table to make sure there's no conflicts
-			Event = RedIdentifier.Shared(`{name}_E`):Await(),
-			Function = RedIdentifier.Shared(`{name}_F`):Await(),
-		})
-	}, if RunService:IsClient() then Indexes[1] else Indexes[2]) :: any
+	self._Ratelimit = nil
+	self._InvokeOverflow = nil
+	self._Identifier = RedIdentifier.Shared(`{name}_{type}`):Await()
+
+	self._Fire = if reliable then 
+		RedEvents[RunContext].SendReliableEvent
+	else
+		RedEvents[RunContext].SendUnreliableEvent
+
+	if not Runtime.Objects.Network[type][name] then
+		Debugger.LogEvent(`[{RunContext}] Create {if reliable then "Reliable" else "Unreliable"} {type} {name}`)
+		Runtime.Objects.Network[type][name] = self
+	end
+
+	return Runtime.Objects.Network[type][name]
 end

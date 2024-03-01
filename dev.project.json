@@ -12,16 +12,14 @@
                 "Framework": {
                     "$properties": {
                         "Attributes": {
-                            "Attributes": {
-                                "Version": {
-                                    "String": "6.2.1"
-                                },
-                                "FFlagStudioIgnoreInvalidNetworkArgs": {
-                                    "Bool": false
-                                },
-                                "FFlagStudioShowLoggedEvents": {
-                                    "Bool": true
-                                }
+                            "Version": {
+                                "String": "7.0.0"
+                            },
+                            "StudioShowLoggedEvents": {
+                                "Bool": true
+                            },
+                            "IgnoreInvalidNetworkArgs": {
+                                "Bool": false
                             }
                         }
                     },

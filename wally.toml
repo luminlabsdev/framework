@@ -1,7 +1,7 @@
 [package]
 name = "canary-development/canaryengine"
-description = "A blazingly fast & lightweight game framework"
-version = "6.2.1"
+description = "A lightning fast & lightweight game framework for Roblox"
+version = "7.0.0"
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 
@@ -18,7 +18,7 @@ include = [
 [dependencies]
 future = "red-blox/future@1.0.1"
 spawn = "red-blox/spawn@1.0.0"
-signal = "red-blox/signal@2.0.2"
+event = "red-blox/signal@2.0.2"
 ratelimit = "red-blox/ratelimit@1.0.1"
 red = "lolmansreturn/red-backend@1.2.7"
 
