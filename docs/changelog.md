@@ -15,7 +15,8 @@ This is the changelog which is changed every update, and we follow semver.
 
 * Improves how the network library works with unreliables
 * Improves general code
-* Fixes bugs within `Canary.GetFrameworkClient` **(@DrasticBlink)**
+* Fixes bugs within `Canary.Client` **(@DrasticBlink)**
+* Changes `Canary.GetFramework` to the just the currently running context
 
 ### Removed
 

@@ -42,6 +42,9 @@ Logs an event in a script, which is then stored in a global cache. This allows y
 * **eventName:** `string`\
 The name to print and log it as
 
+* **formatters** `...any`\
+Pass any formats here, `eventName` will act just like `string.format`
+
 **Returns**
 
 * **void**

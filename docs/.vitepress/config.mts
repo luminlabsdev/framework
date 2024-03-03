@@ -63,8 +63,8 @@ export default defineConfig({
               text: 'Interfaces',
               collapsed: false,
               items: [
-                { text: 'FrameworkServer', link: '/api/server' },
-                { text: 'FrameworkClient', link: '/api/client' }
+                { text: 'Server', link: '/api/server' },
+                { text: 'Client', link: '/api/client' }
               ]
             },
 
