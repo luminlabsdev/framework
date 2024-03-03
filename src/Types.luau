@@ -42,8 +42,8 @@ export type Character6Joint = {
 	["Right Arm"]: Part,
 	["Right Leg"]: Part,
 	["Torso"]: Part & {
-		roblox: Decal
-	}
+		roblox: Decal,
+	},
 } & Model
 
 return Types

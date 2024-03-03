@@ -1,4 +1,4 @@
-# CanaryEngine
+# CanaryEngine (Root)
 
 The main class of CanaryEngine.
 
@@ -22,13 +22,13 @@ The internal engine debugger, has useful functions to abide by debug settings.
 
 ### LoadTime <Badge type="tip" text="read only" />
 
-The number in seconds of which the framework took to completely finish loading; is rounded by the nearest hundreth.
+The number in seconds of which the framework took to completely finish loading, this property is not rounded.
 
 * **number**
 
 ## Functions
 
-### GetFrameworkServer <Badge type="danger" text="server" />
+### Server <Badge type="danger" text="server" />
 
 Gets the server-sided interface of CanaryEngine.
 
@@ -38,7 +38,7 @@ Gets the server-sided interface of CanaryEngine.
 
 ---
 
-### GetFrameworkClient <Badge type="danger" text="client" /> <Badge type="warning" text="yields" />
+### Client <Badge type="danger" text="client" /> <Badge type="warning" text="yields" />
 
 Gets the client-sided interface of CanaryEngine.
 
@@ -48,7 +48,7 @@ Gets the client-sided interface of CanaryEngine.
 
 ---
 
-### ImportPackagesOrdered
+### ImportPackages
 
 Imports the provided packages in chronological order, also allowing for you to import descendants aswell.
 

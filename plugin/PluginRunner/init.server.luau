@@ -16,7 +16,8 @@ local IsLocalPlugin = if string.find(plugin.Name, ".rbxm") or string.find(plugin
 local PluginToolbarName = if IsLocalPlugin then "Canary Studio - Local File" else "Canary Studio"
 
 local CanaryStudioPluginToolbar = plugin:CreateToolbar(PluginToolbarName)
-local CanaryStudioPluginButton = CanaryStudioPluginToolbar:CreateButton("Canary Studio", "Open Canary Studio", "rbxassetid://14374171289")
+local CanaryStudioPluginButton =
+	CanaryStudioPluginToolbar:CreateButton("Canary Studio", "Open Canary Studio", "rbxassetid://14374171289")
 
 local CreateInstanceAction = plugin:CreatePluginAction(
 	"CanaryStudioCreateInstanceAction",
@@ -28,49 +29,43 @@ local CreateInstanceAction = plugin:CreatePluginAction(
 
 local PLAYER_NAME = PlayerService:GetNameFromUserIdAsync(StudioService:GetUserId())
 
-local INSTANCE_TYPE_TO_CLASS = {
-	Script = "Script",
-	Package = "ModuleScript",
-	ModuleScript = "ModuleScript"
-}
-
 local DEFAULT_LOCATIONS = {
 	Client = game:GetService("ReplicatedStorage"),
 	Server = game:GetService("ServerStorage"),
-	Shared = game:GetService("ReplicatedStorage")
+	Shared = game:GetService("ReplicatedStorage"),
 }
 
 local PluginMenu = plugin:CreatePluginMenu(tostring(math.random()), "CanaryStudioMenu")
 
 local ScriptMenu = plugin:CreatePluginMenu(tostring(math.random()), "Create Script", "rbxassetid://11295287500")
-local PackageMenu = plugin:CreatePluginMenu(tostring(math.random()), "Create Package", "rbxassetid://12966846573")
+local ModuleMenu = plugin:CreatePluginMenu(tostring(math.random()), "Create Module", "rbxassetid://12966846573")
 
-PackageMenu:AddNewAction("Client-Package", "Client", "rbxassetid://12974273600")
-PackageMenu:AddNewAction("Server-Package", "Server", "rbxassetid://11430237002")
-PackageMenu:AddNewAction("Shared-Package", "Shared", "rbxassetid://11430236009")
+ModuleMenu:AddNewAction("Client-Module", "Client", "rbxassetid://12974273600")
+ModuleMenu:AddNewAction("Server-Module", "Server", "rbxassetid://11430237002")
+ModuleMenu:AddNewAction("Shared-Module", "Shared", "rbxassetid://11430236009")
 
 ScriptMenu:AddNewAction("Client-Script", "Client", "rbxassetid://12974273600")
 ScriptMenu:AddNewAction("Server-Script", "Server", "rbxassetid://11430237002")
 
 PluginMenu:AddMenu(ScriptMenu)
-PluginMenu:AddMenu(PackageMenu)
+PluginMenu:AddMenu(ModuleMenu)
 
 -- // Functions
 
-local function CreateInstance(name: string, instanceType: "Script" | "Package" | "ModuleScript", context: "Server" | "Client" | "Shared")
+local function CreateInstance(
+	name: string,
+	instanceType: "Script" | "ModuleScript",
+	context: "Server" | "Client" | "Shared"
+)
 	local ObjectToParentTo = Selection:Get()[1]
 
 	if not ObjectToParentTo then
 		ObjectToParentTo = DEFAULT_LOCATIONS[context]
 	end
 
-	if ObjectToParentTo:FindFirstChild(name) and ObjectToParentTo:FindFirstChild(name):IsA(INSTANCE_TYPE_TO_CLASS[instanceType]) then
-		warn(`Cannot create {string.lower(instanceType)}; {name} already exists in that dir`)
+	if ObjectToParentTo:FindFirstChild(name) and ObjectToParentTo:FindFirstChild(name):IsA(instanceType) then
+		warn(`Cannot create {string.lower(instanceType)}; {name} already exists in that directory`)
 		return
-	end
-
-	if instanceType == "Package" then
-		instanceType = "ModuleScript"
 	end
 
 	name = string.gsub(name, "[^%a_]", "")
@@ -78,32 +73,23 @@ local function CreateInstance(name: string, instanceType: "Script" | "Package" |
 	local CreatedInstance = Instance.new(instanceType)
 	local CurrentDate = DateTime.now()
 
-	local FormattedTimeHours = `{CurrentDate:FormatLocalTime("L", "en-us")} @ {CurrentDate:FormatLocalTime("LT", "en-us")}`
+	local FormattedTimeHours =
+		`{CurrentDate:FormatLocalTime("L", "en-us")} @ {CurrentDate:FormatLocalTime("LT", "en-us")}`
 
 	ScriptEditorService:UpdateSourceAsync(CreatedInstance, function()
 		local TemplateContent = Templates[instanceType]
 
-		local NewAuthorSource = string.gsub(
-			TemplateContent,
-			"~AUTHOR~",
-			`--[[\n\t  by {PLAYER_NAME}\n\t  {FormattedTimeHours}\n--]]`
-		)
+		local NewAuthorSource =
+			string.gsub(TemplateContent, "~AUTHOR~", `--[[\n\t  by {PLAYER_NAME}\n\t  {FormattedTimeHours}\n--]]`)
 
-		local NewContextSource = string.gsub(
-			NewAuthorSource,
-			"~FRAMEWORK~TYPE~",
-			context
-		)
+		local NewContextSource = string.gsub(NewAuthorSource, "~FRAMEWORK~TYPE~", context)
 
 		local FinishedSource = NewContextSource
 
 		if CreatedInstance:IsA("ModuleScript") then
-			local NewPackageSource = string.gsub(
-				NewContextSource,
-				"~PACKAGE~NAME~",
-				if name == "" then "Package" else name
-			)
-			FinishedSource = NewPackageSource
+			local NewModuleSource =
+				string.gsub(NewContextSource, "~PACKAGE~NAME~", if name == "" then "Module" else name)
+			FinishedSource = NewModuleSource
 		end
 
 		return FinishedSource
@@ -116,7 +102,7 @@ local function CreateInstance(name: string, instanceType: "Script" | "Package" |
 	CreatedInstance.Name = name
 	CreatedInstance.Parent = ObjectToParentTo
 
-	Selection:Set({CreatedInstance})
+	Selection:Set({ CreatedInstance })
 	ScriptEditorService:OpenScriptDocumentAsync(CreatedInstance)
 end
 
@@ -146,7 +132,9 @@ local function TriggerOpenMenu()
 		end
 	end)
 
-	repeat task.wait() until NameToCreate
+	repeat
+		task.wait()
+	until NameToCreate
 	Connection:Disconnect()
 
 	CreateInstance(NameToCreate, ActionToComplete[2] :: any, string.split(ActionToComplete[1], "_")[3] :: any)

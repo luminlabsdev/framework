@@ -24,3 +24,24 @@ The callback function to run on invoke, must return at least 1 value.
 **Returns**
 
 * **void**
+
+---
+
+### SetRateLimit
+
+Sets a rate limit that is applied when invoking the network function from the client.
+
+**Parameters**
+
+* **maxCalls:** `number`\
+The maximum amount of invokes allowed every `interval` seconds; set to -1 to disable the rate limit
+
+* **resetInterval:** `number?`\
+The interval of which `maxCalls` is reset
+
+* **invokeOverflowCallback:** `(sender: Player) -> ()?`\
+The callback function to run when the player has exceeded the current rate limit
+
+**Returns**
+
+* **void**

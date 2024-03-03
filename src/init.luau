@@ -1,8 +1,8 @@
 -- // Package
 
 local Root = {}
-local FrameworkServer = {}
-local FrameworkClient = {}
+local Server = {}
+local Client = {}
 
 -- // Variables
 
@@ -16,7 +16,7 @@ local Event = require(script.Parent.event) -- Event logic
 
 local Debugger = require(script.Debugger) -- Easy debug logic
 local Runtime = require(script.Runtime) -- Runtime settings
-local Types = require(script.Types)
+local Types = require(script.Types) -- Package types
 
 Root.Runtime = Runtime
 Root.Debugger = Debugger
@@ -24,50 +24,51 @@ Root.Debugger = Debugger
 local RuntimeObjects = Root.Runtime.Objects
 local RunContext = if RunService:IsServer() then "Server" else "Client"
 
-local NetworkRoot = {
+local NetworkRoot = table.freeze({
 	Event = function(name: string, reliable: boolean?)
 		return Network("Event", name, reliable)
 	end,
 	Function = function(name: string, reliable: boolean?)
 		return Network("Function", name, reliable)
-	end
-}
+	end,
+})
 
 -- // Functions
 
--- Engine Contexts
-
-function Root.GetFrameworkServer()
+function Root.Server()
 	assert(RunService:IsServer(), "Cannot get server interfaces on client")
-	
-	if table.isfrozen(FrameworkServer) then
-		return FrameworkServer
+
+	if table.isfrozen(Server) then
+		return Server
 	end
 
-	return table.freeze(FrameworkServer)
+	return table.freeze(Server)
 end
 
-function Root.GetFrameworkClient()
+function Root.Client()
 	assert(RunService:IsClient(), "Cannot get client interfaces on server")
 
+	if table.isfrozen(Client) then
+		return Client
+	end
+
 	local Player = PlayerService.LocalPlayer
+	Client.Player = Player :: Player
 
-	Player.CharacterAdded:Connect(function() -- when the player respawns the old player gui/backpack are removed
-		FrameworkClient.PlayerGui = Player:WaitForChild("PlayerGui")
-		FrameworkClient.PlayerBackpack = Player:WaitForChild("Backpack") 
-	end)
+	if not Player.Character then
+		Player.CharacterAdded:Wait()
+	end
 
-	FrameworkClient.Player = Player :: Player
-	FrameworkClient.PlayerGui = Player:WaitForChild("PlayerGui") :: typeof(game:GetService("StarterGui"))
-	FrameworkClient.PlayerBackpack = Player:WaitForChild("Backpack") :: typeof(game:GetService("StarterPack"))
-	
-	return FrameworkClient
+	Client.PlayerGui = Player:WaitForChild("PlayerGui") :: typeof(game:GetService("StarterGui"))
+	Client.PlayerBackpack = Player:WaitForChild("Backpack") :: typeof(game:GetService("StarterPack"))
+
+	return table.freeze(Client)
 end
 
-function Root.ImportPackagesOrdered(importList: {ModuleScript}, importDeep: boolean?)
+function Root.ImportPackages(importList: { ModuleScript }, importDeep: boolean?)
 	for _, package in importList do
 		(require)(package)
-		
+
 		if importDeep then
 			for _, deepPackage in package:GetDescendants() do
 				if deepPackage:IsA("ModuleScript") then
@@ -78,41 +79,43 @@ function Root.ImportPackagesOrdered(importList: {ModuleScript}, importDeep: bool
 	end
 end
 
--- Event Creation
-
 function Root.Event(eventName: string?): Event.Signal<...any>
 	if not eventName then
-		Debugger.LogEvent("[Framework] Create Event Anonymous")
+		Debugger.LogEvent("[%s] Create Event Anonymous", RunContext)
 		return Event()
 	end
 
-	if not RuntimeObjects.Signals[eventName] then
+	if not RuntimeObjects.Events[eventName] then
 		local NewSignal = Event()
-		Debugger.LogEvent(`[Framework] Create Event {eventName}`)
+		Debugger.LogEvent("[%s] Create Event %s", RunContext, eventName)
 
-		RuntimeObjects.Signals[eventName] = NewSignal
+		RuntimeObjects.Events[eventName] = NewSignal
 	end
 
-	return RuntimeObjects.Signals[eventName]
+	return RuntimeObjects.Events[eventName]
 end
 
 function Root.Signal(signalName: string?): Event.Signal<...any>
 	return Root.Event(signalName)
 end
 
--- Context Specific Functions
-
-function FrameworkClient.GetPlayerCharacter(): Types.Character6Joint
+function Client.GetCharacter(): Types.Character6Joint
 	local Player = PlayerService.LocalPlayer
 	return Player.Character or Player.CharacterAdded:Wait()
 end
 
-FrameworkClient.Network = NetworkRoot :: {Event: (name: string, reliable: boolean?) -> (Network.ClientEvent), Function: (name: string, reliable: boolean?) -> (Network.ClientFunction)}
-FrameworkServer.Network = NetworkRoot :: {Event: (name: string, reliable: boolean?) -> (Network.ServerEvent), Function: (name: string, reliable: boolean?) -> (Network.ServerFunction)}
+Client.Network = NetworkRoot :: {
+	Event: (name: string, reliable: boolean?) -> Network.ClientEvent,
+	Function: (name: string, reliable: boolean?) -> Network.ClientFunction,
+}
+Server.Network = NetworkRoot :: {
+	Event: (name: string, reliable: boolean?) -> Network.ServerEvent,
+	Function: (name: string, reliable: boolean?) -> Network.ServerFunction,
+}
 
 -- // Actions
 
-Root.LoadTime = tonumber(string.format("%.2f", (os.clock() - BeginLoadTime) * 1000)) :: number
-Debugger.LogEvent(`[Framework] {RunContext} loaded; {Root.LoadTime}ms`)
+Root.LoadTime = (os.clock() - BeginLoadTime) * 1000
+Debugger.LogEvent("[Framework] %s Loaded; %.2fms", RunContext, Root.LoadTime)
 
 return table.freeze(Root)

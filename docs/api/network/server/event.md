@@ -109,7 +109,7 @@ A table of the valid types that should be recieved by the client. This is option
 
 ### SetRateLimit
 
-Sets a rate limit that is applied when invoking or firing a network controller from the client.
+Sets a rate limit that is applied when firing a network event from the client.
 
 **Parameters**
 
@@ -119,7 +119,7 @@ The maximum amount of invokes allowed every `interval` seconds; set to -1 to dis
 * **resetInterval:** `number?`\
 The interval of which `maxCalls` is reset
 
-* **invokeOverflowCallback:** `(sender: Player) -> ()?`\
+* **fireOverflowCallback:** `(sender: Player) -> ()?`\
 The callback function to run when the player has exceeded the current rate limit
 
 **Returns**

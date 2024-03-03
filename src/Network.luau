@@ -13,13 +13,13 @@ local RunService = game:GetService("RunService")
 local RunContext = if RunService:IsClient() then "Client" else "Server"
 local Indexes = {
 	Event = {
-		{__index = ClientEvent},
-		{__index = ServerEvent},
+		{ __index = ClientEvent },
+		{ __index = ServerEvent },
 	},
 	Function = {
-		{__index = ClientFunction},
-		{__index = ServerFunction},
-	}
+		{ __index = ClientFunction },
+		{ __index = ServerFunction },
+	},
 }
 
 local Future = require(script.Parent.Parent.future)
@@ -41,25 +41,41 @@ local RedEvents = {
 -- // Types
 
 export type ServerFunction = {
-	OnInvoke: (self: ServerFunction, callback: (sender: Player, ...unknown) -> (any, ...any), typeValidationArgs: {string}?) -> (),
+	OnInvoke: (
+		self: ServerFunction,
+		callback: (sender: Player, ...unknown) -> (any, ...any),
+		typeValidationArgs: { string }?
+	) -> (),
+	SetRateLimit: (
+		self: ServerFunction,
+		maxCalls: number,
+		resetInterval: number?,
+		invokeOverflowCallback: (sender: Player) -> ()?
+	) -> (),
+
 	IsReliable: boolean,
 }
 
 export type ServerEvent = {
-	Listen: (self: ServerEvent, func: (sender: Player, ...unknown) -> (), typeValidationArgs: {string}?) -> (),
+	Listen: (self: ServerEvent, func: (sender: Player, ...unknown) -> (), typeValidationArgs: { string }?) -> (),
 
-	Fire: (self: ServerEvent, recipient: Player | {Player}, ...any) -> (),
+	Fire: (self: ServerEvent, recipient: Player | { Player }, ...any) -> (),
 	FireAll: (self: ServerEvent, ...any) -> (),
-	FireExcept: (self: ServerEvent, except: Player | {Player}, ...any) -> (),
-	FireFilter: (self: ServerEvent, filter: (Player) -> (boolean), ...any) -> (),
-
-	SetRateLimit: (self: ServerEvent, maxCalls: number, resetInterval: number?, invokeOverflowCallback: (sender: Player) -> ()?) -> (),
+	FireExcept: (self: ServerEvent, except: Player | { Player }, ...any) -> (),
+	FireFilter: (self: ServerEvent, filter: (Player) -> boolean, ...any) -> (),
+	SetRateLimit: (
+		self: ServerEvent,
+		maxCalls: number,
+		resetInterval: number?,
+		fireOverflowCallback: (sender: Player) -> ()?
+	) -> (),
 
 	IsReliable: boolean,
 }
 
 export type ClientFunction = {
-	InvokeAsync: (self: ClientFunction, ...any) -> (Future.Future<...any>),
+	InvokeAsync: (self: ClientFunction, ...any) -> Future.Future<...any>,
+
 	IsReliable: boolean,
 }
 
@@ -93,7 +109,7 @@ end
 
 -- // Server
 
-function ServerEvent:Fire(recipients: Player | {Player}, ...: any)
+function ServerEvent:Fire(recipients: Player | { Player }, ...: any)
 	if type(recipients) == "table" then
 		for _, player in recipients do
 			self._Fire(player, self._Identifier, table.pack(...))
@@ -109,7 +125,7 @@ function ServerEvent:FireAll(...: any)
 	end
 end
 
-function ServerEvent:FireExcept(except: Player | {Player}, ...: any)
+function ServerEvent:FireExcept(except: Player | { Player }, ...: any)
 	if type(except) == "table" then
 		for _, player in PlayerService:GetPlayers() do
 			if table.find(except, player) then
@@ -128,7 +144,7 @@ function ServerEvent:FireExcept(except: Player | {Player}, ...: any)
 	end
 end
 
-function ServerEvent:FireFilter(filter: (Player) -> (boolean), ...: any)
+function ServerEvent:FireFilter(filter: (Player) -> boolean, ...: any)
 	for _, player in PlayerService:GetPlayers() do
 		if filter(player) then
 			self._Fire(player, self._Identifier, table.pack(...))
@@ -136,14 +152,14 @@ function ServerEvent:FireFilter(filter: (Player) -> (boolean), ...: any)
 	end
 end
 
-function ServerEvent:Listen(func: (sender: Player, ...unknown) -> (), typeValidationArgs: {string}?)
+function ServerEvent:Listen(func: (sender: Player, ...unknown) -> (), typeValidationArgs: { string }?)
 	assert(func, "Must provide a listener")
 	RedServerEvent.SetListener(self._Identifier, function(player, args)
 		if (self._Ratelimit and self._InvokeOverflow) and not self._Ratelimit(player) then
 			self._InvokeOverflow(player)
 			return
 		end
-		
+
 		if typeValidationArgs and not script.Parent:GetAttribute("IgnoreInvalidNetworkArgs") then
 			for index, value in args do
 				if typeof(value) ~= typeValidationArgs[index] then
@@ -157,7 +173,29 @@ function ServerEvent:Listen(func: (sender: Player, ...unknown) -> (), typeValida
 	end)
 end
 
-function ServerEvent:SetRateLimit(maxCalls: number, resetInterval: number?, invokeOverflowCallback: (sender: Player) -> ()?)
+function ServerEvent:SetRateLimit(
+	maxCalls: number,
+	resetInterval: number?,
+	fireOverflowCallback: (sender: Player) -> ()?
+)
+	if maxCalls <= -1 then
+		self._Ratelimit = nil
+		self._InvokeOverflow = nil
+	end
+
+	if not (resetInterval and fireOverflowCallback) then
+		return
+	end
+
+	self._Ratelimit = Ratelimit(maxCalls, resetInterval or 1) :: any
+	self._InvokeOverflow = fireOverflowCallback :: any
+end
+
+function ServerFunction:SetRateLimit(
+	maxCalls: number,
+	resetInterval: number?,
+	invokeOverflowCallback: (sender: Player) -> ()?
+)
 	if maxCalls <= -1 then
 		self._Ratelimit = nil
 		self._InvokeOverflow = nil
@@ -171,7 +209,10 @@ function ServerEvent:SetRateLimit(maxCalls: number, resetInterval: number?, invo
 	self._InvokeOverflow = invokeOverflowCallback :: any
 end
 
-function ServerFunction:OnInvoke(callback: (sender: Player, ...unknown) -> (unknown, ...any), typeValidationArgs: {string}?)
+function ServerFunction:OnInvoke(
+	callback: (sender: Player, ...unknown) -> (unknown, ...any),
+	typeValidationArgs: { string }?
+)
 	assert(callback, "Must provide a callback")
 	RedServerEvent.SetListener(self._Identifier, function(player, args)
 		if (self._Ratelimit and self._InvokeOverflow) and not self._Ratelimit(player) then
@@ -219,13 +260,16 @@ return function(type: "Event" | "Function", name: string, reliable: boolean?): a
 	self._InvokeOverflow = nil
 	self._Identifier = RedIdentifier.Shared(`{name}_{type}`):Await()
 
-	self._Fire = if reliable then 
-		RedEvents[RunContext].SendReliableEvent
-	else
-		RedEvents[RunContext].SendUnreliableEvent
+	self._Fire = if reliable then RedEvents[RunContext].SendReliableEvent else RedEvents[RunContext].SendUnreliableEvent
 
 	if not Runtime.Objects.Network[type][name] then
-		Debugger.LogEvent(`[{RunContext}] Create {if reliable then "Reliable" else "Unreliable"} {type} {name}`)
+		Debugger.LogEvent(
+			"[%s] Create %s Network %s %s",
+			RunContext,
+			if reliable then "Reliable" else "Unreliable",
+			type,
+			name
+		)
 		Runtime.Objects.Network[type][name] = self
 	end
 

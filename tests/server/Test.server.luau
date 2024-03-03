@@ -1,5 +1,5 @@
 local Canary = require(game.ReplicatedStorage.Packages.Framework)
-local Server = Canary.GetFrameworkServer()
+local Server = Canary.Server()
 
 local GameFinishSignal = Canary.Event()
 local AnnounceNetwork = Server.Network.Event("Announcer")

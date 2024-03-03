@@ -1,4 +1,4 @@
-# FrameworkClient <Badge type="danger" text="client" />
+# Client <Badge type="danger" text="client" />
 
 CanaryEngine's client-sided interface.
 
@@ -36,7 +36,7 @@ A simple reference to the network contstructor.
 
 ## Functions
 
-### GetPlayerCharacter <Badge type="warning" text="yields" />
+### GetCharacter <Badge type="warning" text="yields" />
 
 Gets the players current character model; if it doesn't exist the thread will yield until it does.
 

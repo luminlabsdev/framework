@@ -1,4 +1,4 @@
-# FrameworkServer <Badge type="danger" text="server" />
+# Server <Badge type="danger" text="server" />
 
 CanaryEngine's server-sided interface.
 

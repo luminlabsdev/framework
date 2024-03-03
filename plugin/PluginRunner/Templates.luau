@@ -41,5 +41,5 @@ local Framework = Canary.GetFramework~FRAMEWORK~TYPE~()
 -- // Actions
 
 print("Hello, ~FRAMEWORK~TYPE~!")
-]]
+]],
 }

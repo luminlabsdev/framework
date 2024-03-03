@@ -17,11 +17,11 @@ local RuntimeSettings = {
 }
 
 local RuntimeObjects = {
-	Network = {Event = {}, Function = {}} :: {
-		Event: {[string]: any},
-		Function: {[string]: any},
+	Network = { Event = {}, Function = {} } :: {
+		Event: { [string]: any },
+		Function: { [string]: any },
 	}, -- Tables inside are different for each client and the server
-	Signals = {} :: {[string]: Event.Signal<...any>},
+	Events = {} :: { [string]: Event.Signal<...any> },
 }
 
 -- // Assignment
