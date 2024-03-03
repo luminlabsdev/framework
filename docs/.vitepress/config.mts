@@ -31,7 +31,7 @@ export default defineConfig({
           text: 'Guides',
           items: [
             { text: 'Setup', link: '/guides/' },
-            { text: 'Signals', link: '/guides/signals' },
+            { text: 'Events', link: '/guides/events' },
             { text: 'Networking', link: '/guides/networking' },
             { text: 'Debugging', link: '/guides/debugging' }
           ]

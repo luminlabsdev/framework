@@ -34,7 +34,7 @@ Gets the server-sided interface of CanaryEngine.
 
 **Returns**
 
-* [**FrameworkServer**](/api/server)
+* [**Server**](/api/server)
 
 ---
 
@@ -44,7 +44,7 @@ Gets the client-sided interface of CanaryEngine.
 
 **Returns**
 
-* [**FrameworkClient**](/api/client)
+* [**Client**](/api/client)
 
 ---
 
