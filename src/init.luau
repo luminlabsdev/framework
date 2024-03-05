@@ -53,20 +53,25 @@ function Root.Client()
 	end
 
 	local Player = PlayerService.LocalPlayer
-	Client.Player = Player :: Player
 
 	if not Player.Character then
 		Player.CharacterAdded:Wait()
 	end
 
-	Client.PlayerGui = Player:WaitForChild("PlayerGui") :: typeof(game:GetService("StarterGui"))
-	Client.PlayerBackpack = Player:WaitForChild("Backpack") :: typeof(game:GetService("StarterPack"))
+	if not table.isfrozen(Client) then
+		Client.PlayerGui = Player:WaitForChild("PlayerGui") :: PlayerGui
+		Client.PlayerBackpack = Player:WaitForChild("Backpack") :: Backpack
+		Client.Player = Player :: Player
+	end
 
 	return table.freeze(Client)
 end
 
 function Root.ImportPackages(importList: { ModuleScript }, importDeep: boolean?)
 	for _, package in importList do
+		if not package:IsA("ModuleScript") then
+			continue
+		end
 		(require)(package)
 
 		if importDeep then
