@@ -50,7 +50,7 @@ Gets the client-sided interface of CanaryEngine.
 
 ### ImportPackages
 
-Imports the provided packages in chronological order, also allowing for you to import descendants aswell.
+Imports the provided packages in chronological order, also allowing for you to import descendants aswell. Non-modules will be filtered out automatically.
 
 **Parameters**
 

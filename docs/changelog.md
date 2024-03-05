@@ -2,6 +2,23 @@
 
 This is the changelog which is changed every update, and we follow semver.
 
+## 7.0.1
+
+---
+
+### Added
+
+* Nothing
+
+### Improvements
+
+* If something is not a module when using `ImportPackages`, it will be ignored
+* Fixes `Framework.Client` issues with frozen tables
+
+### Removed
+
+* Nothing
+
 ## 7.0.0
 
 ---
