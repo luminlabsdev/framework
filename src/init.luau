@@ -48,23 +48,17 @@ end
 function Root.Client()
 	assert(RunService:IsClient(), "Cannot get client interfaces on server")
 
-	if table.isfrozen(Client) then
-		return Client
-	end
-
 	local Player = PlayerService.LocalPlayer
 
 	if not Player.Character then
 		Player.CharacterAdded:Wait()
 	end
 
-	if not table.isfrozen(Client) then
-		Client.PlayerGui = Player:WaitForChild("PlayerGui") :: PlayerGui
-		Client.PlayerBackpack = Player:WaitForChild("Backpack") :: Backpack
-		Client.Player = Player :: Player
-	end
+	Client.PlayerGui = Player:WaitForChild("PlayerGui") :: PlayerGui
+	Client.PlayerBackpack = Player:WaitForChild("Backpack") :: Backpack
+	Client.Player = Player :: Player
 
-	return table.freeze(Client)
+	return Client
 end
 
 function Root.ImportPackages(importList: { ModuleScript }, importDeep: boolean?)

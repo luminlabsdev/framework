@@ -2,6 +2,22 @@
 
 This is the changelog which is changed every update, and we follow semver.
 
+## 7.0.2
+
+---
+
+### Added
+
+* Nothing
+
+### Improvements
+
+* Fix client once again
+
+### Removed
+
+* Frozen client tables; causing issues
+
 ## 7.0.1
 
 ---
