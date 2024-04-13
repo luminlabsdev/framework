@@ -3,10 +3,10 @@ import { defineConfig } from 'vitepress'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   head: [['link', { rel: 'icon', href: '/favicon.ico' }]],
-  base: "/CanaryEngine/",
-  title: "CanaryEngine",
-  titleTemplate: "Canary Docs",
-  description: "A blazingly fast & lightweight Luau framework",
+  base: "/LuminFramework/",
+  title: "Lumin Framework",
+  titleTemplate: "Lumin Labs",
+  description: "A blazingly fast & lightweight game framework",
   lastUpdated: true,
   lang: 'en-us',
   themeConfig: {
@@ -104,16 +104,16 @@ export default defineConfig({
     },
 
     editLink: {
-      pattern: 'https://github.com/canary-development/CanaryEngine/edit/main/docs/:path'
+      pattern: 'https://github.com/lumin-dev/LuminFramework/edit/main/docs/:path'
     },
 
     footer: {
       message: 'Built with VitePress',
-      copyright: 'Copyright © 2021 - 2024 Canary Softworks'
+      copyright: 'Copyright © 2021 - 2024 Lumin Labs'
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/canary-development/CanaryEngine' },
+      { icon: 'github', link: 'https://github.com/lumin-dev/LuminFramework' },
       { icon: 'discord', link: 'https://discord.gg/cwwcZtqJAt' },
     ]
   }
