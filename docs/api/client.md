@@ -1,6 +1,6 @@
 # Client <Badge type="danger" text="client" />
 
-CanaryEngine's client-sided interface.
+LuminFramework's client-sided interface.
 
 ## Properties
 

@@ -27,7 +27,7 @@ We have renamed many of the instances that Canary injects into your game to be m
 
 * `EngineContext.Packages`
 * `EngineContext.Media`
-* `CanaryEngine:GetLatestPackageVersionAsync`
+* `LuminFramework:GetLatestPackageVersionAsync`
 
 ### TS Support
 

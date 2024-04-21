@@ -1,6 +1,6 @@
-# CanaryEngine (Root)
+# LuminFramework (Root)
 
-The main class of CanaryEngine.
+The main class of LuminFramework.
 
 ## Properties
 
@@ -30,7 +30,7 @@ The number in seconds of which the framework took to completely finish loading, 
 
 ### Server <Badge type="danger" text="server" />
 
-Gets the server-sided interface of CanaryEngine.
+Gets the server-sided interface of LuminFramework.
 
 **Returns**
 
@@ -40,7 +40,7 @@ Gets the server-sided interface of CanaryEngine.
 
 ### Client <Badge type="danger" text="client" /> <Badge type="warning" text="yields" />
 
-Gets the client-sided interface of CanaryEngine.
+Gets the client-sided interface of LuminFramework.
 
 **Returns**
 

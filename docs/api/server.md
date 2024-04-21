@@ -1,6 +1,6 @@
 # Server <Badge type="danger" text="server" />
 
-CanaryEngine's server-sided interface.
+LuminFramework's server-sided interface.
 
 ## Properties
 

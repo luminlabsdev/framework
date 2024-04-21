@@ -1,42 +1,42 @@
 {
-    "emitLegacyScripts": false,
-    "name": "canaryengine-dev",
-    "tree": {
-        "$className": "DataModel",
-        "ReplicatedStorage": {
-            "DevPackages": {
-                "$path": "DevPackages"
-            },
-            "Packages": {
-                "$path": "Packages",
-                "Framework": {
-                    "$properties": {
-                        "Attributes": {
-                            "Version": {
-                                "String": "7.0.0"
-                            },
-                            "StudioShowLoggedEvents": {
-                                "Bool": true
-                            },
-                            "IgnoreInvalidNetworkArgs": {
-                                "Bool": false
-                            }
-                        }
-                    },
-                    "$path": "src"
-                }
-            },
-            "Tests": {
-                "$path": "tests/client"
-            },
-            "Plugin": {
-                "$path": "plugin"
-            }
-        },
-        "ServerStorage": {
-            "Tests": {
-                "$path": "tests/server"
-            }
-        }
-    }
+	"emitLegacyScripts": false,
+	"name": "luminframework-dev",
+	"tree": {
+		"$className": "DataModel",
+		"ReplicatedStorage": {
+			"DevPackages": {
+				"$path": "DevPackages"
+			},
+			"Packages": {
+				"$path": "Packages",
+				"Framework": {
+					"$properties": {
+						"Attributes": {
+							"Version": {
+								"String": "7.0.0"
+							},
+							"StudioShowLoggedEvents": {
+								"Bool": true
+							},
+							"IgnoreInvalidNetworkArgs": {
+								"Bool": false
+							}
+						}
+					},
+					"$path": "src"
+				}
+			},
+			"Tests": {
+				"$path": "tests/client"
+			},
+			"Plugin": {
+				"$path": "plugin"
+			}
+		},
+		"ServerStorage": {
+			"Tests": {
+				"$path": "tests/server"
+			}
+		}
+	}
 }

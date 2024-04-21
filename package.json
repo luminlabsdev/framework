@@ -1,43 +1,42 @@
 {
-  "dependencies": {
-  },
-  "devDependencies": {
-    "@rbxts/types": "^1.0.704",
-    "vitepress": "^1.0.0-rc.15"
-  },
-  "name": "@rbxts/canaryengine",
-  "description": "CanaryEngine is a lightweight and performant game framework for beginners and power-users alike.",
-  "version": "3.3.5",
-  "main": "src/init.lua",
-  "typings": "src/index.d.ts",
-  "directories": {
-    "doc": "docs"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/canary-development/CanaryEngine.git"
-  },
-  "keywords": [
-    "framework",
-    "roblox",
-    "fast",
-    "organized",
-    "simple",
-    "featurepacked",
-    "canary",
-    "canaryengine",
-    "secure"
-  ],
-  "author": "lolmansReturn",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/canary-development/CanaryEngine/issues"
-  },
-  "homepage": "https://canary-development.github.io/CanaryEngine"
+	"dependencies": {},
+	"devDependencies": {
+		"@rbxts/types": "^1.0.704",
+		"vitepress": "^1.0.0-rc.15"
+	},
+	"name": "@rbxts/luminframework",
+	"description": "LuminFramework is a lightweight and performant game framework for beginners and power-users alike.",
+	"version": "3.3.5",
+	"main": "src/init.lua",
+	"typings": "src/index.d.ts",
+	"directories": {
+		"doc": "docs"
+	},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"docs:dev": "vitepress dev docs",
+		"docs:build": "vitepress build docs",
+		"docs:preview": "vitepress preview docs"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/lumin-dev/LuminFramework.git"
+	},
+	"keywords": [
+		"framework",
+		"roblox",
+		"fast",
+		"organized",
+		"simple",
+		"featurepacked",
+		"lumin",
+		"luminframework",
+		"secure"
+	],
+	"author": "lolmansReturn",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/lumin-dev/LuminFramework/issues"
+	},
+	"homepage": "https://lumin-dev.github.io/LuminFramework"
 }

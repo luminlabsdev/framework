@@ -1,19 +1,19 @@
 {
-  "name": "canaryengine",
-  "tree": {
-    "$path": "src",
-    "$properties": {
-      "Attributes": {
-        "Version": {
-          "String": "7.0.0"
-        },
-        "StudioShowLoggedEvents": {
-          "Bool": true
-        },
-        "IgnoreInvalidNetworkArgs": {
-            "Bool": false
-        }
-      }
-    }
-  }
+	"name": "luminframework",
+	"tree": {
+		"$path": "src",
+		"$properties": {
+			"Attributes": {
+				"Version": {
+					"String": "7.0.0"
+				},
+				"StudioShowLoggedEvents": {
+					"Bool": true
+				},
+				"IgnoreInvalidNetworkArgs": {
+					"Bool": false
+				}
+			}
+		}
+	}
 }

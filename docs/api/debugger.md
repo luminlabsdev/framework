@@ -20,7 +20,7 @@ A list of cached logs/events for the current environment.
 
 ### GetCallStack
 
-Gets the call stack of any script within CanaryEngine.
+Gets the call stack of any script within LuminFramework.
 
 **Parameters**
 
