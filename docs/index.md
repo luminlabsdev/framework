@@ -3,7 +3,7 @@
 layout: home
 
 hero:
-  text: "CanaryEngine"
+  text: "LuminFramework"
   tagline: A lightning fast & lightweight game framework
   actions:
     - theme: brand

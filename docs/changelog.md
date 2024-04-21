@@ -2,6 +2,22 @@
 
 This is the changelog which is changed every update, and we follow semver.
 
+## 7.0.3
+
+---
+
+### Added
+
+* Nothing
+
+### Improvements
+
+* Changed project name from **CanaryEngine** to **LuminFramework**
+
+### Removed
+
+* Nothing
+
 ## 7.0.2
 
 ---
@@ -53,10 +69,10 @@ This is the changelog which is changed every update, and we follow semver.
 
 ### Removed
 
-* `CanaryEngine.CreateAnonymousSignal`
+* `LuminFramework.CreateAnonymousSignal`
 * `ContextInterface.NetworkController`
-* `CanaryEngine.GetFrameworkShared`
-* `CanaryEngine.Future`
+* `LuminFramework.GetFrameworkShared`
+* `LuminFramework.Future`
 
 ## 6.2.1
 
@@ -152,7 +168,7 @@ This is the changelog which is changed every update, and we follow semver.
 
 ### Removed
 
-* Remove deprecated alias `CanaryEngine.GetFrameworkReplicated`
+* Remove deprecated alias `LuminFramework.GetFrameworkReplicated`
 
 ## 5.1.0
 
@@ -206,7 +222,7 @@ This is the changelog which is changed every update, and we follow semver.
 
 * Improves structure and others
 * Improves internal code to be a lot faster
-* CanaryEngine is now a standalone modulescript which can be used from anywhere
+* LuminFramework is now a standalone modulescript which can be used from anywhere
 
 ### Removed
 
@@ -240,7 +256,7 @@ This is the changelog which is changed every update, and we follow semver.
 
 * Adds `Red`, revamped the networking system once again and for the last time
 * Adds `NetworkController:FireFilter`
-* Adds `CanaryEngine.ImportPackagesInOrder`2
+* Adds `LuminFramework.ImportPackagesInOrder`2
 * Finish API documentation
 
 ### Improvements
@@ -266,9 +282,9 @@ This is the changelog which is changed every update, and we follow semver.
 
 ### Improvements
 
-* Improves EasyProfile ([#3](https://github.com/canary-development/CanaryEngine/pull/3), [koxx12](https://github.com/koxx12-dev))
+* Improves EasyProfile ([#3](https://github.com/canary-development/LuminFramework/pull/3), [koxx12](https://github.com/koxx12-dev))
 * Renames `CanaryEngineFramework` instance to `Framework`
-* Renames `CanaryEngine` module to `Init`
+* Renames `LuminFramework` module to `Init`
 * Small bug fixes
 * QOL fixes
 * Most yielding functions now make usage of Futures
@@ -306,7 +322,7 @@ No information available, mainly small bug fixes.
 
 ### Added
 
-* `AnonymousSignals` ([#2](https://github.com/canary-development/CanaryEngine/pull/2), [koxx12](https://github.com/koxx12-dev))
+* `AnonymousSignals` ([#2](https://github.com/canary-development/LuminFramework/pull/2), [koxx12](https://github.com/koxx12-dev))
 * `EngineReplicatedFirst`
 * Add new default loading screen
 
@@ -359,12 +375,12 @@ Nothing!
 
 ### Added
 
-* Add `CanaryEngine.RuntimeCreatedSignals`
-* Add `CanaryEngine.RuntimeCreatedNetworkControllers`
+* Add `LuminFramework.RuntimeCreatedSignals`
+* Add `LuminFramework.RuntimeCreatedNetworkControllers`
 * Support for invoking server
 * Reworked data saving
 * Add `CanaryEngineClient.PlayerBackpack`
-* Add `Replicated` folder to `CanaryEngine/Media`
+* Add `Replicated` folder to `LuminFramework/Media`
 * Proper documentation to almost all methods, expect finished docs to come along when **v3.1.0** releases with a few hotfixes and general improvements
 * Add `CanaryEngineServer.Media.Server`
 * Add `CanaryEngineClient.Media.Client`
@@ -375,7 +391,7 @@ Nothing!
 ### Improvements
 
 * Turn `NetworkSignal` into `NetworkController`
-* Add `signalName` parameter to `CanaryEngine.CreateSignal` for easier signal access across scripts (breaking change)
+* Add `signalName` parameter to `LuminFramework.CreateSignal` for easier signal access across scripts (breaking change)
 * Add error when trying to import packages during runtime
 * Fix `Runtime.IsStarted` not working
 * Move `Utility`, `Benchmark`, and `Statistics` to their own each modules for better loading times

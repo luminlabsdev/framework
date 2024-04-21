@@ -1,5 +1,5 @@
 [package]
-name = "canary-development/canaryengine"
+name = "lumin/framework"
 description = "A lightning fast & lightweight game framework for Roblox"
 version = "7.0.2"
 registry = "https://github.com/UpliftGames/wally-index"
@@ -21,9 +21,6 @@ spawn = "red-blox/spawn@1.0.0"
 event = "red-blox/signal@2.0.2"
 ratelimit = "red-blox/ratelimit@1.0.1"
 red = "lolmansreturn/red-backend@1.2.7"
-
-[dev-dependencies]
-benchmark = "canary-development/benchmark@1.0.1"
 
 [place]
 shared-packages = "game.ReplicatedStorage.Packages"

@@ -22,6 +22,6 @@ Whether or not to show logged events in the console while in studio. Defaults to
 
 ### Version
 
-The current version of CanaryEngine.
+The current version of LuminFramework.
 
 * **string**
