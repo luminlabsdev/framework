@@ -1,5 +1,5 @@
 [package]
-name = "lumin-dev/luminframework"
+name = "lumin/framework"
 description = "A lightning fast & lightweight game framework for Roblox"
 version = "7.0.2"
 registry = "https://github.com/UpliftGames/wally-index"
@@ -23,7 +23,7 @@ ratelimit = "red-blox/ratelimit@1.0.1"
 red = "lolmansreturn/red-backend@1.2.7"
 
 [dev-dependencies]
-benchmark = "lumin-dev/benchmark@1.0.1"
+benchmark = "lumin/benchmark@1.0.1"
 
 [place]
 shared-packages = "game.ReplicatedStorage.Packages"
