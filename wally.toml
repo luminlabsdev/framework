@@ -22,8 +22,5 @@ event = "red-blox/signal@2.0.2"
 ratelimit = "red-blox/ratelimit@1.0.1"
 red = "lolmansreturn/red-backend@1.2.7"
 
-[dev-dependencies]
-benchmark = "lumin/benchmark@1.0.1"
-
 [place]
 shared-packages = "game.ReplicatedStorage.Packages"
