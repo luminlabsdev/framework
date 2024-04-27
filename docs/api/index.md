@@ -10,22 +10,6 @@ The runtime property contains settings that are set during runtime, and the curr
 
 * [**Runtime**](/api/runtime/)
 
----
-
-### Debugger <Badge type="tip" text="read only" />
-
-The internal engine debugger, has useful functions to abide by debug settings.
-
-* [**Debugger**](/api/debugger)
-
----
-
-### LoadTime <Badge type="tip" text="read only" />
-
-The number in seconds of which the framework took to completely finish loading, this property is not rounded.
-
-* **number**
-
 ## Functions
 
 ### Server <Badge type="danger" text="server" />
@@ -48,7 +32,7 @@ Gets the client-sided interface of LuminFramework.
 
 ---
 
-### ImportPackages
+### Load
 
 Imports the provided packages in chronological order, also allowing for you to import descendants aswell. Non-modules will be filtered out automatically.
 
@@ -66,7 +50,7 @@ Whether or not to import the package's descendants, defaults to `false`
 
 ---
 
-### Event
+### Signal
 
 Creates/reference a event of the given name, create a new anonymous event by leaving the name blank.
 
