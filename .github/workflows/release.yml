@@ -23,13 +23,13 @@ jobs:
               run: |
                 wally install
 
+            - name: Format code
+              run: |
+                stylua src/
+
             - name: Build standalone
               run: |
                 rojo build standalone.project.json --output ./Standalone.rbxm
-
-            - name: Build plugin
-              run: |
-                rojo build plugin.project.json --output ./Plugin.rbxm
 
             - name: Create release
               id: create_release
@@ -41,6 +41,5 @@ jobs:
                 generate_release_notes: true
                 files: |
                   ./Standalone.rbxm
-                  ./Plugin.rbxm
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

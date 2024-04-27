@@ -1,48 +1,33 @@
--- // Package
+-- Module
 
 local Root = {}
 local Server = {}
 local Client = {}
 
--- // Variables
-
-local BeginLoadTime = os.clock()
+-- Variables
 
 local PlayerService = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
-local Network = require(script.Network) -- Networking logic
-local Event = require(script.Parent.event) -- Event logic
-
-local Debugger = require(script.Debugger) -- Easy debug logic
-local Runtime = require(script.Runtime) -- Runtime settings
-local Types = require(script.Types) -- Package types
-
-Root.Runtime = Runtime
-Root.Debugger = Debugger
-
-local RuntimeObjects = Root.Runtime.Objects
-local RunContext = if RunService:IsServer() then "Server" else "Client"
+local Network = require(script.Network)
+local Signal = require(script.Parent.signal)
+local Types = require(script.Types)
+local Objects = require(script.Objects)
 
 local NetworkRoot = table.freeze({
 	Event = function(name: string, reliable: boolean?)
-		return Network("Event", name, reliable)
+		return Network.new("Event", name, reliable)
 	end,
 	Function = function(name: string, reliable: boolean?)
-		return Network("Function", name, reliable)
+		return Network.new("Function", name, reliable)
 	end,
 })
 
--- // Functions
+-- Functions
 
 function Root.Server()
 	assert(RunService:IsServer(), "Cannot get server interfaces on client")
-
-	if table.isfrozen(Server) then
-		return Server
-	end
-
-	return table.freeze(Server)
+	return Server
 end
 
 function Root.Client()
@@ -55,66 +40,44 @@ function Root.Client()
 	end
 
 	Client.PlayerGui = Player:WaitForChild("PlayerGui") :: PlayerGui
-	Client.PlayerBackpack = Player:WaitForChild("Backpack") :: Backpack
 	Client.Player = Player :: Player
 
 	return Client
 end
 
-function Root.ImportPackages(importList: { ModuleScript }, importDeep: boolean?)
-	for _, package in importList do
-		if not package:IsA("ModuleScript") then
+function Root.Load(parent: Instance, filter: (module: ModuleScript) -> boolean?)
+	for _, module in parent:GetChildren() do
+		if not module:IsA("ModuleScript") then
 			continue
 		end
-		(require)(package)
-
-		if importDeep then
-			for _, deepPackage in package:GetDescendants() do
-				if deepPackage:IsA("ModuleScript") then
-					(require)(deepPackage)
-				end
+		if filter and filter(module) then
+			local imported = (require)(module)
+			if type(imported["Init"]) == "function" then
+				imported["Init"]()
 			end
 		end
 	end
 end
 
-function Root.Event(eventName: string?): Event.Signal<...any>
-	if not eventName then
-		Debugger.LogEvent("[%s] Create Event Anonymous", RunContext)
-		return Event()
+function Root.Signal(name: string?)
+	if not name then
+		return Signal.new()
 	end
 
-	if not RuntimeObjects.Events[eventName] then
-		local NewSignal = Event()
-		Debugger.LogEvent("[%s] Create Event %s", RunContext, eventName)
-
-		RuntimeObjects.Events[eventName] = NewSignal
+	if not Objects.Signals[name] then
+		local NewSignal = Signal.new()
+		Objects.Signals[name] = NewSignal
 	end
 
-	return RuntimeObjects.Events[eventName]
+	return Objects.Signals[name]
 end
 
-function Root.Signal(signalName: string?): Event.Signal<...any>
-	return Root.Event(signalName)
-end
-
-function Client.GetCharacter(): Types.Character6Joint
+function Client.Character(): Types.Character6Joint
 	local Player = PlayerService.LocalPlayer
 	return Player.Character or Player.CharacterAdded:Wait()
 end
 
-Client.Network = NetworkRoot :: {
-	Event: (name: string, reliable: boolean?) -> Network.ClientEvent,
-	Function: (name: string, reliable: boolean?) -> Network.ClientFunction,
-}
-Server.Network = NetworkRoot :: {
-	Event: (name: string, reliable: boolean?) -> Network.ServerEvent,
-	Function: (name: string, reliable: boolean?) -> Network.ServerFunction,
-}
-
--- // Actions
-
-Root.LoadTime = (os.clock() - BeginLoadTime) * 1000
-Debugger.LogEvent("[Framework] %s Loaded; %.2fms", RunContext, Root.LoadTime)
+Client.Network = NetworkRoot :: Types.NetworkRoot<Types.ClientEvent, Types.ClientFunction>
+Server.Network = NetworkRoot :: Types.NetworkRoot<Types.ServerEvent, Types.ServerFunction>
 
 return table.freeze(Root)

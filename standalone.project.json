@@ -3,20 +3,7 @@
     "tree": {
         "$path": "Packages",
         "Framework": {
-            "$path": "src",
-            "$properties": {
-                "Attributes": {
-                    "Version": {
-                        "String": "7.0.0"
-                    },
-                    "StudioShowLoggedEvents": {
-                        "Bool": true
-                    },
-                    "IgnoreInvalidNetworkArgs": {
-                        "Bool": false
-                    }
-                }
-            }
+            "$path": "src"
         }
     }
 }

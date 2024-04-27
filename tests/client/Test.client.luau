@@ -1,5 +1,7 @@
-local Canary = require(game.ReplicatedStorage.Packages.Framework)
+local Lumin = require(game.ReplicatedStorage.Packages.Framework)
 local Client = Canary.Client()
+
+Lumin.
 
 local AnnounceNetwork = Client.Network.Event("Announcer")
 local Gui = Client.PlayerGui:WaitForChild("Announce")

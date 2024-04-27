@@ -1,0 +1,4 @@
+return {
+	Signals = {},
+	Networks = {},
+}

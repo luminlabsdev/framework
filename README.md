@@ -1,3 +1,3 @@
-# LuminFramework
+# Lumin Framework
 
-A lightning fast & lightweight game framework for Roblox.
+![Documentation status](https://img.shields.io/github/actions/workflow/status/lumin-dev/LuminFramework/deploy.yml)

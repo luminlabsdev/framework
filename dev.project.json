@@ -4,33 +4,14 @@
 	"tree": {
 		"$className": "DataModel",
 		"ReplicatedStorage": {
-			"DevPackages": {
-				"$path": "DevPackages"
-			},
 			"Packages": {
 				"$path": "Packages",
 				"Framework": {
-					"$properties": {
-						"Attributes": {
-							"Version": {
-								"String": "7.0.0"
-							},
-							"StudioShowLoggedEvents": {
-								"Bool": true
-							},
-							"IgnoreInvalidNetworkArgs": {
-								"Bool": false
-							}
-						}
-					},
 					"$path": "src"
 				}
 			},
 			"Tests": {
 				"$path": "tests/client"
-			},
-			"Plugin": {
-				"$path": "plugin"
 			}
 		},
 		"ServerStorage": {
