@@ -6,8 +6,6 @@ local Client = {}
 
 -- Variables
 
-require(script.Network)
-
 local PlayerService = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
