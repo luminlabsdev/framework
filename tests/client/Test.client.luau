@@ -3,7 +3,7 @@ local Client = Lumin.Client()
 
 local AnnounceNetwork = Client.Network.Event("Announcer"):expect()
 local Gui = Client.PlayerGui:WaitForChild("Announce")
-local Label = Gui:WaitForChild("AnnounceLabel")
+local Label = Gui:WaitForChild("AnnounceLabel") :: TextLabel
 
 AnnounceNetwork:Listen(function(message)
 	Label.Text = message

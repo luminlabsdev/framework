@@ -6,7 +6,7 @@ export default defineConfig({
   base: "/LuminFramework/",
   title: "Lumin Framework",
   titleTemplate: "Lumin Labs",
-  description: "A blazingly fast & lightweight game framework",
+  description: "A lightning fast & lightweight game framework",
   lastUpdated: true,
   lang: 'en-us',
   themeConfig: {
@@ -41,7 +41,8 @@ export default defineConfig({
         {
           text: 'Engine Recaps',
           items: [
-            { text: 'February 2024', link: '/recaps/' },
+            { text: 'May 2024', link: '/recaps/' },
+            { text: 'February 2024', link: '/recaps/february2024' },
             { text: 'December 2023', link: '/recaps/december2023' },
             { text: 'November 2023', link: '/recaps/november2023' },
             { text: 'October 2023', link: '/recaps/october2023' },

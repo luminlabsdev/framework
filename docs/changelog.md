@@ -2,21 +2,23 @@
 
 This is the changelog which is changed every update, and we follow semver.
 
-## 7.0.3
+## 8.0.0
 
 ---
 
 ### Added
 
-* Nothing
+* Improved networking system
+* Better solutions to load modules during run time
 
 ### Improvements
 
 * Changed project name from **CanaryEngine** to **LuminFramework**
+* All yielding code now uses promises
 
 ### Removed
 
-* Nothing
+* Client.PlayerBackpack
 
 ## 7.0.2
 
