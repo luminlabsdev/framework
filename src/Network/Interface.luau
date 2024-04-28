@@ -41,16 +41,16 @@ local Remotes = {
 
 -- Functions
 
-local function new(type: "Event" | "Function", name: string, reliable: boolean?): Types.Promise<any>
+local function new(kind: "Event" | "Function", name: string, reliable: boolean?): Types.Promise<any>
 	return Promise.new(function(resolve, reject)
-		local IdentifierName = `{name}_{type}`
+		local IdentifierName = `{name}_{kind}`
 
 		if Identifier.Exists(IdentifierName) then
 			reject("[Lumin] Cannot use same event/function name multiple times")
 		end
 
 		reliable = reliable or reliable == nil
-		local self = setmetatable({}, if RunService:IsClient() then Indexes[type][1] else Indexes[type][2])
+		local self = setmetatable({}, if RunService:IsClient() then Indexes[kind][1] else Indexes[kind][2])
 
 		self.Reliable = reliable
 		self._Ratelimit = nil
@@ -60,10 +60,10 @@ local function new(type: "Event" | "Function", name: string, reliable: boolean?)
 		self._Fire = if reliable then Remotes[RunContext].SendReliable else Remotes[RunContext].SendUnreliable
 		self._FireNow = if reliable then Remotes[RunContext].SendReliableNow else Remotes[RunContext].SendUnreliableNow
 
-		if not Objects.Networks[type][name] then
-			Objects.Networks[type][name] = self
+		if not Objects.Networks[kind][name] then
+			Objects.Networks[kind][name] = self
 		end
-		resolve(Objects.Networks[type][name])
+		resolve(Objects.Networks[kind][name])
 	end)
 end
 
