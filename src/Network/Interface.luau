@@ -49,7 +49,7 @@ local function new(type: "Event" | "Function", name: string, reliable: boolean?)
 			reject("[Lumin] Cannot use same event/function name multiple times")
 		end
 
-		reliable = if reliable == nil then true else reliable
+		reliable = reliable or reliable == nil
 		local self = setmetatable({}, if RunService:IsClient() then Indexes[type][1] else Indexes[type][2])
 
 		self.Reliable = reliable
