@@ -26,6 +26,7 @@ jobs:
             - name: Format code
               run: |
                 stylua src/
+                stylua tests/
 
             - name: Build standalone
               run: |
