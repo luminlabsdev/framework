@@ -23,6 +23,7 @@ local Outgoing: {
 
 -- Functions
 
+-- Normally sends a reliable event
 local function SendReliable(id: string, args: { any })
 	if not Outgoing.Reliable[id] then
 		Outgoing.Reliable[id] = {}
@@ -31,31 +32,40 @@ local function SendReliable(id: string, args: { any })
 	table.insert(Outgoing.Reliable[id], args)
 end
 
+-- Sends the event without batching (waiting an extra frame)
 local function SendReliableNow(id: string, args: { any })
 	Reliable:FireServer({ [id] = { args } })
 end
 
+-- Sends an unreliable event with batching, but packet size protection is offered
 local function SendUnreliable(player: Player, id: string, args: { any })
+	if not Outgoing.Unreliable[id] then
+		Outgoing.Unreliable[id] = {}
+	end
+
+	local OutgoingMimic = Outgoing.Unreliable
+	table.insert(OutgoingMimic[id], args)
+
 	local PacketSize = RemotePacketSizeCounter.GetPacketSize({
 		RunContext = "Client",
 		RemoteType = "RemoteEvent",
-		PacketData = args,
+		PacketData = {OutgoingMimic},
 	})
 
+	-- Since unreliable events have a limit of 900 bytes, we cannot batch all data
 	if PacketSize >= 840 then
 		Unreliable:FireServer({ [id] = { args } })
 	else
-		if not Outgoing.Unreliable[id] then
-			Outgoing.Unreliable[id] = {}
-		end
 		table.insert(Outgoing.Unreliable[id], args)
 	end
 end
 
+-- Similar to `SendReliableNow`
 local function SendUnreliableNow(player: Player, id: string, args: { any })
 	Unreliable:FireServer({ [id] = { args } })
 end
 
+-- Sends a call to be recieved by the server and then back to the client
 local function SendReliableCallAsync(id: string, args: { any }): { any }
 	if not Outgoing.Call[id] then
 		Outgoing.Call[id] = {}
@@ -67,6 +77,7 @@ local function SendReliableCallAsync(id: string, args: { any }): { any }
 	return coroutine.yield()
 end
 
+-- Sets a callback to listen for when an event/function is recieved by the client
 local function Listen(id: string, callback: ({ any }) -> ())
 	Listeners[id] = callback
 end

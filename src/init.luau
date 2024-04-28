@@ -15,6 +15,7 @@ local Signal = require(script.Parent.signal)
 local Promise = require(script.Parent.promise)
 local Objects = require(script.Objects)
 
+-- Reuse NetworkRoot because it is modified internally based on RunContext
 local NetworkRoot = table.freeze({
 	Event = function(name: string, reliable: boolean?)
 		return Network.Interface.new("Event", name, reliable)
@@ -24,15 +25,18 @@ local NetworkRoot = table.freeze({
 	end,
 })
 
+-- A reference to the Promise package
 Root.Promise = Promise :: Types.PromiseLib
 
 -- Functions
 
+-- Fetches the server interface
 function Root.Server()
 	assert(RunService:IsServer(), "[Lumin] Cannot get server interfaces on client")
 	return Server
 end
 
+-- Fetches the client interface
 function Root.Client()
 	assert(RunService:IsClient(), "[Lumin] Cannot get client interfaces on server")
 
@@ -48,6 +52,7 @@ function Root.Client()
 	return Client
 end
 
+-- Loads any module that is within the provided parent, and then filtered if a function is given
 function Root.Load(parent: Instance, filter: (module: ModuleScript) -> boolean?)
 	for _, module in parent:GetChildren() do
 		if not module:IsA("ModuleScript") then
@@ -62,6 +67,7 @@ function Root.Load(parent: Instance, filter: (module: ModuleScript) -> boolean?)
 	end
 end
 
+-- Creates a new signal, if it has no name it will remain anonymous
 function Root.Signal(name: string?): Signal.Signal<any>
 	if not name then
 		return Signal.new()
@@ -75,6 +81,7 @@ function Root.Signal(name: string?): Signal.Signal<any>
 	return Objects.Signals[name]
 end
 
+-- Gets the character, by either getting the current reference or waiting
 function Client.Character(): Types.Promise<Types.Character6Joint>
 	return Promise.new(function(resolve)
 		local Player = PlayerService.LocalPlayer
@@ -82,6 +89,7 @@ function Client.Character(): Types.Promise<Types.Character6Joint>
 	end)
 end
 
+-- An alias for Root.Signal
 Root.Event = Root.Signal
 
 Client.Network = NetworkRoot :: Types.NetworkRoot<Types.ClientEvent, Types.ClientFunction>

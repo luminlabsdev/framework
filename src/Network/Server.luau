@@ -49,25 +49,28 @@ local function SendReliableNow(player: Player, id: string, args: { any })
 end
 
 local function SendUnreliable(player: Player, id: string, args: { any })
+	local OutgoingForPlayer = Outgoing[player]
+
+	if not OutgoingForPlayer then
+		CreateOutgoingForPlayer(player)
+	end
+
+	if not OutgoingForPlayer.Unreliable[id] then
+		OutgoingForPlayer.Unreliable[id] = {}
+	end
+
+	local OutgoingMimic = OutgoingForPlayer.Unreliable
+	table.insert(OutgoingMimic[id], args)
+
 	local PacketSize = RemotePacketSizeCounter.GetPacketSize({
 		RunContext = "Server",
 		RemoteType = "RemoteEvent",
-		PacketData = args,
+		PacketData = {OutgoingMimic},
 	})
 
 	if PacketSize >= 840 then
 		Unreliable:FireClient(player, { [id] = { args } })
 	else
-		local OutgoingForPlayer = Outgoing[player]
-
-		if not OutgoingForPlayer then
-			CreateOutgoingForPlayer(player)
-		end
-
-		if not OutgoingForPlayer.Unreliable[id] then
-			OutgoingForPlayer.Unreliable[id] = {}
-		end
-
 		table.insert(OutgoingForPlayer.Unreliable[id], args)
 	end
 end

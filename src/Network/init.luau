@@ -3,7 +3,6 @@ local RunService = game:GetService("RunService")
 
 if RunService:IsServer() then
 	if not ReplicatedStorage:FindFirstChild("FrameworkReliable") then
-		print("creating remote 1")
 		local Reliable = Instance.new("RemoteEvent")
 		Reliable.Name = "FrameworkReliable"
 		Reliable.Parent = ReplicatedStorage
