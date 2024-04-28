@@ -1,8 +1,8 @@
-local Canary = require(game.ReplicatedStorage.Packages.Framework)
-local Server = Canary.Server()
+local Lumin = require(game.ReplicatedStorage.Packages.Framework)
+local Server = Lumin.Server()
 
-local GameFinishSignal = Canary.Event()
-local AnnounceNetwork = Server.Network.Event("Announcer")
+local GameFinishSignal = Lumin.Signal()
+local AnnounceNetwork = Server.Network.Event("Announcer"):expect()
 
 local CollectionService = game:GetService("CollectionService")
 local PlayerService = game:GetService("Players")
@@ -28,7 +28,7 @@ for _, part: Part in SpleefBricks do
 
         if Character:FindFirstChildWhichIsA("Humanoid") then
             task.wait(0.2)
-            Canary.Debugger.LogEvent("Broke part")
+            print("Broke part")
 
             part.Transparency = 1
             part.CanCollide = false
@@ -73,7 +73,7 @@ for _, part: Part in KillBricks do
 end
 
 GameFinishSignal:Connect(function()
-    Canary.Debugger.LogEvent("Game finished!")
+    print("Game finished!")
     task.wait(3)
     for _, part: Part in SpleefBricks do
         part.Transparency = 0

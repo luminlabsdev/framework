@@ -1,4 +1,7 @@
 return {
 	Signals = {},
-	Networks = {},
+	Networks = {
+		Event = {},
+		Function = {},
+	},
 }

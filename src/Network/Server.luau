@@ -6,6 +6,8 @@ local RunService = game:GetService("RunService")
 local Reliable: RemoteEvent = ReplicatedStorage:WaitForChild("FrameworkReliable")
 local Unreliable: UnreliableRemoteEvent = ReplicatedStorage:WaitForChild("FrameworkUnreliable")
 
+local RemotePacketSizeCounter = require(script.Parent.Parent.Parent.remotepacketsizecounter)
+
 local Listeners: { [string]: (Player, { any }) -> () } = {}
 local Outgoing: {
 	[Player]: {
@@ -33,6 +35,8 @@ local function SendReliable(player: Player, id: string, args: { any })
 		CreateOutgoingForPlayer(player)
 	end
 
+	OutgoingForPlayer = Outgoing[player]
+
 	if not OutgoingForPlayer.Reliable[id] then
 		OutgoingForPlayer.Reliable[id] = {}
 	end
@@ -41,25 +45,35 @@ local function SendReliable(player: Player, id: string, args: { any })
 end
 
 local function SendReliableNow(player: Player, id: string, args: { any })
-	Reliable:FireClient(player, {[id] = {args}})
+	Reliable:FireClient(player, { [id] = { args } })
 end
 
 local function SendUnreliable(player: Player, id: string, args: { any })
-	local OutgoingForPlayer = Outgoing[player]
+	local PacketSize = RemotePacketSizeCounter.GetPacketSize({
+		RunContext = "Server",
+		RemoteType = "RemoteEvent",
+		PacketData = args,
+	})
 
-	if not OutgoingForPlayer then
-		CreateOutgoingForPlayer(player)
+	if PacketSize >= 840 then
+		Unreliable:FireClient(player, { [id] = { args } })
+	else
+		local OutgoingForPlayer = Outgoing[player]
+
+		if not OutgoingForPlayer then
+			CreateOutgoingForPlayer(player)
+		end
+
+		if not OutgoingForPlayer.Unreliable[id] then
+			OutgoingForPlayer.Unreliable[id] = {}
+		end
+
+		table.insert(OutgoingForPlayer.Unreliable[id], args)
 	end
-
-	if not OutgoingForPlayer.Unreliable[id] then
-		OutgoingForPlayer.Unreliable[id] = {}
-	end
-
-	table.insert(OutgoingForPlayer.Unreliable[id], args)
 end
 
 local function SendUnreliableNow(player: Player, id: string, args: { any })
-	Unreliable:FireClient(player, {[id] = {args}})
+	Unreliable:FireClient(player, { [id] = { args } })
 end
 
 local function SendReliableCallReturn(player: Player, id: string, args: { any })
@@ -69,6 +83,7 @@ local function SendReliableCallReturn(player: Player, id: string, args: { any })
 		CreateOutgoingForPlayer(player)
 	end
 
+	OutgoingForPlayer = Outgoing[player]
 	OutgoingForPlayer.Call[id] = args
 end
 

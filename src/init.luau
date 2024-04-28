@@ -6,32 +6,37 @@ local Client = {}
 
 -- Variables
 
+require(script.Network)
+
 local PlayerService = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
+local Types = require(script.Types)
 local Network = require(script.Network)
 local Signal = require(script.Parent.signal)
-local Types = require(script.Types)
+local Promise = require(script.Parent.promise)
 local Objects = require(script.Objects)
 
 local NetworkRoot = table.freeze({
 	Event = function(name: string, reliable: boolean?)
-		return Network.new("Event", name, reliable)
+		return Network.Interface.new("Event", name, reliable)
 	end,
 	Function = function(name: string, reliable: boolean?)
-		return Network.new("Function", name, reliable)
+		return Network.Interface.new("Function", name, reliable)
 	end,
 })
+
+Root.Promise = Promise :: Types.PromiseLib
 
 -- Functions
 
 function Root.Server()
-	assert(RunService:IsServer(), "Cannot get server interfaces on client")
+	assert(RunService:IsServer(), "[Lumin] Cannot get server interfaces on client")
 	return Server
 end
 
 function Root.Client()
-	assert(RunService:IsClient(), "Cannot get client interfaces on server")
+	assert(RunService:IsClient(), "[Lumin] Cannot get client interfaces on server")
 
 	local Player = PlayerService.LocalPlayer
 
@@ -59,7 +64,7 @@ function Root.Load(parent: Instance, filter: (module: ModuleScript) -> boolean?)
 	end
 end
 
-function Root.Signal(name: string?)
+function Root.Signal(name: string?): Signal.Signal<any>
 	if not name then
 		return Signal.new()
 	end
@@ -72,10 +77,14 @@ function Root.Signal(name: string?)
 	return Objects.Signals[name]
 end
 
-function Client.Character(): Types.Character6Joint
-	local Player = PlayerService.LocalPlayer
-	return Player.Character or Player.CharacterAdded:Wait()
+function Client.Character(): Types.Promise<Types.Character6Joint>
+	return Promise.new(function(resolve)
+		local Player = PlayerService.LocalPlayer
+		resolve(Player.Character or Player.CharacterAdded:Wait())
+	end)
 end
+
+Root.Event = Root.Signal
 
 Client.Network = NetworkRoot :: Types.NetworkRoot<Types.ClientEvent, Types.ClientFunction>
 Server.Network = NetworkRoot :: Types.NetworkRoot<Types.ServerEvent, Types.ServerFunction>
