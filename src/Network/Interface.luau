@@ -174,7 +174,7 @@ function ServerEvent:SetRateLimit(
 )
 	if maxCalls <= -1 then
 		self._Ratelimit = nil
-		self._InvokeOverflow = nil
+		self._CallOverflow = nil
 	end
 
 	if not (resetInterval and fireOverflowCallback) then
@@ -182,25 +182,25 @@ function ServerEvent:SetRateLimit(
 	end
 
 	self._Ratelimit = Ratelimit(maxCalls, resetInterval or 1) :: any
-	self._InvokeOverflow = fireOverflowCallback :: any
+	self._CallOverflow = fireOverflowCallback :: any
 end
 
 function ServerFunction:SetRateLimit(
 	maxCalls: number,
 	resetInterval: number?,
-	invokeOverflowCallback: (sender: Player) -> ()?
+	callOverflowCallback: (sender: Player) -> ()?
 )
 	if maxCalls <= -1 then
 		self._Ratelimit = nil
-		self._InvokeOverflow = nil
+		self._CallOverflow = nil
 	end
 
-	if not (resetInterval and invokeOverflowCallback) then
+	if not (resetInterval and callOverflowCallback) then
 		return
 	end
 
 	self._Ratelimit = Ratelimit(maxCalls, resetInterval or 1) :: any
-	self._InvokeOverflow = invokeOverflowCallback :: any
+	self._InvokeOverflow = callOverflowCallback :: any
 end
 
 function ServerFunction:OnInvoke(

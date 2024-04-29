@@ -4,11 +4,11 @@ The main class of LuminFramework.
 
 ## Properties
 
-### Runtime <Badge type="tip" text="read only" />
+### Promise <Badge type="tip" text="read only" />
 
-The runtime property contains settings that are set during runtime, and the current context of the server/client.
+A reference to evaera's Promise module.
 
-* [**Runtime**](/api/runtime/)
+* [**Promise**](https://eryn.io/roblox-lua-promise/)
 
 ## Functions
 
@@ -34,15 +34,15 @@ Gets the client-sided interface of LuminFramework.
 
 ### Load
 
-Imports the provided packages in chronological order, also allowing for you to import descendants aswell. Non-modules will be filtered out automatically.
+Imports any modules of the parent provided. Non-modules will be filtered out automatically.
 
 **Parameters**
 
-* **importList:** `{ModuleScript}`\
-A list of packages to import
+* **parent:** `Instance`\
+The parent of which the modules are located
 
-* **importDeep:** `boolean?`\
-Whether or not to import the package's descendants, defaults to `false`
+* **filter:** `(module: ModuleScript) -> boolean?`\
+Allows you to filter through a module, return `false` for it to not be imported
 
 **Returns**
 
@@ -52,13 +52,13 @@ Whether or not to import the package's descendants, defaults to `false`
 
 ### Signal
 
-Creates/reference a event of the given name, create a new anonymous event by leaving the name blank.
+Creates/references a signal of the given name, create a new anonymous signal by leaving the name blank.
 
 **Parameters**
 
 * **name:** `string?`\
-The name of the event
+The name of the signal
 
 **Returns**
 
-* [**Event**](/api/event)
+* [**Signal**](https://sleitnick.github.io/RbxUtil/api/Signal/)

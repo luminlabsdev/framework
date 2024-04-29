@@ -1,3 +1,4 @@
+-- Credit to Redblox for the original code, this is a bit modified and improved
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 

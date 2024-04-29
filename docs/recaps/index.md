@@ -1,29 +1,29 @@
-# Engine Recap - February 2024
-March 1, 2024 · 1 min read
+# Recap - April 2024
+April 28, 2024 · 1 min read
 
-by **[James - Lead Programmer](https://github.com/lolmansReturn)**
+by **[James - Lead Programmer](https://github.com/2jammers)**
 
 ---
 
 **Hi developers,**
 
-With framework update 7.0.0, we have been working on a upgraded networking system and a better API naming scheme.
+With update 8.0.0, you recieve a totally refreshed and rethought framework
 
-### New Networking System
+### Custom Networking System
 
-Here we bring you another new networking system once again, completely rethought from the ground up. What it is doing is this time it is separating events and functions, no longer making specific controllers. This makes more sense for newer users and also has some performance gains.
+Instead of relying on an external package, we have made our own custom networking system with similar performance gains. Some improvements include the addition of the `FireNow` API. This allows you to skip batching and not fire the next frame, and we also introduced batching for unreliable events. If the collected data is under 840 bytes by the time it is batched, you will see performance gains.
 
-### Rename Older API
+### Better Module Loading
 
-We renamed a fair bit of the older API to make more sense with the latest standards. This includes renaming `Signal` to `Event` to have parity with our networking system.
+We improved the module loader API, now allowing for a filter and a parent instance instead of a list. We highly encourage a single-script architecture in light of this change, and this makes it much easier.
 
-### Docs Overhaul
+### Better Documentation
 
-We completely overhauled the docs fixing any issues with grammar or using older API examples. We also fixed up the changelog by updating links and fixing wrong information.
+We have rewritten the tutorials in the documentation to include better wording and they are now much easier to follow along with. We also introduced more tutorials for each API area.
 
-### New Automation Features
+### Branding Changes
 
-New automation scripts have been added to the Git repository, featuring automatically created releases and automatically published wally packages. This is now standard with the rest of our packages as well!
+We changed the framework name from CanaryEngine to LuminFramework in light of the organization changing. We hope that it is much easier to distinguish the framework from a game engine now!
 
 ---
 

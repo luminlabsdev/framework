@@ -41,7 +41,7 @@ export default defineConfig({
         {
           text: 'Engine Recaps',
           items: [
-            { text: 'May 2024', link: '/recaps/' },
+            { text: 'April 2024', link: '/recaps/' },
             { text: 'February 2024', link: '/recaps/february2024' },
             { text: 'December 2023', link: '/recaps/december2023' },
             { text: 'November 2023', link: '/recaps/november2023' },
@@ -79,20 +79,7 @@ export default defineConfig({
                 { text: 'ClientFunction', link: '/api/network/client/function' },
                 { text: 'ServerFunction', link: '/api/network/server/function' }
               ]
-            },
-
-            {
-              text: 'Runtime',
-              collapsed: true,
-              items: [
-                { text: 'Runtime', link: '/api/runtime' },
-                { text: 'RuntimeSettings', link: '/api/runtime/settings' },
-                { text: 'RuntimeObjects', link: '/api/runtime/objects' }
-              ]
-            },
-
-            { text: 'Debugger', link: '/api/debugger' },
-            { text: 'Event', link: '/api/event' }
+            }
           ]
         },
       ],
