@@ -42,10 +42,6 @@ function Root.Client()
 
 	local Player = PlayerService.LocalPlayer
 
-	if not Player.Character then
-		Player.CharacterAdded:Wait()
-	end
-
 	Client.PlayerGui = Player:WaitForChild("PlayerGui") :: PlayerGui
 	Client.Player = Player :: Player
 
