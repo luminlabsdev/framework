@@ -154,10 +154,10 @@ function ServerEvent:Listen(func: (sender: Player, ...unknown) -> (), typeValida
 			return
 		end
 
-		if typeValidationArgs and not script.Parent:GetAttribute("IgnoreInvalidNetworkArgs") then
+		if typeValidationArgs then
 			for index, value in args do
 				if typeof(value) ~= typeValidationArgs[index] then
-					warn(`[Network] Argument #{index} does not have the type '{typeValidationArgs[index]}'`)
+					warn(`[Lumin] Argument #{index} does not have the type '{typeValidationArgs[index]}'`)
 					return
 				end
 			end
@@ -220,10 +220,10 @@ function ServerFunction:OnInvoke(
 			return
 		end
 
-		if typeValidationArgs and not script.Parent:GetAttribute("IgnoreInvalidNetworkArgs") then
+		if typeValidationArgs then
 			for index, value in args do
 				if typeof(value) ~= typeValidationArgs[index] then
-					warn(`[Network] Argument #{index} does not have the type '{typeValidationArgs[index]}'`)
+					warn(`[Lumin] Argument #{index} does not have the type '{typeValidationArgs[index]}'`)
 					return
 				end
 			end
