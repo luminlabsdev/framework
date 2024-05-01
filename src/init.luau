@@ -49,7 +49,7 @@ function Root.Client()
 end
 
 -- Loads any module that is within the provided parent, and then filtered if a function is given
-function Root.Load(parent: Instance, filter: (module: ModuleScript) -> boolean?)
+function Root.Load(parent: Instance, filter: (module: ModuleScript) -> (boolean)?)
 	for _, module in parent:GetChildren() do
 		if not module:IsA("ModuleScript") then
 			continue
