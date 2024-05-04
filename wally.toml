@@ -1,8 +1,8 @@
 [package]
 name = "lumin/framework"
 description = "A lightning fast & lightweight game framework for Roblox"
-version = "8.0.2-rc1"
-license = "Apache-2.0"
+version = "8.0.0-rc2"
+license = "MIT"
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 
