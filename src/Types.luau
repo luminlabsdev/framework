@@ -134,4 +134,15 @@ export type ClientEvent = {
 	Reliable: boolean,
 }
 
+export type Server = {
+	Network: NetworkRoot<ServerEvent, ServerFunction>,
+}
+
+export type Client = {
+	Network: NetworkRoot<ClientEvent, ClientFunction>,
+	Player: Player,
+	PlayerGui: PlayerGui,
+	Character: () -> (Promise<Character6Joint>)
+}
+
 return {}

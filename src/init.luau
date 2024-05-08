@@ -27,13 +27,13 @@ local NetworkRoot = table.freeze({
 -- Functions
 
 -- Fetches the server interface
-local function GetServer()
+local function GetServer(): Types.Server
 	assert(RunService:IsServer(), "[Lumin] Cannot get server interfaces on client")
 	return Server
 end
 
 -- Fetches the client interface
-local function GetClient()
+local function GetClient(): Types.Client
 	assert(RunService:IsClient(), "[Lumin] Cannot get client interfaces on server")
 
 	local Player = PlayerService.LocalPlayer
@@ -45,18 +45,21 @@ local function GetClient()
 end
 
 -- Loads any module that is within the provided parent, and then filtered if a function is given
-local function Load(parent: Instance, filter: (module: ModuleScript) -> (boolean)?)
-	for _, module in parent:GetChildren() do
-		if not module:IsA("ModuleScript") then
-			continue
-		end
-		if filter and filter(module) then
-			local imported = (require)(module)
-			if type(imported["Init"]) == "function" then
-				imported["Init"]()
+-- Please note that these modules could load in any order, and that 
+local function Load(parent: Instance, filter: ((module: ModuleScript) -> boolean)?)
+	task.defer(function()
+		for _, module in parent:GetChildren() do
+			if not module:IsA("ModuleScript") then
+				continue
+			end
+			if filter and filter(module) then
+				local imported = (require)(module)
+				if type(imported["Init"]) == "function" then
+					imported["Init"]()
+				end
 			end
 		end
-	end
+	end)
 end
 
 -- Creates a new signal, if it has no name it will remain anonymous
@@ -81,8 +84,8 @@ function Client.Character(): Types.Promise<Types.Character6Joint>
 	end)
 end
 
-Client.Network = NetworkRoot :: Types.NetworkRoot<Types.ClientEvent, Types.ClientFunction>
-Server.Network = NetworkRoot :: Types.NetworkRoot<Types.ServerEvent, Types.ServerFunction>
+Client.Network = NetworkRoot
+Server.Network = NetworkRoot
 
 return {
 	Promise = Promise :: Types.PromiseLib,
