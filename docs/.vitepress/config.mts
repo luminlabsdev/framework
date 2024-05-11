@@ -3,9 +3,9 @@ import { defineConfig } from 'vitepress'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   head: [['link', { rel: 'icon', href: '/favicon.ico' }]],
-  base: "/LuminFramework/",
+  base: "/framework/",
   title: "Lumin Framework",
-  titleTemplate: "Lumin Labs",
+  titleTemplate: ":title - Lumin",
   description: "A lightning fast & lightweight game framework",
   lastUpdated: true,
   lang: 'en-us',
@@ -16,7 +16,6 @@ export default defineConfig({
         text: 'Articles',
         items: [
           { text: 'Guides', link: '/guides/' },
-          { text: 'Recaps', link: '/recaps/' },
           { text: 'Installation', link: '/installation' },
         ]
       },
@@ -31,25 +30,10 @@ export default defineConfig({
           text: 'Guides',
           items: [
             { text: 'Setup', link: '/guides/' },
-            { text: 'Events', link: '/guides/events' },
+            { text: 'Conventions', link: '/guides/conventions' },
+            { text: 'Signals', link: '/guides/signals' },
             { text: 'Networking', link: '/guides/networking' },
-            { text: 'Debugging', link: '/guides/debugging' }
-          ]
-        }
-      ],
-      '/recaps': [
-        {
-          text: 'Engine Recaps',
-          items: [
-            { text: 'April 2024', link: '/recaps/' },
-            { text: 'February 2024', link: '/recaps/february2024' },
-            { text: 'December 2023', link: '/recaps/december2023' },
-            { text: 'November 2023', link: '/recaps/november2023' },
-            { text: 'October 2023', link: '/recaps/october2023' },
-            { text: 'September 2023', link: '/recaps/september2023' },
-            { text: 'August 2023', link: '/recaps/august2023' },
-            { text: 'July 2023', link: '/recaps/july2023' },
-            { text: 'June 2023', link: '/recaps/june2023' }
+            { text: 'Networking Expanded', link: '/guides/networkingexpanded' }
           ]
         }
       ],
@@ -73,7 +57,7 @@ export default defineConfig({
               text: 'Network',
               collapsed: true,
               items: [
-                { text: 'Network', link: '/api/network'},
+                { text: 'Network', link: '/api/network/'},
                 { text: 'ClientEvent', link: '/api/network/client/event' },
                 { text: 'ServerEvent', link: '/api/network/server/event' },
                 { text: 'ClientFunction', link: '/api/network/client/function' },
@@ -93,11 +77,6 @@ export default defineConfig({
 
     editLink: {
       pattern: 'https://github.com/lumin-dev/LuminFramework/edit/main/docs/:path'
-    },
-
-    footer: {
-      message: 'Built with VitePress',
-      copyright: 'Copyright © 2021 - 2024 Lumin Labs'
     },
 
     socialLinks: [

@@ -2,7 +2,23 @@
 
 This is the changelog which is changed every update, and we follow semver.
 
-## 8.0.0
+## 8.0.0-rc1
+
+---
+
+### Added
+
+* Nothing
+
+### Improvements
+
+* Nothing
+
+### Removed
+
+* Nothing
+
+## 8.0.0-rc1
 
 ---
 

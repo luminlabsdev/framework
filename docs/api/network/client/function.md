@@ -4,7 +4,7 @@ A client-sided network function.
 
 ## Properties
 
-### IsReliable <Badge type="tip" text="read only" />
+### Reliable <Badge type="tip" text="read only" />
 
 Whether or not the network function uses a reliable remote event.
 
@@ -23,4 +23,4 @@ The data to invoke the server with
 
 **Returns**
 
-* **[Future](https://util.redblox.dev/future.html#methods)**
+* [**Promise**](https://eryn.io/roblox-lua-promise/)

@@ -1,6 +1,6 @@
 # Client <Badge type="danger" text="client" />
 
-LuminFramework's client-sided interface.
+The framework's client-sided interface.
 
 ## Properties
 
@@ -20,14 +20,6 @@ A simple reference to the [Player.PlayerGui](https://create.roblox.com/docs/refe
 
 ---
 
-### PlayerBackpack <Badge type="tip" text="read only" />
-
-A simple reference to the [Player.Backpack](https://create.roblox.com/docs/reference/engine/classes/Player#Backpack)
-
-* [**Backpack**](https://create.roblox.com/docs/reference/engine/classes/Backpack)
-
----
-
 ### Network <Badge type="tip" text="read only" />
 
 A simple reference to the network contstructor.
@@ -36,10 +28,10 @@ A simple reference to the network contstructor.
 
 ## Functions
 
-### GetCharacter <Badge type="warning" text="yields" />
+### Character
 
 Gets the players current character model; if it doesn't exist the thread will yield until it does.
 
 **Returns**
 
-* [**Character**](/api/#character)
+* [**Promise**](https://eryn.io/roblox-lua-promise/)<[**Character**](/api/#character)>

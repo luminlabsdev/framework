@@ -4,7 +4,7 @@ A server-sided network event.
 
 ## Properties
 
-### IsReliable <Badge type="tip" text="read only" />
+### Reliable <Badge type="tip" text="read only" />
 
 Whether or not the network event uses a reliable remote event.
 
@@ -20,9 +20,27 @@ Fires an event which sends data to the client, equivalent to [RemoteEvent:FireCl
 If you need to fire the event to multiple players instead of one, you can use a table of players.
 
 ```lua
-NetworkController:Fire({Player1, Player2, Player3}, 1, 2, 3)
+Event:Fire({Player1, Player2, Player3}, 1, 2, 3)
 ```
 :::
+
+**Parameters**
+
+* **recipients:** `{ Player } | Player`\
+The players who should recieve the data and/or call
+
+* **data:** `...any`\
+The data that should be sent to the client
+
+**Returns**
+
+* **void**
+
+---
+
+### FireNow
+
+Same as `Fire` but does not batch the call / wait until the next frame
 
 **Parameters**
 

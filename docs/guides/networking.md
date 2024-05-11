@@ -1,6 +1,6 @@
 # Networking
 
-LuminFramework's networking system is very straightforward compared to some of the other game frameworks out there. It uses a method which reduces bandwidth by a lot, and in turn will help your game lag less. This document serves as a simple tutorial on the networking system, explaining all the functionality available in the `Network` constructor.
+Lumin Framework's networking system is very straightforward compared to some of the other game frameworks out there. It uses a method which reduces bandwidth by a lot, and in turn will help your game lag less. This document serves as a simple tutorial on the networking system, explaining all the functionality available in the `Network` constructor.
 
 ### Events
 
@@ -8,11 +8,11 @@ Instead of interacting with the normal [RemoteEvent](https://create.roblox.com/d
 
 ::: code-group
 ```lua [Server]
-local SendInfoNetwork = Server.Network.Event("SendInfo")
+local SendInfoNetwork = Server.Network.Event("SendInfo"):expect()
 ```
 
 ```lua [Client]
-local SendInfoNetwork = Client.Network.Event("SendInfo")
+local SendInfoNetwork = Client.Network.Event("SendInfo"):expect()
 ```
 :::
 
@@ -20,7 +20,7 @@ Now lets continue this code and make it so it can recieve info from the server:
 
 ::: code-group
 ```lua [Server]
-local SendInfoNetwork = Server.Network.Event("SendInfo")
+local SendInfoNetwork = Server.Network.Event("SendInfo"):expect()
 local PlayerService = game:GetService("Players")
 
 SendInfoNetwork:FireAll( -- When sending data on the server, you must pass a player argument. In this example though, we are firing to all players.
@@ -30,16 +30,12 @@ SendInfoNetwork:FireAll( -- When sending data on the server, you must pass a pla
 ```
 
 ```lua [Client]
-local SendInfoNetwork = Client.Network.Event("SendInfo")
+local SendInfoNetwork = Client.Network.Event("SendInfo"):expect()
 
 SendInfoNetwork:Listen(function(data1, data2)
     print(data1, data2)
 end)
 ```
-:::
-
-:::danger
-You cannot really create a replicated event/function. This is because it would be accessed both by the server/client, so you would have to explicity check if is the server or client. This is considered a bad practice anyway, you shouldn't be using server or client exclusive things with shared packages.
 :::
 
 When we start the script, we should then see the the name in the output, and also see the following in the client output:
@@ -60,7 +56,7 @@ The [RemoteFunction](https://create.roblox.com/docs/reference/engine/classes/Rem
 
 ::: code-group
 ```lua [Server]
-local ValueGetNetwork = Server.Network.Function("ValueGet")
+local ValueGetNetwork = Server.Network.Function("ValueGet"):expect()
 
 ValueGetNetwork:OnInvoke(function(sender, data)
     print(sender.Name) -- The player who sent the invoke's name
@@ -73,7 +69,7 @@ end)
 ```
 
 ```lua [Client]
-local ValueGetNetwork = Client.Network.Function("ValueGet")
+local ValueGetNetwork = Client.Network.Function("ValueGet"):expect()
 
 print(ValueGetNetwork:InvokeAsync(true):Await()) -- When the value is recieved, this should return "yes" according to the server code.
 ```
@@ -87,7 +83,7 @@ Type validation was a feature that was released in v6.2.1. Type validation allow
 
 ::: code-group
 ```lua [Server]
-local TypeValidationTestNetwork = Server.Network.Event("TypeValidationTest")
+local TypeValidationTestNetwork = Server.Network.Event("TypeValidationTest"):expect()
 
 ValueGetNetwork:Listen(function(arg1, arg2, arg3)
     print(arg1, arg2, arg3)
@@ -95,7 +91,7 @@ end)
 ```
 
 ```lua [Client]
-local TypeValidationTestNetwork = Client.Network.Event("TypeValidationTest")
+local TypeValidationTestNetwork = Client.Network.Event("TypeValidationTest"):expect()
 
 task.delay(5, function()
     TypeValidationTestNetwork:Fire("turkey", 1, true)
@@ -106,7 +102,7 @@ end)
 The above will function normally just like how a default network event would. To activate the type validation, add another argument to `Listen` that is a table, these will contain the types.
 
 ```lua
-local TypeValidationTestNetwork = Server.Network.Event("TypeValidationTest")
+local TypeValidationTestNetwork = Server.Network.Event("TypeValidationTest"):expect()
 
 ValueGetNetwork:Listen(function(arg1, arg2, arg3)
     print(arg1, arg2, arg3)
@@ -115,7 +111,7 @@ end, {"string", "number", "boolean"})
 For type validation to work properly, these should be in the exact same order as you would expect the arguments to. The above example is how the server expects it to be, so nothing would happen and the listener would run as normal. Now, lets change up the order of the arguments on the client and see what happens. 
 
 ```lua
-local TypeValidationTestNetwork = Client.Network.Event("TypeValidationTest")
+local TypeValidationTestNetwork = Client.Network.Event("TypeValidationTest"):expect()
 
 task.delay(5, function()
     TypeValidationTestNetwork:Fire("turkey", true, 1)

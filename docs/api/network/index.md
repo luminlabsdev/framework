@@ -18,7 +18,7 @@ Whether or not the object created is reliable. Defaults to true
 
 **Returns**
 
-* **[**EventClient | EventServer**](/api/network/server/event)**
+* [**Promise**](https://eryn.io/roblox-lua-promise/)<[**EventClient | EventServer**](/api/network/server/event)>
 
 ---
 
@@ -36,4 +36,4 @@ Whether or not the object created is reliable. Defaults to true
 
 **Returns**
 
-* **[**FunctionClient | FunctionServer**](/api/network/client/event)**
+* [**Promise**](https://eryn.io/roblox-lua-promise/)<[**FunctionClient | FunctionServer**](/api/network/client/event)>

@@ -1,6 +1,6 @@
 # Server <Badge type="danger" text="server" />
 
-LuminFramework's server-sided interface.
+The framework's server-sided interface.
 
 ## Properties
 

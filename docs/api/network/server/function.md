@@ -4,7 +4,7 @@ A server-sided network function.
 
 ## Properties
 
-### IsReliable <Badge type="tip" text="read only" />
+### Reliable <Badge type="tip" text="read only" />
 
 Whether or not the network function uses a reliable remote event.
 
