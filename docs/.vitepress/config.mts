@@ -3,7 +3,7 @@ import { defineConfig } from 'vitepress'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   head: [['link', { rel: 'icon', href: '/favicon.ico' }]],
-  base: "/framework/",
+  base: "/LuminFramework/",
   title: "Lumin Framework",
   titleTemplate: ":title - Lumin",
   description: "A lightning fast & lightweight game framework",
