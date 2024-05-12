@@ -14,14 +14,13 @@ hero:
       link: /api/
 
 features:
-  - icon: 🎒
-    title: Lightweight
-    details: No extra bloatware attached, only what it needs to function
-  - icon: ⚡
-    title: Lightning Fast
-    details: A framework that only does what you want it to; no extra side effects
-  - icon: 🔐
-    title: Secure
-    details: Fast and efficient networking system designed to block exploiters
+  - icon:
+      src: https://avatars.githubusercontent.com/u/118916772?v=4
+    title: AridAjd
+    details: <i>'Using the framework, you literally have no worries. The internal is heavily type-checked and also gives you the ability to keep your code to be strict on types. No bloat, lightweight on performance, straightforward API and does proper implementation of promises to improve development experience. Overall, a solid framework!'</i>
+  - icon: 
+      src: https://avatars.githubusercontent.com/u/110689336?v=4
+    title: GameboyTheDev
+    details: <i>'Lumin Framework is the best I have seen so far in making networking as simple and straightforward as possible! Would recommend!'</i>
 ---
 

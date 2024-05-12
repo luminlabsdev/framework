@@ -2,7 +2,23 @@
 
 This is the changelog which is changed every update, and we follow semver.
 
-## 8.0.0-rc1
+## 8.0.0
+
+---
+
+### Added
+
+* Adds reviews to docs home page
+
+### Improvements
+
+* Nothing
+
+### Removed
+
+* Nothing
+
+## 8.0.0-rc2
 
 ---
 
@@ -12,7 +28,40 @@ This is the changelog which is changed every update, and we follow semver.
 
 ### Improvements
 
+* Improve main module structure
+* Fix typing bug with `.Load()`
+
+### Removed
+
 * Nothing
+
+## 8.0.2-rc1
+
+---
+
+### Added
+
+* Nothing
+
+### Improvements
+
+* Fixes yielding bug on client when character does not load
+
+### Removed
+
+* Nothing
+
+## 8.0.1-rc1
+
+---
+
+### Added
+
+* Nothing
+
+### Improvements
+
+* Fix networking interface issues
 
 ### Removed
 

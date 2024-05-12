@@ -30,7 +30,6 @@ export default defineConfig({
           text: 'Guides',
           items: [
             { text: 'Setup', link: '/guides/' },
-            { text: 'Conventions', link: '/guides/conventions' },
             { text: 'Signals', link: '/guides/signals' },
             { text: 'Networking', link: '/guides/networking' },
             { text: 'Networking Expanded', link: '/guides/networkingexpanded' }
@@ -43,6 +42,7 @@ export default defineConfig({
           text: 'API Reference',
           items: [
             { text: 'Framework', link: '/api/' },
+            { text: 'Network', link: '/api/network/'},
 
             {
               text: 'Interfaces',
@@ -54,10 +54,9 @@ export default defineConfig({
             },
 
             {
-              text: 'Network',
+              text: 'Network Interfaces',
               collapsed: true,
               items: [
-                { text: 'Network', link: '/api/network/'},
                 { text: 'ClientEvent', link: '/api/network/client/event' },
                 { text: 'ServerEvent', link: '/api/network/server/event' },
                 { text: 'ClientFunction', link: '/api/network/client/function' },
