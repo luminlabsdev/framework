@@ -28,3 +28,13 @@ local Framework = require(ReplicatedStorage.Packages.Framework)
 local Server = Framework.Server() -- or Framework.Client()
 ```
 From here, you can access run context specific items like the player gui.
+
+## Recommended Packages
+
+To start a successful project, we recommend using:
+
+`jsdotlua/react-lua`
+`jsdotlua/react-roblox`
+`sleitnick/trove`
+
+... and of course Lumin Framework.

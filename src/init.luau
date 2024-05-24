@@ -87,6 +87,14 @@ end
 Client.Network = NetworkRoot
 Server.Network = NetworkRoot
 
+export type Character15Joint = Types.Character15Joint
+export type Character6Joint = Types.Character6Joint
+export type Promise = Types.Promise<any>
+export type ServerFunction = Types.ServerFunction
+export type ServerEvent = Types.ServerEvent
+export type ClientFunction = Types.ClientFunction
+export type ClientEvent = Types.ClientEvent
+
 return {
 	Promise = Promise :: Types.PromiseLib,
 	

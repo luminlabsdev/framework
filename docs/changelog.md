@@ -2,6 +2,36 @@
 
 This is the changelog which is changed every update, and we follow semver.
 
+## 8.0.2
+
+### Added
+
+* Nothing
+
+### Improvements
+
+* Adds type references to init module as they were not accessible prior
+
+### Removed
+
+* Nothing
+
+## 8.0.1
+
+---
+
+### Added
+
+* Re-release due to wally issue
+
+### Improvements
+
+* Nothing
+
+### Removed
+
+* Nothing
+
 ## 8.0.0
 
 ---
