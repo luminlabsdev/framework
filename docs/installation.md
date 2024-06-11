@@ -1,6 +1,6 @@
 # Installation
 
-### GitHub
+### GitHub / Roblox
 
 1. Navigate to the latest release of Lumin Framework on [GitHub](https://github.com/lumin-dev/LuminFramework/releases/)
 2. Download `Standalone.rbxm`

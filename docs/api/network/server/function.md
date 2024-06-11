@@ -4,7 +4,7 @@ A server-sided network function.
 
 ## Properties
 
-### Reliable <Badge type="tip" text="read only" />
+### `Reliable` <Badge type="tip" text="read only" />
 
 Whether or not the network function uses a reliable remote event.
 
@@ -12,7 +12,7 @@ Whether or not the network function uses a reliable remote event.
 
 ## Methods
 
-### OnInvoke
+### `OnInvoke`
 
 Recieves an invoke from the client, and runs the callback function which returns some data. Equivalent to [RemoteFunction.OnServerInvoke](https://create.roblox.com/docs/reference/engine/classes/RemoteFunction#OnServerInvoke).
 
@@ -27,7 +27,7 @@ The callback function to run on invoke, must return at least 1 value.
 
 ---
 
-### SetRateLimit
+### `SetRateLimit`
 
 Sets a rate limit that is applied when invoking the network function from the client.
 

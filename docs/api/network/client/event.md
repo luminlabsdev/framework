@@ -4,7 +4,7 @@ A client-sided network event.
 
 ## Properties
 
-### Reliable <Badge type="tip" text="read only" />
+### `Reliable` <Badge type="tip" text="read only" />
 
 Whether or not the network event uses a reliable remote event.
 
@@ -12,7 +12,7 @@ Whether or not the network event uses a reliable remote event.
 
 ## Methods
 
-### Fire
+### `Fire`
 
 Fires an event which sends data to the server, equivalent to [RemoteEvent:FireServer](https://create.roblox.com/docs/reference/engine/classes/RemoteEvent#FireServer)
 
@@ -27,7 +27,7 @@ The data that should be sent to the server
 
 ---
 
-### FireNow
+### `FireNow`
 
 Same as `Fire` but does not batch the call / wait until the next frame
 
@@ -42,7 +42,7 @@ The data that should be sent to the server
 
 ---
 
-### Listen
+### `Listen`
 
 Listens for the network controller to be fired by the server, then runs the provided function. Note that this can only be run once, it will error if run more than once.
 

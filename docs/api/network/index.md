@@ -4,7 +4,7 @@ The library to create network events and functions.
 
 ## Functions
 
-### Event
+### `Event`
 
 The contstructor for creating new network events.
 
@@ -22,7 +22,7 @@ Whether or not the object created is reliable. Defaults to true
 
 ---
 
-### Function
+### `Function`
 
 The contstructor for creating new network functions.
 

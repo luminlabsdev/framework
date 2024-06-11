@@ -4,7 +4,7 @@ A server-sided network event.
 
 ## Properties
 
-### Reliable <Badge type="tip" text="read only" />
+### `Reliable` <Badge type="tip" text="read only" />
 
 Whether or not the network event uses a reliable remote event.
 
@@ -12,7 +12,7 @@ Whether or not the network event uses a reliable remote event.
 
 ## Methods
 
-### Fire
+### `Fire`
 
 Fires an event which sends data to the client, equivalent to [RemoteEvent:FireClient](https://create.roblox.com/docs/reference/engine/classes/RemoteEvent#FireClient).
 
@@ -38,7 +38,7 @@ The data that should be sent to the client
 
 ---
 
-### FireNow
+### `FireNow`
 
 Same as `Fire` but does not batch the call / wait until the next frame
 
@@ -56,7 +56,7 @@ The data that should be sent to the client
 
 ---
 
-### FireAll
+### `FireAll`
 
 Fires an event which sends data to every client connected to the server, equivalent [RemoteEvent:FireAllClients](https://create.roblox.com/docs/reference/engine/classes/RemoteEvent#FireAllClients).
 
@@ -71,7 +71,7 @@ The data that should be sent to each player
 
 ---
 
-### FireExcept
+### `FireExcept`
 
 Fires an event which sends data to every client connected to the server, except for players defined in the `except` parameter.
 
@@ -89,7 +89,7 @@ The data that should be sent to each player except `except`
 
 ---
 
-### FireFilter
+### `FireFilter`
 
 Fires an event with a filter function, and runs the provided filter on every player in the server.
 
@@ -107,7 +107,7 @@ The data that should be sent to each player that meets the threshold for `filter
 
 ---
 
-### Listen
+### `Listen`
 
 Listens for the network controller to be fired by the client, then runs the provided function.
 
@@ -125,7 +125,7 @@ A table of the valid types that should be recieved by the client. This is option
 
 ---
 
-### SetRateLimit
+### `SetRateLimit`
 
 Sets a rate limit that is applied when firing a network event from the client.
 

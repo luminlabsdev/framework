@@ -7,20 +7,21 @@ hero:
   tagline: A lightning fast & amazing game framework
   actions:
     - theme: brand
-      text: Documentation
+      text: Guide
       link: /guides/
     - theme: alt
       text: API Reference
       link: /api/
 
 features:
-  - icon:
-      src: https://avatars.githubusercontent.com/u/118916772?v=4
-    title: AridAjd, 4.5⭐
-    details: <i>'Using the framework, you literally have no worries. The internal is heavily type-checked and also gives you the ability to keep your code to be strict on types. No bloat, lightweight on performance, straightforward API and does proper implementation of promises to improve development experience. Overall, a solid framework!'</i>
-  - icon: 
-      src: https://avatars.githubusercontent.com/u/110689336?v=4
-    title: GameboyTheDev, 4⭐
-    details: <i>'Lumin Framework is the best I have seen so far in making networking as simple and straightforward as possible! No need for having to create, locate and store remotes to network as Lumin Framework handles all of that for you! Makes the development process more convenient and fun to work with! Would recommend!'</i>
+  - icon: ⚡
+    title: Efficient
+    details: Does nothing else in the background and allocates as much resources as possible to more important jobs
+  - icon: 🦺
+    title: Strict typing
+    details: Everything is strictly typed internally, which means that it is less error prone and more reliable
+  - icon: 🎨
+    title: Customizable
+    details: Allows for any programming configuration, architecture, and allows for more customizable networking
 ---
 

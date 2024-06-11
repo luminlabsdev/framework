@@ -1,10 +1,10 @@
-# LuminFramework (Root)
+# LuminFramework
 
 The main class of LuminFramework.
 
 ## Properties
 
-### Promise <Badge type="tip" text="read only" />
+### `Promise` <Badge type="tip" text="read only" />
 
 A reference to evaera's Promise module.
 
@@ -12,7 +12,7 @@ A reference to evaera's Promise module.
 
 ## Functions
 
-### Server <Badge type="danger" text="server" />
+### `Server` <Badge type="danger" text="server" />
 
 Gets the server-sided interface of LuminFramework.
 
@@ -22,7 +22,7 @@ Gets the server-sided interface of LuminFramework.
 
 ---
 
-### Client <Badge type="danger" text="client" /> <Badge type="warning" text="yields" />
+### `Client` <Badge type="danger" text="client" /> <Badge type="warning" text="yields" />
 
 Gets the client-sided interface of LuminFramework.
 
@@ -32,7 +32,7 @@ Gets the client-sided interface of LuminFramework.
 
 ---
 
-### Load
+### `Load`
 
 Imports any modules of the parent provided. Non-modules will be filtered out automatically.
 
@@ -50,7 +50,7 @@ Allows you to filter through a module, return `false` for it to not be imported
 
 ---
 
-### Signal
+### `Signal`
 
 Creates/references a signal of the given name, create a new anonymous signal by leaving the name blank.
 
