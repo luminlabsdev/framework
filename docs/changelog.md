@@ -2,104 +2,50 @@
 
 This is the changelog which is changed every update, and we follow semver.
 
+## 8.0.3
+
+### Improvements
+
+* Fixes issue with existing network events/functions not being able to be defined multiple times
+
 ## 8.0.2
-
-### Added
-
-* Nothing
 
 ### Improvements
 
 * Adds type references to init module as they were not accessible prior
 
-### Removed
-
-* Nothing
-
 ## 8.0.1
-
----
 
 ### Added
 
 * Re-release due to wally issue
 
-### Improvements
-
-* Nothing
-
-### Removed
-
-* Nothing
-
 ## 8.0.0
-
----
 
 ### Added
 
 * Adds reviews to docs home page
 
-### Improvements
-
-* Nothing
-
-### Removed
-
-* Nothing
-
 ## 8.0.0-rc2
-
----
-
-### Added
-
-* Nothing
 
 ### Improvements
 
 * Improve main module structure
 * Fix typing bug with `.Load()`
 
-### Removed
-
-* Nothing
-
 ## 8.0.2-rc1
-
----
-
-### Added
-
-* Nothing
 
 ### Improvements
 
 * Fixes yielding bug on client when character does not load
 
-### Removed
-
-* Nothing
-
 ## 8.0.1-rc1
-
----
-
-### Added
-
-* Nothing
 
 ### Improvements
 
 * Fix networking interface issues
 
-### Removed
-
-* Nothing
-
 ## 8.0.0-rc1
-
----
 
 ### Added
 
@@ -117,12 +63,6 @@ This is the changelog which is changed every update, and we follow semver.
 
 ## 7.0.2
 
----
-
-### Added
-
-* Nothing
-
 ### Improvements
 
 * Fix client once again
@@ -133,24 +73,12 @@ This is the changelog which is changed every update, and we follow semver.
 
 ## 7.0.1
 
----
-
-### Added
-
-* Nothing
-
 ### Improvements
 
 * If something is not a module when using `ImportPackages`, it will be ignored
 * Fixes `Framework.Client` issues with frozen tables
 
-### Removed
-
-* Nothing
-
 ## 7.0.0
-
----
 
 ### Added
 
@@ -173,8 +101,6 @@ This is the changelog which is changed every update, and we follow semver.
 
 ## 6.2.1
 
----
-
 ### Added
 
 * Networking type validation
@@ -185,17 +111,7 @@ This is the changelog which is changed every update, and we follow semver.
 * Deprecate `Debugger.Debug` and `Debugger.DebugPrefix` functions in favor `Debugger.LogEvent`
 * Change prefixes of settings to `FFlag`
 
-### Removed
-
-* Nothing
-
 ## 6.1.1
-
----
-
-### Added
-
-* Nothing
 
 ### Improvements
 
@@ -204,13 +120,7 @@ This is the changelog which is changed every update, and we follow semver.
 * Cleans up code in a few areas
 * Changes how network controller logs are formatted
 
-### Removed
-
-* Nothing
-
 ## 6.1.0
-
----
 
 ### Added
 
@@ -222,10 +132,6 @@ This is the changelog which is changed every update, and we follow semver.
 * Network controller names now use identifiers
 * Network controller creation now displays reliability type in log
 * Adds ability to set a listener on a network controller after being initially set
-
-### Removed
-
-* Nothing
 
 ## 6.0.0
 
@@ -244,8 +150,6 @@ This is the changelog which is changed every update, and we follow semver.
 * `source` param from LogEvent to make code more neat
 
 ## 6.0.0-rc1
-
----
 
 ### Added
 
@@ -269,8 +173,6 @@ This is the changelog which is changed every update, and we follow semver.
 
 ## 5.1.0
 
----
-
 ### Added
 
 * Revamped plugin, now only creates scripts
@@ -279,13 +181,7 @@ This is the changelog which is changed every update, and we follow semver.
 
 * Refined installation process, makes models available only per release.
 
-### Removed
-
-* Nothing
-
 ## 5.0.0
-
----
 
 ### Added
 
@@ -309,8 +205,6 @@ This is the changelog which is changed every update, and we follow semver.
 
 (Includes rc1-3)
 
----
-
 ### Added
 
 * Improved API
@@ -321,13 +215,7 @@ This is the changelog which is changed every update, and we follow semver.
 * Improves internal code to be a lot faster
 * LuminFramework is now a standalone modulescript which can be used from anywhere
 
-### Removed
-
-* Nothing
-
 ## 4.0.0-rc3
-
----
 
 ### Added
 
@@ -455,18 +343,10 @@ Nothing!
 
 ## 3.0.1
 
-### Added
-
-* Nothing!
-
 ### Improvements
 
 * Typings have been improved to contain an additional argument for network controllers
 * Signals now use a wrapper
-
-### Removed
-
-* Nothing!
 
 ## 3.0.0
 
@@ -515,10 +395,6 @@ Nothing!
 * Clean Code
 * Framework starts earlier for better server security
 
-### Removed
-
-* Nothing!
-
 ## 2.2.0
 
 ### Added
@@ -531,10 +407,6 @@ Nothing!
 
 * Fix bugs
 * Clean Code
-
-### Removed
-
-* Nothing!
 
 ## 2.1.0
 
@@ -550,10 +422,6 @@ Nothing!
 * Remove BridgeNet output logs
 * Fix support for Wait
 * Update `base64` by @Gooncreeper
-
-### Removed
-
-* Nothing!
 
 ## 2.0.0
 

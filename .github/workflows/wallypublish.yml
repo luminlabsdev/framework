@@ -3,7 +3,7 @@ name: Publish package to Wally
 on:
   release:
     types: [published]
-  
+
 jobs:
   publish:
     name: Publish package to Wally
@@ -11,7 +11,7 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-  
+
     - name: Setup Aftman
       uses: ok-nick/setup-aftman@v0.4.2
 
@@ -21,7 +21,7 @@ jobs:
       run: |
         mkdir ~/.wally
         printenv WALLY_AUTH > ~/.wally/auth.toml
-  
+
     - name: Publish
       run: |
         wally publish

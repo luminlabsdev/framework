@@ -18,7 +18,7 @@ jobs:
 
             - name: Setup Aftman
               uses: ok-nick/setup-aftman@v0.4.2
-            
+
             - name: Install Wally dependencies
               run: |
                 wally install

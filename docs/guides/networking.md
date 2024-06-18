@@ -120,3 +120,5 @@ end)
 What happens now is the listener on the server will not run and we instead get a warning in the output. In this scenario, your warning should look similar to this:
 
 `[Network] Argument #2 does not have the type 'number'`
+
+Keep in mind that this will work with any type that is valid when using the `typeof` function.

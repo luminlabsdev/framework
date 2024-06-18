@@ -1,1 +1,0 @@
-* Make better for any kind of project

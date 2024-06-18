@@ -43,6 +43,14 @@ local Remotes = {
 
 local function new(kind: "Event" | "Function", name: string, reliable: boolean?): Types.Promise<any>
 	return Promise.new(function(resolve, reject)
+		local self = setmetatable({}, if RunService:IsClient() then Indexes[kind][1] else Indexes[kind][2])
+
+		if Objects.Networks[kind][name] then
+			resolve(Objects.Networks[kind][name])
+		else
+			Objects.Networks[kind][name] = self
+		end
+
 		local IdentifierName = `{name}_{kind}`
 
 		if Identifier.Exists(IdentifierName) then
@@ -50,7 +58,6 @@ local function new(kind: "Event" | "Function", name: string, reliable: boolean?)
 		end
 
 		reliable = reliable or reliable == nil
-		local self = setmetatable({}, if RunService:IsClient() then Indexes[kind][1] else Indexes[kind][2])
 
 		self.Reliable = reliable
 		self._Ratelimit = nil
@@ -60,9 +67,6 @@ local function new(kind: "Event" | "Function", name: string, reliable: boolean?)
 		self._Fire = if reliable then Remotes[RunContext].SendReliable else Remotes[RunContext].SendUnreliable
 		self._FireNow = if reliable then Remotes[RunContext].SendReliableNow else Remotes[RunContext].SendUnreliableNow
 
-		if not Objects.Networks[kind][name] then
-			Objects.Networks[kind][name] = self
-		end
 		resolve(Objects.Networks[kind][name])
 	end)
 end
@@ -147,7 +151,7 @@ function ServerEvent:FireFilter(filter: (Player) -> boolean, ...: any)
 end
 
 function ServerEvent:Listen(func: (sender: Player, ...unknown) -> (), typeValidationArgs: { string }?)
-	assert(func, "Must provide a listener")
+	assert(func, "[Lumin] Must provide a listener")
 	Server.Listen(self._Identifier, function(player, args)
 		if (self._Ratelimit and self._InvokeOverflow) and not self._Ratelimit(player) then
 			self._InvokeOverflow(player)
