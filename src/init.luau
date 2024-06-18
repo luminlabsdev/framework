@@ -15,14 +15,14 @@ local Promise = require(script.Parent.promise)
 local Objects = require(script.Objects)
 
 -- Reuse NetworkRoot because it is modified internally based on RunContext
-local NetworkRoot = table.freeze({
+local NetworkRoot = {
 	Event = function(name: string, reliable: boolean?)
 		return Network.Interface.new("Event", name, reliable)
 	end,
 	Function = function(name: string, reliable: boolean?)
 		return Network.Interface.new("Function", name, reliable)
 	end,
-})
+}
 
 -- Functions
 
@@ -45,7 +45,7 @@ local function GetClient(): Types.Client
 end
 
 -- Loads any module that is within the provided parent, and then filtered if a function is given
--- Please note that these modules could load in any order, and that 
+-- Please note that these modules could load in any order, and that
 local function Load(parent: Instance, filter: ((module: ModuleScript) -> boolean)?)
 	task.defer(function()
 		for _, module in parent:GetChildren() do
@@ -97,7 +97,7 @@ export type ClientEvent = Types.ClientEvent
 
 return {
 	Promise = Promise :: Types.PromiseLib,
-	
+
 	Server = GetServer,
 	Client = GetClient,
 	Load = Load,
