@@ -77,7 +77,7 @@ const createReleaseNotes = async (version) => {
     const trimmedChangelog = changelog
       .split(/\n/)
       .map(line => line.trim())
-      .filter(line => line !== '' && !line.match(/##/g))
+      .filter(line => line !== '' && !line.match(/^((?!##).)*$/gm))
       .join('\n');
     if (changelog) {
       const releaseNotes = `**${data[0]} - ${data[1]}**\n\n${trimmedChangelog}\n\n**Internal changes:** https://github.com/${USER}/${PROJECT}/compare/${previousVersion}...v${VERSION}`;
