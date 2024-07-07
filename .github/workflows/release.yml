@@ -31,8 +31,7 @@ jobs:
               id: changelog
               run: |
                 CURRENT_VERSION=${GITHUB_REF#refs/tags/}
-                PREVIOUS_VERSION=$(git describe --abbrev=0)
-                node changelog.js $CURRENT_VERSION $PREVIOUS_VERSION
+                node changelog.js $CURRENT_VERSION
 
             - name: Install Wally dependencies
               run: wally install
