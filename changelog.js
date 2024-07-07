@@ -50,7 +50,7 @@ const fetchPreviousTag = async () => {
         try {
           const releases = JSON.parse(data);
           if (releases.length >= 2) {
-            const previousTag = releases[1].tag_name
+            const previousTag = releases[0].tag_name
             resolve(previousTag);
           } else {
             resolve('main')
@@ -74,7 +74,11 @@ const createReleaseNotes = async (version) => {
     const data = await fetchQuote();
     const previousVersion = await fetchPreviousTag();
     const changelog = extractChangelog(version);
-    const trimmedChangelog = changelog.replace('/##/d', '')
+    const trimmedChangelog = changelog
+      .split(/\n/)
+      .map(line => line.trim())
+      .filter(line => line !== '' && !line.match(/##/g))
+      .join('\n');
     if (changelog) {
       const releaseNotes = `**${data[0]} - ${data[1]}**\n\n${trimmedChangelog}\n\n**Internal changes:** https://github.com/${USER}/${PROJECT}/compare/${previousVersion}...v${VERSION}`;
       fs.writeFileSync('release_log.md', releaseNotes);
