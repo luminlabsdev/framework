@@ -1,6 +1,5 @@
 const fs = require('fs');
 const https = require('https');
-const axios = require('axios');
 
 const VERSION = process.argv[2].replace(/^v/, '');
 const CHANGELOG_FILE = 'docs/changelog.md';
@@ -32,35 +31,49 @@ const fetchQuote = () => {
 };
 
 const fetchPreviousTag = async () => {
-  try {
-    const response = await axios.get(`https://api.github.com/repos/${USER}/${PROJECT}/releases`, {
+  return new Promise((resolve, reject) => {
+    const options = {
+      hostname: 'api.github.com',
+      path: `/repos/${USER}/${PROJECT}/releases`,
+      method: 'GET',
       headers: {
-        Authorization: `token YOUR_GITHUB_TOKEN`,
-        'Content-Type': 'application/json',
+        'User-Agent': 'Node.js',
       },
-      params: {
-        per_page: 2,
-      },
+    };
+
+    const req = https.request(options, (res) => {
+      let data = '';
+      res.on('data', (chunk) => {
+        data += chunk;
+      });
+      res.on('end', () => {
+        try {
+          const releases = JSON.parse(data);
+          if (releases.length >= 2) {
+            const previousTag = releases[1].tag_name
+            resolve(previousTag);
+          } else {
+            resolve('main')
+          }
+        } catch (error) {
+          reject(error);
+        }
+      });
     });
 
-    const releases = response.data;
-    if (releases.length >= 2) {
-      const previousTag = releases[1].tag_name;
-      return previousTag;
-    } else {
-      return 'main';
-    }
-  } catch (error) {
-    console.error('Error fetching previous tag:', error);
-    return null;
-  }
+    req.on('error', (error) => {
+      reject(error);
+    });
+
+    req.end();
+  });
 };
 
 const createReleaseNotes = async (version) => {
   try {
     const data = await fetchQuote();
-    const changelog = extractChangelog(version);
     const previousVersion = await fetchPreviousTag();
+    const changelog = extractChangelog(version);
     if (changelog) {
       const releaseNotes = `**${data[0]} - ${data[1]}**\n\n${changelog}\n\n**Internal changes:** https://github.com/${USER}/${PROJECT}/compare/${previousVersion}...v${VERSION}`;
       fs.writeFileSync('release_log.md', releaseNotes);
