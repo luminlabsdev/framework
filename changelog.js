@@ -1,7 +1,7 @@
 const fs = require('fs');
 const https = require('https');
 
-const VERSION = process.argv[2];
+const VERSION = process.argv[2].replace(/^v/, '');
 const PREVIOUS_VERSION = process.argv[3];
 const CHANGELOG_FILE = 'docs/changelog.md';
 const USER = 'lumin-dev'
