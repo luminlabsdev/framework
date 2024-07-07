@@ -1,5 +1,6 @@
 const fs = require('fs');
 const https = require('https');
+const axios = require('axios');
 
 const VERSION = process.argv[2].replace(/^v/, '');
 const CHANGELOG_FILE = 'docs/changelog.md';
