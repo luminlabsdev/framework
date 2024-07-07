@@ -9,7 +9,7 @@ const PROJECT = 'LuminFramework'
 
 const extractChangelog = (version) => {
   const changelog = fs.readFileSync(CHANGELOG_FILE, 'utf8');
-  const regex = new RegExp(`## ${version}\\s*(.*?)\n## `, 's');
+  const regex = new RegExp(`(?<=^## ${version}).*?(?=(## \\[|$))`, 's');
   const match = changelog.match(regex);
   return match ? match[0].trim() : null;
 };
@@ -36,7 +36,7 @@ const createReleaseNotes = async (version) => {
     const data = await fetchQuote();
     const changelog = extractChangelog(version);
     if (changelog) {
-      const releaseNotes = `**${data[0]} - ${data[1]}**\n\n${changelog}\n\n**Internal changes:** https://github.com/${USER}/${PROJECT}/compare/v${PREVIOUS_VERSION}...v${VERSION}`;
+      const releaseNotes = `**${data[0]} - ${data[1]}**\n\n${changelog}\n\n**Internal changes:** https://github.com/${USER}/${PROJECT}/compare/${PREVIOUS_VERSION}...v${VERSION}`;
       fs.writeFileSync('release_log.md', releaseNotes);
       console.log('Release notes created successfully.');
     } else {
