@@ -7,7 +7,7 @@ This is the changelog which is changed every update, and we follow semver.
 ### Improvements
 
 - Improves format of site and actions
-- Fixes standalone not having properly exported package types
+- Fixes standalone not having properly exported package types (thanks @DrasticBlink)
 
 ## 8.0.3
 
