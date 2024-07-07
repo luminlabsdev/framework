@@ -1,11 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap");
 
 :root {
+	--vp-font-family-base: Poppins;
+	--vp-font-family-mono: "JetBrains Mono";
+
 	--vp-c-bg: #e6e6e6;
 	--vp-c-bg-alt: #d2d2d2;
 	--vp-c-brand-1: #4da134;
 	--vp-c-brand-2: #69a856;
 	--vp-c-brand-3: #75b861;
+
+	--vp-border-width: 5px;
+	--vp-border-radius: 15px;
+
+	--vp-custom-block-warning-border: var(--vp-c-yellow-soft);
+	--vp-custom-block-warning-bg: var(--vp-c-warning-soft);
+
+	--vp-custom-block-info-border: var(--vp-c-default-soft);
+	--vp-custom-block-info-bg: var(--vp-c-default-soft);
 }
 
 .dark {
