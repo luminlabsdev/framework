@@ -9,7 +9,7 @@ const PROJECT = 'LuminFramework'
 
 const extractChangelog = (version) => {
   const changelog = fs.readFileSync(CHANGELOG_FILE, 'utf8');
-  const regex = new RegExp(`## \\[${version}\\][\\s\\S]*?(?=## \\[|$)`, 'g');
+  const regex = new RegExp(`## ${version}\\s*(.*?)\n## `, 's');
   const match = changelog.match(regex);
   return match ? match[0].trim() : null;
 };

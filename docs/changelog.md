@@ -2,7 +2,7 @@
 
 This is the changelog which is changed every update, and we follow semver.
 
-## [8.0.4](https://github.com/lumin-dev/LuminFramework/releases/tag/v8.0.4)
+## 8.0.4
 
 ### Improvements
 
