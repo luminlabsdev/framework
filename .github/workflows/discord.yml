@@ -19,10 +19,19 @@ jobs:
           if [ "${{ github.event_name }}" == "issues" ]; then
             EVENT_URL="${{ github.event.issue.html_url }}"
             EVENT_TITLE="${{ github.event.issue.title }}"
+            EVENT_BODY="${{ github.event.issue.body }}"
           elif [ "${{ github.event_name }}" == "pull_request" ]; then
             EVENT_URL="${{ github.event.pull_request.html_url }}"
             EVENT_TITLE="${{ github.event.pull_request.title }}"
+            EVENT_BODY="${{ github.event.pull_request.body }}"
           fi
           curl -X POST -H "Content-Type: application/json" \
-          -d "{\"content\": \"[Content](${EVENT_URL})\", \"thread_name\": \"${EVENT_TITLE}\"}" \
+          -d '{
+            "embeds": [{
+              "title": "${EVENT_TITLE}",
+              "url": "${EVENT_URL}",
+              "description": "${EVENT_BODY}",
+            }],
+            "thread_name": "${EVENT_TITLE}"
+          '}
           $WEBHOOK_URL
