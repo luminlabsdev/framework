@@ -33,5 +33,5 @@ jobs:
               "description": "${EVENT_BODY}",
             }],
             "thread_name": "${EVENT_TITLE}"
-          '}
+          '} \
           $WEBHOOK_URL
