@@ -34,7 +34,7 @@ jobs:
               "embeds": [{
                "title": $event_type,
                "url": $url,
-               "description": $description,
+               "description": $description
               }],
               "thread_name": $title
             '})
