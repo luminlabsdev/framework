@@ -14,7 +14,6 @@ jobs:
       - name: Send webhook
         env:
           WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
-          EVENT_TYPE: ${{ github.event_name }}
         run: |
           if [ "${{ github.event_name }}" == "issues" ]; then
             EVENT_URL="${{ github.event.issue.html_url }}"
@@ -25,13 +24,21 @@ jobs:
             EVENT_TITLE="${{ github.event.pull_request.title }}"
             EVENT_BODY="${{ github.event.pull_request.body }}"
           fi
+
+          EMBED_JSON=$(jq -n \
+            --arg title "$EVENT_TITLE" \
+            --arg url "$EVENT_URL" \
+            --arg description "$EVENT_BODY" \
+            --arg event_type "${{ github.event_name }}" \
+            '{
+              "embeds": [{
+               "title": $event_type,
+               "url": $url,
+               "description": $description,
+              }],
+              "thread_name": $title
+            '})
+
           curl -X POST -H "Content-Type: application/json" \
-          -d '{
-            "embeds": [{
-              "title": "${EVENT_TITLE}",
-              "url": "${EVENT_URL}",
-              "description": "${EVENT_BODY}",
-            }],
-            "thread_name": "${EVENT_TITLE}"
-          '} \
+          -d "$EMBED_JSON" \
           $WEBHOOK_URL
