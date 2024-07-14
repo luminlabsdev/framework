@@ -161,8 +161,7 @@ function ServerEvent:Listen(func: (sender: Player, ...unknown) -> (), typeValida
 		if typeValidationArgs then
 			for index, value in args do
 				if typeof(value) ~= typeValidationArgs[index] then
-					warn(`[Lumin] Argument #{index} does not have the type '{typeValidationArgs[index]}'`)
-					return
+					error(`[Lumin] Argument #{index} does not have the type '{typeValidationArgs[index]}'`)
 				end
 			end
 		end
@@ -227,8 +226,7 @@ function ServerFunction:OnInvoke(
 		if typeValidationArgs then
 			for index, value in args do
 				if typeof(value) ~= typeValidationArgs[index] then
-					warn(`[Lumin] Argument #{index} does not have the type '{typeValidationArgs[index]}'`)
-					return
+					error(`[Lumin] Argument #{index} does not have the type '{typeValidationArgs[index]}'`)
 				end
 			end
 		end

@@ -2,6 +2,14 @@
 
 This is the changelog which is changed every update, and we follow semver.
 
+## 8.0.5
+
+### Improvements
+
+- Fixes problems with .Load not working entirely correctly
+- Fixes package list in docs
+- Type validation will now error if incorrect
+
 ## 8.0.4
 
 ### Improvements

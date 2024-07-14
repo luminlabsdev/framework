@@ -18,23 +18,18 @@ jobs:
           if [ "${{ github.event_name }}" == "issues" ]; then
             EVENT_URL="${{ github.event.issue.html_url }}"
             EVENT_TITLE="${{ github.event.issue.title }}"
-            EVENT_BODY="${{ github.event.issue.body }}"
           elif [ "${{ github.event_name }}" == "pull_request" ]; then
             EVENT_URL="${{ github.event.pull_request.html_url }}"
             EVENT_TITLE="${{ github.event.pull_request.title }}"
-            EVENT_BODY="${{ github.event.pull_request.body }}"
           fi
 
           EMBED_JSON=$(jq -n \
             --arg title "$EVENT_TITLE" \
             --arg url "$EVENT_URL" \
-            --arg description "$EVENT_BODY" \
-            --arg event_type "${{ github.event_name }}" \
             '{
               "embeds": [{
-               "title": $event_type,
-               "url": $url,
-               "description": $description
+               "title": $title,
+               "description": [View issue]($url),
               }],
               "thread_name": $title
             '})

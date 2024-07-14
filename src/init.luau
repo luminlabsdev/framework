@@ -46,19 +46,24 @@ end
 
 -- Loads any module that is within the provided parent, and then filtered if a function is given
 -- Please note that these modules could load in any order, and that
-local function Load(parent: Instance, filter: ((module: ModuleScript) -> boolean)?)
+local function Load(container: Instance, filter: ((module: ModuleScript) -> boolean)?)
 	task.defer(function()
-		for _, module in parent:GetChildren() do
+		local Imported = {}
+		for _, module in container:GetChildren() do
 			if not module:IsA("ModuleScript") then
 				continue
 			end
-			if filter and filter(module) then
-				local imported = (require)(module)
-				if type(imported["Init"]) == "function" then
-					imported["Init"]()
-				end
+			if not filter or (filter and filter(module)) then
+				local ImportedModule = (require)(module)
+				table.insert(Imported, ImportedModule)
 			end
 		end
+		for _, module in Imported do
+			if module["Init"] and type(module.Init) == "function" then
+				module.Init()
+			end
+		end
+		table.clear(Imported)
 	end)
 end
 

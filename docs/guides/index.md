@@ -33,8 +33,7 @@ From here, you can access run context specific items like the player gui.
 
 To start a successful project, we recommend using:
 
-`jsdotlua/react-lua`\
-`jsdotlua/react-roblox`\
+`lumin/aegis`\
 `sleitnick/trove`
 
 ... and of course Lumin Framework.
