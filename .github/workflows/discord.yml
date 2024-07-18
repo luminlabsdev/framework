@@ -30,6 +30,7 @@ jobs:
               "embeds": [{
                "title": $title,
                "description": "[View issue/pull request](\($url))",
+               "color": 7506646
               }],
               "thread_name": $title
             '})
