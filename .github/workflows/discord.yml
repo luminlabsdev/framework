@@ -25,10 +25,11 @@ jobs:
 
           EMBED_JSON=$(jq -n \
             --arg title "$EVENT_TITLE" \
+            --arg url "$EVENT_URL" \
             '{
               "embeds": [{
                "title": $title,
-               "description": "[View issue/pull request]($EVENT_URL)",
+               "description": "[View issue/pull request](\($url))",
               }],
               "thread_name": $title
             '})
