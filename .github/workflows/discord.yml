@@ -29,7 +29,7 @@ jobs:
             '{
               "embeds": [{
                "title": $title,
-               "description": [View issue]($url),
+               "description": "[View issue/pull request](" + $url + ")",
               }],
               "thread_name": $title
             '})
