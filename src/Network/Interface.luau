@@ -21,6 +21,8 @@ local Packages = script.Parent.Parent.Parent
 local Promise = require(Packages.promise)
 local Ratelimit = require(Packages.ratelimit)
 
+local ReservedNames = {}
+
 local RunContext = if RunService:IsServer() then "Server" else "Client"
 
 local Indexes = {
@@ -41,8 +43,12 @@ local Remotes = {
 
 -- Functions
 
-local function new(kind: "Event" | "Function", name: string, reliable: boolean?): Types.Promise<any>
+local function new(kind: "Event" | "Function", name: string, reliable: boolean?, bypass: boolean?): Types.Promise<any>
 	return Promise.new(function(resolve, reject)
+		if not bypass and table.find(ReservedNames, name) then
+			reject("[Lumin] Cannot use a name that is reserved by the framework itself")
+		end
+
 		local self = setmetatable({}, if RunService:IsClient() then Indexes[kind][1] else Indexes[kind][2])
 
 		if Objects.Networks[kind][name] then

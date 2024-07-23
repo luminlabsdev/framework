@@ -16,6 +16,11 @@ A reference to evaera's Promise module.
 
 Gets the server-sided interface of LuminFramework.
 
+**Parameters**
+
+* **callback:** `(object: Types.Server<any>) -> ()`\
+Runs after initialization of the server, with an editable version of the server table
+
 **Returns**
 
 * [**Server**](/api/server)
@@ -26,6 +31,11 @@ Gets the server-sided interface of LuminFramework.
 
 Gets the client-sided interface of LuminFramework.
 
+**Parameters**
+
+* **callback:** `(object: Types.Client<any>) -> ()`\
+Runs after initialization of the client, with an editable version of the client table
+
 **Returns**
 
 * [**Client**](/api/client)
@@ -34,7 +44,7 @@ Gets the client-sided interface of LuminFramework.
 
 ### `Load`
 
-Imports any modules of the parent provided. Non-modules will be filtered out automatically.
+Imports any modules of the parent provided. Non-modules will be filtered out automatically, and their init function will be called (if included) when everything has completely loaded. This fixes race condition problems.
 
 **Parameters**
 

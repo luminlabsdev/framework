@@ -27,19 +27,27 @@ local NetworkRoot = {
 -- Functions
 
 -- Fetches the server interface
-local function GetServer(): Types.Server
+local function GetServer(callback: ((object: Types.Server<any>) -> ())?): Types.Server<any>
 	assert(RunService:IsServer(), "[Lumin] Cannot get server interfaces on client")
+	if callback then
+		callback(Server)
+	end
 	return Server
 end
 
 -- Fetches the client interface
-local function GetClient(): Types.Client
+local function GetClient(callback: ((object: Types.Client<any>) -> ())?): Types.Client<any>
 	assert(RunService:IsClient(), "[Lumin] Cannot get client interfaces on server")
+	Network.Loaded:Wait()
 
 	local Player = PlayerService.LocalPlayer
 
 	Client.PlayerGui = Player:WaitForChild("PlayerGui") :: PlayerGui
 	Client.Player = Player :: Player
+
+	if callback then
+		callback(Client)
+	end
 
 	return Client
 end
@@ -82,13 +90,14 @@ local function GetSignal(name: string?): Signal.Signal<any>
 end
 
 -- Gets the character, by either getting the current reference or waiting
-function Client.Character(): Types.Promise<Types.Character6Joint>
+local function Character(): Types.Promise<Types.Character6Joint>
 	return Promise.new(function(resolve)
 		local Player = PlayerService.LocalPlayer
 		resolve(Player.Character or Player.CharacterAdded:Wait())
 	end)
 end
 
+Client.Character = Character
 Client.Network = NetworkRoot
 Server.Network = NetworkRoot
 

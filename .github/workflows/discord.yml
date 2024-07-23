@@ -32,7 +32,7 @@ jobs:
                "description": "[View issue/pull request](\($url))",
                "color": 7506646
               }],
-              "thread_name": $title
+              "thread_name": "Framework - \($title)"
             '})
 
           curl -X POST -H "Content-Type: application/json" \

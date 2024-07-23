@@ -1,5 +1,5 @@
 {
-	"emitLegacyScripts": false,
+	"legacyScripts": true,
 	"name": "luminframework-dev",
 	"tree": {
 		"$className": "DataModel",

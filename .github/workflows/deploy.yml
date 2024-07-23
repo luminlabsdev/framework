@@ -60,3 +60,24 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+    # Announce on Discord
+  announce:
+    name: Announce on Discord
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send webhook
+        env:
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+        run: |
+          VERSION="${{ github.ref_name }}"
+
+          EMBED_JSON=$(jq -n \
+            --arg version "$VERSION" \
+            '{
+              "content": "<@&1219124088249782322>\n\n## Lumin Framework - [\($version)](https://github.com/lumin-dev/LuminFramework/releases/tag/\($version))",
+            '})
+
+          curl -X POST -H "Content-Type: application/json" \
+          -d "$EMBED_JSON" \
+          $WEBHOOK_URL

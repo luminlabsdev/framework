@@ -23,7 +23,7 @@ jobs:
               run: wally install
 
             - name: Generate new sourcemap
-              run: rojo sourcemap standalone.project.json --output sourcemap.json
+              run: argon sourcemap standalone.project.json --output sourcemap.json
 
             - name: Generate new Wally types
               run: wally-package-types --sourcemap sourcemap.json Packages/
@@ -32,7 +32,7 @@ jobs:
               run: stylua src/
 
             - name: Build standalone
-              run: rojo build standalone.project.json --output ./Standalone.rbxm
+              run: argon build standalone.project.json --output ./Standalone.rbxm
 
             - name: Create release
               id: create_release
