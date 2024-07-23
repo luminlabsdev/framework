@@ -75,7 +75,7 @@ jobs:
           EMBED_JSON=$(jq -n \
             --arg version "$VERSION" \
             '{
-              "content": "<@&1219124088249782322>\n\n## Lumin Framework - [\($version)](https://github.com/lumin-dev/LuminFramework/releases/tag/\($version))",
+              "content": "<@&1205321049957339228>\n\n## Lumin Framework - [\($version)](https://github.com/lumin-dev/LuminFramework/releases/tag/\($version))",
             '})
 
           curl -X POST -H "Content-Type: application/json" \
