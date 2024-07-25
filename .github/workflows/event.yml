@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Send webhook
         env:
-          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+          WEBHOOK_URL: ${{ secrets.EVENT_WEBHOOK_URL }}
         run: |
           if [ "${{ github.event_name }}" == "issues" ]; then
             EVENT_URL="${{ github.event.issue.html_url }}"

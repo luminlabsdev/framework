@@ -63,7 +63,7 @@ jobs:
     steps:
       - name: Send webhook
         env:
-          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+          WEBHOOK_URL: ${{ secrets.UPDATE_WEBHOOK_URL }}
         run: |
           VERSION="${{ github.ref_name }}"
 
