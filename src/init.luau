@@ -14,6 +14,9 @@ local Signal = require(script.Parent.signal)
 local Promise = require(script.Parent.promise)
 local Objects = require(script.Objects)
 
+local ClientStarted = false
+local ServerStarted = false
+
 -- Reuse NetworkRoot because it is modified internally based on RunContext
 local NetworkRoot = {
 	Event = function(name: string, reliable: boolean?)
@@ -29,24 +32,32 @@ local NetworkRoot = {
 -- Fetches the server interface
 local function GetServer(callback: ((object: Types.Server<any>) -> ())?): Types.Server<any>
 	assert(RunService:IsServer(), "[Lumin] Cannot get server interfaces on client")
-	if callback then
-		callback(Server)
+
+	if not ServerStarted then
+        ServerStarted = true
+		if callback then
+			callback(Server)
+		end
 	end
+
 	return Server
 end
 
 -- Fetches the client interface
 local function GetClient(callback: ((object: Types.Client<any>) -> ())?): Types.Client<any>
 	assert(RunService:IsClient(), "[Lumin] Cannot get client interfaces on server")
-	Network.Loaded:Wait()
 
-	local Player = PlayerService.LocalPlayer
+	if not ClientStarted then
+		local Player = PlayerService.LocalPlayer
+        ClientStarted = true
 
-	Client.PlayerGui = Player:WaitForChild("PlayerGui") :: PlayerGui
-	Client.Player = Player :: Player
+		Client.PlayerGui = Player:WaitForChild("PlayerGui") :: PlayerGui
+		Client.Player = Player :: Player
+        Client.Camera = workspace.CurrentCamera
 
-	if callback then
-		callback(Client)
+		if callback then
+			callback(Client)
+		end
 	end
 
 	return Client
@@ -58,16 +69,15 @@ local function Load(container: Instance, filter: ((module: ModuleScript) -> bool
 	task.defer(function()
 		local Imported = {}
 		for _, module in container:GetChildren() do
-			if not module:IsA("ModuleScript") then
-				continue
-			end
-			if not filter or (filter and filter(module)) then
-				local ImportedModule = (require)(module)
-				table.insert(Imported, ImportedModule)
+			if module:IsA("ModuleScript") then
+                if not filter or (filter and filter(module)) then
+                    local ImportedModule = (require)(module)
+                    table.insert(Imported, ImportedModule)
+                end
 			end
 		end
 		for _, module in Imported do
-			if module["Init"] and type(module.Init) == "function" then
+			if module.Init and type(module.Init) == "function" then
 				module.Init()
 			end
 		end
@@ -90,7 +100,7 @@ local function GetSignal(name: string?): Signal.Signal<any>
 end
 
 -- Gets the character, by either getting the current reference or waiting
-local function Character(): Types.Promise<Types.Character6Joint>
+local function Character(): Types.Promise<Types.Character6Joint & Types.Character15Joint>
 	return Promise.new(function(resolve)
 		local Player = PlayerService.LocalPlayer
 		resolve(Player.Character or Player.CharacterAdded:Wait())
@@ -103,11 +113,11 @@ Server.Network = NetworkRoot
 
 export type Character15Joint = Types.Character15Joint
 export type Character6Joint = Types.Character6Joint
-export type Promise = Types.Promise<any>
-export type ServerFunction = Types.ServerFunction
-export type ServerEvent = Types.ServerEvent
-export type ClientFunction = Types.ClientFunction
-export type ClientEvent = Types.ClientEvent
+export type Promise<T...> = Types.Promise<T...>
+export type ServerFunction<T..., U...> = Types.ServerFunction<T..., U...>
+export type ServerEvent<T..., U...> = Types.ServerEvent<T..., U...>
+export type ClientFunction<T..., U...> = Types.ClientFunction<T..., U...>
+export type ClientEvent<T..., U...> = Types.ClientEvent<T..., U...>
 
 return {
 	Promise = Promise :: Types.PromiseLib,

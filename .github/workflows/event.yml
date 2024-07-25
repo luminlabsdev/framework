@@ -27,12 +27,13 @@ jobs:
             --arg title "$EVENT_TITLE" \
             --arg url "$EVENT_URL" \
             '{
+              "content": "<@&1265887191922511953>",
               "embeds": [{
                "title": $title,
                "description": "[View issue/pull request](\($url))",
                "color": 7506646
               }],
-              "thread_name": "Framework - \($title)"
+              "thread_name": "Lumin Framework - \($title)"
             '})
 
           curl -X POST -H "Content-Type: application/json" \

@@ -1,13 +1,10 @@
-name: Build documentation
+name: Publish all builds
 
 on:
   release:
     types: [published]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
@@ -21,24 +18,22 @@ concurrency:
 
 jobs:
   # Build job
-  build:
+  build-docs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Not needed if lastUpdated is not enabled
-      # - uses: pnpm/action-setup@v2 # Uncomment this if you're using pnpm
-      # - uses: oven-sh/setup-bun@v1 # Uncomment this if you're using Bun
+          fetch-depth: 0
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: npm # or pnpm / yarn
+          cache: npm
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Install dependencies
-        run: npm ci # or pnpm install / yarn install / bun install
+        run: npm ci
       - name: Build with VitePress
         run: |
           npm run docs:build # or pnpm docs:build / yarn docs:build / bun run docs:build
@@ -49,11 +44,11 @@ jobs:
           path: docs/.vitepress/dist
 
   # Deployment job
-  deploy:
+  deploy-docs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    needs: build
+    needs: build-docs
     runs-on: ubuntu-latest
     name: Deploy
     steps:
@@ -61,7 +56,7 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-    # Announce on Discord
+  # Announce on Discord
   announce:
     name: Announce on Discord
     runs-on: ubuntu-latest
@@ -75,9 +70,41 @@ jobs:
           EMBED_JSON=$(jq -n \
             --arg version "$VERSION" \
             '{
-              "content": "<@&1205321049957339228>\n\n## Lumin Framework - [\($version)](https://github.com/lumin-dev/LuminFramework/releases/tag/\($version))",
+              "content": "<@&1205321049957339228>",
+              "embeds": [
+                {
+                  "title": "Release \($version) · lumin-dev/LuminFramework",
+                  "description": "Release notification for the latest version of Lumin Framework",
+                  "url": "https://github.com/lumin-dev/LuminFramework/releases/tag/\($version)",
+                  "color": 7506646,
+                  "author": {
+                    "name": "GitHub"
+                  }
+                }
+              ]
             '})
 
           curl -X POST -H "Content-Type: application/json" \
           -d "$EMBED_JSON" \
           $WEBHOOK_URL
+
+  publish-wally:
+    name: Publish package to Wally
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Aftman
+        uses: ok-nick/setup-aftman@v0.4.2
+
+      - name: Log In
+        env:
+          WALLY_AUTH: ${{ secrets.WALLY_AUTH_TOKEN }}
+        run: |
+          mkdir ~/.wally
+          printenv WALLY_AUTH > ~/.wally/auth.toml
+
+      - name: Publish
+        run: |
+          wally publish

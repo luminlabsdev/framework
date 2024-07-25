@@ -87,14 +87,14 @@ export type NetworkRoot<T, U> = {
 	Function: (name: string, reliable: boolean?) -> Promise<U>,
 }
 
-export type ServerFunction = {
+export type ServerFunction<T..., U...> = {
 	OnInvoke: (
-		self: ServerFunction,
-		callback: (sender: Player, ...unknown) -> (any, ...any),
+		self: ServerFunction<T..., U...>,
+		callback: (sender: Player, T...) -> (U...),
 		typeValidationArgs: { string }?
 	) -> (),
 	SetRateLimit: (
-		self: ServerFunction,
+		self: ServerFunction<T..., U...>,
 		maxCalls: number,
 		resetInterval: number?,
 		invokeOverflowCallback: (sender: Player) -> ()?
@@ -103,16 +103,16 @@ export type ServerFunction = {
 	Reliable: boolean,
 }
 
-export type ServerEvent = {
-	Listen: (self: ServerEvent, func: (sender: Player, ...unknown) -> (), typeValidationArgs: { string }?) -> (),
+export type ServerEvent<T..., U...> = {
+	Listen: (self: ServerEvent<T..., U...>, func: (sender: Player, U...) -> (), typeValidationArgs: { string }?) -> (),
 
-	Fire: (self: ServerEvent, recipient: Player | { Player }, ...any) -> (),
-	FireNow: (self: ServerEvent, recipient: Player | { Player }, ...any) -> (),
-	FireAll: (self: ServerEvent, ...any) -> (),
-	FireExcept: (self: ServerEvent, except: Player | { Player }, ...any) -> (),
-	FireFilter: (self: ServerEvent, filter: (Player) -> boolean, ...any) -> (),
+	Fire: (self: ServerEvent<T..., U...>, recipient: Player | { Player }, T...) -> (),
+	FireNow: (self: ServerEvent<T..., U...>, recipient: Player | { Player }, T...) -> (),
+	FireAll: (self: ServerEvent<T..., U...>, T...) -> (),
+	FireExcept: (self: ServerEvent<T..., U...>, except: Player | { Player }, T...) -> (),
+	FireFilter: (self: ServerEvent<T..., U...>, filter: (Player) -> boolean, T...) -> (),
 	SetRateLimit: (
-		self: ServerEvent,
+		self: ServerEvent<T..., U...>,
 		maxCalls: number,
 		resetInterval: number?,
 		fireOverflowCallback: (sender: Player) -> ()?
@@ -121,28 +121,29 @@ export type ServerEvent = {
 	Reliable: boolean,
 }
 
-export type ClientFunction = {
-	InvokeAsync: (self: ClientFunction, ...any) -> Promise<...any>,
+export type ClientFunction<T..., U...> = {
+	InvokeAsync: (self: ClientFunction<T..., U...>, T...) -> Promise<U...>,
 	Reliable: boolean,
 }
 
-export type ClientEvent = {
-	Listen: (self: ClientEvent, func: (...any) -> ()) -> (),
-	Fire: (self: ClientEvent, ...any) -> (),
-	FireNow: (self: ClientEvent, ...any) -> (),
+export type ClientEvent<T..., U...> = {
+	Listen: (self: ClientEvent<T..., U...>, func: (U...) -> ()) -> (),
+	Fire: (self: ClientEvent<T..., U...>, T...) -> (),
+	FireNow: (self: ClientEvent<T..., U...>, T...) -> (),
 
 	Reliable: boolean,
 }
 
 export type Server<T> = {
-	Network: NetworkRoot<ServerEvent, ServerFunction>,
+	Network: NetworkRoot<ServerEvent<...any, ...any>, ServerFunction<...any, ...any>>,
 } & T
 
 export type Client<T> = {
-	Network: NetworkRoot<ClientEvent, ClientFunction>,
+	Network: NetworkRoot<ClientEvent<...any, ...any>, ClientFunction<...any, ...any>>,
 	Player: Player,
 	PlayerGui: PlayerGui,
-	Character: () -> (Promise<Character6Joint>)
+	Camera: Camera,
+	Character: () -> Promise<Character6Joint>,
 } & T
 
 return {}

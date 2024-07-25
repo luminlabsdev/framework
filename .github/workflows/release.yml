@@ -1,14 +1,16 @@
-name: Build standalone version
+name: Create release draft and build standalone
 
 on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
+    # Create release draft and build
     build:
         name: New Release
         runs-on: ubuntu-latest
