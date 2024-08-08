@@ -1,7 +1,7 @@
-import { defineConfig } from 'vitepress'
+import mermaid from "mermaid";
+import { withMermaid } from "vitepress-plugin-mermaid";
 
-// https://vitepress.dev/reference/site-config
-export default defineConfig({
+export default withMermaid({
   head: [['link', { rel: 'icon', href: '/favicon.ico' }]],
   base: "/LuminFramework/",
   title: "Lumin Framework",
@@ -9,6 +9,12 @@ export default defineConfig({
   description: "A lightning fast & lightweight game framework",
   lastUpdated: true,
   lang: 'en-us',
+  mermaid: {
+      fontFamily: '"Inter", sans-serif',
+  },
+  markdown: {
+    lineNumbers: true,
+  },
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
@@ -30,9 +36,10 @@ export default defineConfig({
           text: 'Guides',
           items: [
             { text: 'Setup', link: '/guides/' },
+            { text: 'Controllers', link: '/guides/controllers' },
+            { text: 'Workers', link: '/guides/workers' },
             { text: 'Signals', link: '/guides/signals' },
-            { text: 'Networking', link: '/guides/networking' },
-            { text: 'Networking Expanded', link: '/guides/networkingexpanded' }
+            { text: 'Networking', link: '/guides/networking' }
           ]
         }
       ],
@@ -42,27 +49,8 @@ export default defineConfig({
           text: 'API Reference',
           items: [
             { text: 'Framework', link: '/api/' },
-            { text: 'Network', link: '/api/network/'},
-
-            {
-              text: 'Interfaces',
-              collapsed: false,
-              items: [
-                { text: 'Server', link: '/api/server' },
-                { text: 'Client', link: '/api/client' }
-              ]
-            },
-
-            {
-              text: 'Network Interfaces',
-              collapsed: true,
-              items: [
-                { text: 'ClientEvent', link: '/api/network/client/event' },
-                { text: 'ServerEvent', link: '/api/network/server/event' },
-                { text: 'ClientFunction', link: '/api/network/client/function' },
-                { text: 'ServerFunction', link: '/api/network/server/function' }
-              ]
-            }
+            { text: 'Controller', link: '/api/controller' },
+            { text: 'Worker', link: '/api/worker' }
           ]
         },
       ],
@@ -80,7 +68,7 @@ export default defineConfig({
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/lumin-dev/LuminFramework' },
-      { icon: 'discord', link: 'https://discord.gg/cwwcZtqJAt' },
+      { icon: 'discord', link: 'https://lumin-dev.github.io/link/discord' },
     ]
   }
 })

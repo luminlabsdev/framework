@@ -1,23 +1,19 @@
 [package]
 name = "lumin/framework"
 description = "A lightning fast & amazing game framework for Roblox"
-version = "8.1.5"
+version = "9.0.0"
 license = "MIT"
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 
-exclude = ["**"]
-include = [
-	"default.project.json",
-	"src",
-	"src/**",
-	"LICENSE",
-	"wally.toml",
-	"README.md",
-]
-
 [dependencies]
-promise = "evaera/promise@4.0.0"
+promise = "lukadev-0/typed-promise@4.0.2"
 signal = "sleitnick/signal@2.0.1"
 ratelimit = "red-blox/ratelimit@1.0.1"
-remotepacketsizecounter = "pysephwasntavailable/remotepacketsizecounter@2.4.1"
+spawn = "red-blox/spawn@^1.0.0"
+
+[dev-dependencies]
+net = "lumin/net@0.1.0"
+
+[place]
+shared-packages = "game.ReplicatedStorage.Packages"

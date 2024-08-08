@@ -11,10 +11,17 @@ jobs:
     name: Open Thread on Discord
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Rokit
+        uses: CompeyDev/setup-rokit@v0.1.0
+
       - name: Send webhook
         env:
           WEBHOOK_URL: ${{ secrets.EVENT_WEBHOOK_URL }}
         run: |
+          PROJECT="${{ github.repository }}"
           if [ "${{ github.event_name }}" == "issues" ]; then
             EVENT_URL="${{ github.event.issue.html_url }}"
             EVENT_TITLE="${{ github.event.issue.title }}"
@@ -23,19 +30,4 @@ jobs:
             EVENT_TITLE="${{ github.event.pull_request.title }}"
           fi
 
-          EMBED_JSON=$(jq -n \
-            --arg title "$EVENT_TITLE" \
-            --arg url "$EVENT_URL" \
-            '{
-              "content": "<@&1265887191922511953>",
-              "embeds": [{
-               "title": $title,
-               "description": "[View issue/pull request](\($url))",
-               "color": 7506646
-              }],
-              "thread_name": "Lumin Framework - \($title)"
-            '})
-
-          curl -X POST -H "Content-Type: application/json" \
-          -d "$EMBED_JSON" \
-          $WEBHOOK_URL
+          lune run .lune/discord.luau "$WEBHOOK_URL" "event" "$PROJECT" "$EVENT_TITLE" "$EVENT_URL"

@@ -1,5 +1,5 @@
 {
-    "name": "standalone-build",
+    "name": "standalone",
     "tree": {
         "$path": "Packages",
         "Framework": {

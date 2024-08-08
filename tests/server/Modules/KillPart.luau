@@ -1,15 +1,18 @@
-local Lumin = require(game.ReplicatedStorage.Packages.Framework)
-local Server = Lumin.Server()
-
-local AnnounceNetwork = Server.Network.Event("Announcer"):expect()
-
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local CollectionService = game:GetService("CollectionService")
 local PlayerService = game:GetService("Players")
+
+local Lumin = require(ReplicatedStorage.Packages.framework)
+local Net = require(ReplicatedStorage.DevPackages.net).Server
+
+local AnnounceNetwork = Net.Event("Announcer")
 
 local KillBricks = CollectionService:GetTagged("KillBrick")
 local KillDebounce = false
 
-local function Init()
+local KillPart = {}
+
+function KillPart.Start()
 	for _, part: Part in KillBricks do
 		part.Touched:Connect(function(basePart)
 			if KillDebounce then
@@ -39,6 +42,4 @@ local function Init()
 	end
 end
 
-return {
-	Init = Init,
-}
+return Lumin.Controller("KillPart", KillPart)

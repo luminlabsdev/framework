@@ -1,22 +1,25 @@
 {
 	"legacyScripts": false,
-	"name": "luminframework-dev",
+	"name": "luminframework",
 	"tree": {
 		"$className": "DataModel",
 		"ReplicatedStorage": {
+			"DevPackages": {
+				"$path": "DevPackages"
+			},
 			"Packages": {
 				"$path": "Packages",
-				"Framework": {
+				"framework": {
 					"$path": "src"
 				}
 			},
 			"Tests": {
-				"$path": "tests/client"
-			}
-		},
-		"ServerStorage": {
-			"Tests": {
-				"$path": "tests/server"
+				"Client": {
+					"$path": "tests/client"
+				},
+				"Server": {
+					"$path": "tests/server"
+				}
 			}
 		}
 	}

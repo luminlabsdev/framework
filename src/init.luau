@@ -1,89 +1,37 @@
--- Module
-
-local Server = {}
-local Client = {}
-
 -- Variables
 
-local PlayerService = game:GetService("Players")
 local RunService = game:GetService("RunService")
+local PlayerService = game:GetService("Players")
 
+local Utility = script.Utility
+
+local Storage = require(Utility.Storage)
+local Debug = require(Utility.Debug)
 local Types = require(script.Types)
-local Network = require(script.Network)
 local Signal = require(script.Parent.signal)
 local Promise = require(script.Parent.promise)
-local Objects = require(script.Objects)
+local Spawn = require(script.Parent.spawn)
 
-local ClientStarted = false
-local ServerStarted = false
-
--- Reuse NetworkRoot because it is modified internally based on RunContext
-local NetworkRoot = {
-	Event = function(name: string, reliable: boolean?)
-		return Network.Interface.new("Event", name, reliable)
-	end,
-	Function = function(name: string, reliable: boolean?)
-		return Network.Interface.new("Function", name, reliable)
-	end,
+local StorageNodes = Storage.Nodes
+local Started = false
+local WorkerServices = {
+	RunService = RunService,
+	PlayerService = PlayerService,
+}
+local WorkerNames = {
+	RunService = {
+		"PostSimulation",
+		"PreSimulation",
+		"PreAnimation",
+		"PreRender",
+	},
+	PlayerService = {
+		"PlayerAdded",
+		"PlayerRemoving",
+	},
 }
 
 -- Functions
-
--- Fetches the server interface
-local function GetServer(callback: ((object: Types.Server<any>) -> ())?): Types.Server<any>
-	assert(RunService:IsServer(), "[Lumin] Cannot get server interfaces on client")
-
-	if not ServerStarted then
-        ServerStarted = true
-		if callback then
-			callback(Server)
-		end
-	end
-
-	return Server
-end
-
--- Fetches the client interface
-local function GetClient(callback: ((object: Types.Client<any>) -> ())?): Types.Client<any>
-	assert(RunService:IsClient(), "[Lumin] Cannot get client interfaces on server")
-
-	if not ClientStarted then
-		local Player = PlayerService.LocalPlayer
-        ClientStarted = true
-
-		Client.PlayerGui = Player:WaitForChild("PlayerGui") :: PlayerGui
-		Client.Player = Player :: Player
-        Client.Camera = workspace.CurrentCamera
-
-		if callback then
-			callback(Client)
-		end
-	end
-
-	return Client
-end
-
--- Loads any module that is within the provided parent, and then filtered if a function is given
--- Please note that these modules could load in any order, and that
-local function Load(container: Instance, filter: ((module: ModuleScript) -> boolean)?)
-	task.defer(function()
-		local Imported = {}
-		for _, module in container:GetChildren() do
-			if module:IsA("ModuleScript") then
-                if not filter or (filter and filter(module)) then
-                    local ImportedModule = (require)(module)
-                    table.insert(Imported, ImportedModule)
-                end
-			end
-		end
-		for _, module in Imported do
-			if module.Init and type(module.Init) == "function" then
-				module.Init()
-			end
-		end
-		table.clear(Imported)
-	end)
-end
 
 -- Creates a new signal, if it has no name it will remain anonymous
 local function GetSignal(name: string?): Signal.Signal<any>
@@ -91,40 +39,120 @@ local function GetSignal(name: string?): Signal.Signal<any>
 		return Signal.new()
 	end
 
-	if not Objects.Signals[name] then
-		local NewSignal = Signal.new()
-		Objects.Signals[name] = NewSignal
+	if not StorageNodes.Signals[name] then
+		StorageNodes.Signals[name] = Signal.new()
 	end
 
-	return Objects.Signals[name]
+	return StorageNodes.Signals[name]
 end
 
--- Gets the character, by either getting the current reference or waiting
-local function Character(): Types.Promise<Types.Character6Joint & Types.Character15Joint>
+-- Loads all the controllers internally
+local function LoadControllers(modules: { Instance })
+	local Controllers = {}
+	for _, container in modules do
+		for _, module in container:GetDescendants() do
+			if not module:IsA("ModuleScript") then
+				continue
+			end
+			table.insert(Controllers, (require)(module))
+		end
+	end
+	for _, controller in Controllers do
+		if not controller.Init then
+			continue
+		end
+		Debug.Assert(type(controller.Init) == "function", "IncorrectType", "Init", "function")
+		Debug.Assert(controller.Name, "ItemNotOptional", "Name")
+		Debug.Assert(controller.IsController, "ItemNotOptional", "IsController")
+		xpcall(function()
+			debug.setmemorycategory(controller.Name)
+			controller.Init()
+		end, Debug.Error, debug.info(2, "sln"))
+	end
+	return Controllers
+end
+
+-- Starts all the controllers internally
+local function StartControllers(controllers: { any })
+	for _, controller in controllers do
+		if not controller.Start then
+			continue
+		end
+		Debug.Assert(type(controller.Start) == "function", "IncorrectType", "Start", "function")
+		xpcall(function()
+			debug.setmemorycategory(controller.Name)
+			controller.Start()
+		end, Debug.Error, debug.info(2, "sln"))
+	end
+end
+
+-- Starts all the workers internally
+local function StartWorkers()
+	for service: any, workerList in Storage.Workers do
+		for _, worker in workerList do
+			Debug.Assert(worker.IsWorker, "ItemNotOptional", "IsWorker")
+			Debug.Assert(WorkerServices[service][worker.Type], "ItemNotFound", worker.Type)
+			WorkerServices[service][worker.Type]:Connect(function(...)
+				Spawn(worker.Callback, ...)
+			end)
+		end
+	end
+end
+
+-- Starts the framework
+local function Start(modules: { Instance }?)
+	if Started then
+		return Promise.reject(Debug.Append("AlreadyStarted"))
+	end
+
 	return Promise.new(function(resolve)
-		local Player = PlayerService.LocalPlayer
-		resolve(Player.Character or Player.CharacterAdded:Wait())
+		if modules then
+			resolve(LoadControllers(modules))
+		end
+	end):andThen(function(controllers)
+		-- Call start function and start workers; all modules and workers are now safe to use
+		StartControllers(controllers)
+		StartWorkers()
+		-- Finish startup and make values certain/frozen
+		Started = true
+		table.freeze(Storage.Controllers)
+		table.freeze(Storage.Workers)
 	end)
 end
 
-Client.Character = Character
-Client.Network = NetworkRoot
-Server.Network = NetworkRoot
+-- Creates a new controller for managing a variety of tasks, if it wasn't defined already
+local function Controller<T>(name: string, members: Types.Controller<T>): T
+	Debug.Assert(not Started, "AlreadyStarted")
+	Debug.Assert(not Storage.Controllers[name], "ControllerAlreadyExists", name)
+	Debug.Assert(string.len(name) > 0, "NameTooShort")
+	Storage.Controllers[name] = members
+	members.Name = name
+	members.IsController = true
+	return members
+end
 
-export type Character15Joint = Types.Character15Joint
-export type Character6Joint = Types.Character6Joint
-export type Promise<T...> = Types.Promise<T...>
-export type ServerFunction<T..., U...> = Types.ServerFunction<T..., U...>
-export type ServerEvent<T..., U...> = Types.ServerEvent<T..., U...>
-export type ClientFunction<T..., U...> = Types.ClientFunction<T..., U...>
-export type ClientEvent<T..., U...> = Types.ClientEvent<T..., U...>
+-- Creates a new worker which is used for management of ongoing tasks in the background
+local function Worker(type: Types.WorkerType, callback: (...any) -> ())
+	Debug.Assert(not Started, "AlreadyStarted")
+	Debug.Assert(type == "PreRender" and RunService:IsClient(), "IncorrectContext", "WorkerType")
+	Debug.Assert(not table.find(WorkerNames, type), "ItemNotFound", type)
+	local Worker = {}
+	Worker.Type = type
+	Worker.Callback = callback
+	Worker.IsWorker = true
+	for service, connectionList in WorkerNames do
+		if table.find(connectionList :: any, type) then
+			table.insert(Storage.Workers[service :: any], table.freeze(Worker :: any))
+		end
+	end
+end
+
+-- Module
 
 return {
-	Promise = Promise :: Types.PromiseLib,
-
-	Server = GetServer,
-	Client = GetClient,
-	Load = Load,
+	Started = Started,
+	Start = Start,
+	Controller = Controller,
+	Worker = Worker,
 	Signal = GetSignal,
-	Event = GetSignal,
 }

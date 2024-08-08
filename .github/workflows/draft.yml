@@ -1,4 +1,4 @@
-name: Create release draft and build standalone
+name: Draft Release
 
 on:
   push:
@@ -18,17 +18,11 @@ jobs:
             - name: Checkout repository
               uses: actions/checkout@v4
 
-            - name: Setup Aftman
-              uses: ok-nick/setup-aftman@v0.4.2
+            - name: Setup Rokit
+              uses: CompeyDev/setup-rokit@v0.1.0
 
             - name: Install Wally dependencies
               run: wally install
-
-            - name: Generate new sourcemap
-              run: argon sourcemap standalone.project.json --output sourcemap.json
-
-            - name: Generate new Wally types
-              run: wally-package-types --sourcemap sourcemap.json Packages/
 
             - name: Format code
               run: stylua src/

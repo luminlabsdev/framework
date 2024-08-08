@@ -1,19 +1,25 @@
-local Lumin = require(game.ReplicatedStorage.Packages.Framework)
-local Client = Lumin.Client()
+local PlayerService = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local function Init()
-    local Gui = Client.PlayerGui:WaitForChild("Announce")
-    local Label = Gui:WaitForChild("AnnounceLabel") :: TextLabel
+local Player = PlayerService.LocalPlayer
 
-    Client.Network.Event("Announcer"):andThen(function(event)
-        event:Listen(function(message)
-            Label.Text = message
-            task.wait(5)
-            Label.Text = ""
-        end)
-    end)
+local Lumin = require(ReplicatedStorage.Packages.framework)
+local Net = require(ReplicatedStorage.DevPackages.net).Client
+
+local Announcement = {}
+local AnnouncerEvent = Net.Event("Announcer")
+
+function Announcement.Init()
+	Announcement.Gui = Player.PlayerGui:WaitForChild("Announce")
+	Announcement.Label = Announcement.Gui:WaitForChild("AnnounceLabel")
 end
 
-return {
-    Init = Init
-}
+function Announcement.Start()
+	AnnouncerEvent:Listen(function(message)
+		Announcement.Label.Text = message
+		task.wait(5)
+		Announcement.Label.Text = ""
+	end)
+end
+
+return Lumin.Controller("Announcement", Announcement)

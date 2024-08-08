@@ -1,62 +1,65 @@
-# LuminFramework
+# Framework
 
 The main class of LuminFramework.
 
 ## Properties
 
-### `Promise` <Badge type="tip" text="read only" />
+### `Started`
 
-A reference to evaera's Promise module.
+Whether or not the framework has started yet
 
-* [**Promise**](https://eryn.io/roblox-lua-promise/)
+- **boolean**
 
 ## Functions
 
-### `Server` <Badge type="danger" text="server" />
+### `Start`
 
-Gets the server-sided interface of LuminFramework.
+Starts the framework and prepares all of the workers/controllers.
 
 **Parameters**
 
-* **callback:** `(object: Types.Server<any>) -> ()`\
-Runs after initialization of the server, with an editable version of the server table
+- **modules:** `Instance?`\
+A folder of modules to load, this will import every descendant
 
 **Returns**
 
-* [**Server**](/api/server)
+- [**Promise**](https://eryn.io/roblox-lua-promise/)
 
 ---
 
-### `Client` <Badge type="danger" text="client" /> <Badge type="warning" text="yields" />
+### `Controller`
 
-Gets the client-sided interface of LuminFramework.
+Creates a new controller, this is essentially a service-like infastructure for the framework. This is preferred to use over vanilla tables, especially in conjunction with `Start`
 
 **Parameters**
 
-* **callback:** `(object: Types.Client<any>) -> ()`\
-Runs after initialization of the client, with an editable version of the client table
+* **name:** `string`\
+The name of the controller; cannot already exist and must be longer than 0 characters
+
+* **members:** `{ any }`\
+This is where functions, properties, and methods are stored. Use this like a generic module
 
 **Returns**
 
-* [**Client**](/api/client)
+* [**Controller**](./controller.md)
 
 ---
 
-### `Load`
+### `Worker`
 
-Imports any modules of the parent provided. Non-modules will be filtered out automatically, and their init function will be called (if included) when everything has completely loaded. This fixes race condition problems.
+Implements lifecycle methods into the framework, as its own object called a Worker
 
 **Parameters**
 
-* **parent:** `Instance`\
-The parent of which the modules are located
+* **type:** `WorkerType`\
+A designated worker type
 
-* **filter:** `(module: ModuleScript) -> boolean?`\
-Allows you to filter through a module, return `false` for it to not be imported
+* **callback:** `(deltaTime: number) -> ()`\
+The callback to run for the worker type
 
 **Returns**
 
-* **void**
+* [**Worker**](./worker.md)
 
 ---
 

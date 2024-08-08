@@ -1,110 +1,51 @@
-name: Publish all builds
-
+name: Publish Release
 on:
-  release:
-    types: [published]
-  workflow_dispatch:
+    release:
+        types: [published]
+    workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
-concurrency:
-  group: pages
-  cancel-in-progress: false
+    contents: read
+    pages: write
+    id-token: write
 
 jobs:
-  # Build job
-  build-docs:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: npm
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-      - name: Install dependencies
-        run: npm ci
-      - name: Build with VitePress
-        run: |
-          npm run docs:build # or pnpm docs:build / yarn docs:build / bun run docs:build
-          touch docs/.vitepress/dist/.nojekyll
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: docs/.vitepress/dist
-
-  # Deployment job
-  deploy-docs:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    needs: build-docs
-    runs-on: ubuntu-latest
-    name: Deploy
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-
   # Announce on Discord
   announce:
     name: Announce on Discord
     runs-on: ubuntu-latest
     steps:
-      - name: Send webhook
-        env:
-          WEBHOOK_URL: ${{ secrets.UPDATE_WEBHOOK_URL }}
-        run: |
-          VERSION="${{ github.ref_name }}"
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-          EMBED_JSON=$(jq -n \
-            --arg version "$VERSION" \
-            '{
-              "content": "<@&1205321049957339228>",
-              "embeds": [
-                {
-                  "title": "Release \($version) · lumin-dev/LuminFramework",
-                  "description": "Release notification for the latest version of Lumin Framework",
-                  "url": "https://github.com/lumin-dev/LuminFramework/releases/tag/\($version)",
-                  "color": 7506646,
-                  "author": {
-                    "name": "GitHub"
-                  }
-                }
-              ]
-            '})
+    - name: Setup Rokit
+      uses: CompeyDev/setup-rokit@v0.1.0
 
-          curl -X POST -H "Content-Type: application/json" \
-          -d "$EMBED_JSON" \
-          $WEBHOOK_URL
+    - name: Send webhook
+      env:
+        WEBHOOK_URL: ${{ secrets.UPDATE_WEBHOOK_URL }}
+      run: |
+        VERSION="${{ github.ref_name }}"
+        lune run .lune/discord.luau "$WEBHOOK_URL" "announcement" "$PROJECT" "$VERSION"
 
+  # Publish to wally
   publish-wally:
     name: Publish package to Wally
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      - name: Setup Aftman
-        uses: ok-nick/setup-aftman@v0.4.2
+    - name: Setup Rokit
+      uses: CompeyDev/setup-rokit@v0.1.0
 
-      - name: Log In
-        env:
-          WALLY_AUTH: ${{ secrets.WALLY_AUTH_TOKEN }}
-        run: |
-          mkdir ~/.wally
-          printenv WALLY_AUTH > ~/.wally/auth.toml
+    - name: Log In
+      env:
+        WALLY_AUTH: ${{ secrets.WALLY_AUTH_TOKEN }}
+      run: |
+        mkdir ~/.wally
+        printenv WALLY_AUTH > ~/.wally/auth.toml
 
-      - name: Publish
-        run: |
-          wally publish
+    - name: Publish
+      run: |
+        wally publish

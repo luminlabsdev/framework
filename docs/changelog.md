@@ -2,6 +2,21 @@
 
 This is the changelog which is changed every update, and we follow semver.
 
+## 9.0.0-rc1
+
+### Improvements
+
+- Adds .Controller to define controller objects
+- Adds .Worker to define worker objects
+- Adds .Start for streamlined working
+- Networking is now a separate package, under LuminNet
+- Adds improved debugging internally
+- Improves docs a ton, adding tutorials for every aspect
+
+### Deletions
+
+- Removes client and server interfaces
+
 ## 8.0.5
 
 ### Improvements
