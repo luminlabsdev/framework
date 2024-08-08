@@ -1,7 +1,7 @@
 local Signal = require(script.Parent.Parent.signal)
 
 export type WorkerType =
-	| "PostSimulation"
+	  "PostSimulation"
 	| "PreSimulation"
 	| "PreAnimation"
 	| "PreRender"
