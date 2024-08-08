@@ -25,6 +25,7 @@ jobs:
       env:
         WEBHOOK_URL: ${{ secrets.UPDATE_WEBHOOK_URL }}
       run: |
+        PROJECT="${{ github.repository }}"
         VERSION="${{ github.ref_name }}"
         lune run .lune/discord.luau "$WEBHOOK_URL" "announcement" "$PROJECT" "$VERSION"
 
