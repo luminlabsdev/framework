@@ -19,7 +19,7 @@ jobs:
               ref: "main"
 
           - name: Update changelog
-            uses: thomaseizinger/keep-a-changelog-new-release@3.1.0
+            uses: 2jammers/keep-a-changelog-new-release@v0.1.0
             with:
               tag: ${{ github.ref_name }}
               changelogPath: "docs/changelog.md"
@@ -55,7 +55,7 @@ jobs:
             id: read-changes
             uses: mindsers/changelog-reader-action@v2
             with:
-              version: $(echo ${{ github.ref_name }} | sed 's/^v//')
+              version: ${{ github.ref_name }}
               path: "docs/changelog.md"
 
           - name: Create release
