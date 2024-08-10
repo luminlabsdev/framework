@@ -55,7 +55,7 @@ jobs:
             id: read-changes
             uses: mindsers/changelog-reader-action@v2
             with:
-              version: "$(echo ${{ github.ref_name }} | sed 's/^v//')"
+              version: $(echo ${{ github.ref_name }} | sed 's/^v//')
               path: "docs/changelog.md"
 
           - name: Create release
