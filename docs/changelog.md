@@ -7,8 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [9.0.0-rc2] - 2024-08-10
-
 ### Changed
 
 - Changed github actions to be more precise and automate more tasks
@@ -475,7 +473,6 @@ No information available, mainly small bug fixes.
 - Add support for debugging in live games
 
 ### Changed
-
 - Clean up code
 - Bug fixes
 - Fix up `random_gen`
@@ -508,6 +505,5 @@ No information available, mainly small bug fixes.
 
 - Public release! 🥳
 
-[unreleased]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc2...HEAD
-[9.0.0-rc2]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc1...v9.0.0-rc2
+[Unreleased]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc1...HEAD
 [v9.0.0-rc1]: https://github.com/lumin-dev/LuminFramework/compare/v8.1.5...v9.0.0-rc1
