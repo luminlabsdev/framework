@@ -1,10 +1,23 @@
 # Changelog
 
-This is the changelog which is changed every update, and we follow semver.
+All notable changes to this project will be documented in this file.
 
-## 9.0.0-rc1
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-### Improvements
+## [Unreleased]
+
+### Changed
+
+- Changed github actions to be more precise and automate more tasks
+
+### Removed
+
+- Removed an internal type that was not working properly
+
+## 9.0.0-rc1 - 2024-08-08
+
+### Changed
 
 - Adds .Controller to define controller objects
 - Adds .Worker to define worker objects
@@ -13,76 +26,82 @@ This is the changelog which is changed every update, and we follow semver.
 - Adds improved debugging internally
 - Improves docs a ton, adding tutorials for every aspect
 
-### Deletions
+### Removed
 
 - Removes client and server interfaces
 
-## 8.0.5
+## 8.1.5 - 2024-07-23
 
-### Improvements
+### Fixed
+
+- Fixed some github actions
+
+## 8.0.5 - 2024-07-14
+
+### Changed
 
 - Fixes problems with .Load not working entirely correctly
 - Fixes package list in docs
 - Type validation will now error if incorrect
 
-## 8.0.4
+## 8.0.4 - 2024-07-07
 
-### Improvements
+### Changed
 
 - Improves format of site and actions
 - Fixes standalone not having properly exported package types (thanks @DrasticBlink)
 
-## 8.0.3
+## 8.0.3 - 2024-06-18
 
-### Improvements
+### Changed
 
 - Fixes issue with existing network events/functions not being able to be defined multiple times
 
-## 8.0.2
+## 8.0.2 - 2024-05-24
 
-### Improvements
+### Changed
 
 - Adds type references to init module as they were not accessible prior
 
-## 8.0.1
+## 8.0.1 - 2024-05-12
 
 ### Added
 
 - Re-release due to wally issue
 
-## 8.0.0
+## 8.0.0 - 2024-05-12
 
 ### Added
 
 - Adds reviews to docs home page
 
-## 8.0.0-rc2
+## 8.0.0-rc2 - 2024-05-04
 
-### Improvements
+### Changed
 
 - Improve main module structure
 - Fix typing bug with `.Load()`
 
-## 8.0.2-rc1
+## 8.0.2-rc1 - 2024-04-29
 
-### Improvements
+### Changed
 
 - Fixes yielding bug on client when character does not load
 
-## 8.0.1-rc1
+## 8.0.1-rc1 - 2024-04-29
 
-### Improvements
+### Changed
 
 - Fix networking interface issues
 
-## 8.0.0-rc1
+## 8.0.0-rc1 - 2024-04-28
 
 ### Added
 
 - Improved networking system
 - Better solutions to load modules during run time
 
-### Improvements
+### Changed
 
 - Changed project name from **CanaryEngine** to **LuminFramework**
 - All yielding code now uses promises
@@ -91,9 +110,9 @@ This is the changelog which is changed every update, and we follow semver.
 
 - Client.PlayerBackpack
 
-## 7.0.2
+## 7.0.2 - 2024-03-05
 
-### Improvements
+### Changed
 
 - Fix client once again
 
@@ -101,21 +120,21 @@ This is the changelog which is changed every update, and we follow semver.
 
 - Frozen client tables; causing issues
 
-## 7.0.1
+## 7.0.1 - 2024-03-05
 
-### Improvements
+### Changed
 
 - If something is not a module when using `ImportPackages`, it will be ignored
 - Fixes `Framework.Client` issues with frozen tables
 
-## 7.0.0
+## 7.0.0 - 2024-03-03
 
 ### Added
 
 - Newly upgraded networking library, with `ContextInterface.Network` API
 - Renames older API to fit with new standards
 
-### Improvements
+### Changed
 
 - Improves how the network library works with unreliables
 - Improves general code
@@ -129,47 +148,47 @@ This is the changelog which is changed every update, and we follow semver.
 - `LuminFramework.GetFrameworkShared`
 - `LuminFramework.Future`
 
-## 6.2.1
+## 6.2.1 - 2023-12-28
 
 ### Added
 
 - Networking type validation
 
-### Improvements
+### Changed
 
 - Fixes player gui/backpack properties not updating when player respawns
 - Deprecate `Debugger.Debug` and `Debugger.DebugPrefix` functions in favor `Debugger.LogEvent`
 - Change prefixes of settings to `FFlag`
 
-## 6.1.1
+## 6.1.1 - 2023-12-08
 
-### Improvements
+### Changed
 
 - Improves load time to use milliseconds
 - Mainly improves docs
 - Cleans up code in a few areas
 - Changes how network controller logs are formatted
 
-## 6.1.0
+## 6.1.0 - 2023-12-06
 
 ### Added
 
 - Support for reliable/unreliable network controllers
 
-### Improvements
+### Changed
 
 - Creating an anonymous signal will no longer log the name as 'nil'
 - Network controller names now use identifiers
 - Network controller creation now displays reliability type in log
 - Adds ability to set a listener on a network controller after being initially set
 
-## 6.0.0
+## 6.0.0 - 2023-11-29
 
 ### Added
 
 - Better calculation of startup
 
-### Improvements
+### Changed
 
 - Improved internally logged events to be more clear
 
@@ -177,7 +196,7 @@ This is the changelog which is changed every update, and we follow semver.
 
 - `source` param from LogEvent to make code more neat
 
-## 6.0.0-rc1
+## 6.0.0-rc1 - 2023-11-28
 
 ### Added
 
@@ -185,9 +204,9 @@ This is the changelog which is changed every update, and we follow semver.
 - Use `.luaurc` file instead of `--!strict`
 - Correctly logs when an object is created
 
-### Improvements
+### Changed
 
-- General code improvements and bug fixes
+- General code Changed and bug fixes
 - Improved API naming to be more clear
 - Improves `LogEvent` performance
 - Update internal naming scheme to reflect frontend
@@ -199,17 +218,17 @@ This is the changelog which is changed every update, and we follow semver.
 
 - Remove deprecated alias `LuminFramework.GetFrameworkReplicated`
 
-## 5.1.0
+## 5.1.0 - 2023-11-21
 
 ### Added
 
 - Revamped plugin, now only creates scripts
 
-### Improvements
+### Changed
 
 - Refined installation process, makes models available only per release.
 
-## 5.0.0
+## 5.0.0 - 2023-11-08
 
 ### Added
 
@@ -217,9 +236,9 @@ This is the changelog which is changed every update, and we follow semver.
 - Improved documentation
 - Adds `ShowLoggedEvents` setting
 
-### Improvements
+### Changed
 
-- Mainly lots of internal improvements and/or optimizations
+- Mainly lots of internal Changed and/or optimizations
 - Optimized `Debugger.LogEvent` in most cases
 - Improves debugger user API
 - Framework debugs server and client start time in MS
@@ -229,7 +248,7 @@ This is the changelog which is changed every update, and we follow semver.
 
 - A lot of useless/deprecated functions or properties
 
-## 4.0.0
+## 4.0.0 - 2023-10-14
 
 (Includes rc1-3)
 
@@ -237,13 +256,13 @@ This is the changelog which is changed every update, and we follow semver.
 
 - Improved API
 
-### Improvements
+### Changed
 
 - Improves structure and others
 - Improves internal code to be a lot faster
 - LuminFramework is now a standalone modulescript which can be used from anywhere
 
-## 4.0.0-rc3
+## 4.0.0-rc3 - Unknown
 
 ### Added
 
@@ -252,7 +271,7 @@ This is the changelog which is changed every update, and we follow semver.
 - Add ability to add custom packages to manager
 - Add `Snacky` to Canary Suite
 
-### Improvements
+### Changed
 
 - Improves internal API, should be significantly faster
 - Improves networking / signal APIs, tuples are now allowed
@@ -263,7 +282,7 @@ This is the changelog which is changed every update, and we follow semver.
 
 - Deprecated functions
 
-## 4.0.0-rc2
+## 4.0.0-rc2 - Unknown
 
 ### Added
 
@@ -272,7 +291,7 @@ This is the changelog which is changed every update, and we follow semver.
 - Adds `LuminFramework.ImportPackagesInOrder`2
 - Finish API documentation
 
-### Improvements
+### Changed
 
 - Adds event logs when creating classes
 - Creating new scripts / packages will now have the date when created, and your username at top (thanks @BigBubba!)
@@ -285,7 +304,7 @@ This is the changelog which is changed every update, and we follow semver.
 
 - `BridgeNet`
 
-## 4.0.0-rc1
+## 4.0.0-rc1 - Unknown
 
 ### Added
 
@@ -293,7 +312,7 @@ This is the changelog which is changed every update, and we follow semver.
 - Adds ability to pull packages from any GitHub repo
 - Entirely new documentation provider
 
-### Improvements
+### Changed
 
 - Improves EasyProfile ([#3](https://github.com/canary-development/LuminFramework/pull/3), [koxx12](https://github.com/koxx12-dev))
 - Renames `CanaryEngineFramework` instance to `Framework`
@@ -307,7 +326,7 @@ This is the changelog which is changed every update, and we follow semver.
 - `EngineContext.Packages`
 - `EngineContext.Media`
 
-## 3.3.5
+## 3.3.5 - 2023-08-25
 
 ### Added
 
@@ -315,7 +334,7 @@ This is the changelog which is changed every update, and we follow semver.
 - UIShelf library
 - Documentation blog page
 
-### Improvements
+### Changed
 
 - Improve `networkControllerTimeout`
 - Improve API docs
@@ -323,15 +342,11 @@ This is the changelog which is changed every update, and we follow semver.
 - Improve types
 - Improve performance
 
-### Removed
-
-Nothing!
-
-## 3.2.5
+## 3.2.5 - 2023-08-12
 
 No information available, mainly small bug fixes.
 
-## 3.2.4
+## 3.2.4 - 2023-08-07
 
 ### Added
 
@@ -339,7 +354,7 @@ No information available, mainly small bug fixes.
 - `EngineReplicatedFirst`
 - Add new default loading screen
 
-### Improvements
+### Changed
 
 - Fix all plugin bugs, now runs faster
 - Fix signals erroring constantly
@@ -347,11 +362,7 @@ No information available, mainly small bug fixes.
 - Improve typings
 - Updated Benchmark + Debugger modules
 
-### Removed
-
-Nothing!
-
-## 3.1.4
+## 3.1.4 - 2023-07-22
 
 ### Added
 
@@ -359,7 +370,7 @@ Nothing!
 - Docs for all APIs
 - Plugin now updates all files dynamically
 
-### Improvements
+### Changed
 
 - Improves default structure
 - Improved plugin
@@ -369,14 +380,14 @@ Nothing!
 - Remove `Runtime.IsStarted`
 - Deprecated `.GetLatestPackageVersionAsync`
 
-## 3.0.1
+## 3.0.1 - Unknown
 
-### Improvements
+### Changed
 
 - Typings have been improved to contain an additional argument for network controllers
 - Signals now use a wrapper
 
-## 3.0.0
+## 3.0.0 - Unknown
 
 ### Added
 
@@ -386,14 +397,14 @@ Nothing!
 - Reworked data saving
 - Add `CanaryEngineClient.PlayerBackpack`
 - Add `Replicated` folder to `LuminFramework/Media`
-- Proper documentation to almost all methods, expect finished docs to come along when **v3.1.0** releases with a few hotfixes and general improvements
+- Proper documentation to almost all methods, expect finished docs to come along when **v3.1.0** releases with a few hotfixes and general Changed
 - Add `CanaryEngineServer.Media.Server`
 - Add `CanaryEngineClient.Media.Client`
 - Add `Spring` to default packages
 - Add `Promise` to default packages
 - Add `MatchmakingService`
 
-### Improvements
+### Changed
 
 - Turn `NetworkSignal` into `NetworkController`
 - Add `signalName` parameter to `LuminFramework.CreateSignal` for easier signal access across scripts (breaking change)
@@ -411,19 +422,19 @@ Nothing!
 - Remove `CanaryEngineServer.Media`
 - Remove `CanaryEngineClient.Media`
 
-## 2.2.1
+## 2.2.1 - Unknown
 
 ### Added
 
 - Add Once + Disconnect to `NetworkSignals`
 
-### Improvements
+### Changed
 
 - Fix bugs
 - Clean Code
 - Framework starts earlier for better server security
 
-## 2.2.0
+## 2.2.0 - Unknown
 
 ### Added
 
@@ -431,18 +442,18 @@ Nothing!
 - Add support for EasyDocs
 - Add `PlayerGui` to `EngineClient`.
 
-### Improvements
+### Changed
 
 - Fix bugs
 - Clean Code
 
-## 2.1.0
+## 2.1.0 - Unknown
 
 ### Added
 
 - Add Vendor folder under new packages
 
-### Improvements
+### Changed
 
 - Make it so that return data from regular `Signal`s return in a table instead of a tuple for consistency
 - Create wrapper for BridgeNet instead of editing the source code
@@ -451,7 +462,7 @@ Nothing!
 - Fix support for Wait
 - Update `base64` by @Gooncreeper
 
-## 2.0.0
+## 2.0.0 - Unknown
 
 ### Added
 
@@ -461,7 +472,7 @@ Nothing!
 - Add `EngineServer.GetDataService()`
 - Add support for debugging in live games
 
-### Improvements
+### Changed
 - Clean up code
 - Bug fixes
 - Fix up `random_gen`
@@ -472,7 +483,7 @@ Nothing!
 - Remove `EngineClient.PreinstalledPackages`
 - Remove `EngineServer.PreinstalledPackages`
 
-## 1.2.0
+## 1.2.0 - Unknown
 
 ### Added
 
@@ -481,7 +492,7 @@ Nothing!
 - Add support for checking framework version automatically with `GetLatestPackageVersionAsync`, it is now an attribute under the main module.
 - Better `NetworkSignal` typing
 
-### Improvements
+### Changed
 
 - A few QOL fixes
 - Bug fixes
@@ -490,6 +501,8 @@ Nothing!
 
 - Removed intellisense from plugin, it's sadly impossible
 
-## 1.1.0
+## 1.1.0 - Unknown
 
 - Public release! 🥳
+
+[Unreleased]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc1...HEAD

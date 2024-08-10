@@ -14,15 +14,8 @@ export type Worker = {
 	IsWorker: boolean,
 }
 
-export type Controller<T> = {
-	Name: string?,
-	IsController: boolean?,
-	Init: (() -> ())?,
-	Start: (() -> ())?,
-} & T
-
 export type Storage = {
-	Controllers: {[string]: Controller<any>},
+	Controllers: {[string]: {[string]: any}},
 	Workers: {[string]: {Worker}},
 	Nodes: {
 		Signals: { [string]: Signal.Signal<...any> },

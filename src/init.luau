@@ -121,13 +121,13 @@ local function Start(modules: { Instance }?)
 end
 
 -- Creates a new controller for managing a variety of tasks, if it wasn't defined already
-local function Controller<T>(name: string, members: Types.Controller<T>): T
+local function Controller<T>(name: string, members: T): T
 	Debug.Assert(not Started, "AlreadyStarted")
 	Debug.Assert(not Storage.Controllers[name], "ControllerAlreadyExists", name)
 	Debug.Assert(string.len(name) > 0, "NameTooShort")
-	Storage.Controllers[name] = members
-	members.Name = name
-	members.IsController = true
+	Storage.Controllers[name] = members :: any
+	(members :: any).Name = name
+	;(members :: any).IsController = true
 	return members
 end
 

@@ -1,21 +1,8 @@
 local net = require("@lune/net")
 local process = require("@lune/process")
 
-local roleIds = {
-	Aegis = "1219124088249782322",
-	LuminFramework = "1205321049957339228",
-    LuminNet = "1270253679626162197",
-	Snacky = "1205321076905869332",
-	LuminPluginSuite = "1262079690785558640",
-}
-
-local maintainerRoleIds = {
-	Aegis = "1265887260046397563",
-	LuminFramework = "1265887191922511953",
-    LuminNet = "1270141341665333359",
-	Snacky = "1265887289976950814",
-	LuminPluginSuite = "1265887316858114098",
-}
+local projectRole = "1205321049957339228"
+local projectMainterRole = "1265887191922511953"
 
 local webhook_url = process.args[1]
 local type = process.args[2]
@@ -31,7 +18,7 @@ if type == "announcement" then
 		method = "POST",
 		headers = { ["Content-Type"] = "application/json" },
 		body = net.jsonEncode({
-			content = if noPing then nil else `<@&{roleIds[projectName]}>`,
+			content = if noPing == true then nil else `<@&{projectRole}>`,
 			embeds = {
 				{
 					title = `Release {tag} · lumin-dev/{projectName}`,
@@ -56,7 +43,7 @@ elseif type == "event" then
 		method = "POST",
 		headers = { ["Content-Type"] = "application/json" },
 		body = net.jsonEncode({
-			content = `<@&{maintainerRoleIds[projectName]}>`,
+			content = `<@&{projectMainterRole}>`,
 			embeds = {
 				{
 					title = title,

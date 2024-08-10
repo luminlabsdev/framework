@@ -1,4 +1,4 @@
-name: Create Discord thread
+name: Event
 
 on:
   pull_request:
