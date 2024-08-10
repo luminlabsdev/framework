@@ -7,8 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [9.0.0-rc2] - 2024-08-10
-
 ### Changed
 
 - Changed github actions to be more precise and automate more tasks
@@ -17,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Removed an internal type that was not working properly
 
-## [9.0.0-rc1] - 2024-08-08
+## [v9.0.0-rc1] - 2024-08-08
 
 ### Changed
 
@@ -32,13 +30,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Removes client and server interfaces
 
-## 8.1.5 - 2024-07-23
+## v8.1.5 - 2024-07-23
 
 ### Fixed
 
 - Fixed some github actions
 
-## 8.0.5 - 2024-07-14
+## v8.0.5 - 2024-07-14
 
 ### Changed
 
@@ -46,57 +44,57 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixes package list in docs
 - Type validation will now error if incorrect
 
-## 8.0.4 - 2024-07-07
+## v8.0.4 - 2024-07-07
 
 ### Changed
 
 - Improves format of site and actions
 - Fixes standalone not having properly exported package types (thanks @DrasticBlink)
 
-## 8.0.3 - 2024-06-18
+## v8.0.3 - 2024-06-18
 
 ### Changed
 
 - Fixes issue with existing network events/functions not being able to be defined multiple times
 
-## 8.0.2 - 2024-05-24
+## v8.0.2 - 2024-05-24
 
 ### Changed
 
 - Adds type references to init module as they were not accessible prior
 
-## 8.0.1 - 2024-05-12
+## v8.0.1 - 2024-05-12
 
 ### Added
 
 - Re-release due to wally issue
 
-## 8.0.0 - 2024-05-12
+## v8.0.0 - 2024-05-12
 
 ### Added
 
 - Adds reviews to docs home page
 
-## 8.0.0-rc2 - 2024-05-04
+## v8.0.0-rc2 - 2024-05-04
 
 ### Changed
 
 - Improve main module structure
 - Fix typing bug with `.Load()`
 
-## 8.0.2-rc1 - 2024-04-29
+## v8.0.2-rc1 - 2024-04-29
 
 ### Changed
 
 - Fixes yielding bug on client when character does not load
 
-## 8.0.1-rc1 - 2024-04-29
+## v8.0.1-rc1 - 2024-04-29
 
 ### Changed
 
 - Fix networking interface issues
 
-## 8.0.0-rc1 - 2024-04-28
+## v8.0.0-rc1 - 2024-04-28
 
 ### Added
 
@@ -112,7 +110,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Client.PlayerBackpack
 
-## 7.0.2 - 2024-03-05
+## v7.0.2 - 2024-03-05
 
 ### Changed
 
@@ -475,7 +473,6 @@ No information available, mainly small bug fixes.
 - Add support for debugging in live games
 
 ### Changed
-
 - Clean up code
 - Bug fixes
 - Fix up `random_gen`
@@ -508,6 +505,5 @@ No information available, mainly small bug fixes.
 
 - Public release! 🥳
 
-[unreleased]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc2...HEAD
-[9.0.0-rc2]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc1...v9.0.0-rc2
-[9.0.0-rc1]: https://github.com/lumin-dev/LuminFramework/compare/v8.1.5...v9.0.0-rc1
+[Unreleased]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc1...HEAD
+[v9.0.0-rc1]: https://github.com/lumin-dev/LuminFramework/compare/v8.1.5...v9.0.0-rc1
