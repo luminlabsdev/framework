@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Removed an internal type that was not working properly
 
-## 9.0.0-rc1 - 2024-08-08
+## [v9.0.0-rc1] - 2024-08-08
 
 ### Changed
 
@@ -30,13 +30,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Removes client and server interfaces
 
-## 8.1.5 - 2024-07-23
+## v8.1.5 - 2024-07-23
 
 ### Fixed
 
 - Fixed some github actions
 
-## 8.0.5 - 2024-07-14
+## v8.0.5 - 2024-07-14
 
 ### Changed
 
@@ -44,57 +44,57 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixes package list in docs
 - Type validation will now error if incorrect
 
-## 8.0.4 - 2024-07-07
+## v8.0.4 - 2024-07-07
 
 ### Changed
 
 - Improves format of site and actions
 - Fixes standalone not having properly exported package types (thanks @DrasticBlink)
 
-## 8.0.3 - 2024-06-18
+## v8.0.3 - 2024-06-18
 
 ### Changed
 
 - Fixes issue with existing network events/functions not being able to be defined multiple times
 
-## 8.0.2 - 2024-05-24
+## v8.0.2 - 2024-05-24
 
 ### Changed
 
 - Adds type references to init module as they were not accessible prior
 
-## 8.0.1 - 2024-05-12
+## v8.0.1 - 2024-05-12
 
 ### Added
 
 - Re-release due to wally issue
 
-## 8.0.0 - 2024-05-12
+## v8.0.0 - 2024-05-12
 
 ### Added
 
 - Adds reviews to docs home page
 
-## 8.0.0-rc2 - 2024-05-04
+## v8.0.0-rc2 - 2024-05-04
 
 ### Changed
 
 - Improve main module structure
 - Fix typing bug with `.Load()`
 
-## 8.0.2-rc1 - 2024-04-29
+## v8.0.2-rc1 - 2024-04-29
 
 ### Changed
 
 - Fixes yielding bug on client when character does not load
 
-## 8.0.1-rc1 - 2024-04-29
+## v8.0.1-rc1 - 2024-04-29
 
 ### Changed
 
 - Fix networking interface issues
 
-## 8.0.0-rc1 - 2024-04-28
+## v8.0.0-rc1 - 2024-04-28
 
 ### Added
 
@@ -110,7 +110,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Client.PlayerBackpack
 
-## 7.0.2 - 2024-03-05
+## v7.0.2 - 2024-03-05
 
 ### Changed
 
@@ -120,14 +120,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Frozen client tables; causing issues
 
-## 7.0.1 - 2024-03-05
+## v7.0.1 - 2024-03-05
 
 ### Changed
 
 - If something is not a module when using `ImportPackages`, it will be ignored
 - Fixes `Framework.Client` issues with frozen tables
 
-## 7.0.0 - 2024-03-03
+## v7.0.0 - 2024-03-03
 
 ### Added
 
@@ -148,7 +148,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `LuminFramework.GetFrameworkShared`
 - `LuminFramework.Future`
 
-## 6.2.1 - 2023-12-28
+## v6.2.1 - 2023-12-28
 
 ### Added
 
@@ -160,7 +160,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Deprecate `Debugger.Debug` and `Debugger.DebugPrefix` functions in favor `Debugger.LogEvent`
 - Change prefixes of settings to `FFlag`
 
-## 6.1.1 - 2023-12-08
+## v6.1.1 - 2023-12-08
 
 ### Changed
 
@@ -169,7 +169,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cleans up code in a few areas
 - Changes how network controller logs are formatted
 
-## 6.1.0 - 2023-12-06
+## v6.1.0 - 2023-12-06
 
 ### Added
 
@@ -182,7 +182,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Network controller creation now displays reliability type in log
 - Adds ability to set a listener on a network controller after being initially set
 
-## 6.0.0 - 2023-11-29
+## v6.0.0 - 2023-11-29
 
 ### Added
 
@@ -196,7 +196,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `source` param from LogEvent to make code more neat
 
-## 6.0.0-rc1 - 2023-11-28
+## v6.0.0-rc1 - 2023-11-28
 
 ### Added
 
@@ -218,7 +218,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Remove deprecated alias `LuminFramework.GetFrameworkReplicated`
 
-## 5.1.0 - 2023-11-21
+## v5.1.0 - 2023-11-21
 
 ### Added
 
@@ -228,7 +228,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Refined installation process, makes models available only per release.
 
-## 5.0.0 - 2023-11-08
+## v5.0.0 - 2023-11-08
 
 ### Added
 
@@ -248,7 +248,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - A lot of useless/deprecated functions or properties
 
-## 4.0.0 - 2023-10-14
+## v4.0.0 - 2023-10-14
 
 (Includes rc1-3)
 
@@ -262,7 +262,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improves internal code to be a lot faster
 - LuminFramework is now a standalone modulescript which can be used from anywhere
 
-## 4.0.0-rc3 - Unknown
+## v4.0.0-rc3 - Unknown
 
 ### Added
 
@@ -282,7 +282,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Deprecated functions
 
-## 4.0.0-rc2 - Unknown
+## v4.0.0-rc2 - Unknown
 
 ### Added
 
@@ -304,7 +304,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `BridgeNet`
 
-## 4.0.0-rc1 - Unknown
+## v4.0.0-rc1 - Unknown
 
 ### Added
 
@@ -326,7 +326,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `EngineContext.Packages`
 - `EngineContext.Media`
 
-## 3.3.5 - 2023-08-25
+## v3.3.5 - 2023-08-25
 
 ### Added
 
@@ -342,11 +342,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improve types
 - Improve performance
 
-## 3.2.5 - 2023-08-12
+## v3.2.5 - 2023-08-12
 
 No information available, mainly small bug fixes.
 
-## 3.2.4 - 2023-08-07
+## v3.2.4 - 2023-08-07
 
 ### Added
 
@@ -362,7 +362,7 @@ No information available, mainly small bug fixes.
 - Improve typings
 - Updated Benchmark + Debugger modules
 
-## 3.1.4 - 2023-07-22
+## v3.1.4 - 2023-07-22
 
 ### Added
 
@@ -380,14 +380,14 @@ No information available, mainly small bug fixes.
 - Remove `Runtime.IsStarted`
 - Deprecated `.GetLatestPackageVersionAsync`
 
-## 3.0.1 - Unknown
+## v3.0.1 - Unknown
 
 ### Changed
 
 - Typings have been improved to contain an additional argument for network controllers
 - Signals now use a wrapper
 
-## 3.0.0 - Unknown
+## v3.0.0 - Unknown
 
 ### Added
 
@@ -422,7 +422,7 @@ No information available, mainly small bug fixes.
 - Remove `CanaryEngineServer.Media`
 - Remove `CanaryEngineClient.Media`
 
-## 2.2.1 - Unknown
+## v2.2.1 - Unknown
 
 ### Added
 
@@ -434,7 +434,7 @@ No information available, mainly small bug fixes.
 - Clean Code
 - Framework starts earlier for better server security
 
-## 2.2.0 - Unknown
+## v2.2.0 - Unknown
 
 ### Added
 
@@ -447,7 +447,7 @@ No information available, mainly small bug fixes.
 - Fix bugs
 - Clean Code
 
-## 2.1.0 - Unknown
+## v2.1.0 - Unknown
 
 ### Added
 
@@ -462,7 +462,7 @@ No information available, mainly small bug fixes.
 - Fix support for Wait
 - Update `base64` by @Gooncreeper
 
-## 2.0.0 - Unknown
+## v2.0.0 - Unknown
 
 ### Added
 
@@ -483,7 +483,7 @@ No information available, mainly small bug fixes.
 - Remove `EngineClient.PreinstalledPackages`
 - Remove `EngineServer.PreinstalledPackages`
 
-## 1.2.0 - Unknown
+## v1.2.0 - Unknown
 
 ### Added
 
@@ -501,8 +501,9 @@ No information available, mainly small bug fixes.
 
 - Removed intellisense from plugin, it's sadly impossible
 
-## 1.1.0 - Unknown
+## v1.1.0 - Unknown
 
 - Public release! 🥳
 
 [Unreleased]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc1...HEAD
+[v9.0.0-rc1]: https://github.com/lumin-dev/LuminFramework/compare/v8.1.5...v9.0.0-rc1
