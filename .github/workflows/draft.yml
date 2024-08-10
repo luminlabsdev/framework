@@ -19,7 +19,7 @@ jobs:
               ref: "main"
 
           - name: Update changelog
-            uses: 2jammers/keep-a-changelog-new-release@v0.1.0
+            uses: 2jammers/keep-a-changelog-new-release@v0.2.0
             with:
               tag: ${{ github.ref_name }}
               changelogPath: "docs/changelog.md"
