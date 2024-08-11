@@ -12,6 +12,8 @@ jobs:
     bump:
         name: Bump Versions
         runs-on: ubuntu-latest
+        outputs:
+          release-body: ${{ steps.update-changelog.outputs.release-notes }}
         steps:
           - name: Checkout repository
             uses: actions/checkout@v4
@@ -19,7 +21,8 @@ jobs:
               ref: "main"
 
           - name: Update changelog
-            uses: 2jammers/keep-a-changelog-new-release@v0.3.0
+            id: update-changelog
+            uses: thomaseizinger/keep-a-changelog-new-release@3.1.0
             with:
               tag: ${{ github.ref_name }}
               changelogPath: "docs/changelog.md"
@@ -51,12 +54,8 @@ jobs:
           - name: Checkout repository
             uses: actions/checkout@v4
 
-          - name: Read changelog
-            id: read-changes
-            uses: mindsers/changelog-reader-action@v2
-            with:
-              version: ${{ github.ref_name }}
-              path: "docs/changelog.md"
+          - name: Setup Rokit
+            uses: CompeyDev/setup-rokit@v0.1.0
 
           - name: Create release
             uses: softprops/action-gh-release@v2.0.8
@@ -67,7 +66,7 @@ jobs:
               prerelease: ${{ contains(github.ref_name, 'rc') }}
               body: |
                 ## Changelog
-                ${{ steps.read-changes.outputs.changes }}
+                ${{ needs.bump.outputs.release-body }}
 
     build:
         name: Build Assets
