@@ -82,5 +82,5 @@ jobs:
               body: |
                 ## Changelog
                 ${{ needs.bump.outputs.release-body }}
-                files: |
+              files: |
                 ./Standalone.rbxm
