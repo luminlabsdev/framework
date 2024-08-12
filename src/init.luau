@@ -88,13 +88,15 @@ end
 
 -- Starts all the workers internally
 local function StartWorkers()
-	for service: any, workerList in Storage.Workers do
-		for _, worker in workerList do
-			Debug.Assert(worker.IsWorker, "ItemNotOptional", "IsWorker")
-			Debug.Assert(WorkerServices[service][worker.Type], "ItemNotFound", worker.Type)
-			WorkerServices[service][worker.Type]:Connect(function(...)
-				Spawn(worker.Callback, ...)
-			end)
+	for service, connectionTypes in Storage.Workers do
+		for connectionType, connectionList in connectionTypes do
+			for _, worker in connectionList do
+				Debug.Assert(worker.IsWorker, "ItemNotOptional", "IsWorker")
+				Debug.Assert(WorkerServices[service][worker.Type], "ItemNotFound", worker.Type)
+				WorkerServices[service][worker.Type]:Connect(function(...)
+					Spawn(worker.Callback, ...)
+				end)
+			end
 		end
 	end
 end
@@ -140,9 +142,11 @@ local function Worker(type: Types.WorkerType, callback: (...any) -> ())
 	Worker.Type = type
 	Worker.Callback = callback
 	Worker.IsWorker = true
-	for service, connectionList in WorkerNames do
-		if table.find(connectionList :: any, type) then
-			table.insert(Storage.Workers[service :: any], table.freeze(Worker :: any))
+	for service, connectionTypes in Storage.Workers do
+		for connectionType, connectionList in connectionTypes do
+			if connectionType == type then
+				table.insert(connectionList, Worker :: any)
+			end
 		end
 	end
 end

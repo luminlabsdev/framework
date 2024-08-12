@@ -2,10 +2,16 @@ local Types = require(script.Parent.Parent.Types)
 return {
 	Controllers = {},
 	Workers = {
-		PostSimulation = {},
-		PreSimulation = {},
-		PreAnimation = {},
-		PreRender = {},
+		RunService = {
+			PostSimulation = {},
+			PreSimulation = {},
+			PreAnimation = {},
+			PreRender = {},
+		},
+		Players = {
+			PlayerAdded = {},
+			PlayerRemoving = {},
+		},
 	},
 	Nodes = {
 		Signals = {},

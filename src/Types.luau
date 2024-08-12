@@ -1,7 +1,7 @@
 local Signal = require(script.Parent.Parent.signal)
 
 export type WorkerType =
-	  "PostSimulation"
+	"PostSimulation"
 	| "PreSimulation"
 	| "PreAnimation"
 	| "PreRender"
@@ -15,8 +15,8 @@ export type Worker = {
 }
 
 export type Storage = {
-	Controllers: {[string]: {[string]: any}},
-	Workers: {[string]: {Worker}},
+	Controllers: { [string]: { [string]: any } },
+	Workers: { [string]: { [string]: { Worker } } },
 	Nodes: {
 		Signals: { [string]: Signal.Signal<...any> },
 	},

@@ -1,4 +1,3 @@
-import mermaid from "mermaid";
 import { withMermaid } from "vitepress-plugin-mermaid";
 
 export default withMermaid({

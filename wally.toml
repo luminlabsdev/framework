@@ -9,7 +9,6 @@ realm = "shared"
 [dependencies]
 promise = "lukadev-0/typed-promise@4.0.2"
 signal = "sleitnick/signal@2.0.1"
-ratelimit = "red-blox/ratelimit@1.0.1"
 spawn = "red-blox/spawn@^1.0.0"
 
 [dev-dependencies]

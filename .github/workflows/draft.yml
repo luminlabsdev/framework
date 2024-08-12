@@ -46,32 +46,10 @@ jobs:
               git tag -f ${{ github.ref_name }}
               git push -f --tags
 
-    draft:
-        name: Draft Release
+    draft-build:
+        name: Draft & Build Assets
         runs-on: ubuntu-latest
         needs: bump
-        steps:
-          - name: Checkout repository
-            uses: actions/checkout@v4
-
-          - name: Setup Rokit
-            uses: CompeyDev/setup-rokit@v0.1.0
-
-          - name: Create release
-            uses: softprops/action-gh-release@v2.0.8
-            with:
-              tag_name: ${{ github.ref_name }}
-              name: ${{ github.ref_name }}
-              draft: true
-              prerelease: ${{ contains(github.ref_name, 'rc') }}
-              body: |
-                ## Changelog
-                ${{ needs.bump.outputs.release-body }}
-
-    build:
-        name: Build Assets
-        runs-on: ubuntu-latest
-        needs: draft
         steps:
           - name: Checkout Repository
             uses: actions/checkout@v4
@@ -94,9 +72,15 @@ jobs:
           - name: Build standalone
             run: argon build standalone.project.json --output ./Standalone.rbxm
 
-          - name: Upload Assets
+          - name: Draft release
             uses: softprops/action-gh-release@v2.0.8
             with:
               tag_name: ${{ github.ref_name }}
-              files: |
+              name: ${{ github.ref_name }}
+              draft: true
+              prerelease: ${{ contains(github.ref_name, 'rc') }}
+              body: |
+                ## Changelog
+                ${{ needs.bump.outputs.release-body }}
+                files: |
                 ./Standalone.rbxm

@@ -1,6 +1,6 @@
 # Workers
 
-Workers are essentially lifecycle events like in any other framework. They allow for code to constantly run in the background without interupting anything that is in the main thread. Notable mentions include `PlayerAdded` and `PostSimulation`. The purpose of workers is so that we can introduce more safety while using the framework and run into less issues like race conditions or unexplainable errors.
+Workers are essentially lifecycle events like in any other framework. They allow for code to constantly run in the background without interupting anything that is in the main thread. Notable mentions include `PlayerAdded` and `PostSimulation`. The purpose of workers is so that we can introduce more safety while using the framework and run into less issues like race conditions or unexplainable errors. New workers cannot be created after `.Start` is finished.
 
 ## Usage
 

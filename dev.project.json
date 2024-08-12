@@ -1,6 +1,6 @@
 {
 	"legacyScripts": false,
-	"name": "luminframework",
+	"name": "framework",
 	"tree": {
 		"$className": "DataModel",
 		"ReplicatedStorage": {

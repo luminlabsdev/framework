@@ -1,6 +1,6 @@
 # Controllers
 
-The controller object is an object that allows you to create data structures catered towards controlling the game, per the name. Think of it similar to a service in another framework like Knit.
+The controller object is an object that allows you to create data structures catered towards controlling the game, per the name. Think of it similar to a service in another framework like Knit. New Controllers cannot be created after `.Start` is finished.
 
 ## Usage
 
@@ -8,9 +8,7 @@ Setting up a controller is a simple as calling the `Controller` function. The pr
 
 ```lua
 local function Init()
-    return Promise.new(function()
-        print("Initialized!")
-    end)
+    print("Initialized!")
 end
 
 local function Start()
