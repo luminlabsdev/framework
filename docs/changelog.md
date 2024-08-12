@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.0.0-rc3] - 2024-08-12
+
 ## [9.0.0-rc2] - 2024-08-11
 
 ### Changed
@@ -508,6 +510,7 @@ No information available, mainly small bug fixes.
 
 - Public release! 🥳
 
-[unreleased]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc2...HEAD
+[unreleased]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc3...HEAD
+[9.0.0-rc3]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc2...v9.0.0-rc3
 [9.0.0-rc2]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc1...v9.0.0-rc2
 [9.0.0-rc1]: https://github.com/lumin-dev/LuminFramework/compare/v8.1.5...v9.0.0-rc1
