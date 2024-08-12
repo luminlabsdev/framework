@@ -34,7 +34,7 @@ function SpleefPart.Start()
 			local Character = basePart.Parent :: Model
 
 			if Character:FindFirstChildWhichIsA("Humanoid") then
-				task.wait(0.2)
+				task.wait(0.15)
 				print("Broke part")
 
 				part.Transparency = 1

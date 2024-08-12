@@ -64,10 +64,8 @@ local function LoadControllers(modules: { Instance })
 		Debug.Assert(type(controller.Init) == "function", "IncorrectType", "Init", "function")
 		Debug.Assert(controller.Name, "ItemNotOptional", "Name")
 		Debug.Assert(controller.IsController, "ItemNotOptional", "IsController")
-		xpcall(function()
-			debug.setmemorycategory(controller.Name)
-			controller.Init()
-		end, Debug.Error, debug.info(2, "sln"))
+		debug.setmemorycategory(controller.Name)
+		controller.Init()
 	end
 	return Controllers
 end
@@ -79,10 +77,8 @@ local function StartControllers(controllers: { any })
 			continue
 		end
 		Debug.Assert(type(controller.Start) == "function", "IncorrectType", "Start", "function")
-		xpcall(function()
-			debug.setmemorycategory(controller.Name)
-			controller.Start()
-		end, Debug.Error, debug.info(2, "sln"))
+		debug.setmemorycategory(controller.Name)
+		controller.Start()
 	end
 end
 
@@ -136,8 +132,10 @@ end
 -- Creates a new worker which is used for management of ongoing tasks in the background
 local function Worker(type: Types.WorkerType, callback: (...any) -> ())
 	Debug.Assert(not Started, "AlreadyStarted")
-	Debug.Assert(type == "PreRender" and RunService:IsClient(), "IncorrectContext", "WorkerType")
 	Debug.Assert(not table.find(WorkerNames, type), "ItemNotFound", type)
+	if type == "PreRender" and not RunService:IsClient() then
+		Debug.Error("IncorrectContext", "WorkerType")
+	end
 	local Worker = {}
 	Worker.Type = type
 	Worker.Callback = callback

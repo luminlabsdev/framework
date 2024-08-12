@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed issue with workers again
+
+### Added
+
+- Updated example place to include workers and better response times
+
 ## [9.0.0-rc3] - 2024-08-12
 
 ### Fixed

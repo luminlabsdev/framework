@@ -14,7 +14,17 @@ function Announcement.Init()
 	Announcement.Label = Announcement.Gui:WaitForChild("AnnounceLabel")
 end
 
+local count = 0
+
 function Announcement.Start()
+	Lumin.Worker("PostSimulation", function()
+		if count == 120 then
+			count = 0
+		end
+		count += 1
+		print(count)
+	end)
+
 	AnnouncerEvent:Listen(function(message)
 		Announcement.Label.Text = message
 		task.wait(5)
