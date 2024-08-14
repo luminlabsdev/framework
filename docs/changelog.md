@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixes issue with Player based workers
+- Fixed xpcall issues
+
+### Changes
+
+- Updates docs
+
 ## [9.0.0-rc4] - 2024-08-12
 
 ### Fixed
