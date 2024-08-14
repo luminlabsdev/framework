@@ -27,7 +27,7 @@ Fires every *frame* after the physics simulation has completed.
 Fires every *frame* prior to the physics simulation but after rendering.
 
 - `PreRender`\
-Fires every *frame* prior to the frame being rendered. (Client only)
+Fires every *frame* prior to the frame being rendered. **(Client only)**
 
 - `PreSimulation`\
 Fires every *frame* prior to the physics simulation.

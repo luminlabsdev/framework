@@ -8,7 +8,7 @@ return {
 			PreAnimation = {},
 			PreRender = {},
 		},
-		Players = {
+		PlayerService = {
 			PlayerAdded = {},
 			PlayerRemoving = {},
 		},

@@ -19,7 +19,7 @@ local FALLBACK = "missing log id"
 -- Functions
 
 local function Append(logId: string, ...): string
-	return `[Lumin] {string.format(Logs[logId] or FALLBACK, ...)}`
+	return string.format(Logs[logId] or FALLBACK, ...)
 end
 
 local function Assert(assertion: any, logId: string, ...: any)

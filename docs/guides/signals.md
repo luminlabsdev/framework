@@ -36,7 +36,7 @@ Anonymous signals are not stored within the storage table, and are meant to be u
 ```lua
 local AnonymousSignal = Lumin.Signal()
 AnonymousSignal:Connect(function(args)
-    print(args) -- Output: I'm anonyous...
+    print(args) -- Output: I'm anonymous...
 end)
-AnonymousSignal:Fire("I'm anonyous...")
+AnonymousSignal:Fire("I'm anonymous...")
 ```

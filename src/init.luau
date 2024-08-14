@@ -64,8 +64,13 @@ local function LoadControllers(modules: { Instance })
 		Debug.Assert(type(controller.Init) == "function", "IncorrectType", "Init", "function")
 		Debug.Assert(controller.Name, "ItemNotOptional", "Name")
 		Debug.Assert(controller.IsController, "ItemNotOptional", "IsController")
-		debug.setmemorycategory(controller.Name)
-		controller.Init()
+		local _, err
+		_, err = xpcall(function()
+			debug.setmemorycategory(controller.Name)
+			controller.Init()
+		end, function()
+			Debug.Error("CannotInit", debug.info(2, "ln"), err)
+		end)
 	end
 	return Controllers
 end
@@ -77,8 +82,13 @@ local function StartControllers(controllers: { any })
 			continue
 		end
 		Debug.Assert(type(controller.Start) == "function", "IncorrectType", "Start", "function")
-		debug.setmemorycategory(controller.Name)
-		controller.Start()
+		local _, err
+		_, err = xpcall(function()
+			debug.setmemorycategory(controller.Name)
+			controller.Start()
+		end, function()
+			Debug.Error("CannotInit", debug.info(2, "ln"), err)
+		end)
 	end
 end
 
@@ -123,9 +133,9 @@ local function Controller<T>(name: string, members: T): T
 	Debug.Assert(not Started, "AlreadyStarted")
 	Debug.Assert(not Storage.Controllers[name], "ControllerAlreadyExists", name)
 	Debug.Assert(string.len(name) > 0, "NameTooShort")
-	Storage.Controllers[name] = members :: any
-	(members :: any).Name = name
-	;(members :: any).IsController = true
+	Storage.Controllers[name] = members :: any;
+	(members :: any).Name = name;
+	(members :: any).IsController = true
 	return members
 end
 

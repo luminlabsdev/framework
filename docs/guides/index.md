@@ -22,8 +22,8 @@ end)
 
 A list of other open sourced libraries that pair quite well with the framework.
 
-`lumin/aegis`
-`lumin/net`
-`sleitnick/trove`
+`lumin/aegis`\
+`lumin/net`\
+`sleitnick/trove`\
 
 These are for most basic games but you can remove or include others as you please!
