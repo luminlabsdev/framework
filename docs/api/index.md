@@ -54,12 +54,27 @@ Implements lifecycle methods into the framework, as its own object called a Work
 * **type:** `WorkerType`\
 A designated worker type
 
-* **callback:** `(deltaTime: number) -> ()`\
+* **callback:** `(args: ...any) -> ()`\
 The callback to run for the worker type
 
 **Returns**
 
 * [**Worker**](./worker.md)
+
+---
+
+### `Expect`
+
+Expects for a specific controller to be loaded before the one calling it from is.
+
+**Parameters**
+
+* **controller:** `Controller`\
+The controller to put first the loading queue
+
+**Returns**
+
+* [**Controller**](./controller.md)
 
 ---
 

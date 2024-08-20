@@ -36,6 +36,7 @@ export default withMermaid({
           items: [
             { text: 'Setup', link: '/guides/' },
             { text: 'Controllers', link: '/guides/controllers' },
+            { text: 'Dependency Injection', link: '/guides/dependency-injection' },
             { text: 'Workers', link: '/guides/workers' },
             { text: 'Signals', link: '/guides/signals' },
             { text: 'Networking', link: '/guides/networking' }
