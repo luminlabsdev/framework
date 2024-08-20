@@ -2,9 +2,11 @@
 
 local Logs = {
 	AlreadyStarted = "Framework has already started",
+	NotStarted = "Framework has not started yet",
 	CannotInit = "Init errored at %s; '%s'",
 	CannotStart = "Start errored at %s; '%s'",
 	ControllerAlreadyExists = "Controller '%s' already exists",
+	ControllerDoesntExist = "Controller does not exist",
 	NameTooShort = "Name must be greater than 0 characters",
 	IncorrectType = "Item '%s' is the incorrect type; expects %s",
 	IncorrectContext = "Using parameter %s on the incorrect context",

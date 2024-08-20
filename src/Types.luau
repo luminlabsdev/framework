@@ -1,5 +1,12 @@
 local Signal = require(script.Parent.Parent.signal)
 
+export type Controller<T> = T & {
+	Name: string?,
+	Start: (() -> ())?,
+	Init: (() -> ())?,
+	IsController: boolean?,
+}
+
 export type WorkerType =
 	"PostSimulation"
 	| "PreSimulation"
@@ -15,7 +22,8 @@ export type Worker = {
 }
 
 export type Storage = {
-	Controllers: { [string]: { [string]: any } },
+	Controllers: {Controller<any>},
+	ExpectedControllers: {Controller<any>},
 	Workers: { [string]: { [string]: { Worker } } },
 	Nodes: {
 		Signals: { [string]: Signal.Signal<...any> },

@@ -1,6 +1,7 @@
 local Types = require(script.Parent.Parent.Types)
 return {
 	Controllers = {},
+	ExpectedControllers = {},
 	Workers = {
 		RunService = {
 			PostSimulation = {},
