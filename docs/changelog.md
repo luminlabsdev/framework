@@ -546,7 +546,8 @@ No information available, mainly small bug fixes.
 
 - Public release! 🥳
 
-[unreleased]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc5...HEAD
+[unreleased]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc6...HEAD
+[9.0.0-rc6]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc5...v9.0.0-rc6
 [9.0.0-rc5]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc4...v9.0.0-rc5
 [9.0.0-rc4]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc3...v9.0.0-rc4
 [9.0.0-rc3]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc2...v9.0.0-rc3
