@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.0.0-rc5] - 2024-08-14
+
 ### Fixed
 
 - Fixes issue with Player based workers
@@ -539,7 +541,8 @@ No information available, mainly small bug fixes.
 
 - Public release! 🥳
 
-[unreleased]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc4...HEAD
+[unreleased]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc5...HEAD
+[9.0.0-rc5]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc4...v9.0.0-rc5
 [9.0.0-rc4]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc3...v9.0.0-rc4
 [9.0.0-rc3]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc2...v9.0.0-rc3
 [9.0.0-rc2]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc1...v9.0.0-rc2
