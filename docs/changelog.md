@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.0.0-rc6] - 2024-08-20
+
 ### Added
 
 - Dependency injection
@@ -547,6 +549,7 @@ No information available, mainly small bug fixes.
 - Public release! 🥳
 
 [unreleased]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc6...HEAD
+[9.0.0-rc6]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc6...v9.0.0-rc6
 [9.0.0-rc6]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc5...v9.0.0-rc6
 [9.0.0-rc5]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc4...v9.0.0-rc5
 [9.0.0-rc4]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc3...v9.0.0-rc4
