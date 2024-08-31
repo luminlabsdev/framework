@@ -4,7 +4,7 @@ layout: home
 
 hero:
   text: "Lumin Framework"
-  tagline: A lightning fast & amazing game framework
+  tagline: A lightning fast & efficient game framework
   actions:
     - theme: brand
       text: Guide
