@@ -1,7 +1,10 @@
----
+* * *
+
 hide:
-  - navigation
----
+
+- navigation
+
+* * *
 
 # Changelog
 
@@ -11,6 +14,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [9.0.0-rc7] - 2024-09-02
 
 ### Added
 
@@ -569,7 +574,8 @@ No information available, mainly small bug fixes.
 
 - Public release! 🥳
 
-[unreleased]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc6...HEAD
+[unreleased]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc7...HEAD
+[9.0.0-rc7]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc6...v9.0.0-rc7
 [9.0.0-rc6]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc6...v9.0.0-rc6
 [9.0.0-rc6]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc5...v9.0.0-rc6
 [9.0.0-rc5]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc4...v9.0.0-rc5
