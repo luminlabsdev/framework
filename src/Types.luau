@@ -1,11 +1,10 @@
-local Signal = require(script.Parent.Parent.signal)
-
-export type Controller<T> = T & {
-	Name: string?,
-	Start: (() -> ())?,
+export type Controller = {
+    Start: (() -> ())?,
 	Init: (() -> ())?,
-	IsController: boolean?,
+    Uses: {Controller}?,
 }
+
+export type DevController<T> = T & Controller
 
 export type WorkerType =
 	"PostSimulation"
@@ -16,18 +15,13 @@ export type WorkerType =
 	| "PlayerRemoving"
 
 export type Worker = {
-	Type: WorkerType,
+	Connection: RBXScriptSignal,
 	Callback: (...any) -> (),
-	IsWorker: boolean,
 }
 
 export type Storage = {
-	Controllers: {Controller<any>},
-	ExpectedControllers: {Controller<any>},
-	Workers: { [string]: { [string]: { Worker } } },
-	Nodes: {
-		Signals: { [string]: Signal.Signal<...any> },
-	},
+	Controllers: {DevController<any>},
+	Workers: {Worker},
 }
 
 return {}

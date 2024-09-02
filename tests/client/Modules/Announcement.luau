@@ -22,4 +22,4 @@ function Announcement.Start()
 	end)
 end
 
-return Lumin.Controller("Announcement", Announcement)
+return Lumin.New(Announcement)

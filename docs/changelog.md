@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Adds `Controller.Uses` as an optional table that contains every other controller that it uses
+
+### Changed
+
+- How workers are defined internally, much less code
+- `.Controller` to `.New`, much less verbose and more general
+- Controllers no longer need names upon creation
+
+### Removed
+
+- Removes `.Expect` for a better dependency system
+- Removes `.Signal` for less bloat in favor of custom systems
+
 ## [9.0.0-rc6] - 2024-08-20
 
 ### Added

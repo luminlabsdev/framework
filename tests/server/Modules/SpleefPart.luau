@@ -1,4 +1,5 @@
 local Lumin = require(game.ReplicatedStorage.Packages.framework)
+local Signal = require(game.ReplicatedStorage.DevPackages.signal)
 
 local CollectionService = game:GetService("CollectionService")
 local SpleefBricks = CollectionService:GetTagged("SpleefBrick")
@@ -10,7 +11,7 @@ local TouchDebounce = false
 local SpleefPart = {}
 
 function SpleefPart.Init()
-	SpleefPart.GameFinishedSignal = Lumin.Signal()
+	SpleefPart.GameFinishedSignal = Signal.new()
 	SpleefPart.GameFinishedSignal:Connect(function()
 		print("Game finished!")
 		task.wait(3)
@@ -52,4 +53,4 @@ function SpleefPart.Start()
 	end
 end
 
-return Lumin.Controller("SpleefPart", SpleefPart)
+return Lumin.New(SpleefPart)

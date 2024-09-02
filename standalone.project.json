@@ -2,7 +2,7 @@
     "name": "standalone",
     "tree": {
         "$path": "Packages",
-        "Framework": {
+        "framework": {
             "$path": "src"
         }
     }

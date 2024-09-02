@@ -7,12 +7,12 @@ registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 
 [dependencies]
-promise = "lukadev-0/typed-promise@4.0.2"
-signal = "sleitnick/signal@2.0.1"
+debugger = "lumin/debugger@^0.3.0"
 spawn = "red-blox/spawn@^1.0.0"
 
 [dev-dependencies]
 net = "lumin/net@0.1.0"
+signal = "sleitnick/signal@2.0.1"
 
 [place]
 shared-packages = "game.ReplicatedStorage.Packages"

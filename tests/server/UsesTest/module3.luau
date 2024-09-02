@@ -7,5 +7,5 @@ E.Init = function()
         return "Goodbye"
     end :: any
 end
-print("HI 4")
-return Lumin.Controller("Module3", E)
+print("HI 3")
+return Lumin.New(E)

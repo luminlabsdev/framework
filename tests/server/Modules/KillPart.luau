@@ -42,4 +42,4 @@ function KillPart.Start()
 	end
 end
 
-return Lumin.Controller("KillPart", KillPart)
+return Lumin.New(KillPart)
