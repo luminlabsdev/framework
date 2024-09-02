@@ -1,0 +1,62 @@
+site_name: Lumin Framework
+repo_url: https://github.com/lumin-dev/LuminFramework
+repo_name: lumin-dev/LuminFramework
+copyright: Copyright &copy; 2021 - 2024 Lumin Labs & Contributors
+edit_uri: edit/main/docs/
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/lumin-dev
+    - icon: fontawesome/brands/discord
+      link: https://lumin-dev.github.io/link/discord
+theme:
+  name: material
+  favicon: assets/images/favicon.ico
+  font:
+    text: Inter
+    code: JetBrains Mono
+  icon:
+    edit: material/pencil
+    view: material/eye
+  features:
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.tabs
+    - navigation.path
+    - navigation.top
+    - navigation.footer
+    - content.action.edit
+    - content.code.copy
+    - content.code.select
+    - content.tooltips
+  palette:
+
+    # Palette toggle for automatic mode
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: black
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      toggle:
+        icon: material/weather-night
+        name: Switch to system preference

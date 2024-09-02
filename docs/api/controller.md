@@ -4,21 +4,17 @@ Responsible for controlling most of the game's functions
 
 ## Properties
 
-### `Name`
-
-The name of the controller.
-
-- **string?**
-
 ---
 
-### `IsController`
+### `Uses`
 
-Whether the controller is truly a controller, this is mainly used internally.
+Any other controllers that the current one uses
 
-- **boolean?**
+- **{ Controller }**
 
 ## Functions
+
+---
 
 ### `Init`
 

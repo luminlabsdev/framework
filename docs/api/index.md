@@ -4,13 +4,17 @@ The main class of LuminFramework.
 
 ## Properties
 
-### `Started`
+---
 
-Whether or not the framework has started yet
+### `version`
 
-- **boolean**
+The current version of the framework.
+
+- **string**
 
 ## Functions
+
+---
 
 ### `Start`
 
@@ -18,75 +22,75 @@ Starts the framework and prepares all of the workers/controllers.
 
 **Parameters**
 
-- **modules:** `Instance?`\
-A folder of modules to load, this will import every descendant
+- **loaded:** `{ Controller }`<br>
+A list of already loaded controllers, should be from `.Load`
 
 **Returns**
 
-- [**Promise**](https://eryn.io/roblox-lua-promise/)
+- **void**
 
 ---
 
-### `Controller`
+### `New`
 
-Creates a new controller, this is essentially a service-like infastructure for the framework. This is preferred to use over vanilla tables, especially in conjunction with `Start`
+Creates a new controller for management of various tasks.
 
 **Parameters**
 
-* **name:** `string`\
-The name of the controller; cannot already exist and must be longer than 0 characters
-
-* **members:** `{ any }`\
+- **members:** `{ any }`<br>
 This is where functions, properties, and methods are stored. Use this like a generic module
 
 **Returns**
 
-* [**Controller**](./controller.md)
+- [**Controller**](./controller.md)
 
 ---
 
 ### `Worker`
 
-Implements lifecycle methods into the framework, as its own object called a Worker
+Creates a new worker for management of various tasks that happen continously in the background.
 
 **Parameters**
 
-* **type:** `WorkerType`\
+- **type:** `WorkerType`<br>
 A designated worker type
 
-* **callback:** `(args: ...any) -> ()`\
+- **callback:** `(args: ...any) -> ()`<br>
 The callback to run for the worker type
 
 **Returns**
 
-* [**Worker**](./worker.md)
+- **void**
 
 ---
 
-### `Expect`
+### `Load`
 
-Expects for a specific controller to be loaded before the one calling it from is.
+Loads all of the provided modules, going through a `filter` if available.
 
 **Parameters**
 
-* **controller:** `Controller`\
-The controller to put first the loading queue
+- **containers:** `{ Instance }`<br>
+A list of containers of which the children will be loaded of
+
+- **filter:** `((ModuleScript) -> boolean)?`<br>
+A function that runs for every module script, returning true will allow the module to load
 
 **Returns**
 
-* [**Controller**](./controller.md)
+- **void**
 
 ---
 
-### `Signal`
+### `OnStart`
 
-Creates/references a signal of the given name, create a new anonymous signal by leaving the name blank.
+Runs the provided callback function when the framework is completely started.
 
 **Parameters**
 
-* **name:** `string?`\
-The name of the signal
+- **callback:** `() -> ()`<br>
+Callback function to run after the framework starts
 
 **Returns**
 
-* [**Signal**](https://sleitnick.github.io/RbxUtil/api/Signal/)
+- **void**

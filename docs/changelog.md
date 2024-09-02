@@ -1,3 +1,8 @@
+---
+hide:
+  - navigation
+---
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
@@ -16,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - How workers are defined internally, much less code
 - `.Controller` to `.New`, much less verbose and more general
 - Controllers no longer need names upon creation
+- Simplify internal code to be under 200 LOC
 
 ### Removed
 

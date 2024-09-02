@@ -10,20 +10,20 @@ Organization is a vital part of a successful game! First and foremost, you shoul
 
 Setting up the framework is identical on both client and server scripts, with the only change being the module directories. An example is seen below:
 
-```lua
+```luau
 local Lumin = require(path.to.luminframework)
 local Modules = require(game:GetService("ReplicatedStorage").Modules) -- Points to Shared, Client or Server modules
-Lumin.Start({Modules}):andThen(function() -- You are able to add more directories to the table in Start
-    print("Framework has started!")
-end)
+Lumin.Start(Lumin.Load({
+    Modules, -- You can add more directories to this table which the children will be loaded
+}))
 ```
 
 ## Recommended Packages
 
 A list of other open sourced libraries that pair quite well with the framework.
 
-`lumin/aegis`\
-`lumin/net`\
+`lumin/aegis`<br>
+`lumin/net`<br>
 `sleitnick/trove`
 
 These are for most basic games but you can remove or include others as you please!

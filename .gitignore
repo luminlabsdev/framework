@@ -1,9 +1,5 @@
-# Vitepress
-docs/.vitepress/cache
-docs/.vitepress/dist
-
-# Node
-node_modules
+# Mkdocs
+venv
 
 # Wally
 Packages

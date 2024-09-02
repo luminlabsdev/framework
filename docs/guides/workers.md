@@ -6,7 +6,7 @@ Workers are essentially lifecycle events like in any other framework. They allow
 
 Usage of workers is very minimal and simple. Here's how to use one:
 
-```lua
+```luau
 local Frames = 0
 Lumin.Worker("PostSimulation", function(deltaTime)
     print(deltaTime)
@@ -20,20 +20,20 @@ The code above will print the amount of frames that have passed since the server
 
 This is a list of all of the allowed worker types. It can be seen below.
 
-- `PostSimulation`\
+- `PostSimulation`<br>
 Fires every *frame* after the physics simulation has completed.
 
-- `PreAnimation`\
+- `PreAnimation`<br>
 Fires every *frame* prior to the physics simulation but after rendering.
 
-- `PreRender`\
+- `PreRender`<br>
 Fires every *frame* prior to the frame being rendered. **(Client only)**
 
-- `PreSimulation`\
+- `PreSimulation`<br>
 Fires every *frame* prior to the physics simulation.
 
-- `PlayerAdded`\
+- `PlayerAdded`<br>
 Fires after a player is added/joins.
 
-- `PlayerRemoving`\
+- `PlayerRemoving`<br>
 Fires before a player is removed/leaves.

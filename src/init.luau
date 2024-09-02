@@ -65,7 +65,7 @@ local function StartWorkers()
 end
 
 --[=[
-	Loads all of the provided modules, going through a `filter` if available
+	Loads all of the provided modules, going through a `filter` if available.
 
 	[Learn More](https://lumin-dev.github.io/LuminFramework/api/#load)
 ]=]
@@ -135,7 +135,7 @@ local function Worker(type: Types.WorkerType, callback: (...any) -> ())
 end
 
 --[=[
-	Runs the provided callback function when the framework is completely started
+	Runs the provided callback function when the framework is completely started.
 
 	[Learn More](https://lumin-dev.github.io/LuminFramework/api/#onstart)
 ]=]

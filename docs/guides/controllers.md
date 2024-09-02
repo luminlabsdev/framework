@@ -6,7 +6,7 @@ The controller object is an object that allows you to create data structures cat
 
 Setting up a controller is a simple as calling the `Controller` function. The preferred way to do this is shown below.
 
-```lua
+```luau
 local function Init()
     print("Initialized!")
 end
@@ -15,7 +15,7 @@ local function Start()
     print("Started!")
 end
 
-return Lumin.Controller("MyController", {
+return Lumin.New({
     Init = Init,
     Start = Start,
 })
@@ -50,7 +50,7 @@ flowchart TB
     A(Init) -- Dependencies are loading --> B(Start) -- Dependencies are ready --> C(Finish)
 ```
 
-This is how dependencies eventually become available in a controller's lifecycle. Once we get to the `Finish` step, they can be used anywhere within the controller as new ones cannot be created after the framework has started. There are alternatives to this, however, and they can be done using [dependency injection.](./dependency-injection.md)
+This is how dependencies eventually become available in a controller's lifecycle. Once we get to the `Finish` step, they can be used anywhere within the controller as new ones cannot be created after the framework has started. There are alternatives to this, however, and they can be done using [the `Uses` property of conttrollers.](./dependencies.md)
 
 ## Dependency Use
 

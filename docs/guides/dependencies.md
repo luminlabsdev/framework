@@ -1,36 +1,37 @@
-# Dependency Injection
+# Dependencies
 
-Dependency injection is an efficient way to expect controllers to be loaded by a specific timeframe. These are loaded outside of the default loading stack and queued first before the default loading stack.
+Dependencies can sometimes be confusing. If not done correctly, they can lead to race conditions and what seems like never-ending errors. Lumin Framework has a way to fix this and it is a simple and quick solution to apply to your code.
 
 ## Usage
 
 Access to dependency injection can be gained by using `.Expect` and providing the controller you want to inject first and foremost. An example is shown below.
 
-::: code-group
+#### Module 1
 
-```lua [Module 1]
-local MyController = Lumin.Expect(require(script.Parent.MyController))
+```luau
+local MyController = require(script.Parent.MyController)
 
 local function Init()
     print("Loaded second!")
 end
 
-return Lumin.Controller("MyOtherController", {
+return Lumin.New({
+    Uses = {MyController}
     Init = Init
 })
 ```
 
-```lua [Module 2]
+#### Module 2
+
+```luau
 local function Init()
     print("Loaded first!")
 end
 
-return Lumin.Controller("MyController", {
+return Lumin.New({
     Init = Init,
 })
 ```
-
-:::
 
 ## Loading
 
