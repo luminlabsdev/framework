@@ -1,6 +1,6 @@
 site_name: Lumin Framework
-repo_url: https://github.com/lumin-dev/LuminFramework
-repo_name: lumin-dev/LuminFramework
+repo_url: https://github.com/luminlabsdev/framework
+repo_name: luminlabsdev/framework
 copyright: Copyright &copy; 2021 - 2024 Lumin Labs & Contributors
 edit_uri: edit/main/docs/
 markdown_extensions:
@@ -16,9 +16,9 @@ markdown_extensions:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/lumin-dev
+      link: https://github.com/luminlabsdev
     - icon: fontawesome/brands/discord
-      link: https://lumin-dev.github.io/link/discord
+      link: https://luminlabsdev.github.io/link/discord
 theme:
   name: material
   favicon: assets/images/favicon.ico
