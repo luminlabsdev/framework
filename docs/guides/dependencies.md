@@ -4,7 +4,7 @@ Dependencies can sometimes be confusing. If not done correctly, they can lead to
 
 ## Usage
 
-Access to dependency injection can be gained by using `.Expect` and providing the controller you want to inject first and foremost. An example is shown below.
+Access to this feature can be achieved by using the `.Uses` property of controllers. This a defined table of all of the dependencies that your module uses.
 
 #### Module 1
 
@@ -39,5 +39,5 @@ The load order differs from the default but not too much. Here's a diagram of it
 
 ```mermaid
 flowchart TB
-    A(Expect) -- Put module first in loading queue --> B(Init in expected) -- Load dependency --> C(Init in loader) -- Dependencies are ready --> D(Finish)
+    A(Uses MyController) -- Put module first in loading queue --> B(Init in used) -- Load dependency --> C(Init in loader) -- Dependencies are ready --> D(Finish)
 ```

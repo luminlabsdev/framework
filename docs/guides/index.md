@@ -22,7 +22,7 @@ Lumin.Start(Lumin.Load({
 
 A list of other open sourced libraries that pair quite well with the framework.
 
-`lumin/aegis`<br>
+`dphfox/fusion`<br>
 `lumin/net`<br>
 `sleitnick/trove`
 

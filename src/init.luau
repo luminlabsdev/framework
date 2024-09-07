@@ -67,7 +67,7 @@ end
 --[=[
 	Loads all of the provided modules, going through a `filter` if available.
 
-	[Learn More](https://lumin-dev.github.io/LuminFramework/api/#load)
+	[Learn More](https://luminlabsdev.github.io/framework/api/#load)
 ]=]
 local function Load(containers: { Instance }, filter: ((ModuleScript) -> boolean)?): { Types.DevController<any> }
 	local Controllers = {}
@@ -85,7 +85,7 @@ end
 --[=[
 	Starts the framework, loading all the created controllers and starting Workers.
 
-	[Learn More](https://lumin-dev.github.io/LuminFramework/api/#start)
+	[Learn More](https://luminlabsdev.github.io/framework/api/#start)
 ]=]
 local function Start(loaded: { Types.DevController<any> })
 	Debugger.Assert(Started, "AlreadyStarted")
@@ -106,7 +106,7 @@ end
 --[=[
 	Creates a new controller for management of various tasks.
 
-	[Learn More](https://lumin-dev.github.io/LuminFramework/api/#new)
+	[Learn More](https://luminlabsdev.github.io/framework/api/#new)
 ]=]
 local function New<T>(members: Types.DevController<T>): T
 	Debugger.Assert(Started, "AlreadyStarted")
@@ -117,7 +117,7 @@ end
 --[=[
 	Creates a new worker for management of various tasks that happen continously in the background.
 
-	[Learn More](https://lumin-dev.github.io/LuminFramework/api/#worker)
+	[Learn More](https://luminlabsdev.github.io/framework/api/#worker)
 ]=]
 local function Worker(type: Types.WorkerType, callback: (...any) -> ())
 	Debugger.Assert(Started, "AlreadyStarted")
@@ -137,7 +137,7 @@ end
 --[=[
 	Runs the provided callback function when the framework is completely started.
 
-	[Learn More](https://lumin-dev.github.io/LuminFramework/api/#onstart)
+	[Learn More](https://luminlabsdev.github.io/framework/api/#onstart)
 ]=]
 local function OnStart(callback: () -> ())
 	Debugger.Assert(Started, "AlreadyStarted")
@@ -148,8 +148,8 @@ end
 
 Debugger.SetLogs(LogList)
 Debugger.SetMetadata({
-	PackageName = "Lumin Framework",
-	PackageURL = "https://github.com/lumin-dev/LuminFramework",
+	PackageName = "Framework",
+	PackageURL = "https://github.com/luminlabsdev/framework",
 	TraceLevel = 3,
 })
 
