@@ -571,12 +571,12 @@ No information available, mainly small bug fixes.
 
 - Public release! 🥳
 
-[unreleased]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc7...HEAD
-[9.0.0-rc7]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc6...v9.0.0-rc7
-[9.0.0-rc6]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc6...v9.0.0-rc6
-[9.0.0-rc6]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc5...v9.0.0-rc6
-[9.0.0-rc5]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc4...v9.0.0-rc5
-[9.0.0-rc4]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc3...v9.0.0-rc4
-[9.0.0-rc3]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc2...v9.0.0-rc3
-[9.0.0-rc2]: https://github.com/lumin-dev/LuminFramework/compare/v9.0.0-rc1...v9.0.0-rc2
-[9.0.0-rc1]: https://github.com/lumin-dev/LuminFramework/compare/v8.1.5...v9.0.0-rc1
+[unreleased]: https://github.com/luminlabsdev/framework/compare/v9.0.0-rc7...HEAD
+[9.0.0-rc7]: https://github.com/luminlabsdev/framework/compare/v9.0.0-rc6...v9.0.0-rc7
+[9.0.0-rc6]: https://github.com/luminlabsdev/framework/compare/v9.0.0-rc6...v9.0.0-rc6
+[9.0.0-rc6]: https://github.com/luminlabsdev/framework/compare/v9.0.0-rc5...v9.0.0-rc6
+[9.0.0-rc5]: https://github.com/luminlabsdev/framework/compare/v9.0.0-rc4...v9.0.0-rc5
+[9.0.0-rc4]: https://github.com/luminlabsdev/framework/compare/v9.0.0-rc3...v9.0.0-rc4
+[9.0.0-rc3]: https://github.com/luminlabsdev/framework/compare/v9.0.0-rc2...v9.0.0-rc3
+[9.0.0-rc2]: https://github.com/luminlabsdev/framework/compare/v9.0.0-rc1...v9.0.0-rc2
+[9.0.0-rc1]: https://github.com/luminlabsdev/framework/compare/v8.1.5...v9.0.0-rc1
