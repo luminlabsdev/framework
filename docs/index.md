@@ -42,7 +42,7 @@ return Framework.New({
 })
 ```
 
-Organizes you dependencies in an understandable way, so you can easily keep track of what your module uses.
+Organizes your dependencies in an understandable way, so you can easily keep track of what your module uses.
 
 ## Simple Worker Design
 
