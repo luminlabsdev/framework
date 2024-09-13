@@ -12,6 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Adds a fix for an incorrect type reference
+- Simplifies controller type
+
 ## [9.0.0-rc7] - 2024-09-02
 
 ### Added

@@ -1,10 +1,10 @@
-export type Controller = {
+export type Controller<T> = {
     Start: (() -> ())?,
 	Init: (() -> ())?,
-    Uses: {Controller}?,
-}
-
-export type DevController<T> = T & Controller
+    Uses: {
+        any
+    }?,
+} & T
 
 export type WorkerType =
 	"PostSimulation"
@@ -20,7 +20,7 @@ export type Worker = {
 }
 
 export type Storage = {
-	Controllers: {DevController<any>},
+	Controllers: {Controller<any>},
 	Workers: {Worker},
 }
 

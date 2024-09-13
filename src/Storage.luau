@@ -1,5 +1,5 @@
 local Types = require(script.Parent.Types)
 return {
-	Controllers = {} :: {Types.UserController<any>},
+	Controllers = {} :: {Types.Controller<any>},
 	Workers = {} :: {Types.Worker},
 }

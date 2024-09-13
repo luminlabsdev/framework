@@ -36,7 +36,7 @@ local function LoadController(callback: () -> (), type: "Start" | "Init")
 end
 
 -- Starts/inits a list of controllers internally
-local function LoadAllControllers(controllers: { Types.DevController<any> })
+local function LoadAllControllers(controllers: { Types.Controller<any> })
 	for _, controller in controllers do
 		if controller["Uses"] and type(controller.Uses) == "table" then
 			for _, usedController in controller.Uses :: any do
@@ -69,7 +69,7 @@ end
 
 	[Learn More](https://luminlabsdev.github.io/framework/api/#load)
 ]=]
-local function Load(containers: { Instance }, filter: ((ModuleScript) -> boolean)?): { Types.DevController<any> }
+local function Load(containers: { Instance }, filter: ((ModuleScript) -> boolean)?): { Types.Controller<any> }
 	local Controllers = {}
 	for _, container in containers do
 		for _, module in container:GetChildren() do
@@ -87,7 +87,7 @@ end
 
 	[Learn More](https://luminlabsdev.github.io/framework/api/#start)
 ]=]
-local function Start(loaded: { Types.DevController<any> })
+local function Start(loaded: { Types.Controller<any> })
 	Debugger.Assert(Started, "AlreadyStarted")
 
 	LoadAllControllers(loaded)
@@ -108,7 +108,7 @@ end
 
 	[Learn More](https://luminlabsdev.github.io/framework/api/#new)
 ]=]
-local function New<T>(members: Types.DevController<T>): T
+local function New<T>(members: Types.Controller<T>): T
 	Debugger.Assert(Started, "AlreadyStarted")
 	table.insert(Storage.Controllers, members)
 	return members
@@ -157,7 +157,7 @@ Debugger.SetMetadata({
 
 return table.freeze({
 	-- Version
-	version = { major = 9, minor = 0, patch = 0, rc = 7 },
+	version = { major = 9, minor = 0, patch = 0, rc = 8 },
 
 	-- Loaders
 	Start = Start,
