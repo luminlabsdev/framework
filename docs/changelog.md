@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixes an issue with controller loading
+
 ## [9.0.0-rc9] - 2024-09-21
 
 ### Fixed

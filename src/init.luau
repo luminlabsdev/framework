@@ -107,7 +107,7 @@ end
 	[Learn More](https://luminlabsdev.github.io/framework/api/#start)
 ]=]
 local function Start(loaded: { Types.Controller<any> }, callback: (() -> ())?)
-	Debugger.Assert(Started, "AlreadyStarted")
+	Debugger.Assert(not Started, "AlreadyStarted")
 
 	LoadAllControllers(loaded) -- Yields until they are loaded
 	StartCycles()
@@ -128,7 +128,7 @@ end
 	[Learn More](https://luminlabsdev.github.io/framework/api/#new)
 ]=]
 local function New<T>(members: Types.Controller<T>): T
-	Debugger.Assert(Started, "AlreadyStarted")
+	Debugger.Assert(not Started, "AlreadyStarted")
 	table.insert(Storage.Controllers, members)
 	return members
 end
@@ -139,8 +139,8 @@ end
 	[Learn More](https://luminlabsdev.github.io/framework/api/#cycle)
 ]=]
 local function Cycle(type: Types.CycleType, callback: (...any) -> ())
-	Debugger.Assert(Started, "AlreadyStarted")
-	Debugger.Assert(not DefaultCycleTypes[type], "ItemNotFound", type)
+	Debugger.Assert(not Started, "AlreadyStarted")
+	Debugger.Assert(DefaultCycleTypes[type], "ItemNotFound", type)
     if type == "PreRender" and not RunService:IsClient() then
         Debugger.Fatal("IncorrectContext", "WorkerType")
     end
