@@ -21,6 +21,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changes `Worker` to `Cycle`
 - Changed docs style
 
+### Removed
+
+- Removes `OnStart` in favor of a callback within `Start`
+
 ## [9.0.0-rc8] - 2024-09-13
 
 ### Fixed
