@@ -44,13 +44,13 @@ return Framework.New {
 
 Organizes your dependencies in an understandable way, so you can easily keep track of what your module uses.
 
-## Simple Worker Design
+## Simple Cycle Design
 
 ```luau
 local Framework = require(Packages.framework)
 
 local function Init()
-    Framework.Worker("PostSimulation", function()
+    Framework.Cycle("PostSimulation", function()
         print("I print every frame!")
     end)
 end
@@ -60,7 +60,7 @@ return Framework.New {
 }
 ```
 
-Has a simple worker/lifecycle design that is readable and accessible at a glance.
+Has a simple lifecycle design that is readable and accessible at a glance.
 
 ## Finally...
 
