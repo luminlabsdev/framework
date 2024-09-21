@@ -13,9 +13,8 @@ local Debugger = require(Packages.debugger)
 local Spawn = require(Packages.spawn)
 
 local Started = false
-local StartedCallback = nil
 
-local DefaultWorkerTypes = {
+local DefaultCycleTypes = {
 	PostSimulation = RunService.PostSimulation,
 	PreSimulation = RunService.PreSimulation,
 	PreAnimation = RunService.PreAnimation,
@@ -28,38 +27,58 @@ local DefaultWorkerTypes = {
 
 -- Starts/inits a controller internally
 local function LoadController(callback: () -> (), type: "Start" | "Init")
-	local Success, Err = xpcall(callback :: any, Debugger.Parse)
+	local Success, Err: Debugger.ParsedError = xpcall(callback :: any, Debugger.Parse)
 	if not Success then
-		local Message = Err :: Debugger.ParsedError
-		Debugger.Fatal(`Cannot{type}`, Message.Message)
+		Debugger.Fatal(`Cannot{type}`, Err.Message)
 	end
 end
 
 -- Starts/inits a list of controllers internally
 local function LoadAllControllers(controllers: { Types.Controller<any> })
+    local InitiatedControllers = {}
+
 	for _, controller in controllers do
 		if controller["Uses"] and type(controller.Uses) == "table" then
+            table.freeze(controller.Uses)
 			for _, usedController in controller.Uses :: any do
+                Debugger.Assert(
+                    type(usedController["Init"]) == "function",
+                    "IncorrectType", "Init", "function"
+                )
                 if usedController["Init"] then
                     LoadController(usedController.Init, "Init")
+                    table.insert(InitiatedControllers, usedController)
                     table.remove(controllers, table.find(controllers, controller))
                 end
 			end
 		end
-		if controller["Init"] and type(controller.Init) == "function" then
+
+        Debugger.Assert(
+            type(controller["Init"]) == "function",
+            "IncorrectType", "Init", "function"
+        )
+		if controller["Init"] then
 			LoadController(controller.Init, "Init")
-		end
-		if controller["Start"] and type(controller.Start) == "function" then
-			LoadController(controller.Start, "Start")
+            table.insert(InitiatedControllers, controller)
 		end
 	end
+
+    for _, controller in InitiatedControllers do
+        Debugger.Assert(
+            type(controller["Start"]) == "function",
+            "IncorrectType", "Start", "function"
+        )
+        if controller["Start"] then
+			LoadController(controller.Start, "Start")
+		end
+    end
 end
 
 -- Starts all the workers internally
-local function StartWorkers()
-	for _, worker in Storage.Workers do
-		worker.Connection:Connect(function(...)
-			Spawn(worker.Callback, ...)
+local function StartCycles()
+	for _, cycle in Storage.Cycles do
+		cycle.Connection:Connect(function(...)
+			Spawn(cycle.Callback, ...)
 		end)
 	end
 end
@@ -83,24 +102,24 @@ local function Load(containers: { Instance }, filter: ((ModuleScript) -> boolean
 end
 
 --[=[
-	Starts the framework, loading all the created controllers and starting Workers.
+	Starts the framework, loading all the created controllers and starting cycles.
 
 	[Learn More](https://luminlabsdev.github.io/framework/api/#start)
 ]=]
-local function Start(loaded: { Types.Controller<any> })
+local function Start(loaded: { Types.Controller<any> }, callback: (() -> ())?)
 	Debugger.Assert(Started, "AlreadyStarted")
 
-	LoadAllControllers(loaded)
-	StartWorkers()
+	LoadAllControllers(loaded) -- Yields until they are loaded
+	StartCycles()
 
 	Started = true
 
-	if StartedCallback then
-		StartedCallback()
+	if callback then
+		callback()
 	end
 
 	table.freeze(Storage.Controllers)
-	table.freeze(Storage.Workers)
+	table.freeze(Storage.Cycles)
 end
 
 --[=[
@@ -115,33 +134,23 @@ local function New<T>(members: Types.Controller<T>): T
 end
 
 --[=[
-	Creates a new worker for management of various tasks that happen continously in the background.
+	Creates a new cycle for management of various tasks that happen continously in the background.
 
-	[Learn More](https://luminlabsdev.github.io/framework/api/#worker)
+	[Learn More](https://luminlabsdev.github.io/framework/api/#cycle)
 ]=]
-local function Worker(type: Types.WorkerType, callback: (...any) -> ())
+local function Cycle(type: Types.CycleType, callback: (...any) -> ())
 	Debugger.Assert(Started, "AlreadyStarted")
-	Debugger.Assert(not DefaultWorkerTypes[type], "ItemNotFound", type)
+	Debugger.Assert(not DefaultCycleTypes[type], "ItemNotFound", type)
     if type == "PreRender" and not RunService:IsClient() then
         Debugger.Fatal("IncorrectContext", "WorkerType")
     end
 	table.insert(
-		Storage.Workers,
+		Storage.Cycles,
 		table.freeze({
-			Connection = DefaultWorkerTypes[type],
+			Connection = DefaultCycleTypes[type],
 			Callback = callback,
 		})
 	)
-end
-
---[=[
-	Runs the provided callback function when the framework is completely started.
-
-	[Learn More](https://luminlabsdev.github.io/framework/api/#onstart)
-]=]
-local function OnStart(callback: () -> ())
-	Debugger.Assert(Started, "AlreadyStarted")
-	StartedCallback = callback
 end
 
 -- Debugger
@@ -157,7 +166,7 @@ Debugger.SetMetadata({
 
 return table.freeze({
 	-- Version
-	version = { major = 9, minor = 0, patch = 0, rc = 8 },
+	version = { major = 9, minor = 0, patch = 0, rc = 9 },
 
 	-- Loaders
 	Start = Start,
@@ -165,8 +174,5 @@ return table.freeze({
 
 	-- Constructors
 	New = New,
-	Worker = Worker,
-
-	-- Callbacks
-	OnStart = OnStart,
+	Cycle = Cycle,
 })

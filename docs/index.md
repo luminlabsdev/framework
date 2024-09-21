@@ -18,9 +18,9 @@ local function Explode()
     print("KABOOM!!!")
 end
 
-return Framework.New({
+return Framework.New {
     Explode = Explode,
-})
+}
 ```
 
 Efficient and not verbose controller API, is very similar to vanilla modules and does not add any bloat.
@@ -36,10 +36,10 @@ local function Init()
     Dependency.NuclearExplosion() -- This dependency loads first and in result is usable!
 end
 
-return Framework.New({
-    Uses = {Dependency},
+return Framework.New {
+    Uses = { Dependency },
     Init = Init,
-})
+}
 ```
 
 Organizes your dependencies in an understandable way, so you can easily keep track of what your module uses.
@@ -55,9 +55,9 @@ local function Init()
     end)
 end
 
-return Framework.New({
+return Framework.New {
     Init = Init,
-})
+}
 ```
 
 Has a simple worker/lifecycle design that is readable and accessible at a glance.

@@ -18,12 +18,15 @@ The current version of the framework.
 
 ### `Start`
 
-Starts the framework and prepares all of the workers/controllers.
+Starts the framework and prepares all of the cycles/controllers.
 
 **Parameters**
 
 - **loaded:** `{ Controller }`<br>
 A list of already loaded controllers, should be from `.Load`
+
+- **callback:** `(() -> ())?`<br>
+Runs when the start process has finished
 
 **Returns**
 
@@ -46,17 +49,17 @@ This is where functions, properties, and methods are stored. Use this like a gen
 
 ---
 
-### `Worker`
+### `Cycle`
 
-Creates a new worker for management of various tasks that happen continously in the background.
+Creates a new cycle for management of various tasks that happen continously in the background.
 
 **Parameters**
 
-- **type:** `WorkerType`<br>
-A designated worker type
+- **type:** `CycleType`<br>
+A designated cycle type
 
 - **callback:** `(args: ...any) -> ()`<br>
-The callback to run for the worker type
+The callback to run for the cycle type
 
 **Returns**
 
@@ -75,21 +78,6 @@ A list of containers of which the children will be loaded of
 
 - **filter:** `((ModuleScript) -> boolean)?`<br>
 A function that runs for every module script, returning true will allow the module to load
-
-**Returns**
-
-- **void**
-
----
-
-### `OnStart`
-
-Runs the provided callback function when the framework is completely started.
-
-**Parameters**
-
-- **callback:** `() -> ()`<br>
-Callback function to run after the framework starts
 
 **Returns**
 

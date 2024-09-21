@@ -1,5 +1,5 @@
 {
-	"legacyScripts": false,
+	"emitLegacyScripts": false,
 	"name": "framework",
 	"tree": {
 		"$className": "DataModel",
@@ -14,6 +14,7 @@
 				}
 			},
 			"Tests": {
+                "$className": "Folder",
 				"Client": {
 					"$path": "tests/client"
 				},

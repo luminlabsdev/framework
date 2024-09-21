@@ -1,14 +1,14 @@
-# Workers
+# Cycles
 
-Workers are essentially lifecycle events like in any other framework. They allow for code to constantly run in the background without interupting anything that is in the main thread. Notable mentions include `PlayerAdded` and `PostSimulation`. The purpose of workers is so that we can introduce more safety while using the framework and run into less issues like race conditions or unexplainable errors. New workers cannot be created after `.Start` is finished.
+Cycles are essentially lifecycle events like in any other framework. They allow for code to constantly run in the background without interupting anything that is in the main thread. Notable mentions include `PlayerAdded` and `PostSimulation`. The purpose of cycles is so that we can introduce more safety while using the framework and run into less issues like race conditions or unexplainable errors. New cycles cannot be created after `.Start` is finished.
 
 ## Usage
 
-Usage of workers is very minimal and simple. Here's how to use one:
+Usage of cycles is very minimal and simple. Here's how to use one:
 
 ```luau
 local Frames = 0
-Lumin.Worker("PostSimulation", function(deltaTime)
+Lumin.Cycle("PostSimulation", function(deltaTime)
     print(deltaTime)
     print("Frame number", Frames += 1)
 end)
@@ -16,9 +16,9 @@ end)
 
 The code above will print the amount of frames that have passed since the server started or the client joined entered the data model. It will also print the delta time for each frame.
 
-## Worker Types
+## Cycle Types
 
-This is a list of all of the allowed worker types. It can be seen below.
+This is a list of all of the allowed cycle types. It can be seen below.
 
 - `PostSimulation`<br>
 Fires every *frame* after the physics simulation has completed.

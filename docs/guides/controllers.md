@@ -15,10 +15,10 @@ local function Start()
     print("Started!")
 end
 
-return Lumin.New({
+return Lumin.New {
     Init = Init,
     Start = Start,
-})
+}
 ```
 
 That is an example of the most minimal controller, that includes all of the required items. With this, you include as many other functions, methods, or properties as you please.
@@ -36,11 +36,9 @@ The functionality of these are explained in the [loading section.](#loading)
 
 ```mermaid
 flowchart LR
-    A(Init) --> B{Pcall} --> C(Success) & D(Error)
-    E(Start)
-    C --> E
-    D --x E
-    E --> F(Finished)
+    A(Init) --> B{Pcall} -->
+    C(Start) --> D{Pcall} -->
+    F(Finished)
 ```
 
 Above is a diagram of how every controller loads. Dependencies of controllers will become available after `Start` is called as seen in order below:

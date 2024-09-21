@@ -63,7 +63,7 @@ jobs:
             run: wally install
 
           - name: Generate sourcemap
-            run: argon sourcemap standalone.project.json --output sourcemap.json
+            run: rojo sourcemap standalone.project.json --output sourcemap.json
 
           - name: Generate package types
             run: wally-package-types --sourcemap sourcemap.json Packages
@@ -72,7 +72,7 @@ jobs:
             run: stylua src/
 
           - name: Build standalone
-            run: argon build standalone.project.json --output ./Standalone.rbxm
+            run: rojo build standalone.project.json --output ./Standalone.rbxm
 
           - name: Draft release
             uses: softprops/action-gh-release@v2.0.8

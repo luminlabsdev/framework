@@ -15,10 +15,10 @@ local function Init()
     print("Loaded second!")
 end
 
-return Lumin.New({
-    Uses = {MyController}
+return Lumin.New {
+    Uses = { MyController }
     Init = Init
-})
+}
 ```
 
 #### Module 2
@@ -28,9 +28,9 @@ local function Init()
     print("Loaded first!")
 end
 
-return Lumin.New({
+return Lumin.New {
     Init = Init,
-})
+}
 ```
 
 ## Loading
@@ -39,5 +39,5 @@ The load order differs from the default but not too much. Here's a diagram of it
 
 ```mermaid
 flowchart TB
-    A(Uses MyController) -- Put module first in loading queue --> B(Init in used) -- Load dependency --> C(Init in loader) -- Dependencies are ready --> D(Finish)
+    A(Uses MyController) -- Put module first in loading queue --> B(Init in used) -- Load dependency --> C(Init in loader) -- Dependencies are ready --> D(Start in both) -- Loading completed --> E(Finish)
 ```

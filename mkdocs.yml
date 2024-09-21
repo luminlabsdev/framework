@@ -3,6 +3,20 @@ repo_url: https://github.com/luminlabsdev/framework
 repo_name: luminlabsdev/framework
 copyright: Copyright &copy; 2021 - 2024 Lumin Labs & Contributors
 edit_uri: edit/main/docs/
+nav:
+  - Home: index.md
+  - Guides:
+    - Setup: guides/index.md
+    - Controllers: guides/controllers.md
+    - Dependencies: guides/dependencies.md
+    - Cycles: guides/cycles.md
+    - Networking: guides/networking.md
+  - API:
+    - Framework: api/index.md
+    - Controller: api/controller.md
+    - Cycle: api/cycle.md
+  - Install: installation.md
+  - Changelog: changelog.md
 markdown_extensions:
   - attr_list
   - pymdownx.emoji:

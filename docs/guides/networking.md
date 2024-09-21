@@ -1,6 +1,6 @@
 # Networking
 
-There is no stock networking library that comes with the framework, so you can use any library you want to. For a default option, you can use [LuminNet](https://github.com/lumin-dev/LuminNet)
+There is no stock networking library that comes with the framework, so you can use any library you want to. For a default option, you can use [Net](https://github.com/luminlabsdev/net) by Lumin.
 
 We also recommend:
 

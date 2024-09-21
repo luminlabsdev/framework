@@ -6,7 +6,7 @@ export type Controller<T> = {
     }?,
 } & T
 
-export type WorkerType =
+export type CycleType =
 	"PostSimulation"
 	| "PreSimulation"
 	| "PreAnimation"
@@ -14,14 +14,14 @@ export type WorkerType =
 	| "PlayerAdded"
 	| "PlayerRemoving"
 
-export type Worker = {
+export type Cycle = {
 	Connection: RBXScriptSignal,
 	Callback: (...any) -> (),
 }
 
 export type Storage = {
 	Controllers: {Controller<any>},
-	Workers: {Worker},
+	Cycles: {Cycle},
 }
 
 return {}

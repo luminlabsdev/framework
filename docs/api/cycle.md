@@ -1,4 +1,4 @@
-# Worker
+# Cycle
 
 Responsible for handling actions on different threads concurrently
 
@@ -8,7 +8,7 @@ Responsible for handling actions on different threads concurrently
 
 ### `Connection` <Badge type="tip" text="read only" />
 
-The connection of the worker.
+The connection of the cycle.
 
 - **RBXScriptSignal**
 
