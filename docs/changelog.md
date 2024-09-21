@@ -1,10 +1,7 @@
-* * *
-
+---
 hide:
-
 - navigation
-
-* * *
+---
 
 # Changelog
 
