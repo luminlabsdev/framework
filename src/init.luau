@@ -35,43 +35,34 @@ end
 
 -- Starts/inits a list of controllers internally
 local function LoadAllControllers(controllers: { Types.Controller<any> })
-    local InitiatedControllers = {}
+	local InitiatedControllers = {}
 
 	for _, controller in controllers do
 		if controller["Uses"] and type(controller.Uses) == "table" then
-            table.freeze(controller.Uses)
+			table.freeze(controller.Uses)
 			for _, usedController in controller.Uses :: any do
-                Debugger.Assert(
-                    type(usedController["Init"]) == "function",
-                    "IncorrectType", "Init", "function"
-                )
                 if usedController["Init"] then
-                    LoadController(usedController.Init, "Init")
-                    table.insert(InitiatedControllers, usedController)
-                    table.remove(controllers, table.find(controllers, controller))
-                end
+				    Debugger.Assert(type(usedController["Init"]) == "function", "IncorrectType", "Init", "function")
+					LoadController(usedController.Init, "Init")
+					table.insert(InitiatedControllers, usedController)
+					table.remove(controllers, table.find(controllers, controller))
+				end
 			end
 		end
 
-        Debugger.Assert(
-            type(controller["Init"]) == "function",
-            "IncorrectType", "Init", "function"
-        )
 		if controller["Init"] then
+			Debugger.Assert(type(controller["Init"]) == "function", "IncorrectType", "Init", "function")
 			LoadController(controller.Init, "Init")
-            table.insert(InitiatedControllers, controller)
+			table.insert(InitiatedControllers, controller)
 		end
 	end
 
-    for _, controller in InitiatedControllers do
-        Debugger.Assert(
-            type(controller["Start"]) == "function",
-            "IncorrectType", "Start", "function"
-        )
-        if controller["Start"] then
+	for _, controller in InitiatedControllers do
+		if controller["Start"] then
+			Debugger.Assert(type(controller["Start"]) == "function", "IncorrectType", "Start", "function")
 			LoadController(controller.Start, "Start")
 		end
-    end
+	end
 end
 
 -- Starts all the workers internally
@@ -141,9 +132,9 @@ end
 local function Cycle(type: Types.CycleType, callback: (...any) -> ())
 	Debugger.Assert(not Started, "AlreadyStarted")
 	Debugger.Assert(DefaultCycleTypes[type], "ItemNotFound", type)
-    if type == "PreRender" and not RunService:IsClient() then
-        Debugger.Fatal("IncorrectContext", "WorkerType")
-    end
+	if type == "PreRender" and not RunService:IsClient() then
+		Debugger.Fatal("IncorrectContext", "WorkerType")
+	end
 	table.insert(
 		Storage.Cycles,
 		table.freeze({
