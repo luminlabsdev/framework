@@ -1,7 +1,10 @@
----
+* * *
+
 hide:
+
 - navigation
----
+
+* * *
 
 # Changelog
 
@@ -11,6 +14,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [9.0.0-rc11] - 2024-09-22
 
 ### Fixed
 
@@ -603,7 +608,8 @@ No information available, mainly small bug fixes.
 
 - Public release! 🥳
 
-[unreleased]: https://github.com/luminlabsdev/framework/compare/v9.0.0-rc10...HEAD
+[unreleased]: https://github.com/luminlabsdev/framework/compare/v9.0.0-rc11...HEAD
+[9.0.0-rc11]: https://github.com/luminlabsdev/framework/compare/v9.0.0-rc10...v9.0.0-rc11
 [9.0.0-rc10]: https://github.com/luminlabsdev/framework/compare/v9.0.0-rc9...v9.0.0-rc10
 [9.0.0-rc9]: https://github.com/luminlabsdev/framework/compare/v9.0.0-rc8...v9.0.0-rc9
 [9.0.0-rc8]: https://github.com/luminlabsdev/framework/compare/v9.0.0-rc7...v9.0.0-rc8
