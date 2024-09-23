@@ -1,10 +1,7 @@
-* * *
-
+---
 hide:
-
 - navigation
-
-* * *
+---
 
 # Changelog
 
@@ -14,6 +11,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+### Changed
+
+- Changes how controllers load to be more efficient
+
+### Added
+
+- Adds improved cycle APIs
+- Adds load order option to controllers
+- Add philosphy page in documentation
+
+### Removed
+
+- Removes `.Load` in favor of merging with `.Start`
+- Removed default cycle types in favor of self-implementation
 
 ## [9.0.0-rc11] - 2024-09-22
 

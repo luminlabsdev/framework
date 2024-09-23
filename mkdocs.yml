@@ -11,6 +11,7 @@ nav:
     - Dependencies: guides/dependencies.md
     - Cycles: guides/cycles.md
     - Networking: guides/networking.md
+    - Philosophy: guides/philosophy.md
   - API:
     - Framework: api/index.md
     - Controller: api/controller.md

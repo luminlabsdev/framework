@@ -1,14 +1,13 @@
 [package]
 name = "lumin/framework"
 description = "A lightning fast & amazing game framework for Roblox"
-version = "9.0.0-rc11"
+version = "9.0.0-rc12"
 license = "MIT"
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 
 [dependencies]
 debugger = "lumin/debugger@^0.4.0"
-spawn = "red-blox/spawn@^1.0.0"
 
 [dev-dependencies]
 net = "lumin/net@0.4.1"

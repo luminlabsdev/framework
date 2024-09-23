@@ -10,7 +10,7 @@ The main class of LuminFramework.
 
 The current version of the framework.
 
-- **string**
+- `string`
 
 ## Functions
 
@@ -22,63 +22,48 @@ Starts the framework and prepares all of the cycles/controllers.
 
 **Parameters**
 
-- **loaded:** `{ Controller }`<br>
-A list of already loaded controllers, should be from `.Load`
+- **directories:** `{ Instance }`<br>
+A list of directories that have controllers inside of them. Only children are loaded.
+
+- **filter:** `((module: ModuleScript) -> boolean)?`<br>
+A filter that runs on every file in the specified directories. Return true to allow module.
 
 - **callback:** `(() -> ())?`<br>
 Runs when the start process has finished
 
 **Returns**
 
-- **void**
+- `void`
 
 ---
 
 ### `New`
 
-Creates a new controller for management of various tasks.
+Creates a new controller for management of various tasks. Returned table is frozen.
 
 **Parameters**
 
 - **members:** `{ any }`<br>
 This is where functions, properties, and methods are stored. Use this like a generic module
 
+- **order:** `number?`<br>
+A specified load order. Defaults to 1 / no specific order
+
 **Returns**
 
-- [**Controller**](./controller.md)
+- [`Controller`](./controller.md)
 
 ---
 
 ### `Cycle`
 
-Creates a new cycle for management of various tasks that happen continously in the background.
+Creates a new cycle that hooks onto already existing controller methods.
 
 **Parameters**
 
 - **type:** `CycleType`<br>
 A designated cycle type
 
-- **callback:** `(args: ...any) -> ()`<br>
-The callback to run for the cycle type
-
 **Returns**
 
-- **void**
-
----
-
-### `Load`
-
-Loads all of the provided modules, going through a `filter` if available.
-
-**Parameters**
-
-- **containers:** `{ Instance }`<br>
-A list of containers of which the children will be loaded of
-
-- **filter:** `((ModuleScript) -> boolean)?`<br>
-A function that runs for every module script, returning true will allow the module to load
-
-**Returns**
-
-- **void**
+- [`Cycle`](./cycle.md)

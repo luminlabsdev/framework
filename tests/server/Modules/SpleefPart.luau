@@ -8,10 +8,11 @@ local InitialBrickCount = #SpleefBricks
 local BrokenBricks = 0
 local TouchDebounce = false
 
-local SpleefPart = {}
+local SpleefPart = {
+    GameFinishedSignal = Signal.new()
+}
 
 function SpleefPart.Init()
-	SpleefPart.GameFinishedSignal = Signal.new()
 	SpleefPart.GameFinishedSignal:Connect(function()
 		print("Game finished!")
 		task.wait(3)

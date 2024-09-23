@@ -4,7 +4,7 @@ print("HI 4")
 return Lumin.New({
     Init = function()
         local success, err = pcall(function()
-            print((Module3 :: any).Goodbye())
+            print((Module3 :: any).Test.Goodbye())
         end)
         print(success, err)
     end

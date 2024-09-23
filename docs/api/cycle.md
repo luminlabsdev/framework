@@ -1,25 +1,38 @@
 # Cycle
 
-Responsible for handling actions on different threads concurrently
+Implements a lifecycle API, that will use methods from controllers that already exist.
 
 ## Properties
 
 ---
 
-### `Connection` <Badge type="tip" text="read only" />
+### `Name`
 
-The connection of the cycle.
+The name of the cycle, this will correspond with the method used.
 
-- **RBXScriptSignal**
-
-## Functions
+- `string`
 
 ---
 
-### `Callback`
+### `Listeners`
+
+A list of the methods with the name of `Name` from each controller.
+
+- `{ (...any) -> () }`
+
+## Methods
+
+---
+
+### `Fire`
 
 The callback function which is set to run every time the `Connection` runs.
 
+**Parameters**
+
+- **params:** `...any`<br>
+A list of parameters to be passed to the controller method
+
 **Returns**
 
-- **void**
+- `void`

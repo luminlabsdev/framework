@@ -1,9 +1,11 @@
 local Lumin = require(game.ReplicatedStorage.Packages.framework)
 local E = {
-    Goodbye = nil
+    Test = {
+        Goodbye = nil
+    }
 }
 E.Init = function()
-    E.Goodbye = function()
+    E.Test.Goodbye = function()
         return "Goodbye"
     end :: any
 end

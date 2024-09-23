@@ -10,7 +10,7 @@ Responsible for controlling most of the game's functions
 
 Any other controllers that the current one uses
 
-- **{ Controller }**
+- [`{ Controller }`](./controller.md)
 
 ## Functions
 
@@ -22,7 +22,7 @@ Prepares the controller so that it can be used across the data model.
 
 **Returns**
 
-- **void**
+- `void`
 
 ---
 
@@ -32,4 +32,4 @@ Called internally when the controller is safe to use other dependencies that wer
 
 **Returns**
 
-- **void**
+- `void`

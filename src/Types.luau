@@ -1,27 +1,13 @@
 export type Controller<T> = {
-    Start: (() -> ())?,
+	Start: (() -> ())?,
 	Init: (() -> ())?,
-    Uses: {
-        any
-    }?,
+	Uses: { any }?,
 } & T
 
-export type CycleType =
-	"PostSimulation"
-	| "PreSimulation"
-	| "PreAnimation"
-	| "PreRender"
-	| "PlayerAdded"
-	| "PlayerRemoving"
-
-export type Cycle = {
-	Connection: RBXScriptSignal,
-	Callback: (...any) -> (),
-}
-
-export type Storage = {
-	Controllers: {Controller<any>},
-	Cycles: {Cycle},
+export type Cycle<T...> = {
+	Fire: (self: Cycle<T...>, T...) -> (),
+	Name: string,
+	Listeners: { (...any) -> () },
 }
 
 return {}

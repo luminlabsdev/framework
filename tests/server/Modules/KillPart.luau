@@ -12,7 +12,7 @@ local KillDebounce = false
 
 local KillPart = {}
 
-function KillPart.Init()
+function KillPart.Start()
 	for _, part: Part in KillBricks do
 		part.Touched:Connect(function(basePart)
 			if KillDebounce then

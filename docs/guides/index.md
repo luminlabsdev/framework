@@ -13,9 +13,9 @@ Setting up the framework is identical on both client and server scripts, with th
 ```luau
 local Lumin = require(path.to.luminframework)
 local Modules = require(game:GetService("ReplicatedStorage").Modules) -- Points to Shared, Client or Server modules
-Lumin.Start(Lumin.Load({
+Lumin.Start({
     Modules, -- You can add more directories to this table which the children will be loaded
-}))
+})
 ```
 
 ## Recommended Packages
