@@ -1,5 +1,8 @@
 -- Variables
 
+local RunService = game:GetService("RunService")
+local PlayerService = game:GetService("Players")
+
 local Packages = script.Parent
 
 local Types = require(script.Types)
@@ -10,9 +13,24 @@ local Debugger = require(Packages.debugger)
 local Started = false
 
 local Controllers: { Types.Controller<any> } = {}
-local Cycles: { Types.Cycle<...any> } = {}
+local Lifecycles: { Types.Lifecycle<...any> } = {}
+local DefaultLifecycles: { [string]: RBXScriptSignal } = {
+	PostSimulation = RunService.PostSimulation,
+	PreSimulation = RunService.PreSimulation,
+	PreRender = RunService.PreRender,
+	PreAnimation = RunService.PreAnimation,
+	PlayerAdded = PlayerService.PlayerAdded,
+	PlayerRemoving = PlayerService.PlayerRemoving,
+}
 
 -- Functions
+
+-- The default callback for lifecycle fires
+local function DefaultLifecycleCallback(self: Types.Lifecycle<...any>, ...: any)
+	for _, listener in self.Listeners do
+		task.spawn(listener, ...)
+	end
+end
 
 -- Starts/inits a controller internally
 local function LoadController(callback: () -> (), controllerType: "Start" | "Init")
@@ -24,20 +42,69 @@ local function LoadController(callback: () -> (), controllerType: "Start" | "Ini
 	end
 end
 
+--[=[
+	Creates a new lifecycle that hooks onto already existing controller methods.
+
+	[Learn More](https://luminlabsdev.github.io/framework/api/#lifecycle)
+]=]
+local function Lifecycle(
+	name: Types.LifecycleType | string,
+	callback: ((self: Types.Lifecycle<...any>, ...any) -> ())?
+): Types.Lifecycle<...any>
+	Debugger.Assert(not Started, "AlreadyStarted")
+	Debugger.Assert(name, "MustProvide", "name")
+	local Lifecycle = table.freeze({
+		Name = name :: string,
+		Listeners = {},
+		Fire = callback or DefaultLifecycleCallback,
+	})
+	table.insert(Lifecycles, Lifecycle)
+	return Lifecycle
+end
+
+--[=[
+	Creates a new controller for management of various tasks. Returned table is frozen.
+
+	[Learn More](https://luminlabsdev.github.io/framework/api/#new)
+]=]
+local function New<T>(members: Types.Controller<T>, order: number?): T
+	Debugger.Assert(not Started, "AlreadyStarted")
+	Debugger.Assert(members, "MustProvide", "members")
+	table.freeze(members)
+	table.insert(Controllers, order or 1, members)
+	return members
+end
+
+-- Loads a default lifecycle
+local function LoadDefaultLifecycle(lifecycle: Types.Lifecycle<...any>)
+	local Event = DefaultLifecycles[lifecycle.Name]
+	if RunService:IsServer() and (lifecycle.Name == "PreAnimation" or lifecycle.Name == "PreRender") then
+		Debugger.Fatal("IncorrectContext", "PreAnimation or PreRender")
+	end
+	Event:Connect(function(...)
+		lifecycle:Fire(...)
+	end)
+end
+
 -- Starts/inits a list of controllers internally, and starts cycles within those
 local function LoadControllersAsync(controllers: { Types.Controller<any> })
 	local UsedControllers = {}
 
 	for _, controller in controllers do
-        for _, cycle in Cycles do
-            if (controller :: any)[cycle.Name] then
-                table.insert(cycle.Listeners, (controller :: any)[cycle.Name])
-            end
-        end
+		-- Register lifecycles
+		for _, lifecycle in Lifecycles do
+			if (controller :: any)[lifecycle.Name] then
+				table.insert(lifecycle.Listeners, (controller :: any)[lifecycle.Name])
+				if DefaultLifecycles[lifecycle.Name] then
+					LoadDefaultLifecycle(lifecycle)
+				end
+			end
+		end
 
 		-- Check if the controller uses any dependencies
 		if controller.Uses and type(controller.Uses) == "table" then
 			table.freeze(controller.Uses)
+			-- Call init on used dependencies
 			for _, usedController in controller.Uses do
 				if usedController["Init"] then
 					LoadController(usedController.Init, "Init")
@@ -46,10 +113,12 @@ local function LoadControllersAsync(controllers: { Types.Controller<any> })
 			end
 		end
 
+		-- Call init on non-used dependencies
 		if controller.Init and not table.find(UsedControllers, controller) then
 			LoadController(controller.Init, "Init")
 		end
 
+		-- Call start on all dependencies
 		if controller.Start then
 			LoadController(controller.Start, "Start")
 		end
@@ -85,48 +154,7 @@ local function Start(directories: { Instance }, filter: ((ModuleScript) -> boole
 	end
 
 	table.freeze(Controllers)
-	table.freeze(Cycles)
-end
-
---[=[
-	Creates a new controller for management of various tasks. Returned table is frozen.
-
-	[Learn More](https://luminlabsdev.github.io/framework/api/#new)
-]=]
-local function New<T>(members: Types.Controller<T>, order: number?): T
-	Debugger.Assert(not Started, "AlreadyStarted")
-	Debugger.Assert(members, "MustProvide", "members")
-	table.freeze(members)
-	table.insert(Controllers, order or 1, members)
-	return members
-end
-
---[=[
-	Fires the callback for all of the listeners to the cycle.
-
-	[Learn More](https://luminlabsdev.github.io/framework/api/cycle/#fire)
-]=]
-local function Fire<T...>(self: Types.Cycle<T...>, ...: T...)
-	for _, listener in self.Listeners do
-		task.spawn(listener, ...)
-	end
-end
-
---[=[
-	Creates a new cycle that hooks onto already existing controller methods.
-
-	[Learn More](https://luminlabsdev.github.io/framework/api/#cycle)
-]=]
-local function Cycle(name: string): Types.Cycle<...any>
-	Debugger.Assert(not Started, "AlreadyStarted")
-	Debugger.Assert(name, "MustProvide", "name")
-    local Cycle = table.freeze({
-        Name = name,
-		Listeners = {},
-		Fire = Fire,
-    })
-    table.insert(Cycles, Cycle)
-	return Cycle
+	table.freeze(Lifecycles)
 end
 
 -- Debugger
@@ -140,7 +168,7 @@ Debugger.SetMetadata({
 
 -- Types
 
-export type Cycle<T...> = Types.Cycle<T...>
+export type Lifecycle<T...> = Types.Lifecycle<T...>
 export type Controller<T> = Types.Controller<T>
 
 -- Module
@@ -154,5 +182,5 @@ return table.freeze({
 
 	-- Constructors
 	New = New,
-	Cycle = Cycle,
+	Lifecycle = Lifecycle,
 })

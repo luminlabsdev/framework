@@ -9,13 +9,13 @@ nav:
     - Setup: guides/index.md
     - Controllers: guides/controllers.md
     - Dependencies: guides/dependencies.md
-    - Cycles: guides/cycles.md
+    - Cycles: guides/lifecycle-events.md
     - Networking: guides/networking.md
     - Philosophy: guides/philosophy.md
   - API:
     - Framework: api/index.md
     - Controller: api/controller.md
-    - Cycle: api/cycle.md
+    - Lifecycle: api/lifecycle.md
   - Install: installation.md
   - Changelog: changelog.md
 markdown_extensions:

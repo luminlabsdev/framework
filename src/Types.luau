@@ -4,10 +4,18 @@ export type Controller<T> = {
 	Uses: { any }?,
 } & T
 
-export type Cycle<T...> = {
-	Fire: (self: Cycle<T...>, T...) -> (),
+export type Lifecycle<T...> = {
+	Fire: (self: Lifecycle<T...>, T...) -> (),
 	Name: string,
 	Listeners: { (...any) -> () },
 }
+
+export type LifecycleType =
+    "PlayerAdded" |
+    "PlayerRemoving" |
+    "PreSimulation" |
+    "PreAnimation" |
+    "PreRender" |
+    "PostSimulation"
 
 return {}

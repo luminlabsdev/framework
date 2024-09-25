@@ -55,15 +55,15 @@ A specified load order. Defaults to 1 / no specific order
 
 ---
 
-### `Cycle`
+### `Lifecycle`
 
 Creates a new cycle that hooks onto already existing controller methods.
 
 **Parameters**
 
-- **type:** `CycleType`<br>
-A designated cycle type
+- **type:** `LifecycleType`<br>
+A designated lfiecycle type
 
 **Returns**
 
-- [`Cycle`](./cycle.md)
+- [`Lifecycle`](./lifecycle.md)

@@ -1,4 +1,4 @@
-# Cycle
+# Lifecycle
 
 Implements a lifecycle API, that will use methods from controllers that already exist.
 

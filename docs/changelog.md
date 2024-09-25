@@ -15,6 +15,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added back ability to create default lifecycle types
+
+### Changed
+
+- Changed `Cycle` API to `Lifecycle` to be more concise
+
 ## [9.0.0-rc12] - 2024-09-23
 
 ### Changed
