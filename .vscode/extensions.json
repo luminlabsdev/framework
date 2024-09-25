@@ -1,5 +1,6 @@
 {
     "recommendations": [
-        "johnnymorganz.luau-lsp"
+        "johnnymorganz.luau-lsp",
+        "johnnymorganz.stylua"
     ]
 }
