@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.0.0-rc13] - 2024-09-25
+
 ### Added
 
 - Added back ability to create default lifecycle types
@@ -633,7 +635,8 @@ No information available, mainly small bug fixes.
 
 - Public release! 🥳
 
-[unreleased]: https://github.com/luminlabsdev/framework/compare/v9.0.0-rc12...HEAD
+[unreleased]: https://github.com/luminlabsdev/framework/compare/v9.0.0-rc13...HEAD
+[9.0.0-rc13]: https://github.com/luminlabsdev/framework/compare/v9.0.0-rc12...v9.0.0-rc13
 [9.0.0-rc12]: https://github.com/luminlabsdev/framework/compare/v9.0.0-rc11...v9.0.0-rc12
 [9.0.0-rc11]: https://github.com/luminlabsdev/framework/compare/v9.0.0-rc10...v9.0.0-rc11
 [9.0.0-rc10]: https://github.com/luminlabsdev/framework/compare/v9.0.0-rc9...v9.0.0-rc10
