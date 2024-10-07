@@ -95,9 +95,6 @@ local function LoadControllersAsync(controllers: { Types.Controller<any> })
 		for _, lifecycle in Lifecycles do
 			if (controller :: any)[lifecycle.Name] then
 				table.insert(lifecycle.Listeners, (controller :: any)[lifecycle.Name])
-				if DefaultLifecycles[lifecycle.Name] then
-					LoadDefaultLifecycle(lifecycle)
-				end
 			end
 		end
 
@@ -121,6 +118,13 @@ local function LoadControllersAsync(controllers: { Types.Controller<any> })
 		-- Call start on all dependencies
 		if controller.Start then
 			LoadController(controller.Start, "Start")
+		end
+	end
+
+	-- Connect default lifecycles
+	for _, lifecycle in Lifecycles do
+		if DefaultLifecycles[lifecycle.Name] then
+			LoadDefaultLifecycle(lifecycle)
 		end
 	end
 end
