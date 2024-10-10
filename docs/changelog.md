@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.0.0] - 2024-10-10
+
 ### Fixed
 
 - Fixes some issues that are related to yielding code unexpectedly ([#27](https://github.com/luminlabsdev/framework/issues/27))
@@ -644,7 +646,8 @@ No information available, mainly small bug fixes.
 
 - Public release! 🥳
 
-[unreleased]: https://github.com/luminlabsdev/framework/compare/v9.0.0-rc13...HEAD
+[unreleased]: https://github.com/luminlabsdev/framework/compare/v9.0.0...HEAD
+[9.0.0]: https://github.com/luminlabsdev/framework/compare/v9.0.0-rc13...v9.0.0
 [9.0.0-rc13]: https://github.com/luminlabsdev/framework/compare/v9.0.0-rc12...v9.0.0-rc13
 [9.0.0-rc12]: https://github.com/luminlabsdev/framework/compare/v9.0.0-rc11...v9.0.0-rc12
 [9.0.0-rc11]: https://github.com/luminlabsdev/framework/compare/v9.0.0-rc10...v9.0.0-rc11
