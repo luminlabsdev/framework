@@ -36,7 +36,9 @@ end
 local function LoadController(callback: () -> (), controllerType: "Start" | "Init")
 	-- Runs `Start` or `Init` and implements verbose debugging
 	Debugger.Assert(type(callback) == "function", "IncorrectType", controllerType, "function")
-	local Success, Err: Debugger.ParsedError = xpcall(callback :: any, Debugger.Parse)
+	local Success, Err: Debugger.ParsedError = xpcall(function()
+        task.spawn(callback)
+    end, Debugger.Parse)
 	if not Success then
 		Debugger.Fatal(`Cannot{controllerType}`, Err.Message)
 	end
@@ -91,13 +93,6 @@ local function LoadControllersAsync(controllers: { Types.Controller<any> })
 	local UsedControllers = {}
 
 	for _, controller in controllers do
-		-- Register lifecycles
-		for _, lifecycle in Lifecycles do
-			if (controller :: any)[lifecycle.Name] then
-				table.insert(lifecycle.Listeners, (controller :: any)[lifecycle.Name])
-			end
-		end
-
 		-- Check if the controller uses any dependencies
 		if controller.Uses and type(controller.Uses) == "table" then
 			table.freeze(controller.Uses)
@@ -119,6 +114,13 @@ local function LoadControllersAsync(controllers: { Types.Controller<any> })
 		if controller.Start then
 			LoadController(controller.Start, "Start")
 		end
+
+        -- Register lifecycles
+		for _, lifecycle in Lifecycles do
+			if (controller :: any)[lifecycle.Name] then
+				table.insert(lifecycle.Listeners, (controller :: any)[lifecycle.Name])
+			end
+		end
 	end
 
 	-- Connect default lifecycles
@@ -132,8 +134,8 @@ end
 -- Loads all of the provided directories
 local function Import(directories: { Instance }, filter: ((ModuleScript) -> boolean)?): { Types.Controller<any> }
 	local Controllers = {}
-	for _, driectory in directories do
-		for _, module in driectory:GetChildren() do
+	for _, directory in directories do
+		for _, module in directory:GetChildren() do
 			if not (module:IsA("ModuleScript") or filter and filter(module :: ModuleScript)) then
 				continue
 			end
@@ -179,7 +181,7 @@ export type Controller<T> = Types.Controller<T>
 
 return table.freeze({
 	-- Version
-	version = { major = 9, minor = 0, patch = 0, rc = 9 },
+	version = "9",
 
 	-- Starter
 	Start = Start,

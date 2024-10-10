@@ -108,22 +108,3 @@ jobs:
         - name: Publish
           run: |
             wally publish
-
-    publish-announcement:
-        name: Publish Announcement
-        runs-on: ubuntu-latest
-        needs: [publish-package, publish-build]
-        steps:
-        - name: Checkout repository
-          uses: actions/checkout@v4
-
-        - name: Setup Rokit
-          uses: CompeyDev/setup-rokit@v0.1.0
-
-        - name: Send webhook
-          env:
-            WEBHOOK_URL: ${{ secrets.UPDATE_WEBHOOK_URL }}
-          run: |
-            PROJECT="${{ github.repository }}"
-            VERSION="${{ github.ref_name }}"
-            lune run .lune/discord.luau "$WEBHOOK_URL" "announcement" "$PROJECT" "$VERSION"

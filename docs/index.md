@@ -4,7 +4,7 @@ hide:
   - navigation
 ---
 
-A lightning fast & efficient framework for Roblox, inspired by Prvd 'M Wrong.
+A lightning fast & efficient framework for Roblox
 
 [Guides](./guides/){ .md-button .md-button--primary }
 [Reference](./reference/){ .md-button }
@@ -44,18 +44,18 @@ return Framework.New {
 
 Organizes your dependencies in an understandable way, so you can easily keep track of what your module uses.
 
-## Straightforward Cycle Design
+## Straightforward Lifecycle Design
 
 ```luau
 local Framework = require(Packages.framework)
-local FrameLifecycle = Framework.Lifecycle("Frame")
+local FrameLifecycle = Framework.Lifecycle("PostSimulation")
 
-local function Frame()
+local function PostSimulation()
     print("I print every frame!")
 end
 
 return Framework.New {
-    Frame = Frame,
+    PostSimulation = PostSimulation,
 }
 ```
 

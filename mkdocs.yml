@@ -9,7 +9,7 @@ nav:
     - Setup: guides/index.md
     - Controllers: guides/controllers.md
     - Dependencies: guides/dependencies.md
-    - Cycles: guides/lifecycle-events.md
+    - Lifecycles: guides/lifecycle-events.md
     - Networking: guides/networking.md
     - Philosophy: guides/philosophy.md
   - API:

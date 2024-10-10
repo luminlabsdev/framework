@@ -15,6 +15,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixes some issues that are related to yielding code unexpectedly ([#27](https://github.com/luminlabsdev/framework/issues/27))
+- Fixes some docs issues
+
+### Changed
+
+- Improved the way lifecycles are loaded ([#26](https://github.com/luminlabsdev/framework/pull/26))
+
 ## [9.0.0-rc13] - 2024-09-25
 
 ### Added
