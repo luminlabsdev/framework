@@ -1,7 +1,7 @@
 [package]
 name = "lumin/framework"
 description = "A lightning fast & amazing game framework for Roblox"
-version = "9.0.0"
+version = "9.0.1"
 license = "MIT"
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"

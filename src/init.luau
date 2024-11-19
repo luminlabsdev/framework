@@ -88,9 +88,9 @@ local function LoadDefaultLifecycle(lifecycle: Types.Lifecycle<...any>)
 	end)
 end
 
--- Starts/inits a list of controllers internally, and starts cycles within those
+-- Starts/inits a list of controllers internally, and starts lifecycles within those
 local function LoadControllersAsync(controllers: { Types.Controller<any> })
-	local UsedControllers = {}
+	local InitiatedControllers = {}
 
 	for _, controller in controllers do
 		-- Check if the controller uses any dependencies
@@ -98,16 +98,17 @@ local function LoadControllersAsync(controllers: { Types.Controller<any> })
 			table.freeze(controller.Uses)
 			-- Call init on used dependencies
 			for _, usedController in controller.Uses do
-				if usedController["Init"] then
+				if usedController["Init"] and not table.find(InitiatedControllers, usedController) then
 					LoadController(usedController.Init, "Init")
-					table.insert(UsedControllers, usedController)
+					table.insert(InitiatedControllers, usedController)
 				end
 			end
 		end
 
 		-- Call init on non-used dependencies
-		if controller.Init and not table.find(UsedControllers, controller) then
+		if controller.Init and not table.find(InitiatedControllers, controller) then
 			LoadController(controller.Init, "Init")
+            table.insert(InitiatedControllers, controller)
 		end
 
 		-- Call start on all dependencies
@@ -181,7 +182,7 @@ export type Controller<T> = Types.Controller<T>
 
 return table.freeze({
 	-- Version
-	version = "9",
+	version = "9.0.1",
 
 	-- Starter
 	Start = Start,

@@ -29,24 +29,11 @@ jobs:
               tag: ${{ github.ref_name }}
               changelogPath: "docs/changelog.md"
 
-          - name: Bump Wally version
-            id: version-bump
-            uses: DervexDev/file-version-bumper@v1
-            with:
-              path: ./wally.toml
-
           - name: Commit and push
             uses: EndBug/add-and-commit@v9
-            if: ${{ github.ref_name != steps.version-bump.outputs.old_version }}
             with:
               message: Bump version to ${{ github.ref_name }}
               default_author: github_actions
-
-          - name: Update tag
-            if: ${{ github.ref_name != steps.version-bump.outputs.old_version }}
-            run: |
-              git tag -f ${{ github.ref_name }}
-              git push -f --tags
 
     publish-build:
         name: Publish Assets
@@ -99,31 +86,9 @@ jobs:
           uses: CompeyDev/setup-rokit@v0.1.0
 
         - name: Log In
-          env:
-            WALLY_AUTH: ${{ secrets.WALLY_AUTH_TOKEN }}
           run: |
-            mkdir ~/.wally
-            printenv WALLY_AUTH > ~/.wally/auth.toml
+            wally login --token "${{secrets.WALLY_AUTH_TOKEN}}"
 
         - name: Publish
           run: |
             wally publish
-
-    publish-announcement:
-        name: Publish Announcement
-        runs-on: ubuntu-latest
-        needs: [publish-package, publish-build]
-        steps:
-        - name: Checkout repository
-          uses: actions/checkout@v4
-
-        - name: Setup Rokit
-          uses: CompeyDev/setup-rokit@v0.1.0
-
-        - name: Send webhook
-          env:
-            WEBHOOK_URL: ${{ secrets.UPDATE_WEBHOOK_URL }}
-          run: |
-            PROJECT="${{ github.repository }}"
-            VERSION="${{ github.ref_name }}"
-            lune run .lune/discord.luau "$WEBHOOK_URL" "announcement" "$PROJECT" "$VERSION"

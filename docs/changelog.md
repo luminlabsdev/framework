@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixes an issue with initiation ([#28](https://github.com/luminlabsdev/framework/issues/28))
+
 ## [9.0.0] - 2024-10-10
 
 ### Fixed

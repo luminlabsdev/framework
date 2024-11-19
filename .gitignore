@@ -1,4 +1,4 @@
-# Mkdocs
+# Moonwave
 venv
 
 # Wally
@@ -8,3 +8,4 @@ wally.lock
 
 # Argon
 sourcemap.json
+
