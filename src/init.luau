@@ -1,27 +1,15 @@
 -- Variables
-
-local RunService = game:GetService("RunService")
-local PlayerService = game:GetService("Players")
-
 local Packages = script.Parent
 
 local Types = require(script.Types)
 local Logs = require(script.Logs)
 
-local Debugger = require(Packages.debugger)
+local Debugger = require(Packages.Debugger)
 
 local Started = false
 
 local Controllers: { Types.Controller<any> } = {}
 local Lifecycles: { Types.Lifecycle<...any> } = {}
-local DefaultLifecycles: { [string]: RBXScriptSignal } = {
-	PostSimulation = RunService.PostSimulation,
-	PreSimulation = RunService.PreSimulation,
-	PreRender = RunService.PreRender,
-	PreAnimation = RunService.PreAnimation,
-	PlayerAdded = PlayerService.PlayerAdded,
-	PlayerRemoving = PlayerService.PlayerRemoving,
-}
 
 -- Functions
 
@@ -37,8 +25,8 @@ local function LoadController(callback: () -> (), controllerType: "Start" | "Ini
 	-- Runs `Start` or `Init` and implements verbose debugging
 	Debugger.Assert(type(callback) == "function", "IncorrectType", controllerType, "function")
 	local Success, Err: Debugger.ParsedError = xpcall(function()
-        task.spawn(callback)
-    end, Debugger.Parse)
+		task.spawn(callback)
+	end, Debugger.Parse)
 	if not Success then
 		Debugger.Fatal(`Cannot{controllerType}`, Err.Message)
 	end
@@ -50,7 +38,7 @@ end
 	[Learn More](https://luminlabsdev.github.io/framework/api/#lifecycle)
 ]=]
 local function Lifecycle(
-	name: Types.LifecycleType | string,
+	name: string,
 	callback: ((self: Types.Lifecycle<...any>, ...any) -> ())?
 ): Types.Lifecycle<...any>
 	Debugger.Assert(not Started, "AlreadyStarted")
@@ -77,17 +65,6 @@ local function New<T>(members: Types.Controller<T>, order: number?): T
 	return members
 end
 
--- Loads a default lifecycle
-local function LoadDefaultLifecycle(lifecycle: Types.Lifecycle<...any>)
-	local Event = DefaultLifecycles[lifecycle.Name]
-	if RunService:IsServer() and (lifecycle.Name == "PreAnimation" or lifecycle.Name == "PreRender") then
-		Debugger.Fatal("IncorrectContext", "PreAnimation or PreRender")
-	end
-	Event:Connect(function(...)
-		lifecycle:Fire(...)
-	end)
-end
-
 -- Starts/inits a list of controllers internally, and starts lifecycles within those
 local function LoadControllersAsync(controllers: { Types.Controller<any> })
 	local InitiatedControllers = {}
@@ -108,15 +85,10 @@ local function LoadControllersAsync(controllers: { Types.Controller<any> })
 		-- Call init on non-used dependencies
 		if controller.Init and not table.find(InitiatedControllers, controller) then
 			LoadController(controller.Init, "Init")
-            table.insert(InitiatedControllers, controller)
+			table.insert(InitiatedControllers, controller)
 		end
 
-		-- Call start on all dependencies
-		if controller.Start then
-			LoadController(controller.Start, "Start")
-		end
-
-        -- Register lifecycles
+		-- Register lifecycles
 		for _, lifecycle in Lifecycles do
 			if (controller :: any)[lifecycle.Name] then
 				table.insert(lifecycle.Listeners, (controller :: any)[lifecycle.Name])
@@ -124,10 +96,10 @@ local function LoadControllersAsync(controllers: { Types.Controller<any> })
 		end
 	end
 
-	-- Connect default lifecycles
-	for _, lifecycle in Lifecycles do
-		if DefaultLifecycles[lifecycle.Name] then
-			LoadDefaultLifecycle(lifecycle)
+	for _, controller in controllers do
+		-- Call start on all dependencies
+		if controller.Start then
+			LoadController(controller.Start, "Start")
 		end
 	end
 end

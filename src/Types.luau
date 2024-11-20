@@ -10,12 +10,4 @@ export type Lifecycle<T...> = {
 	Listeners: { (...any) -> () },
 }
 
-export type LifecycleType =
-    "PlayerAdded" |
-    "PlayerRemoving" |
-    "PreSimulation" |
-    "PreAnimation" |
-    "PreRender" |
-    "PostSimulation"
-
 return {}
