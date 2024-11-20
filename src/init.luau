@@ -4,7 +4,7 @@ local Packages = script.Parent
 local Types = require(script.Types)
 local Logs = require(script.Logs)
 
-local Debugger = require(Packages.Debugger)
+local Debugger = require(Packages.debugger)
 
 local Started = false
 
