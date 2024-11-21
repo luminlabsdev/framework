@@ -29,11 +29,15 @@ jobs:
               tag: ${{ github.ref_name }}
               changelogPath: "docs/changelog.md"
 
+          - name: Configure Git
+            run: |
+                git config user.name "github-actions[bot]"
+                git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
           - name: Commit and push
-            uses: EndBug/add-and-commit@v9
-            with:
-              message: Bump version to ${{ github.ref_name }}
-              default_author: github_actions
+            run: |
+              git add docs/changelog.md
+              git commit --message "Bump version to ${{ github.ref_name }}"
 
     publish-build:
         name: Publish Assets

@@ -52,11 +52,4 @@ end
 
 ## Default Lifecycles
 
-For ease of use, a few default lifecycle types are automatically provided. No extra configuration needed, all you have to do is create a new lifecycle with the specific name. Here's a list of the available lifecycles:
-
-- **PostSimulation**
-- **PreSimulation**
-- **PreRender** Client only!
-- **PreAnimation** Client only!
-- **PlayerAdded**
-- **PlayerRemoving**
+There are no default lifecycles and they must be created on your own. Some common lifecycle types are things such as `PlayerAdded`, `Heartbeat` and more. Default lifecycles were removed in 9.1.0 as they affected game performance.

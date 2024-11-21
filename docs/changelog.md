@@ -15,6 +15,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixes an issue with start being in the incorrect order ([#29](https://github.com/luminlabsdev/framework/issues/29))
+
+### Removed
+
+- Removes default lifecycle types
+
 ## [9.0.1] - 2024-11-19
 
 ### Fixed
