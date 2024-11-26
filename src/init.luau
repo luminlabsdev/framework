@@ -92,16 +92,16 @@ local function LoadControllersAsync(controllers: { Types.Controller<any> })
 
     -- Start process
     for _, controller in Controllers do
-        -- Call start on all dependencies
-		if controller.Start then
-			LoadController(controller.Start, "Start")
-		end
-
         -- Register lifecycles
 		for _, lifecycle in Lifecycles do
 			if (controller :: any)[lifecycle.Name] then
 				table.insert(lifecycle.Listeners, (controller :: any)[lifecycle.Name])
 			end
+		end
+
+        -- Call start on all dependencies
+		if controller.Start then
+			LoadController(controller.Start, "Start")
 		end
     end
 end
@@ -111,9 +111,14 @@ local function Import(directories: { Instance }, filter: ((ModuleScript) -> bool
 	local Controllers = {}
 	for _, directory in directories do
 		for _, module in directory:GetChildren() do
-			if not (module:IsA("ModuleScript") or filter and filter(module :: ModuleScript)) then
-				continue
-			end
+            if not module:IsA("ModuleScript") then
+                continue
+            end
+
+            if filter and not filter(module) then
+                continue
+            end
+			
 			table.insert(Controllers, (require)(module))
 		end
 	end
