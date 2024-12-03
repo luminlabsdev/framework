@@ -1,6 +1,6 @@
 name: Enhancement
 description: Request a feature that you think would be nice to include in this project
-labels: ["enhancement", "review"]
+labels: ["enhancement", "triage", "review"]
 body:
   - type: checkboxes
     id: check
