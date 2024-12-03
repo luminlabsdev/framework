@@ -1,0 +1,34 @@
+name: Bug Report
+description: Report an issue you come across in this project
+labels: ["bug", "triage", "review"]
+body:
+  - type: checkboxes
+    id: check
+    attributes:
+      label: Original
+      description: Be sure that a change related to this issue isn't already pending, and a similar issue does not exist.
+      options:
+        - label: My issue is original
+          required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Give a detailed description on the bug you are experiencing.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction
+      description: A bullet-pointed list in the order to reproduce the bug.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Output
+      description: Copy the exact error, and omit the date + time prefixes if any.
+      render: shell
+    validations:
+      required: true

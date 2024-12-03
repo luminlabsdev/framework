@@ -1,0 +1,26 @@
+name: Enhancement
+description: Request a feature that you think would be nice to include in this project
+labels: ["enhancement", "review"]
+body:
+  - type: checkboxes
+    id: check
+    attributes:
+      label: Original
+      description: Be sure that a change related to this issue isn't already pending, and a similar issue does not exist.
+      options:
+        - label: My issue is original
+          required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Give a detailed description on the feature you're proposing.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Objective
+      description: What should this feature achieve, and why should it be added?
+    validations:
+      required: true
