@@ -1,6 +1,5 @@
 -- Variables
-
-local Packages = script.Parent
+local Packages = script.Parent.roblox_packages
 local Types = require(script.Types)
 local Logs = require(script.Logs)
 local Debugger = require(Packages.debugger)
@@ -34,7 +33,7 @@ end
 --[=[
 	Creates a new lifecycle that hooks onto already existing controller methods.
 
-	[Learn More](https://luminlabsdev.github.io/framework/api/#lifecycle)
+	[Open Documentation](https://lumin-org.github.io/framework/api/#lifecycle)
 ]=]
 local function Lifecycle(
 	name: string,
@@ -54,7 +53,7 @@ end
 --[=[
 	Creates a new controller for management of various tasks. Returned table is frozen.
 
-	[Learn More](https://luminlabsdev.github.io/framework/api/#new)
+	[Open Documentation](https://lumin-org.github.io/framework/api/#new)
 ]=]
 local function New<T>(members: Types.Controller<T>, order: number?): T
 	Debugger.Assert(not Started, "AlreadyStarted")
@@ -128,7 +127,7 @@ end
 --[=[
 	Starts the framework, loading all the created controllers and starting cycles.
 
-	[Learn More](https://luminlabsdev.github.io/framework/api/#start)
+	[Open Documentation](https://lumin-org.github.io/framework/api/#start)
 ]=]
 local function Start(directories: { Instance }, filter: ((ModuleScript) -> boolean)?, callback: (() -> ())?)
 	Debugger.Assert(not Started, "AlreadyStarted")
@@ -160,7 +159,7 @@ export type Controller<T> = Types.Controller<T>
 
 return table.freeze({
 	-- Version
-	version = "9.1.0",
+	version = { major = 9, minor = 1, patch = 1 },
 
 	-- Starter
 	Start = Start,

@@ -1,11 +1,9 @@
-# Moonwave
-venv
+# Pesde
+.pesde
+roblox_packages
+lune_packages
+luau_packages
+pesde.lock
 
-# Wally
-Packages
-DevPackages
-wally.lock
-
-# Argon
+# Rojo
 sourcemap.json
-

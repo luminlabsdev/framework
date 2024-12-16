@@ -1,9 +1,12 @@
 {
-    "name": "standalone",
+    "name": "framework",
     "tree": {
-        "$path": "Packages",
-        "framework": {
+        "$className": "Folder",
+        "src": {
             "$path": "src"
+        },
+        "roblox_packages": {
+            "$path": "roblox_packages"
         }
     }
 }

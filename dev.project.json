@@ -4,23 +4,17 @@
 	"tree": {
 		"$className": "DataModel",
 		"ReplicatedStorage": {
-			"DevPackages": {
-				"$path": "DevPackages"
-			},
-			"Packages": {
-				"$path": "Packages",
-				"framework": {
+			"framework": {
+				"$className": "Folder",
+				"src": {
 					"$path": "src"
-				}
-			},
-			"Tests": {
-                "$className": "Folder",
-				"Client": {
-					"$path": "tests/client"
 				},
-				"Server": {
-					"$path": "tests/server"
-				}
+                "roblox_packages": {
+                    "$path": "roblox_packages"
+                }
+			},
+			"tests": {
+                "$path": "tests"
 			}
 		}
 	}

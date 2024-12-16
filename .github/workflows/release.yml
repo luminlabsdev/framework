@@ -1,4 +1,4 @@
-name: Draft
+name: Release
 
 on:
   push:
@@ -11,62 +11,52 @@ permissions:
     id-token: write
 
 jobs:
-    bump:
-        name: Bump Versions
+    changelog:
+        name: Changelog
         runs-on: ubuntu-latest
         outputs:
           release-body: ${{ steps.update-changelog.outputs.release-notes }}
         steps:
-          - name: Checkout repository
-            uses: actions/checkout@v4
+          - uses: actions/checkout@v4
             with:
-              ref: "main"
+              ref: main
 
           - name: Update changelog
             id: update-changelog
             uses: thomaseizinger/keep-a-changelog-new-release@3.1.0
             with:
               tag: ${{ github.ref_name }}
-              changelogPath: "docs/changelog.md"
-
-          - name: Configure Git
-            run: |
-                git config user.name "github-actions[bot]"
-                git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+              changelogPath: 'docs/changelog.md'
 
           - name: Commit and push
-            run: |
-              git add docs/changelog.md
-              git commit --message "Bump version to ${{ github.ref_name }}"
+            uses: EndBug/add-and-commit@v9
+            with:
+              message: Bump version to ${{ github.ref_name }}
+              default_author: github_actions
 
-    publish-build:
-        name: Publish Assets
+    build:
+        name: Build
         runs-on: ubuntu-latest
-        needs: bump
+        needs: changelog
         steps:
-          - name: Checkout Repository
-            uses: actions/checkout@v4
+          - uses: actions/checkout@v4
 
-          - name: Setup Rokit
-            uses: CompeyDev/setup-rokit@v0.1.0
+          - name: Setup Pesde
+            uses: 2jammers/setup-pesde@v0.3.0
+            with:
+              cache: true
 
-          - name: Install Wally dependencies
-            run: wally install
-
-          - name: Generate sourcemap
-            run: rojo sourcemap standalone.project.json --output sourcemap.json
-
-          - name: Generate package types
-            run: wally-package-types --sourcemap sourcemap.json Packages
+          - name: Install dependencies
+            run: pesde install
 
           - name: Format code
             run: stylua src/
 
-          - name: Build standalone
+          - name: Standalone build
             run: rojo build standalone.project.json --output ./Standalone.rbxm
 
-          - name: Draft release
-            uses: softprops/action-gh-release@v2.0.8
+          - name: Standalone release
+            uses: softprops/action-gh-release@v2.0.9
             with:
               tag_name: ${{ github.ref_name }}
               name: ${{ github.ref_name }}
@@ -74,25 +64,24 @@ jobs:
               generate_release_notes: true
               body: |
                 ## Changelog
-                ${{ needs.bump.outputs.release-body }}
+                ${{ needs.changelog.outputs.release-body }}
               files: |
                 ./Standalone.rbxm
 
-    publish-package:
-        name: Publish Package
+    package:
+        name: Package
         runs-on: ubuntu-latest
-        needs: bump
+        needs: changelog
         steps:
-        - name: Checkout repository
-          uses: actions/checkout@v4
+        - uses: actions/checkout@v4
 
-        - name: Setup Rokit
-          uses: CompeyDev/setup-rokit@v0.1.0
-
-        - name: Log In
-          run: |
-            wally login --token "${{secrets.WALLY_AUTH_TOKEN}}"
+        - name: Setup Pesde
+          uses: 2jammers/setup-pesde@v0.3.0
+          with:
+            cache: true
+            token: '${{ secrets.PESDE_TOKEN }}'
 
         - name: Publish
           run: |
-            wally publish
+            pesde install
+            pesde publish -y

@@ -1,0 +1,32 @@
+name = "lumin/framework"
+version = "9.1.1"
+description = "A featherlight and quick framework for Roblox experiences"
+authors = ["2jammers"]
+repository = "https://github.com/lumin-org/framework"
+license = "MIT"
+includes = [
+  "pesde.toml",
+  "README.md",
+  "LICENSE",
+  "src",
+]
+
+[target]
+environment = "roblox"
+lib = "src/init.luau"
+build_files = ["src"]
+
+[indices]
+default = "https://github.com/daimond113/pesde-index"
+
+[scripts]
+roblox_sync_config_generator = ".pesde/scripts/roblox_sync_config_generator.luau"
+sourcemap_generator = ".pesde/scripts/sourcemap_generator.luau"
+
+[dev_dependencies]
+scripts = { name = "pesde/scripts_rojo", version = "^0.1.0", target = "lune" }
+rojo = { name = "pesde/rojo", version = "^7.4.4", target = "lune" }
+stylua = { name = "pesde/stylua", version = "^2.0.1", target = "lune" }
+
+[dependencies]
+debugger = { name = "lumin/debugger", version = "^0.5.0" }
