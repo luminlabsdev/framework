@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.1.1] - 2024-12-16
+
 ### Fixed
 
 - Fixes an issue with start being in the incorrect order ([#29](https://github.com/luminlabsdev/framework/issues/29))
@@ -660,7 +662,8 @@ No information available, mainly small bug fixes.
 
 - Public release! 🥳
 
-[unreleased]: https://github.com/luminlabsdev/framework/compare/v9.0.1...HEAD
+[unreleased]: https://github.com/lumin-org/framework/compare/v9.1.1...HEAD
+[9.1.1]: https://github.com/lumin-org/framework/compare/v9.0.1...v9.1.1
 [9.0.1]: https://github.com/luminlabsdev/framework/compare/v9.0.0...v9.0.1
 [9.0.0]: https://github.com/luminlabsdev/framework/compare/v9.0.0-rc13...v9.0.0
 [9.0.0-rc13]: https://github.com/luminlabsdev/framework/compare/v9.0.0-rc12...v9.0.0-rc13
